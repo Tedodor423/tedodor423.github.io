@@ -1,0 +1,121 @@
+@import 'tailwindcss';
+
+@import '@fontsource/anton';
+@import '@fontsource/poppins/500.css';
+@import '@fontsource/poppins/700.css';
+@import '@fontsource/poppins/800.css';
+@import '@fontsource/space-mono/400.css';
+@import '@fontsource/space-mono/700.css';
+
+@theme {
+  /* brand core — sampled from /design-refs, do not invent new values */
+  --color-brand-yellow: #f2c94c;
+  --color-navy: #16265c;
+  --color-navy-deep: #101c47;
+  --color-navy-tint: #2e3f73;
+  --color-ink: #0d0d0d;
+  --color-flame-start: #f26b21;
+  --color-flame-end: #fbb040;
+  --color-wax: #bfa97c;
+  --color-paper: #ffffff;
+
+  /* nucleotide scale — fixed everywhere, clear of the yellow/flame bands */
+  --color-base-a: #3ec6e0;
+  --color-base-u: #ef5da8;
+  --color-base-g: #57d68d;
+  --color-base-c: #9b7bf0;
+
+  /* screening states */
+  --color-pass: #3fae72;
+  --color-caution: #d9a441;
+  --color-hit: #e3473f;
+
+  --font-display: 'Anton', 'Archivo Black', sans-serif;
+  --font-heading: 'Poppins', sans-serif;
+  --font-data: 'Space Mono', ui-monospace, monospace;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-navy-deep);
+    color: var(--color-paper);
+    font-family: var(--font-heading);
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: var(--color-brand-yellow);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-brand-yellow);
+    outline-offset: 2px;
+  }
+
+  /* sequence / coordinate / energy data — always mono, always tabular, always selectable */
+  .data-text {
+    font-family: var(--font-data);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.05em;
+    user-select: text;
+  }
+
+  .seq-text {
+    font-family: var(--font-data);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.14em;
+    user-select: text;
+  }
+
+  /* the comb-strip / notebook ghosting used behind navy panels */
+  .bench-grid {
+    background-image: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--color-navy-tint) 35%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        color-mix(in srgb, var(--color-navy-tint) 35%, transparent) 1px,
+        transparent 1px
+      );
+    background-size: 28px 28px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  html.reduce-motion *,
+  html.reduce-motion *::before,
+  html.reduce-motion *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+#root {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
