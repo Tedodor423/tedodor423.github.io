@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { HexCell } from '@/components/ui/HexCell';
 import { CountUp } from '@/components/ui/CountUp';
+import { Tooltip } from '@/components/ui/Tooltip';
 import { NUCLEOTIDE_COLORS, COLORS, SEMANTIC_COLORS } from '@/lib/theme';
 import type { FoldingProfile, SirnaCandidate } from '@/lib/api/types';
 
@@ -119,9 +120,33 @@ export function SirnaDocking({ profile, candidate, reducedMotion = false }: Sirn
       <p className="mt-6 max-w-md text-xs leading-relaxed text-paper/60">{microcopy}</p>
 
       <div className="mt-4 grid grid-cols-3 gap-4">
-        <Readout label="ΔG open" value={candidate.deltaGOpen} suffix=" kcal/mol" color={SEMANTIC_COLORS.caution} active={phase === 'done'} reducedMotion={reducedMotion} />
-        <Readout label="ΔG duplex" value={candidate.deltaGDuplex} suffix=" kcal/mol" color="#3EC6E0" active={phase === 'done'} reducedMotion={reducedMotion} />
-        <Readout label="ΔΔG net" value={deltaDeltaG} suffix=" kcal/mol" color={COLORS.brandYellow} active={phase === 'done'} reducedMotion={reducedMotion} />
+        <Readout
+          label="ΔG open"
+          value={candidate.deltaGOpen}
+          suffix=" kcal/mol"
+          color={SEMANTIC_COLORS.caution}
+          active={phase === 'done'}
+          reducedMotion={reducedMotion}
+          tooltip="Energy cost to melt open the competing local structure before the siRNA can bind. Zero means the site was already accessible."
+        />
+        <Readout
+          label="ΔG duplex"
+          value={candidate.deltaGDuplex}
+          suffix=" kcal/mol"
+          color="#3EC6E0"
+          active={phase === 'done'}
+          reducedMotion={reducedMotion}
+          tooltip="Free energy released by the siRNA/mRNA duplex forming — more negative means a stronger bind."
+        />
+        <Readout
+          label="ΔΔG net"
+          value={deltaDeltaG}
+          suffix=" kcal/mol"
+          color={COLORS.brandYellow}
+          active={phase === 'done'}
+          reducedMotion={reducedMotion}
+          tooltip="Net energy balance: duplex formation minus the cost of opening the site. More negative is a more favourable overall bind."
+        />
       </div>
     </div>
   );
@@ -134,6 +159,7 @@ function Readout({
   color,
   active,
   reducedMotion,
+  tooltip,
 }: {
   label: string;
   value: number;
@@ -141,15 +167,18 @@ function Readout({
   color: string;
   active: boolean;
   reducedMotion: boolean;
+  tooltip: string;
 }) {
   const shown = useMemo(() => (active ? value : 0), [active, value]);
   return (
-    <div>
-      <div className="data-text text-[10px] tracking-widest text-paper/45 uppercase">{label}</div>
-      <div className="data-text text-xl font-bold" style={{ color }}>
-        <CountUp to={shown} reduceMotion={reducedMotion || !active} duration={0.8} format={(n) => n.toFixed(1)} />
-        {suffix}
+    <Tooltip label={tooltip}>
+      <div>
+        <div className="data-text text-[10px] tracking-widest text-paper/45 uppercase">{label}</div>
+        <div className="data-text text-xl font-bold" style={{ color }}>
+          <CountUp to={shown} reduceMotion={reducedMotion || !active} duration={0.8} format={(n) => n.toFixed(1)} />
+          {suffix}
+        </div>
       </div>
-    </div>
+    </Tooltip>
   );
 }

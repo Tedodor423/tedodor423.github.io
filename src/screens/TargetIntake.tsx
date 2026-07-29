@@ -6,6 +6,7 @@ import type { Organism, TargetClass } from '@/lib/api/types';
 import { useWizardStore } from '@/store/wizardStore';
 import { ClippedPanel } from '@/components/ui/ClippedPanel';
 import { Button } from '@/components/ui/Button';
+import { Tooltip } from '@/components/ui/Tooltip';
 import { validateFasta } from '@/lib/fasta';
 import { NUCLEOTIDE_COLORS } from '@/lib/theme';
 
@@ -111,23 +112,37 @@ export function TargetIntake() {
                 <div className="data-text text-sm text-paper/60 italic">{organism.scientificName}</div>
               </div>
               <div className="data-text flex flex-wrap gap-4 text-xs text-paper/70">
-                <span>taxid {organism.taxid}</span>
-                <span>{organism.sourceDb}</span>
-                <span>{organism.transcriptCount.toLocaleString()} transcripts</span>
-                <span
-                  className={`inline-flex items-center gap-1 px-2 py-1 font-bold uppercase ${
+                <Tooltip label={`NCBI-style taxonomy id for ${organism.scientificName}.`}>
+                  <span>taxid {organism.taxid}</span>
+                </Tooltip>
+                <Tooltip label="Which mock sequence database this organism's records are drawn from.">
+                  <span>{organism.sourceDb}</span>
+                </Tooltip>
+                <Tooltip label="Number of transcripts in this organism's mock reference set.">
+                  <span>{organism.transcriptCount.toLocaleString()} transcripts</span>
+                </Tooltip>
+                <Tooltip
+                  label={
                     organism.hasReferenceTranscriptome
-                      ? 'bg-pass/15 text-pass'
-                      : 'bg-caution/15 text-caution'
-                  }`}
+                      ? 'A reference transcriptome exists, so target discovery and off-target screening can both run against it.'
+                      : 'No reference transcriptome available — this organism can be targeted, but it cannot be used as an off-target screening species.'
+                  }
                 >
-                  {organism.hasReferenceTranscriptome ? (
-                    <CheckCircle2 size={12} />
-                  ) : (
-                    <XCircle size={12} />
-                  )}
-                  {organism.hasReferenceTranscriptome ? 'Reference transcriptome' : 'No reference transcriptome'}
-                </span>
+                  <span
+                    className={`inline-flex items-center gap-1 px-2 py-1 font-bold uppercase ${
+                      organism.hasReferenceTranscriptome
+                        ? 'bg-pass/15 text-pass'
+                        : 'bg-caution/15 text-caution'
+                    }`}
+                  >
+                    {organism.hasReferenceTranscriptome ? (
+                      <CheckCircle2 size={12} />
+                    ) : (
+                      <XCircle size={12} />
+                    )}
+                    {organism.hasReferenceTranscriptome ? 'Reference transcriptome' : 'No reference transcriptome'}
+                  </span>
+                </Tooltip>
               </div>
             </div>
           </ClippedPanel>

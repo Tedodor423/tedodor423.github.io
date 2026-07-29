@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, AlertTriangle } from 'lucide-react';
 import { getApi } from '@/lib/api/client';
 import { useJob } from '@/lib/hooks/useJob';
 import type { Organism, OffTargetReport } from '@/lib/api/types';
@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/Button';
 import { CombProgress } from '@/components/ui/CombProgress';
 import { HexMatrix } from '@/components/ui/HexMatrix';
 import { OffTargetSweep } from '@/components/viz/OffTargetSweep';
+import { Tooltip } from '@/components/ui/Tooltip';
 
 const CANDIDATE_LIMIT = 10;
 
@@ -80,6 +81,22 @@ export function OffTargetScreening() {
         </p>
       </header>
 
+      {store.screenSpeciesIds.length === 0 && (
+        <EmptyStateNotice
+          message="No species are selected for screening. Off-target screening has nothing to check against."
+          actionLabel="Back to run configuration"
+          onAction={() => navigate('/configure')}
+        />
+      )}
+
+      {store.screenSpeciesIds.length > 0 && screenedCandidates.length === 0 && (
+        <EmptyStateNotice
+          message="No siRNA candidates survived seed-region filtering, or none were tiled yet. There's nothing to screen."
+          actionLabel="Back to accessibility & folding"
+          onAction={() => navigate('/fold')}
+        />
+      )}
+
       {job && job.status !== 'succeeded' && (
         <ClippedPanel cut={14} className="mb-8">
           <div className="p-6">
@@ -111,10 +128,18 @@ export function OffTargetScreening() {
                 {store.offTargetReport.survivorIds.length === 1 ? '' : 's'}
               </span>
               <div className="data-text flex items-center gap-4 text-[11px] text-paper/60">
-                <Legend color="var(--color-pass)" label="Pass" />
-                <Legend color="var(--color-caution)" label="Caution" />
-                <Legend color="var(--color-hit)" label="Hit" />
-                <Legend hatched label="Unscreenable" />
+                <Tooltip label="Longest contiguous match is well below the threshold — low off-target risk.">
+                  <Legend color="var(--color-pass)" label="Pass" />
+                </Tooltip>
+                <Tooltip label="Longest contiguous match is close to the threshold (70%+) but hasn't crossed it — worth a second look.">
+                  <Legend color="var(--color-caution)" label="Caution" />
+                </Tooltip>
+                <Tooltip label="Longest contiguous match meets or exceeds the threshold — this candidate is rejected against this species.">
+                  <Legend color="var(--color-hit)" label="Hit" />
+                </Tooltip>
+                <Tooltip label="This species has no reference transcriptome, so it can't be screened — shown explicitly rather than silently passing.">
+                  <Legend hatched label="Unscreenable" />
+                </Tooltip>
               </div>
             </div>
 
@@ -164,6 +189,30 @@ export function OffTargetScreening() {
         </Button>
       </div>
     </div>
+  );
+}
+
+function EmptyStateNotice({
+  message,
+  actionLabel,
+  onAction,
+}: {
+  message: string;
+  actionLabel: string;
+  onAction: () => void;
+}) {
+  return (
+    <ClippedPanel cut={14} bg="var(--color-navy-tint)" className="mb-8">
+      <div className="flex flex-wrap items-center justify-between gap-4 p-6">
+        <div className="flex items-center gap-3 text-paper/85">
+          <AlertTriangle size={18} className="shrink-0 text-caution" />
+          <p className="text-sm">{message}</p>
+        </div>
+        <Button variant="secondary" onClick={onAction}>
+          {actionLabel}
+        </Button>
+      </div>
+    </ClippedPanel>
   );
 }
 

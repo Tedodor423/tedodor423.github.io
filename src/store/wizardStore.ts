@@ -12,14 +12,42 @@ import type {
 } from '@/lib/api/types';
 
 export const WIZARD_STEPS = [
-  { path: '/', label: 'Start' },
-  { path: '/intake', label: 'Target intake' },
-  { path: '/configure', label: 'Run configuration' },
-  { path: '/discover', label: 'Target discovery' },
-  { path: '/fold', label: 'Accessibility & folding' },
-  { path: '/screen', label: 'Off-target screening' },
-  { path: '/cassette', label: 'Cassette builder' },
-  { path: '/export', label: 'Export' },
+  { path: '/', label: 'Start', description: 'Landing page — kick off a new design run.' },
+  {
+    path: '/intake',
+    label: 'Target intake',
+    description: 'Pick the organism and the class of gene the design should knock down.',
+  },
+  {
+    path: '/configure',
+    label: 'Run configuration',
+    description: 'Set candidate count, siRNA length, off-target stringency, species panel, and delivery chassis.',
+  },
+  {
+    path: '/discover',
+    label: 'Target discovery',
+    description: 'Mock compute job scans the transcriptome and ranks candidate genes.',
+  },
+  {
+    path: '/fold',
+    label: 'Accessibility & folding',
+    description: "Fold the transcript and tile siRNA candidates against where the fold leaves the sequence open.",
+  },
+  {
+    path: '/screen',
+    label: 'Off-target screening',
+    description: 'Cross-screen surviving candidates against the chosen species safety panel.',
+  },
+  {
+    path: '/cassette',
+    label: 'Cassette builder',
+    description: 'Assemble survivors into a cloning-ready expression cassette on the chosen backbone.',
+  },
+  {
+    path: '/export',
+    label: 'Export',
+    description: 'Download GenBank, FASTA, primers, and a PDF report generated from this run.',
+  },
 ] as const;
 
 interface WizardState {

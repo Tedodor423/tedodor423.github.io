@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { WIZARD_STEPS } from '@/store/wizardStore';
 import { useWizardStore } from '@/store/wizardStore';
 import { Lock } from 'lucide-react';
+import { Tooltip } from '@/components/ui/Tooltip';
 
 export function StepRail() {
   const location = useLocation();
@@ -23,7 +24,7 @@ export function StepRail() {
             }`}
           >
             <span
-              className={`font-display pointer-events-none absolute -top-3 left-1 text-[52px] leading-none tracking-tighter select-none lg:-top-4 lg:left-1 lg:text-[58px] ${
+              className={`font-display pointer-events-none absolute top-1 left-1 text-[52px] leading-none tracking-tighter select-none lg:top-2 lg:left-1 lg:text-[58px] ${
                 active ? 'text-ink/25' : 'text-paper/10'
               }`}
             >
@@ -40,14 +41,22 @@ export function StepRail() {
           </div>
         );
 
-        return reachable ? (
-          <Link key={step.path} to={step.path} aria-current={active ? 'step' : undefined}>
-            {content}
-          </Link>
-        ) : (
-          <div key={step.path} aria-disabled className="cursor-not-allowed">
-            {content}
-          </div>
+        const tooltipLabel = reachable
+          ? step.description
+          : `${step.description} Locked until you reach it in order.`;
+
+        return (
+          <Tooltip key={step.path} label={tooltipLabel}>
+            {reachable ? (
+              <Link to={step.path} aria-current={active ? 'step' : undefined}>
+                {content}
+              </Link>
+            ) : (
+              <div aria-disabled className="cursor-not-allowed">
+                {content}
+              </div>
+            )}
+          </Tooltip>
         );
       })}
     </nav>

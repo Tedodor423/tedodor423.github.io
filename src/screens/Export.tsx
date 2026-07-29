@@ -10,6 +10,7 @@ import { buildPrimers, primersToCsv } from '@/lib/export/primers';
 import { buildReportPdf } from '@/lib/export/pdf';
 import { downloadText, downloadBlob } from '@/lib/export/download';
 import { CHASSIS_LABELS } from '@/lib/chassisLabels';
+import { Tooltip } from '@/components/ui/Tooltip';
 
 const KEYWORD_RE = /^(LOCUS|DEFINITION|ACCESSION|VERSION|KEYWORDS|SOURCE|FEATURES|ORIGIN|\/\/)/;
 const FEATURE_RE = /^ {5}\S/;
@@ -99,23 +100,31 @@ export function Export() {
           </ClippedPanel>
 
           <div className="grid grid-cols-1 gap-2">
-            <Button onClick={() => downloadText(`apiary_cassette.gb`, gbText, 'text/plain')}>
-              <Download size={14} /> .gb GenBank
-            </Button>
-            <Button variant="secondary" onClick={() => downloadText(`apiary_cassette.fasta`, fastaText, 'text/plain')}>
-              <Download size={14} /> .fasta
-            </Button>
-            <Button variant="secondary" onClick={() => downloadText(`apiary_primers.csv`, csvText, 'text/csv')}>
-              <Download size={14} /> Primer CSV
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() =>
-                downloadBlob('apiary_report.pdf', buildReportPdf('APIARY design run — DEMO DATA', summaryLines))
-              }
-            >
-              <Download size={14} /> PDF report
-            </Button>
+            <Tooltip label="Full annotated construct — sequence plus a FEATURES table, ready to open in a plasmid viewer.">
+              <Button onClick={() => downloadText(`nectar_designer_cassette.gb`, gbText, 'text/plain')}>
+                <Download size={14} /> .gb GenBank
+              </Button>
+            </Tooltip>
+            <Tooltip label="Plain sequence only, no annotations — for BLAST, alignment tools, or synthesis order forms.">
+              <Button variant="secondary" onClick={() => downloadText(`nectar_designer_cassette.fasta`, fastaText, 'text/plain')}>
+                <Download size={14} /> .fasta
+              </Button>
+            </Tooltip>
+            <Tooltip label="Forward/reverse primers for the full construct, plus a check primer per surviving candidate, with Wallace-rule Tm estimates.">
+              <Button variant="secondary" onClick={() => downloadText(`nectar_designer_primers.csv`, csvText, 'text/csv')}>
+                <Download size={14} /> Primer CSV
+              </Button>
+            </Tooltip>
+            <Tooltip label="A one-page run summary as a real PDF, generated in the browser — no server involved.">
+              <Button
+                variant="secondary"
+                onClick={() =>
+                  downloadBlob('nectar_designer_report.pdf', buildReportPdf('NECTAR DESIGNER design run — DEMO DATA', summaryLines))
+                }
+              >
+                <Download size={14} /> PDF report
+              </Button>
+            </Tooltip>
           </div>
         </div>
 

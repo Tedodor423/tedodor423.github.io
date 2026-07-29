@@ -4,12 +4,26 @@ import { HelixHero } from '@/components/viz/HelixHero';
 import { Button } from '@/components/ui/Button';
 import { Sparkle } from '@/components/ui/Sparkle';
 import { CountUp } from '@/components/ui/CountUp';
+import { Tooltip } from '@/components/ui/Tooltip';
 import { useWizardStore } from '@/store/wizardStore';
 
 const STATS = [
-  { label: 'Transcriptomes indexed', value: 11, format: (n: number) => Math.round(n).toString() },
-  { label: 'Candidate sites scored', value: 1284730 },
-  { label: 'Off-target species panels run', value: 3862 },
+  {
+    label: 'Transcriptomes indexed',
+    value: 11,
+    format: (n: number) => Math.round(n).toString(),
+    tooltip: 'Organisms with a mock reference transcriptome available to search in this demo.',
+  },
+  {
+    label: 'Candidate sites scored',
+    value: 1284730,
+    tooltip: 'Cumulative siRNA binding sites tiled and scored across demo runs — a decorative running counter, not live data.',
+  },
+  {
+    label: 'Off-target species panels run',
+    value: 3862,
+    tooltip: 'Cumulative off-target screening passes across demo runs — a decorative running counter, not live data.',
+  },
 ];
 
 export function Landing() {
@@ -41,8 +55,11 @@ export function Landing() {
             <Sparkle size={16} />
           </div>
           <h1 className="font-display text-6xl leading-[0.95] tracking-tight text-paper sm:text-8xl">
-            APIARY
+            NECTAR
           </h1>
+          <div className="font-heading mt-1 text-sm font-bold tracking-[0.4em] text-brand-yellow uppercase sm:text-base">
+            Designer
+          </div>
           <p className="font-heading mx-auto mt-6 max-w-2xl text-lg text-paper/80 sm:text-xl">
             From target gene to cloning-ready cassette — occlusion-aware siRNA design, screened
             against the species you actually need to protect.
@@ -65,12 +82,14 @@ export function Landing() {
       <div className="border-t border-navy-tint bg-navy-deep px-6 py-8">
         <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 sm:grid-cols-3">
           {STATS.map((stat) => (
-            <div key={stat.label} className="text-center sm:text-left">
-              <div className="data-text text-3xl font-bold text-brand-yellow sm:text-4xl">
-                <CountUp to={stat.value} reduceMotion={reducedMotion} format={stat.format} />
+            <Tooltip key={stat.label} label={stat.tooltip}>
+              <div className="text-center sm:text-left">
+                <div className="data-text text-3xl font-bold text-brand-yellow sm:text-4xl">
+                  <CountUp to={stat.value} reduceMotion={reducedMotion} format={stat.format} />
+                </div>
+                <div className="mt-1 text-xs tracking-wide text-paper/55 uppercase">{stat.label}</div>
               </div>
-              <div className="mt-1 text-xs tracking-wide text-paper/55 uppercase">{stat.label}</div>
-            </div>
+            </Tooltip>
           ))}
         </div>
       </div>

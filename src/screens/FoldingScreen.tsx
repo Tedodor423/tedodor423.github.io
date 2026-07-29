@@ -12,6 +12,7 @@ import { CombProgress } from '@/components/ui/CombProgress';
 import { FoldedStructure } from '@/components/viz/FoldedStructure';
 import { AccessibilityTrack } from '@/components/viz/AccessibilityTrack';
 import { SirnaDocking } from '@/components/viz/SirnaDocking';
+import { Tooltip } from '@/components/ui/Tooltip';
 
 export function FoldingScreen() {
   const navigate = useNavigate();
@@ -124,18 +125,22 @@ export function FoldingScreen() {
                 Folded structure · window {range[0]}–{range[1]}
               </span>
               <div className="flex gap-1">
-                <button
-                  onClick={() => setColorMode('base')}
-                  className={`data-text px-2 py-1 text-[10px] font-bold uppercase ${colorMode === 'base' ? 'bg-brand-yellow text-ink' : 'text-paper/50'}`}
-                >
-                  Base
-                </button>
-                <button
-                  onClick={() => setColorMode('accessibility')}
-                  className={`data-text flex items-center gap-1 px-2 py-1 text-[10px] font-bold uppercase ${colorMode === 'accessibility' ? 'bg-brand-yellow text-ink' : 'text-paper/50'}`}
-                >
-                  <Eye size={10} /> Accessibility
-                </button>
+                <Tooltip label="Colour each nucleotide by its identity (A/U/G/C).">
+                  <button
+                    onClick={() => setColorMode('base')}
+                    className={`data-text px-2 py-1 text-[10px] font-bold uppercase ${colorMode === 'base' ? 'bg-brand-yellow text-ink' : 'text-paper/50'}`}
+                  >
+                    Base
+                  </button>
+                </Tooltip>
+                <Tooltip label="Colour each nucleotide by how accessible it is — navy is occluded, yellow is open.">
+                  <button
+                    onClick={() => setColorMode('accessibility')}
+                    className={`data-text flex items-center gap-1 px-2 py-1 text-[10px] font-bold uppercase ${colorMode === 'accessibility' ? 'bg-brand-yellow text-ink' : 'text-paper/50'}`}
+                  >
+                    <Eye size={10} /> Accessibility
+                  </button>
+                </Tooltip>
               </div>
             </div>
             <div ref={structureRef} style={{ height: 520 }}>
@@ -186,10 +191,26 @@ export function FoldingScreen() {
                   </colgroup>
                   <thead className="sticky top-0 bg-navy">
                     <tr className="data-text border-b border-navy-tint text-left text-[10px] tracking-widest text-paper/45 uppercase">
-                      <th className="px-3 py-2 font-normal">Pos</th>
-                      <th className="px-3 py-2 font-normal">Sense</th>
-                      <th className="px-3 py-2 font-normal">Effic.</th>
-                      <th className="px-3 py-2 font-normal">Access.</th>
+                      <th className="px-3 py-2 font-normal">
+                        <Tooltip label="Start coordinate of this candidate on the transcript, 0-based.">
+                          <span>Pos</span>
+                        </Tooltip>
+                      </th>
+                      <th className="px-3 py-2 font-normal">
+                        <Tooltip label="Sense-strand sequence of the target site — click a row to inspect it, or select it below.">
+                          <span>Sense</span>
+                        </Tooltip>
+                      </th>
+                      <th className="px-3 py-2 font-normal">
+                        <Tooltip label="Composite predicted knockdown efficacy — weighted from accessibility, GC content, and seed-region risk.">
+                          <span>Effic.</span>
+                        </Tooltip>
+                      </th>
+                      <th className="px-3 py-2 font-normal">
+                        <Tooltip label="Mean unpaired probability across this candidate's footprint — higher means less occluded by the fold.">
+                          <span>Access.</span>
+                        </Tooltip>
+                      </th>
                     </tr>
                   </thead>
                   <tbody>

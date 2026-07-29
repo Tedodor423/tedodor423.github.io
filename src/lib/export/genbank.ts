@@ -29,7 +29,7 @@ function formatOrigin(seq: string): string {
 }
 
 export function buildGenBank(design: CassetteDesign): string {
-  const name = `APIARY_${design.chassis.toUpperCase().replace(/-/g, '_')}`;
+  const name = `NECTAR_${design.chassis.toUpperCase().replace(/-/g, '_')}`;
   const lines: string[] = [];
   lines.push(
     `LOCUS       ${name.padEnd(20)} ${String(design.lengthBp).padStart(5)} bp    DNA     linear   SYN ${today()}`,

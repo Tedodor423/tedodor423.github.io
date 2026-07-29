@@ -10,7 +10,8 @@ import { Button } from '@/components/ui/Button';
 import { CombProgress } from '@/components/ui/CombProgress';
 import { PlasmidMap } from '@/components/viz/PlasmidMap';
 import { FEATURE_LABELS, LinearFeatureMap } from '@/components/viz/LinearFeatureMap';
-import { CHASSIS_LABELS } from '@/lib/chassisLabels';
+import { CHASSIS_LABELS, CHASSIS_ARTICLE } from '@/lib/chassisLabels';
+import { Tooltip } from '@/components/ui/Tooltip';
 
 const TOPOLOGIES: Array<{ id: CassetteTopology; label: string; note: string }> = [
   { id: 'dual-inverted-promoter', label: 'Dual inverted promoter', note: 'Opposing promoters transcribe both strands — classic L4440 dsRNA' },
@@ -65,8 +66,8 @@ export function CassetteBuilder() {
         </span>
         <h1 className="font-display mt-1 text-4xl text-paper sm:text-5xl">Cassette builder</h1>
         <p className="mt-2 max-w-xl text-sm text-paper/65">
-          Assembling {candidateIds.length} surviving candidate{candidateIds.length === 1 ? '' : 's'} into a{' '}
-          {CHASSIS_LABELS[store.chassis]} construct.
+          Assembling {candidateIds.length} surviving candidate{candidateIds.length === 1 ? '' : 's'} into{' '}
+          {CHASSIS_ARTICLE[store.chassis]} {CHASSIS_LABELS[store.chassis]} construct.
         </p>
       </header>
 
@@ -134,12 +135,14 @@ export function CassetteBuilder() {
 
               <ClippedPanel cut={14}>
                 <div className="p-5">
-                  <div className="mb-3 flex items-center gap-2 text-paper/80">
-                    <Scissors size={14} />
-                    <span className="data-text text-[11px] tracking-widest uppercase">
-                      Golden Gate sites (BsaI / BsmBI / SapI)
-                    </span>
-                  </div>
+                  <Tooltip label="These enzymes' recognition sequences will cut the construct during Golden Gate assembly if left in place — usually unwanted inside the insert or backbone.">
+                    <div className="mb-3 flex items-center gap-2 text-paper/80">
+                      <Scissors size={14} />
+                      <span className="data-text text-[11px] tracking-widest uppercase">
+                        Golden Gate sites (BsaI / BsmBI / SapI)
+                      </span>
+                    </div>
+                  </Tooltip>
                   {activeDesign.goldenGateSites.length === 0 && (
                     <p className="text-xs text-pass">None detected — construct is clean for Golden Gate assembly.</p>
                   )}
@@ -158,12 +161,14 @@ export function CassetteBuilder() {
                         {site.removed ? (
                           <span className="text-pass">removed</span>
                         ) : (
-                          <button
-                            onClick={() => handleRemoveSite(i)}
-                            className="data-text border border-caution/60 px-2 py-1 text-[10px] font-bold text-caution uppercase hover:bg-caution/10"
-                          >
-                            Silently remove
-                          </button>
+                          <Tooltip label="Flips a single base inside the recognition sequence to break the cut site, without changing what the construct expresses.">
+                            <button
+                              onClick={() => handleRemoveSite(i)}
+                              className="data-text border border-caution/60 px-2 py-1 text-[10px] font-bold text-caution uppercase hover:bg-caution/10"
+                            >
+                              Silently remove
+                            </button>
+                          </Tooltip>
                         )}
                       </div>
                     ))}

@@ -9,8 +9,16 @@ import { Button } from '@/components/ui/Button';
 import { Slider } from '@/components/ui/Slider';
 import { Toggle } from '@/components/ui/Toggle';
 import { Chip } from '@/components/ui/Chip';
+import { Tooltip } from '@/components/ui/Tooltip';
 
 const LENGTHS: SirnaLength[] = [19, 21, 22, 24];
+
+const LENGTH_TOOLTIPS: Record<SirnaLength, string> = {
+  19: 'Shortest standard length — highest specificity, marginally weaker duplex stability.',
+  21: 'Canonical Dicer-product length — the conventional default for RNAi design.',
+  22: 'Slightly longer duplex — can improve potency on harder-to-reach sites.',
+  24: 'Longest option here — stronger duplex, but a bigger footprint to fit into open regions.',
+};
 
 const CHASSIS_OPTIONS: Array<{ id: DeliveryChassis; label: string; note: string }> = [
   { id: 'ecoli-ht115', label: 'E. coli HT115 (L4440)', note: 'IPTG-inducible dual-T7, feeding assay standard' },
@@ -80,17 +88,18 @@ export function RunConfiguration() {
                 </div>
                 <div className="flex gap-2">
                   {LENGTHS.map((len) => (
-                    <button
-                      key={len}
-                      onClick={() => store.setSirnaLength(len)}
-                      className={`data-text flex-1 border px-3 py-2.5 text-sm font-bold transition-colors ${
-                        store.sirnaLength === len
-                          ? 'border-brand-yellow bg-brand-yellow text-ink'
-                          : 'border-navy-tint text-paper/70 hover:border-paper/40'
-                      }`}
-                    >
-                      {len} nt
-                    </button>
+                    <Tooltip key={len} label={LENGTH_TOOLTIPS[len]}>
+                      <button
+                        onClick={() => store.setSirnaLength(len)}
+                        className={`data-text flex-1 border px-3 py-2.5 text-sm font-bold transition-colors ${
+                          store.sirnaLength === len
+                            ? 'border-brand-yellow bg-brand-yellow text-ink'
+                            : 'border-navy-tint text-paper/70 hover:border-paper/40'
+                        }`}
+                      >
+                        {len} nt
+                      </button>
+                    </Tooltip>
                   ))}
                 </div>
               </div>

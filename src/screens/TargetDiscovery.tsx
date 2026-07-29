@@ -9,6 +9,7 @@ import { ClippedPanel } from '@/components/ui/ClippedPanel';
 import { Button } from '@/components/ui/Button';
 import { CombProgress } from '@/components/ui/CombProgress';
 import { Sparkline } from '@/components/ui/Sparkline';
+import { Tooltip } from '@/components/ui/Tooltip';
 
 const EVIDENCE_LABEL: Record<string, string> = { high: 'High', moderate: 'Moderate', low: 'Low' };
 const EVIDENCE_COLOR: Record<string, string> = { high: 'text-pass', moderate: 'text-caution', low: 'text-paper/50' };
@@ -106,12 +107,36 @@ export function TargetDiscovery() {
             <table className="w-full min-w-[640px] border-collapse">
               <thead>
                 <tr className="data-text border-b border-navy-tint text-left text-[11px] tracking-widest text-paper/50 uppercase">
-                  <th className="px-4 py-3 font-normal">Symbol</th>
-                  <th className="px-4 py-3 font-normal">Accession</th>
-                  <th className="px-4 py-3 font-normal">Length</th>
-                  <th className="px-4 py-3 font-normal">Conservation</th>
-                  <th className="px-4 py-3 font-normal">Expression</th>
-                  <th className="px-4 py-3 font-normal">Trend</th>
+                  <th className="px-4 py-3 font-normal">
+                    <Tooltip label="Mock gene symbol assigned to this candidate.">
+                      <span>Symbol</span>
+                    </Tooltip>
+                  </th>
+                  <th className="px-4 py-3 font-normal">
+                    <Tooltip label="Mock RefSeq-style accession number for the transcript.">
+                      <span>Accession</span>
+                    </Tooltip>
+                  </th>
+                  <th className="px-4 py-3 font-normal">
+                    <Tooltip label="Transcript length in nucleotides.">
+                      <span>Length</span>
+                    </Tooltip>
+                  </th>
+                  <th className="px-4 py-3 font-normal">
+                    <Tooltip label="How similar this gene is across related species — higher means a knockdown is more likely to translate across the target population.">
+                      <span>Conservation</span>
+                    </Tooltip>
+                  </th>
+                  <th className="px-4 py-3 font-normal">
+                    <Tooltip label="Mock RNA-seq expression evidence strength for this gene.">
+                      <span>Expression</span>
+                    </Tooltip>
+                  </th>
+                  <th className="px-4 py-3 font-normal">
+                    <Tooltip label="Relative expression trend across mock tissue/condition samples.">
+                      <span>Trend</span>
+                    </Tooltip>
+                  </th>
                   <th className="px-4 py-3 font-normal" />
                 </tr>
               </thead>

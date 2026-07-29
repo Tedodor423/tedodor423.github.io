@@ -21,8 +21,14 @@ export interface PlasmidMapProps {
   size?: number;
 }
 
+// Room either side of the circle for feature labels — without this the
+// longest labels (e.g. "T7 promoter (opposing)") get clipped by the panel
+// edge when they land on the left side of the ring.
+const LABEL_MARGIN = 130;
+
 export function PlasmidMap({ design, hoveredFeatureId, onHoverFeature, reducedMotion, size = 460 }: PlasmidMapProps) {
-  const cx = size / 2;
+  const canvasWidth = size + LABEL_MARGIN * 2;
+  const cx = canvasWidth / 2;
   const cy = size / 2;
   const outerR = size * 0.36;
   const innerR = outerR - 22;
@@ -65,8 +71,8 @@ export function PlasmidMap({ design, hoveredFeatureId, onHoverFeature, reducedMo
   }, [design.lengthBp]);
 
   return (
-    <div className="relative" style={{ width: size, height: size }}>
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+    <div className="relative" style={{ width: canvasWidth, height: size }}>
+      <svg width={canvasWidth} height={size} viewBox={`0 0 ${canvasWidth} ${size}`}>
         <circle cx={cx} cy={cy} r={outerR + 12} fill="none" stroke={COLORS.navyTint} strokeWidth={1} strokeOpacity={0.4} />
         {ticks.map((bp) => {
           const a = angleFor(bp);
@@ -93,13 +99,15 @@ export function PlasmidMap({ design, hoveredFeatureId, onHoverFeature, reducedMo
 
           return (
             <g key={f.id} onMouseEnter={() => onHoverFeature(f.id)} onMouseLeave={() => onHoverFeature(null)} style={{ cursor: 'pointer' }}>
-              <path
-                d={d}
-                fill={FEATURE_COLORS[f.type]}
-                opacity={active ? 1 : 0.85}
-                stroke={active ? COLORS.paper : 'none'}
-                strokeWidth={active ? 1.5 : 0}
-              />
+              <g transform={`translate(${cx},${cy})`}>
+                <path
+                  d={d}
+                  fill={FEATURE_COLORS[f.type]}
+                  opacity={active ? 1 : 0.85}
+                  stroke={active ? COLORS.paper : 'none'}
+                  strokeWidth={active ? 1.5 : 0}
+                />
+              </g>
               {f.end - f.start > design.lengthBp * 0.03 && (
                 <>
                   <line x1={anchorX} y1={anchorY} x2={lx} y2={ly} stroke={COLORS.paper} strokeOpacity={0.3} strokeWidth={0.75} />
