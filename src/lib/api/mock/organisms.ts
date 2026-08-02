@@ -1,6 +1,9 @@
 import type { Organism } from '../types';
 
-export const ORGANISMS: Organism[] = [
+// Curated pests — the species selectable as a design target. Chosen for
+// breadth across the orders where RNAi biopesticides are actually being
+// pursued in the literature: Acari, Coleoptera, Lepidoptera, Hemiptera.
+export const TARGET_ORGANISMS: Organism[] = [
   {
     id: 'org-varroa',
     commonName: 'Varroa mite',
@@ -10,16 +13,6 @@ export const ORGANISMS: Organism[] = [
     transcriptCount: 21372,
     hasReferenceTranscriptome: true,
     kind: 'target',
-  },
-  {
-    id: 'org-apis',
-    commonName: 'Western honey bee',
-    scientificName: 'Apis mellifera',
-    taxid: 7460,
-    sourceDb: 'RefSeq',
-    transcriptCount: 24385,
-    hasReferenceTranscriptome: true,
-    kind: 'pollinator',
   },
   {
     id: 'org-leptinotarsa',
@@ -42,6 +35,72 @@ export const ORGANISMS: Organism[] = [
     kind: 'target',
   },
   {
+    id: 'org-spodoptera',
+    commonName: 'Fall armyworm',
+    scientificName: 'Spodoptera frugiperda',
+    taxid: 7108,
+    sourceDb: 'RefSeq',
+    transcriptCount: 23210,
+    hasReferenceTranscriptome: true,
+    kind: 'target',
+  },
+  {
+    id: 'org-plutella',
+    commonName: 'Diamondback moth',
+    scientificName: 'Plutella xylostella',
+    taxid: 51655,
+    sourceDb: 'RefSeq',
+    transcriptCount: 18540,
+    hasReferenceTranscriptome: true,
+    kind: 'target',
+  },
+  {
+    id: 'org-bemisia',
+    commonName: 'Silverleaf whitefly',
+    scientificName: 'Bemisia tabaci',
+    taxid: 7038,
+    sourceDb: 'RefSeq',
+    transcriptCount: 20117,
+    hasReferenceTranscriptome: true,
+    kind: 'target',
+  },
+  {
+    id: 'org-myzus',
+    commonName: 'Green peach aphid',
+    scientificName: 'Myzus persicae',
+    taxid: 13164,
+    sourceDb: 'RefSeq',
+    transcriptCount: 17836,
+    hasReferenceTranscriptome: true,
+    kind: 'target',
+  },
+  {
+    id: 'org-halyomorpha',
+    commonName: 'Brown marmorated stink bug',
+    scientificName: 'Halyomorpha halys',
+    taxid: 286706,
+    sourceDb: 'RefSeq',
+    transcriptCount: 19348,
+    hasReferenceTranscriptome: true,
+    kind: 'target',
+  },
+];
+
+// Ecologically important non-target species offered in the safety screening
+// panel — pollinators, beneficial predators/parasitoids, domesticated and
+// aquatic sentinels. Never selectable as a design target.
+export const NON_TARGET_ORGANISMS: Organism[] = [
+  {
+    id: 'org-apis',
+    commonName: 'Western honey bee',
+    scientificName: 'Apis mellifera',
+    taxid: 7460,
+    sourceDb: 'RefSeq',
+    transcriptCount: 24385,
+    hasReferenceTranscriptome: true,
+    kind: 'non-target',
+  },
+  {
     id: 'org-bombus',
     commonName: 'Buff-tailed bumblebee',
     scientificName: 'Bombus terrestris',
@@ -49,37 +108,7 @@ export const ORGANISMS: Organism[] = [
     sourceDb: 'RefSeq',
     transcriptCount: 20411,
     hasReferenceTranscriptome: true,
-    kind: 'pollinator',
-  },
-  {
-    id: 'org-human',
-    commonName: 'Human',
-    scientificName: 'Homo sapiens',
-    taxid: 9606,
-    sourceDb: 'RefSeq',
-    transcriptCount: 172699,
-    hasReferenceTranscriptome: true,
-    kind: 'human',
-  },
-  {
-    id: 'org-dwv-a',
-    commonName: 'Deformed wing virus A',
-    scientificName: 'Deformed wing virus A',
-    taxid: 198112,
-    sourceDb: 'GenBank',
-    transcriptCount: 1,
-    hasReferenceTranscriptome: true,
-    kind: 'virus',
-  },
-  {
-    id: 'org-dwv-b',
-    commonName: 'Deformed wing virus B',
-    scientificName: 'Deformed wing virus B',
-    taxid: 198172,
-    sourceDb: 'GenBank',
-    transcriptCount: 1,
-    hasReferenceTranscriptome: true,
-    kind: 'virus',
+    kind: 'non-target',
   },
   {
     id: 'org-osmia',
@@ -89,7 +118,47 @@ export const ORGANISMS: Organism[] = [
     sourceDb: 'VectorBase',
     transcriptCount: 0,
     hasReferenceTranscriptome: false,
-    kind: 'pollinator',
+    kind: 'non-target',
+  },
+  {
+    id: 'org-monarch',
+    commonName: 'Monarch butterfly',
+    scientificName: 'Danaus plexippus',
+    taxid: 13037,
+    sourceDb: 'RefSeq',
+    transcriptCount: 16324,
+    hasReferenceTranscriptome: true,
+    kind: 'non-target',
+  },
+  {
+    id: 'org-bombyx',
+    commonName: 'Domestic silkworm',
+    scientificName: 'Bombyx mori',
+    taxid: 7091,
+    sourceDb: 'RefSeq',
+    transcriptCount: 22987,
+    hasReferenceTranscriptome: true,
+    kind: 'non-target',
+  },
+  {
+    id: 'org-coccinella',
+    commonName: 'Seven-spot ladybird',
+    scientificName: 'Coccinella septempunctata',
+    taxid: 41139,
+    sourceDb: 'RefSeq',
+    transcriptCount: 15982,
+    hasReferenceTranscriptome: true,
+    kind: 'non-target',
+  },
+  {
+    id: 'org-chrysoperla',
+    commonName: 'Green lacewing',
+    scientificName: 'Chrysoperla carnea',
+    taxid: 189513,
+    sourceDb: 'VectorBase',
+    transcriptCount: 0,
+    hasReferenceTranscriptome: false,
+    kind: 'non-target',
   },
   {
     id: 'org-nasonia',
@@ -99,7 +168,7 @@ export const ORGANISMS: Organism[] = [
     sourceDb: 'RefSeq',
     transcriptCount: 16891,
     hasReferenceTranscriptome: true,
-    kind: 'pollinator',
+    kind: 'non-target',
   },
   {
     id: 'org-tribolium',
@@ -109,9 +178,32 @@ export const ORGANISMS: Organism[] = [
     sourceDb: 'RefSeq',
     transcriptCount: 17395,
     hasReferenceTranscriptome: true,
-    kind: 'pollinator',
+    kind: 'non-target',
+  },
+  {
+    id: 'org-daphnia',
+    commonName: 'Water flea',
+    scientificName: 'Daphnia magna',
+    taxid: 35525,
+    sourceDb: 'RefSeq',
+    transcriptCount: 14762,
+    hasReferenceTranscriptome: true,
+    kind: 'non-target',
   },
 ];
+
+export const HUMAN_ORGANISM: Organism = {
+  id: 'org-human',
+  commonName: 'Human',
+  scientificName: 'Homo sapiens',
+  taxid: 9606,
+  sourceDb: 'RefSeq',
+  transcriptCount: 172699,
+  hasReferenceTranscriptome: true,
+  kind: 'human',
+};
+
+export const ORGANISMS: Organism[] = [...TARGET_ORGANISMS, ...NON_TARGET_ORGANISMS, HUMAN_ORGANISM];
 
 export function searchOrganisms(q: string): Organism[] {
   const query = q.trim().toLowerCase();
@@ -128,8 +220,8 @@ export function getOrganism(id: string): Organism | undefined {
   return ORGANISMS.find((o) => o.id === id);
 }
 
-/** Species offered in the off-target safety panel — everything but the
- * currently-selected target organism and pure viral genomes. */
-export function screenableSpeciesPool(excludeOrganismId?: string): Organism[] {
-  return ORGANISMS.filter((o) => o.id !== excludeOrganismId && o.kind !== 'virus');
+/** Every species that can appear in the safety screening panel — every
+ * non-target/human organism, regardless of the currently selected pest. */
+export function screenableSpeciesPool(): Organism[] {
+  return [...NON_TARGET_ORGANISMS, HUMAN_ORGANISM];
 }

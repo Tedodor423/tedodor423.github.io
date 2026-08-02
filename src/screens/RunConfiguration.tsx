@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, Clock } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Clock, Dna } from 'lucide-react';
 import { getApi } from '@/lib/api/client';
-import type { DeliveryChassis, Organism, SirnaLength } from '@/lib/api/types';
+import type { Organism } from '@/lib/api/types';
 import { useWizardStore } from '@/store/wizardStore';
 import { ClippedPanel } from '@/components/ui/ClippedPanel';
 import { Button } from '@/components/ui/Button';
@@ -10,22 +10,9 @@ import { Slider } from '@/components/ui/Slider';
 import { Toggle } from '@/components/ui/Toggle';
 import { Chip } from '@/components/ui/Chip';
 import { Tooltip } from '@/components/ui/Tooltip';
-
-const LENGTHS: SirnaLength[] = [19, 21, 22, 24];
-
-const LENGTH_TOOLTIPS: Record<SirnaLength, string> = {
-  19: 'Shortest standard length — highest specificity, marginally weaker duplex stability.',
-  21: 'Canonical Dicer-product length — the conventional default for RNAi design.',
-  22: 'Slightly longer duplex — can improve potency on harder-to-reach sites.',
-  24: 'Longest option here — stronger duplex, but a bigger footprint to fit into open regions.',
-};
-
-const CHASSIS_OPTIONS: Array<{ id: DeliveryChassis; label: string; note: string }> = [
-  { id: 'ecoli-ht115', label: 'E. coli HT115 (L4440)', note: 'IPTG-inducible dual-T7, feeding assay standard' },
-  { id: 'hairpin-cassette', label: 'Hairpin cassette', note: 'Single-promoter shRNA, compact construct' },
-  { id: 'snodgrassella-alvi', label: 'Engineered S. alvi', note: 'Gut symbiont delivery, chromosomal integration' },
-  { id: 's-cerevisiae', label: 'S. cerevisiae', note: 'Yeast feeding / dsRNA production chassis' },
-];
+import { CHASSIS_LABELS, CHASSIS_ORDER } from '@/lib/chassisLabels';
+import { sirnaLengthForOrganism } from '@/lib/rnaiBiology';
+import { suggestedSafetySpeciesFor } from '@/lib/safetySpeciesMap';
 
 function thresholdExplainer(v: number): string {
   if (v <= 17) return 'Very stringent — flags almost any partial homology. Expect more candidates rejected.';
@@ -42,21 +29,33 @@ export function RunConfiguration() {
   useEffect(() => {
     getApi()
       .searchOrganisms('')
-      .then((all) =>
-        setSpeciesPool(all.filter((o) => o.kind !== 'virus' && o.id !== store.organism?.id)),
-      );
+      .then((all) => setSpeciesPool(all.filter((o) => o.kind !== 'target')));
+  }, []);
+
+  const derivedLength = useMemo(() => sirnaLengthForOrganism(store.organism), [store.organism]);
+  useEffect(() => {
+    store.setSirnaLength(derivedLength.length);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [store.organism?.id]);
+  }, [derivedLength.length]);
+
+  const recommendedIds = useMemo(
+    () => new Set(suggestedSafetySpeciesFor(store.organism?.id)),
+    [store.organism?.id],
+  );
+  const sortedSpecies = useMemo(
+    () =>
+      [...speciesPool].sort((a, b) => {
+        const ra = recommendedIds.has(a.id) ? 0 : 1;
+        const rb = recommendedIds.has(b.id) ? 0 : 1;
+        return ra - rb;
+      }),
+    [speciesPool, recommendedIds],
+  );
 
   const estimatedMinutes = useMemo(() => {
-    const base =
-      2 +
-      store.numCandidates * 0.4 +
-      store.screenSpeciesIds.length * 0.6 +
-      (store.chimericDesign ? 3 : 0) +
-      (store.accessibilityWeighting ? 1 : 0);
+    const base = 3 + store.numCandidates * 0.4 + store.screenSpeciesIds.length * 0.6 + (store.chimericDesign ? 3 : 0);
     return [Math.round(base * 0.8), Math.round(base * 1.35)];
-  }, [store.numCandidates, store.screenSpeciesIds.length, store.chimericDesign, store.accessibilityWeighting]);
+  }, [store.numCandidates, store.screenSpeciesIds.length, store.chimericDesign]);
 
   return (
     <div className="mx-auto max-w-5xl px-6 py-10">
@@ -82,27 +81,22 @@ export function RunConfiguration() {
                 onChange={store.setNumCandidates}
               />
 
-              <div>
-                <div className="mb-2 font-heading text-sm font-semibold text-paper/90">
-                  siRNA length
+              <Tooltip label={derivedLength.note}>
+                <div className="flex items-start justify-between gap-4 border border-navy-tint bg-navy-deep px-4 py-3">
+                  <div className="flex items-start gap-2">
+                    <Dna size={15} className="mt-0.5 shrink-0 text-brand-yellow" />
+                    <div>
+                      <div className="font-heading text-sm font-semibold text-paper/90">siRNA duplex length</div>
+                      <div className="mt-0.5 text-xs text-paper/55">
+                        Auto-derived from {store.organism?.commonName ?? 'target'} Dicer-2/Argonaute processing.
+                      </div>
+                    </div>
+                  </div>
+                  <div className="data-text shrink-0 text-2xl font-bold text-brand-yellow">
+                    {store.sirnaLength} nt
+                  </div>
                 </div>
-                <div className="flex gap-2">
-                  {LENGTHS.map((len) => (
-                    <Tooltip key={len} label={LENGTH_TOOLTIPS[len]}>
-                      <button
-                        onClick={() => store.setSirnaLength(len)}
-                        className={`data-text flex-1 border px-3 py-2.5 text-sm font-bold transition-colors ${
-                          store.sirnaLength === len
-                            ? 'border-brand-yellow bg-brand-yellow text-ink'
-                            : 'border-navy-tint text-paper/70 hover:border-paper/40'
-                        }`}
-                      >
-                        {len} nt
-                      </button>
-                    </Tooltip>
-                  ))}
-                </div>
-              </div>
+              </Tooltip>
 
               <Slider
                 label="Off-target contiguous-match threshold"
@@ -122,19 +116,35 @@ export function RunConfiguration() {
                 Species safety panel
               </div>
               <p className="mb-3 text-xs text-paper/55">
-                Selected species are cross-screened for off-target homology. Species without a
-                reference transcriptome cannot be screened and are marked accordingly rather than
-                silently skipped.
+                Nothing is pre-selected. Species flagged{' '}
+                <span className="text-brand-yellow">recommended</span> share habitat or a trophic
+                link with the selected pest; species without a reference transcriptome cannot be
+                screened and are marked accordingly rather than silently skipped.
               </p>
               <div className="flex flex-wrap gap-2">
-                {speciesPool.map((o) => (
-                  <Chip
+                {sortedSpecies.map((o) => (
+                  <Tooltip
                     key={o.id}
-                    label={o.commonName}
-                    active={store.screenSpeciesIds.includes(o.id)}
-                    unscreenable={!o.hasReferenceTranscriptome}
-                    onClick={() => o.hasReferenceTranscriptome && store.toggleScreenSpecies(o.id)}
-                  />
+                    label={
+                      !o.hasReferenceTranscriptome
+                        ? `${o.commonName} has no reference transcriptome and cannot be screened.`
+                        : recommendedIds.has(o.id)
+                          ? `${o.commonName} — recommended: shares habitat or a trophic link with ${store.organism?.commonName ?? 'the selected pest'}.`
+                          : `${o.commonName} — add to the safety panel to screen candidates against it.`
+                    }
+                  >
+                    <span className="relative inline-block">
+                      {recommendedIds.has(o.id) && o.hasReferenceTranscriptome && (
+                        <span className="absolute -top-1.5 -right-1.5 h-2 w-2 rounded-full bg-brand-yellow" />
+                      )}
+                      <Chip
+                        label={o.commonName}
+                        active={store.screenSpeciesIds.includes(o.id)}
+                        unscreenable={!o.hasReferenceTranscriptome}
+                        onClick={() => o.hasReferenceTranscriptome && store.toggleScreenSpecies(o.id)}
+                      />
+                    </span>
+                  </Tooltip>
                 ))}
               </div>
             </div>
@@ -149,17 +159,15 @@ export function RunConfiguration() {
                 onChange={store.setSeedFiltering}
               />
               <Toggle
-                label="Accessibility weighting"
-                description="Prefer binding sites the transcript's own fold leaves open"
-                checked={store.accessibilityWeighting}
-                onChange={store.setAccessibilityWeighting}
-              />
-              <Toggle
                 label="Chimeric multi-target design"
                 description="Allow a single construct to carry siRNAs against more than one gene"
                 checked={store.chimericDesign}
                 onChange={store.setChimericDesign}
               />
+              <div className="pt-2.5 text-xs text-paper/45">
+                Accessibility weighting — preferring binding sites the transcript's own fold
+                leaves open — always runs as part of the design pipeline.
+              </div>
             </div>
           </ClippedPanel>
         </div>
@@ -171,18 +179,17 @@ export function RunConfiguration() {
                 Delivery chassis
               </div>
               <div className="space-y-2">
-                {CHASSIS_OPTIONS.map((c) => (
+                {CHASSIS_ORDER.map((id) => (
                   <button
-                    key={c.id}
-                    onClick={() => store.setChassis(c.id)}
+                    key={id}
+                    onClick={() => store.setChassis(id)}
                     className={`w-full border px-3 py-3 text-left transition-colors ${
-                      store.chassis === c.id
+                      store.chassis === id
                         ? 'border-brand-yellow bg-brand-yellow/10'
                         : 'border-navy-tint hover:border-paper/30'
                     }`}
                   >
-                    <div className="font-heading text-sm font-bold text-paper">{c.label}</div>
-                    <div className="mt-0.5 text-xs text-paper/55">{c.note}</div>
+                    <div className="font-heading text-sm font-bold text-paper">{CHASSIS_LABELS[id]}</div>
                   </button>
                 ))}
               </div>

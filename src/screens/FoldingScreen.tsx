@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, Eye, Dna } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, Eye, Dna } from 'lucide-react';
 import { getApi } from '@/lib/api/client';
 import { useJob } from '@/lib/hooks/useJob';
 import { useElementSize } from '@/lib/hooks/useElementSize';
@@ -19,8 +19,31 @@ export function FoldingScreen() {
   const store = useWizardStore();
   const reducedMotion = useWizardStore((s) => s.reducedMotion);
 
-  const gene = store.discoveredGenes.find((g) => g.id === store.selectedGeneId) ?? null;
+  const geneList = useMemo(
+    () =>
+      store.selectedGeneIds
+        .map((id) => store.discoveredGenes.find((g) => g.id === id))
+        .filter((g): g is NonNullable<typeof g> => Boolean(g)),
+    [store.selectedGeneIds, store.discoveredGenes],
+  );
+
+  const [activeGeneId, setActiveGeneId] = useState<string | null>(geneList[0]?.id ?? null);
+  useEffect(() => {
+    if (!geneList.some((g) => g.id === activeGeneId)) {
+      setActiveGeneId(geneList[0]?.id ?? null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [geneList]);
+
+  const gene = geneList.find((g) => g.id === activeGeneId) ?? null;
   const transcriptId = gene?.transcriptId ?? null;
+
+  const isGeneReady = useCallback(
+    (transcriptId: string) =>
+      Boolean(store.foldingProfiles[transcriptId]) &&
+      store.sirnaCandidates.some((c) => c.transcriptId === transcriptId),
+    [store.foldingProfiles, store.sirnaCandidates],
+  );
 
   const startFold = useCallback(() => {
     if (!transcriptId) return Promise.reject(new Error('no transcript selected'));
@@ -33,45 +56,54 @@ export function FoldingScreen() {
     return getApi().tileSirnas(transcriptId, {
       length: store.sirnaLength,
       seedFiltering: store.seedFiltering,
-      accessibilityWeighting: store.accessibilityWeighting,
+      accessibilityWeighting: true,
     });
-  }, [transcriptId, store.sirnaLength, store.seedFiltering, store.accessibilityWeighting]);
+  }, [transcriptId, store.sirnaLength, store.seedFiltering]);
   const { job: tileJob } = useJob<SirnaCandidate[]>(transcriptId ? startTile : null, [
     transcriptId,
     store.sirnaLength,
   ]);
 
   useEffect(() => {
-    if (foldJob?.status === 'succeeded' && foldJob.result) store.setFoldingProfile(foldJob.result);
+    if (foldJob?.status === 'succeeded' && foldJob.result && transcriptId) {
+      store.setFoldingProfile(transcriptId, foldJob.result);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [foldJob?.status]);
+  }, [foldJob?.status, transcriptId]);
 
   useEffect(() => {
-    if (tileJob?.status === 'succeeded' && tileJob.result) {
-      store.setSirnaCandidates(tileJob.result);
+    if (tileJob?.status === 'succeeded' && tileJob.result && transcriptId) {
+      store.addSirnaCandidates(transcriptId, tileJob.result);
       if (!store.selectedCandidateId && tileJob.result.length > 0) {
         store.setSelectedCandidateId(tileJob.result[0].id);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tileJob?.status]);
+  }, [tileJob?.status, transcriptId]);
 
   const [colorMode, setColorMode] = useState<'base' | 'accessibility'>('base');
   const [range, setRange] = useState<[number, number]>([0, 150]);
   const { ref: structureRef, size: structureSize } = useElementSize<HTMLDivElement>();
 
-  const profile = store.foldingProfile;
-  const candidates = store.sirnaCandidates.slice(0, 14);
-  const trackCandidates = store.sirnaCandidates.slice(0, 60);
+  const profile = transcriptId ? (store.foldingProfiles[transcriptId] ?? null) : null;
+  const activeCandidates = useMemo(
+    () => store.sirnaCandidates.filter((c) => c.transcriptId === transcriptId),
+    [store.sirnaCandidates, transcriptId],
+  );
+  const candidates = activeCandidates.slice(0, 14);
+  const trackCandidates = activeCandidates.slice(0, 60);
   const selectedCandidate = store.sirnaCandidates.find((c) => c.id === store.selectedCandidateId) ?? null;
+  const dockingProfile = selectedCandidate ? (store.foldingProfiles[selectedCandidate.transcriptId] ?? null) : null;
 
   useEffect(() => {
     if (profile) setRange([0, Math.min(150, profile.sequence.length)]);
   }, [profile?.transcriptId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const bothReady = foldJob?.status === 'succeeded' && tileJob?.status === 'succeeded' && profile;
+  const allGenesReady = geneList.length > 0 && geneList.every((g) => isGeneReady(g.transcriptId));
+  const pendingGenes = geneList.filter((g) => !isGeneReady(g.transcriptId));
 
-  if (!gene) {
+  if (geneList.length === 0) {
     return (
       <div className="mx-auto max-w-3xl px-6 py-16 text-center">
         <p className="text-paper/70">No gene selected yet.</p>
@@ -91,10 +123,39 @@ export function FoldingScreen() {
         <h1 className="font-display mt-1 text-4xl text-paper sm:text-5xl">Accessibility &amp; folding</h1>
         <p className="mt-2 max-w-2xl text-sm text-paper/65">
           <Dna size={13} className="mr-1 inline" />
-          {gene.symbol} · {gene.accession} — occlusion renders as capping: an open cell shows its
+          {gene?.symbol} · {gene?.accession} — occlusion renders as capping: an open cell shows its
           base colour, a capped cell is sealed by the transcript's own fold.
         </p>
       </header>
+
+      {geneList.length > 1 && (
+        <div className="mb-6 flex flex-wrap gap-2">
+          {geneList.map((g) => {
+            const ready = isGeneReady(g.transcriptId);
+            const active = g.id === activeGeneId;
+            return (
+              <Tooltip
+                key={g.id}
+                label={ready ? `${g.symbol} — folded and tiled.` : `${g.symbol} — switch here to fold and tile it.`}
+              >
+                <button
+                  onClick={() => setActiveGeneId(g.id)}
+                  className={`data-text flex items-center gap-2 border px-3 py-2 text-xs font-bold transition-colors ${
+                    active ? 'border-brand-yellow bg-brand-yellow/10 text-brand-yellow' : 'border-navy-tint text-paper/60 hover:border-paper/30'
+                  }`}
+                >
+                  <span
+                    className={`flex h-3.5 w-3.5 items-center justify-center rounded-full ${ready ? 'bg-pass text-navy-deep' : 'bg-navy-tint text-transparent'}`}
+                  >
+                    <Check size={9} strokeWidth={4} />
+                  </span>
+                  {g.symbol}
+                </button>
+              </Tooltip>
+            );
+          })}
+        </div>
+      )}
 
       {(!bothReady || foldJob?.status !== 'succeeded' || tileJob?.status !== 'succeeded') && (
         <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -154,6 +215,7 @@ export function FoldingScreen() {
                   height={structureSize.height}
                   highlightRange={
                     selectedCandidate &&
+                    selectedCandidate.transcriptId === transcriptId &&
                     selectedCandidate.position < range[1] &&
                     selectedCandidate.position + selectedCandidate.length > range[0]
                       ? [selectedCandidate.position, selectedCandidate.position + selectedCandidate.length]
@@ -241,13 +303,13 @@ export function FoldingScreen() {
               </div>
             </ClippedPanel>
 
-            {selectedCandidate && (
+            {selectedCandidate && dockingProfile && (
               <ClippedPanel cut={14} bg="var(--color-navy-tint)">
                 <div className="p-5">
                   <div className="data-text mb-3 text-[11px] tracking-widest text-paper/60 uppercase">
                     Docking preview — {selectedCandidate.senseSeq}
                   </div>
-                  <SirnaDocking profile={profile} candidate={selectedCandidate} reducedMotion={reducedMotion} />
+                  <SirnaDocking profile={dockingProfile} candidate={selectedCandidate} reducedMotion={reducedMotion} />
                 </div>
               </ClippedPanel>
             )}
@@ -255,15 +317,22 @@ export function FoldingScreen() {
         </div>
       )}
 
-      <div className="mt-10 flex justify-between">
+      <div className="mt-10 flex items-center justify-between">
         <Button variant="ghost" onClick={() => navigate('/discover')}>
           <ArrowLeft size={16} />
           Back
         </Button>
-        <Button disabled={!bothReady} onClick={() => navigate('/screen')}>
-          Continue to off-target screening
-          <ArrowRight size={16} />
-        </Button>
+        <div className="flex items-center gap-4">
+          {!allGenesReady && pendingGenes.length > 0 && (
+            <span className="data-text text-xs text-caution">
+              Still need: {pendingGenes.map((g) => g.symbol).join(', ')}
+            </span>
+          )}
+          <Button disabled={!allGenesReady} onClick={() => navigate('/screen')}>
+            Continue to off-target screening
+            <ArrowRight size={16} />
+          </Button>
+        </div>
       </div>
     </div>
   );

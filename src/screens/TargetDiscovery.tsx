@@ -1,6 +1,6 @@
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, ChevronDown, TerminalSquare } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, ChevronDown, TerminalSquare } from 'lucide-react';
 import { getApi } from '@/lib/api/client';
 import { useJob } from '@/lib/hooks/useJob';
 import type { DiscoverResultSet } from '@/lib/api/types';
@@ -58,8 +58,8 @@ export function TargetDiscovery() {
   useEffect(() => {
     if (job?.status === 'succeeded' && job.result) {
       store.setDiscoveredGenes(job.result.genes);
-      if (!store.selectedGeneId && job.result.genes.length > 0) {
-        store.setSelectedGeneId(job.result.genes[0].id);
+      if (store.selectedGeneIds.length === 0 && job.result.genes.length > 0) {
+        store.toggleSelectedGene(job.result.genes[0].id);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -108,6 +108,11 @@ export function TargetDiscovery() {
               <thead>
                 <tr className="data-text border-b border-navy-tint text-left text-[11px] tracking-widest text-paper/50 uppercase">
                   <th className="px-4 py-3 font-normal">
+                    <Tooltip label="Carry this gene forward into folding — check as many as you want in one design run.">
+                      <span>Use</span>
+                    </Tooltip>
+                  </th>
+                  <th className="px-4 py-3 font-normal">
                     <Tooltip label="Mock gene symbol assigned to this candidate.">
                       <span>Symbol</span>
                     </Tooltip>
@@ -143,7 +148,7 @@ export function TargetDiscovery() {
               <tbody>
                 {genes.map((g) => {
                   const isOpen = expanded === g.id;
-                  const isSelected = store.selectedGeneId === g.id;
+                  const isSelected = store.selectedGeneIds.includes(g.id);
                   return (
                     <Fragment key={g.id}>
                       <tr
@@ -152,6 +157,20 @@ export function TargetDiscovery() {
                           isSelected ? 'bg-brand-yellow/5' : ''
                         }`}
                       >
+                        <td className="px-4 py-3">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              store.toggleSelectedGene(g.id);
+                            }}
+                            aria-pressed={isSelected}
+                            className={`flex h-5 w-5 items-center justify-center border transition-colors ${
+                              isSelected ? 'border-brand-yellow bg-brand-yellow text-ink' : 'border-paper/30 text-transparent hover:border-paper/50'
+                            }`}
+                          >
+                            <Check size={13} strokeWidth={3} />
+                          </button>
+                        </td>
                         <td className="px-4 py-3 font-bold text-paper">{g.symbol}</td>
                         <td className="px-4 py-3 text-paper/60">{g.accession}</td>
                         <td className="px-4 py-3 text-paper/60">{g.lengthNt.toLocaleString()} nt</td>
@@ -171,14 +190,14 @@ export function TargetDiscovery() {
                       </tr>
                       {isOpen && (
                         <tr className="border-b border-navy-tint/50 bg-navy-deep">
-                          <td colSpan={7} className="px-4 py-4">
+                          <td colSpan={8} className="px-4 py-4">
                             <p className="mb-3 text-xs text-paper/60">{g.description}</p>
                             <Button
                               variant={isSelected ? 'secondary' : 'primary'}
-                              onClick={() => store.setSelectedGeneId(g.id)}
+                              onClick={() => store.toggleSelectedGene(g.id)}
                               className="text-xs"
                             >
-                              {isSelected ? 'Selected for folding' : 'Use this gene'}
+                              {isSelected ? 'Remove from this run' : 'Use this gene'}
                             </Button>
                           </td>
                         </tr>
@@ -192,15 +211,22 @@ export function TargetDiscovery() {
         </ClippedPanel>
       )}
 
-      <div className="mt-10 flex justify-between">
+      <div className="mt-10 flex items-center justify-between">
         <Button variant="ghost" onClick={() => navigate('/configure')}>
           <ArrowLeft size={16} />
           Back
         </Button>
-        <Button disabled={job?.status !== 'succeeded' || !store.selectedGeneId} onClick={() => navigate('/fold')}>
-          Continue to folding
-          <ArrowRight size={16} />
-        </Button>
+        <div className="flex items-center gap-4">
+          {store.selectedGeneIds.length > 0 && (
+            <span className="data-text text-xs text-paper/50">
+              {store.selectedGeneIds.length} gene{store.selectedGeneIds.length === 1 ? '' : 's'} selected
+            </span>
+          )}
+          <Button disabled={job?.status !== 'succeeded' || store.selectedGeneIds.length === 0} onClick={() => navigate('/fold')}>
+            Continue to folding
+            <ArrowRight size={16} />
+          </Button>
+        </div>
       </div>
     </div>
   );

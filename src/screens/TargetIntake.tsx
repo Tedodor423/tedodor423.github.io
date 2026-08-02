@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Dna, Egg, Bug, FileCode2, Search, CheckCircle2, XCircle } from 'lucide-react';
+import { ArrowRight, Dna, Egg, Sprout, FileCode2, Search, CheckCircle2, XCircle } from 'lucide-react';
 import { getApi } from '@/lib/api/client';
 import type { Organism, TargetClass } from '@/lib/api/types';
 import { useWizardStore } from '@/store/wizardStore';
@@ -17,8 +17,8 @@ const CLASS_CARDS: Array<{
   icon: typeof Dna;
 }> = [
   { id: 'essential', title: 'Essential gene', description: 'Housekeeping / viability targets — lethal knockdown.', icon: Dna },
-  { id: 'reproduction', title: 'Reproduction gene', description: 'Fertility and development targets — population suppression.', icon: Egg },
-  { id: 'viral', title: 'Viral genome', description: 'Target the pathogen genome directly, not the host.', icon: Bug },
+  { id: 'population-control', title: 'Population Control', description: 'Fertility and germline targets — suppresses population size, not individual survival.', icon: Egg },
+  { id: 'developmental', title: 'Key Developmental Genes', description: 'Molting and metamorphosis targets — disrupts development rather than an adult-stage process.', icon: Sprout },
   { id: 'custom', title: 'Custom sequence', description: 'Paste your own FASTA-format target region.', icon: FileCode2 },
 ];
 
@@ -39,7 +39,9 @@ export function TargetIntake() {
         .searchOrganisms(query)
         .then((r) => {
           if (!cancelled) {
-            setResults(r);
+            // Target intake only offers pests — non-target/human organisms
+            // exist for the safety screening panel later, never as a target.
+            setResults(r.filter((o) => o.kind === 'target'));
             setSearching(false);
           }
         });

@@ -3,11 +3,11 @@ import { rngFor } from './prng';
 import { generateAccession, generateSequence } from './sequence';
 import { getOrganism } from './organisms';
 import {
+  DEVELOPMENTAL_GENE_NAMES,
   ESSENTIAL_GENE_NAMES,
   geneSymbolFrom,
   HOUSEKEEPING_GENE_NAMES,
-  REPRODUCTION_GENE_NAMES,
-  VIRAL_ORF_NAMES,
+  POPULATION_CONTROL_GENE_NAMES,
 } from './genes';
 
 export interface PoolEntry {
@@ -30,8 +30,7 @@ function buildEntry(
 ): PoolEntry {
   const key = `transcript:${organism.id}:${targetClass}:${index}:${name}`;
   const rng = rngFor(key);
-  const isViral = organism.kind === 'virus';
-  const lengthNt = isViral ? rng.int(1000, 3000) : rng.int(800, 3000);
+  const lengthNt = rng.int(800, 3000);
   const gcTarget = rng.range(0.32, 0.48);
   const sequence = generateSequence(rng, lengthNt, gcTarget);
   const symbol = geneSymbolFrom(name, index);
@@ -54,18 +53,16 @@ export function buildTranscriptPool(organism: Organism): PoolEntry[] {
   const cached = poolCache.get(organism.id);
   if (cached) return cached;
 
-  let entries: PoolEntry[];
-  if (organism.kind === 'virus') {
-    entries = VIRAL_ORF_NAMES.map((name, i) => buildEntry(organism, name, i, 'viral'));
-  } else {
-    entries = [
-      ...ESSENTIAL_GENE_NAMES.map((name, i) => buildEntry(organism, name, i, 'essential')),
-      ...REPRODUCTION_GENE_NAMES.map((name, i) => buildEntry(organism, name, i, 'reproduction')),
-      ...HOUSEKEEPING_GENE_NAMES.map((name, i) =>
-        buildEntry(organism, name, i, 'essential' as TargetClass),
-      ),
-    ];
-  }
+  const entries: PoolEntry[] = [
+    ...ESSENTIAL_GENE_NAMES.map((name, i) => buildEntry(organism, name, i, 'essential')),
+    ...HOUSEKEEPING_GENE_NAMES.map((name, i) =>
+      buildEntry(organism, name, i, 'essential' as TargetClass),
+    ),
+    ...POPULATION_CONTROL_GENE_NAMES.map((name, i) =>
+      buildEntry(organism, name, i, 'population-control'),
+    ),
+    ...DEVELOPMENTAL_GENE_NAMES.map((name, i) => buildEntry(organism, name, i, 'developmental')),
+  ];
   poolCache.set(organism.id, entries);
   return entries;
 }
@@ -76,7 +73,6 @@ export function listTranscripts(organism: Organism): Transcript[] {
 
 export function transcriptsForClass(organism: Organism, targetClass: TargetClass): Transcript[] {
   const pool = buildTranscriptPool(organism);
-  if (targetClass === 'viral') return pool.map((e) => e.transcript);
   return pool.filter((e) => e.targetClass === targetClass).map((e) => e.transcript);
 }
 

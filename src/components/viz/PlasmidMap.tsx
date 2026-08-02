@@ -120,7 +120,7 @@ export function PlasmidMap({ design, hoveredFeatureId, onHoverFeature, reducedMo
                     fontSize={9.5}
                     fill={active ? COLORS.brandYellow : 'rgba(255,255,255,0.7)'}
                   >
-                    {f.name}
+                    {f.strand === 1 ? `${f.name} ▶` : `◀ ${f.name}`}
                   </text>
                 </>
               )}
@@ -154,7 +154,11 @@ export function PlasmidMap({ design, hoveredFeatureId, onHoverFeature, reducedMo
           {design.lengthBp.toLocaleString()} bp
         </text>
         <text x={cx} y={cy + 12} textAnchor="middle" className="data-text" fontSize={9} fill="rgba(255,255,255,0.5)" letterSpacing={1}>
-          {design.topology === 'hairpin' ? 'HAIRPIN' : 'DUAL PROMOTER'}
+          {design.topology === 'hairpin'
+            ? 'HAIRPIN LOOP'
+            : design.topology === 'dumbbell'
+              ? 'DUMBBELL dsRNA'
+              : 'DUAL-PROMOTER'}
         </text>
       </svg>
     </div>

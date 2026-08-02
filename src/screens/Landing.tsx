@@ -50,7 +50,7 @@ export function Landing() {
           <div className="mb-4 flex items-center justify-center gap-2">
             <Sparkle size={16} />
             <span className="data-text text-xs font-bold tracking-[0.25em] text-brand-yellow uppercase">
-              dsRNA design platform
+              Occlusion-aware RNA design platform
             </span>
             <Sparkle size={16} />
           </div>
@@ -61,8 +61,8 @@ export function Landing() {
             Designer
           </div>
           <p className="font-heading mx-auto mt-6 max-w-2xl text-lg text-paper/80 sm:text-xl">
-            From target gene to cloning-ready cassette — occlusion-aware siRNA design, screened
-            against the species you actually need to protect.
+            From target gene to cloning-ready cassette — occlusion-aware RNA design, screened to
+            prevent off-target toxicity and increase targeting efficacy.
           </p>
           <div className="mt-10 flex justify-center">
             <Button

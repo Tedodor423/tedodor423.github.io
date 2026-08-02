@@ -2,42 +2,12 @@ import type {
   CassetteDesign,
   CassetteFeature,
   CassetteRequest,
-  DeliveryChassis,
   GoldenGateSite,
   SirnaCandidate,
 } from '../types';
 import { rngFor } from './prng';
 import { generateSequence, toDna } from './sequence';
-
-const CHASSIS_LABELS: Record<
-  DeliveryChassis,
-  { promoter: string; terminator: string; marker: string; usesHomologyArms: boolean }
-> = {
-  'ecoli-ht115': {
-    promoter: 'T7 promoter',
-    terminator: 'T7 terminator',
-    marker: 'AmpR (bla)',
-    usesHomologyArms: false,
-  },
-  'hairpin-cassette': {
-    promoter: 'T7 promoter',
-    terminator: 'T7 terminator',
-    marker: 'AmpR (bla)',
-    usesHomologyArms: false,
-  },
-  'snodgrassella-alvi': {
-    promoter: 'Ptrc constitutive promoter',
-    terminator: 'rrnB T1 terminator',
-    marker: 'SpecR (aadA)',
-    usesHomologyArms: true,
-  },
-  's-cerevisiae': {
-    promoter: 'GAL1 promoter',
-    terminator: 'CYC1 terminator',
-    marker: 'URA3',
-    usesHomologyArms: true,
-  },
-};
+import { HOMOLOGY_ARM_CHASSIS, MARKERS_BY_CHASSIS, PROMOTERS_BY_CHASSIS } from '@/lib/cassetteOptions';
 
 const HAIRPIN_LOOP = 'TTCAAGAGA'; // canonical short-hairpin loop spacer
 
@@ -72,8 +42,9 @@ export function buildCassette(
   req: CassetteRequest,
   candidates: SirnaCandidate[],
 ): CassetteDesign {
-  const labels = CHASSIS_LABELS[req.chassis];
-  const rng = rngFor(`cassette:${req.chassis}:${req.topology}:${req.candidateIds.join(',')}`);
+  const rng = rngFor(
+    `cassette:${req.chassis}:${req.topology}:${req.promoterId}:${req.markerId}:${req.candidateIds.join(',')}`,
+  );
 
   const insertSense = candidates
     .slice(0, 3)
@@ -86,11 +57,6 @@ export function buildCassette(
     .join('')
     .replace(/U/g, 'T');
 
-  const promoterSeq = toDna(generateSequence(rng, rng.int(60, 120), 0.55));
-  const terminatorSeq = toDna(generateSequence(rng, rng.int(40, 70), 0.5));
-  const markerSeq = toDna(generateSequence(rng, rng.int(600, 850), 0.5));
-  const homologyArmSeq = () => toDna(generateSequence(rng, rng.int(300, 480), 0.4));
-
   const features: CassetteFeature[] = [];
   const parts: string[] = [];
   let cursor = 0;
@@ -99,42 +65,56 @@ export function buildCassette(
     const start = cursor;
     parts.push(seq);
     cursor += seq.length;
-    features.push({
-      id: `feat-${features.length}`,
-      name,
-      type,
-      start,
-      end: cursor,
-      strand,
-    });
+    features.push({ id: `feat-${features.length}`, name, type, start, end: cursor, strand });
   };
 
-  if (labels.usesHomologyArms) {
-    push('5′ homology arm', 'homology-arm', homologyArmSeq(), 1);
-  }
-
-  push(labels.marker, 'marker', markerSeq, 1);
-
-  if (req.topology === 'hairpin') {
-    push(labels.promoter, 'promoter', promoterSeq, 1);
-    push('shRNA insert', 'insert', insertSense + HAIRPIN_LOOP + insertAntisense, 1);
-    push(labels.terminator, 'terminator', terminatorSeq, 1);
+  if (req.topology === 'dumbbell') {
+    // Cell-free enzymatic product — covalently closed loops at both ends,
+    // no promoter/terminator/marker, because nothing expresses it in vivo.
+    const loopCapSeq = () => toDna(generateSequence(rng, rng.int(8, 14), 0.5));
+    push('5′ loop closure', 'loop', loopCapSeq(), 1);
+    push('dsRNA duplex', 'insert', insertSense + HAIRPIN_LOOP + insertAntisense, 1);
+    push('3′ loop closure', 'loop', loopCapSeq(), -1);
   } else {
-    push(labels.promoter, 'promoter', promoterSeq, 1);
-    push('dsRNA insert', 'insert', insertSense, 1);
-    push(labels.terminator, 'terminator', terminatorSeq, 1);
-    push(`${labels.promoter} (opposing)`, 'promoter', promoterSeq, -1);
-  }
+    const promoterSpec =
+      PROMOTERS_BY_CHASSIS[req.chassis].find((p) => p.id === req.promoterId) ??
+      PROMOTERS_BY_CHASSIS[req.chassis][0];
+    const markerSpec =
+      MARKERS_BY_CHASSIS[req.chassis].find((m) => m.id === req.markerId) ??
+      MARKERS_BY_CHASSIS[req.chassis][0];
+    const usesHomologyArms = HOMOLOGY_ARM_CHASSIS.has(req.chassis);
 
-  if (labels.usesHomologyArms) {
-    push('3′ homology arm', 'homology-arm', homologyArmSeq(), 1);
+    const promoterSeq = () => toDna(generateSequence(rng, rng.int(60, 120), 0.55));
+    const terminatorSeq = () => toDna(generateSequence(rng, rng.int(40, 70), 0.5));
+    const markerSeq = toDna(generateSequence(rng, rng.int(600, 850), 0.5));
+    const homologyArmSeq = () => toDna(generateSequence(rng, rng.int(300, 480), 0.4));
+
+    if (usesHomologyArms) push('5′ homology arm', 'homology-arm', homologyArmSeq(), 1);
+    push(markerSpec.label, 'marker', markerSeq, 1);
+
+    if (req.topology === 'hairpin') {
+      push(promoterSpec.label, 'promoter', promoterSeq(), 1);
+      push('shRNA insert', 'insert', insertSense + HAIRPIN_LOOP + insertAntisense, 1);
+      push(promoterSpec.terminatorLabel, 'terminator', terminatorSeq(), 1);
+    } else {
+      // dual-promoter: opposing promoters transcribe the same insert from
+      // both directions — each strand's transcription unit gets its own
+      // matching terminator.
+      push(promoterSpec.label, 'promoter', promoterSeq(), 1);
+      push('dsRNA insert', 'insert', insertSense, 1);
+      push(promoterSpec.terminatorLabel, 'terminator', terminatorSeq(), 1);
+      push(`${promoterSpec.label} (opposing)`, 'promoter', promoterSeq(), -1);
+      push(`${promoterSpec.terminatorLabel} (opposing)`, 'terminator', terminatorSeq(), -1);
+    }
+
+    if (usesHomologyArms) push('3′ homology arm', 'homology-arm', homologyArmSeq(), 1);
   }
 
   const sequence = parts.join('');
   const goldenGateSites = findGoldenGateSites(sequence);
 
   return {
-    id: `cassette:${req.chassis}:${req.topology}:${req.candidateIds.length}`,
+    id: `cassette:${req.chassis}:${req.topology}:${req.promoterId}:${req.markerId}:${req.candidateIds.length}`,
     topology: req.topology,
     chassis: req.chassis,
     lengthBp: sequence.length,

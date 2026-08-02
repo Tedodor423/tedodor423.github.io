@@ -21,9 +21,9 @@ function scoreCell(
   }
 
   const rng = rngFor(`offtarget:${candidate.id}:${speciesId}`);
-  // Pollinators/relatives run a bit hotter than distant taxa — gives the
-  // matrix a believable shape rather than uniform noise.
-  const closeness = species.kind === 'pollinator' ? 1 : species.kind === 'human' ? 0.4 : 0.7;
+  // Closely-related non-target arthropods run a bit hotter than distant taxa
+  // — gives the matrix a believable shape rather than uniform noise.
+  const closeness = species.kind === 'non-target' ? 1 : species.kind === 'human' ? 0.4 : 0.7;
   const longestMatch = Math.round(rng.gaussian(9 + closeness * 6, 4));
   const clamped = Math.max(4, Math.min(candidate.length, longestMatch));
   const isHit = clamped >= threshold;

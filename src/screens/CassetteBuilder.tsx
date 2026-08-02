@@ -11,11 +11,13 @@ import { CombProgress } from '@/components/ui/CombProgress';
 import { PlasmidMap } from '@/components/viz/PlasmidMap';
 import { FEATURE_LABELS, LinearFeatureMap } from '@/components/viz/LinearFeatureMap';
 import { CHASSIS_LABELS, CHASSIS_ARTICLE } from '@/lib/chassisLabels';
+import { defaultMarkerId, defaultPromoterId, MARKERS_BY_CHASSIS, PROMOTERS_BY_CHASSIS } from '@/lib/cassetteOptions';
 import { Tooltip } from '@/components/ui/Tooltip';
 
 const TOPOLOGIES: Array<{ id: CassetteTopology; label: string; note: string }> = [
-  { id: 'dual-inverted-promoter', label: 'Dual inverted promoter', note: 'Opposing promoters transcribe both strands — classic L4440 dsRNA' },
-  { id: 'hairpin', label: 'Hairpin', note: 'Single promoter, self-annealing loop — compact shRNA cassette' },
+  { id: 'dual-promoter', label: 'Dual-Promoter Design', note: 'Opposing promoters transcribe both strands — classic L4440 dsRNA' },
+  { id: 'hairpin', label: 'Single Promoter with Hairpin Loop', note: 'Single promoter, self-annealing loop — compact shRNA cassette' },
+  { id: 'dumbbell', label: 'Dumbbell dsRNA', note: 'Loop-closed both ends, no promoter needed — cell-free enzymatic product' },
 ];
 
 export function CassetteBuilder() {
@@ -23,8 +25,15 @@ export function CassetteBuilder() {
   const store = useWizardStore();
   const reducedMotion = useWizardStore((s) => s.reducedMotion);
 
-  const [topology, setTopology] = useState<CassetteTopology>('dual-inverted-promoter');
+  const [topology, setTopology] = useState<CassetteTopology>('dual-promoter');
   const [hoveredFeatureId, setHoveredFeatureId] = useState<string | null>(null);
+  const [promoterId, setPromoterId] = useState(() => defaultPromoterId(store.chassis));
+  const [markerId, setMarkerId] = useState(() => defaultMarkerId(store.chassis));
+
+  useEffect(() => {
+    setPromoterId(defaultPromoterId(store.chassis));
+    setMarkerId(defaultMarkerId(store.chassis));
+  }, [store.chassis]);
 
   const candidateIds = useMemo(() => {
     const survivors = store.offTargetReport?.survivorIds ?? [];
@@ -33,13 +42,15 @@ export function CassetteBuilder() {
   }, [store.offTargetReport, store.sirnaCandidates]);
 
   const start = useCallback(() => {
-    return getApi().buildCassette({ candidateIds, chassis: store.chassis, topology });
-  }, [candidateIds, store.chassis, topology]);
+    return getApi().buildCassette({ candidateIds, chassis: store.chassis, topology, promoterId, markerId });
+  }, [candidateIds, store.chassis, topology, promoterId, markerId]);
 
   const { job } = useJob<CassetteDesign>(candidateIds.length > 0 ? start : null, [
     candidateIds.join(','),
     store.chassis,
     topology,
+    promoterId,
+    markerId,
   ]);
 
   useEffect(() => {
@@ -85,6 +96,52 @@ export function CassetteBuilder() {
           </button>
         ))}
       </div>
+
+      {topology !== 'dumbbell' && (
+        <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <Tooltip label={`Only promoters valid for ${CHASSIS_LABELS[store.chassis]} are offered — the terminator follows automatically.`}>
+            <div>
+              <div className="mb-2 font-heading text-xs font-semibold tracking-wide text-paper/70 uppercase">
+                Promoter
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {PROMOTERS_BY_CHASSIS[store.chassis].map((p) => (
+                  <button
+                    key={p.id}
+                    onClick={() => setPromoterId(p.id)}
+                    className={`data-text border px-3 py-2 text-xs font-bold transition-colors ${
+                      promoterId === p.id ? 'border-brand-yellow bg-brand-yellow/10 text-brand-yellow' : 'border-navy-tint text-paper/70 hover:border-paper/30'
+                    }`}
+                  >
+                    {p.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </Tooltip>
+
+          <Tooltip label={`Only selectable markers compatible with ${CHASSIS_LABELS[store.chassis]} are offered.`}>
+            <div>
+              <div className="mb-2 font-heading text-xs font-semibold tracking-wide text-paper/70 uppercase">
+                Selectable marker
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {MARKERS_BY_CHASSIS[store.chassis].map((m) => (
+                  <button
+                    key={m.id}
+                    onClick={() => setMarkerId(m.id)}
+                    className={`data-text border px-3 py-2 text-xs font-bold transition-colors ${
+                      markerId === m.id ? 'border-brand-yellow bg-brand-yellow/10 text-brand-yellow' : 'border-navy-tint text-paper/70 hover:border-paper/30'
+                    }`}
+                  >
+                    {m.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </Tooltip>
+        </div>
+      )}
 
       {job && job.status !== 'succeeded' && (
         <ClippedPanel cut={14} className="mb-8">

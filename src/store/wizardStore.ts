@@ -16,22 +16,22 @@ export const WIZARD_STEPS = [
   {
     path: '/intake',
     label: 'Target intake',
-    description: 'Pick the organism and the class of gene the design should knock down.',
+    description: 'Pick the pest and the class of gene the design should knock down.',
   },
   {
     path: '/configure',
     label: 'Run configuration',
-    description: 'Set candidate count, siRNA length, off-target stringency, species panel, and delivery chassis.',
+    description: 'Set candidate count, off-target stringency, species safety panel, and delivery chassis.',
   },
   {
     path: '/discover',
     label: 'Target discovery',
-    description: 'Mock compute job scans the transcriptome and ranks candidate genes.',
+    description: 'Mock compute job scans the transcriptome and ranks candidate genes — pick one or more to carry forward.',
   },
   {
     path: '/fold',
     label: 'Accessibility & folding',
-    description: "Fold the transcript and tile siRNA candidates against where the fold leaves the sequence open.",
+    description: "Fold each selected gene's transcript and tile siRNA candidates against where the fold leaves the sequence open.",
   },
   {
     path: '/screen',
@@ -69,7 +69,6 @@ interface WizardState {
   contiguousMatchThreshold: number;
   screenSpeciesIds: string[];
   seedFiltering: boolean;
-  accessibilityWeighting: boolean;
   chimericDesign: boolean;
   chassis: DeliveryChassis;
   setNumCandidates: (n: number) => void;
@@ -77,22 +76,25 @@ interface WizardState {
   setContiguousMatchThreshold: (n: number) => void;
   toggleScreenSpecies: (id: string) => void;
   setSeedFiltering: (v: boolean) => void;
-  setAccessibilityWeighting: (v: boolean) => void;
   setChimericDesign: (v: boolean) => void;
   setChassis: (c: DeliveryChassis) => void;
 
   discoveredGenes: TargetGene[];
-  selectedGeneId: string | null;
+  /** One design run can carry siRNAs against more than one gene forward. */
+  selectedGeneIds: string[];
   setDiscoveredGenes: (g: TargetGene[]) => void;
-  setSelectedGeneId: (id: string | null) => void;
+  toggleSelectedGene: (id: string) => void;
 
+  /** Accumulated across every gene the user has visited in folding — not
+   * replaced per-gene, so switching gene tabs never loses earlier work. */
   sirnaCandidates: SirnaCandidate[];
   selectedCandidateId: string | null;
-  setSirnaCandidates: (c: SirnaCandidate[]) => void;
+  addSirnaCandidates: (transcriptId: string, candidates: SirnaCandidate[]) => void;
   setSelectedCandidateId: (id: string | null) => void;
 
-  foldingProfile: FoldingProfile | null;
-  setFoldingProfile: (f: FoldingProfile | null) => void;
+  /** Keyed by transcriptId — one fold per selected gene. */
+  foldingProfiles: Record<string, FoldingProfile>;
+  setFoldingProfile: (transcriptId: string, profile: FoldingProfile) => void;
 
   offTargetReport: OffTargetReport | null;
   setOffTargetReport: (r: OffTargetReport | null) => void;
@@ -113,17 +115,16 @@ const initial = {
   contiguousMatchThreshold: 19,
   screenSpeciesIds: [] as string[],
   seedFiltering: true,
-  accessibilityWeighting: true,
   chimericDesign: false,
-  chassis: 'ecoli-ht115' as DeliveryChassis,
+  chassis: 's-cerevisiae' as DeliveryChassis,
 
   discoveredGenes: [] as TargetGene[],
-  selectedGeneId: null,
+  selectedGeneIds: [] as string[],
 
   sirnaCandidates: [] as SirnaCandidate[],
   selectedCandidateId: null,
 
-  foldingProfile: null,
+  foldingProfiles: {} as Record<string, FoldingProfile>,
   offTargetReport: null,
   cassetteDesign: null,
 };
@@ -150,17 +151,25 @@ export const useWizardStore = create<WizardState>((set) => ({
         : [...s.screenSpeciesIds, id],
     })),
   setSeedFiltering: (v) => set({ seedFiltering: v }),
-  setAccessibilityWeighting: (v) => set({ accessibilityWeighting: v }),
   setChimericDesign: (v) => set({ chimericDesign: v }),
   setChassis: (c) => set({ chassis: c }),
 
   setDiscoveredGenes: (g) => set({ discoveredGenes: g }),
-  setSelectedGeneId: (id) => set({ selectedGeneId: id }),
+  toggleSelectedGene: (id) =>
+    set((s) => ({
+      selectedGeneIds: s.selectedGeneIds.includes(id)
+        ? s.selectedGeneIds.filter((x) => x !== id)
+        : [...s.selectedGeneIds, id],
+    })),
 
-  setSirnaCandidates: (c) => set({ sirnaCandidates: c }),
+  addSirnaCandidates: (transcriptId, candidates) =>
+    set((s) => ({
+      sirnaCandidates: [...s.sirnaCandidates.filter((c) => c.transcriptId !== transcriptId), ...candidates],
+    })),
   setSelectedCandidateId: (id) => set({ selectedCandidateId: id }),
 
-  setFoldingProfile: (f) => set({ foldingProfile: f }),
+  setFoldingProfile: (transcriptId, profile) =>
+    set((s) => ({ foldingProfiles: { ...s.foldingProfiles, [transcriptId]: profile } })),
   setOffTargetReport: (r) => set({ offTargetReport: r }),
   setCassetteDesign: (d) => set({ cassetteDesign: d }),
 

@@ -1,4 +1,4 @@
-// Domain types for the dsRNA design platform.
+// Domain types for the occlusion-aware RNA design platform.
 // Every field a screen renders must trace back to one of these — no component
 // invents shape that isn't declared here.
 
@@ -21,7 +21,11 @@ export interface Organism {
   sourceDb: 'RefSeq' | 'VectorBase' | 'GenBank';
   transcriptCount: number;
   hasReferenceTranscriptome: boolean;
-  kind: 'target' | 'pollinator' | 'human' | 'virus';
+  /** 'target' = selectable pest in target intake. 'non-target' = ecologically
+   * relevant species offered in the safety screening panel (pollinators,
+   * beneficial insects, sentinel/indicator species). 'human' = shown only in
+   * safety screening, never as a target. */
+  kind: 'target' | 'non-target' | 'human';
 }
 
 export interface Transcript {
@@ -35,7 +39,7 @@ export interface Transcript {
   sequence: string; // A/C/G/U
 }
 
-export type TargetClass = 'essential' | 'reproduction' | 'viral' | 'custom';
+export type TargetClass = 'essential' | 'population-control' | 'developmental' | 'custom';
 
 export interface DiscoverRequest {
   organismId: string;
@@ -86,22 +90,7 @@ export interface FoldingProfile {
   unpairedProbability: number[]; // per-position, 0..1, coherent with dotBracket
 }
 
-export type DeliveryChassis =
-  | 'ecoli-ht115'
-  | 'hairpin-cassette'
-  | 'snodgrassella-alvi'
-  | 's-cerevisiae';
-
-export interface RunConfig {
-  numCandidates: number;
-  sirnaLength: SirnaLength;
-  contiguousMatchThreshold: number; // 15..25
-  screenSpeciesIds: string[];
-  seedFiltering: boolean;
-  accessibilityWeighting: boolean;
-  chimericDesign: boolean;
-  chassis: DeliveryChassis;
-}
+export type DeliveryChassis = 's-cerevisiae' | 'ecoli-ht115' | 'snodgrassella-alvi';
 
 export interface OffTargetRequest {
   candidateIds: string[];
@@ -143,12 +132,27 @@ export interface GoldenGateSite {
   removed: boolean;
 }
 
-export type CassetteTopology = 'dual-inverted-promoter' | 'hairpin';
+export type CassetteTopology = 'dual-promoter' | 'hairpin' | 'dumbbell';
+
+export interface PromoterOption {
+  id: string;
+  label: string;
+}
+
+export interface MarkerOption {
+  id: string;
+  label: string;
+  /** Host strains/chassis this marker's resistance/auxotrophy actually works in. */
+  compatibleChassis: DeliveryChassis[];
+}
 
 export interface CassetteRequest {
   candidateIds: string[];
   chassis: DeliveryChassis;
   topology: CassetteTopology;
+  /** Ignored for the 'dumbbell' topology, which is promoter-free. */
+  promoterId?: string;
+  markerId?: string;
 }
 
 export interface CassetteDesign {

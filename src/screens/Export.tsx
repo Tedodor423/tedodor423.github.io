@@ -43,7 +43,12 @@ export function Export() {
       `Run date: ${new Date().toLocaleString()}`,
       `Organism: ${store.organism?.commonName ?? 'custom sequence'} (${store.organism?.scientificName ?? '-'})`,
       `Target class: ${store.targetClass ?? '-'}`,
-      `Target gene: ${store.discoveredGenes.find((g) => g.id === store.selectedGeneId)?.symbol ?? '-'}`,
+      `Target gene(s): ${
+        store.discoveredGenes
+          .filter((g) => store.selectedGeneIds.includes(g.id))
+          .map((g) => g.symbol)
+          .join(', ') || '-'
+      }`,
       `siRNA length: ${store.sirnaLength} nt`,
       `Off-target threshold: ${store.contiguousMatchThreshold} nt contiguous match`,
       `Species screened: ${store.screenSpeciesIds.length}`,

@@ -4,7 +4,6 @@
 
 export const ESSENTIAL_GENE_NAMES = [
   'V-ATPase subunit B',
-  'Chitin synthase 1',
   'Proteasome subunit PSMD4',
   'Elongation factor 1-alpha',
   'Beta-tubulin',
@@ -13,11 +12,11 @@ export const ESSENTIAL_GENE_NAMES = [
   'COPB2 coatomer subunit',
   'Ribosomal protein S6',
   'ATP synthase subunit 6',
-  'Chitinase-like protein 2',
-  'Juvenile hormone esterase',
 ];
 
-export const REPRODUCTION_GENE_NAMES = [
+// Fertility/germline genes — knockdown targets population size rather than
+// individual survival.
+export const POPULATION_CONTROL_GENE_NAMES = [
   'Vitellogenin',
   'Vasa homolog',
   'Boule',
@@ -30,13 +29,18 @@ export const REPRODUCTION_GENE_NAMES = [
   'Bicaudal-D',
 ];
 
-export const VIRAL_ORF_NAMES = [
-  'ORF1 helicase domain',
-  'ORF1 protease domain',
-  'VP1 major capsid',
-  'VP2 capsid protein',
-  'VP3 capsid protein',
-  'RNA-dependent RNA polymerase',
+// Molting, metamorphosis and cuticle-formation genes — knockdown disrupts
+// development rather than acting on an adult-stage essential process.
+export const DEVELOPMENTAL_GENE_NAMES = [
+  'Ecdysone receptor',
+  'Juvenile hormone esterase',
+  'Chitin synthase 1',
+  'Chitinase-like protein 2',
+  'Broad-Complex core protein',
+  'Hormone receptor 3',
+  'Ultraspiracle',
+  'Cuticle protein 19',
+  'E93 transcription factor',
 ];
 
 export const HOUSEKEEPING_GENE_NAMES = [
