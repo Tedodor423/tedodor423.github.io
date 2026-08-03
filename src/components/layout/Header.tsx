@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Zap, ZapOff } from 'lucide-react';
 import { useWizardStore } from '@/store/wizardStore';
 import { Tooltip } from '@/components/ui/Tooltip';
+import nectarLogo from '@/assets/nectar-logo.png';
 
 export function Header() {
   const reducedMotion = useWizardStore((s) => s.reducedMotion);
@@ -9,8 +10,8 @@ export function Header() {
 
   return (
     <header className="flex h-14 shrink-0 items-center justify-between border-b border-navy-tint bg-navy px-4 lg:px-6">
-      <Link to="/" className="flex items-baseline gap-1.5">
-        <span className="font-display text-xl tracking-tight text-brand-yellow">NECTAR</span>
+      <Link to="/" className="flex items-baseline gap-2">
+        <img src={nectarLogo} alt="Nectar" className="h-5 w-auto" />
         <span className="font-heading text-[10px] font-bold tracking-[0.2em] text-paper/50 uppercase">
           Designer
         </span>

@@ -6,6 +6,7 @@ import { Sparkle } from '@/components/ui/Sparkle';
 import { CountUp } from '@/components/ui/CountUp';
 import { Tooltip } from '@/components/ui/Tooltip';
 import { useWizardStore } from '@/store/wizardStore';
+import nectarLogo from '@/assets/nectar-logo.png';
 
 const STATS = [
   {
@@ -54,10 +55,10 @@ export function Landing() {
             </span>
             <Sparkle size={16} />
           </div>
-          <h1 className="font-display text-6xl leading-[0.95] tracking-tight text-paper sm:text-8xl">
-            NECTAR
+          <h1>
+            <img src={nectarLogo} alt="Nectar" className="mx-auto h-16 w-auto sm:h-24" />
           </h1>
-          <div className="font-heading mt-1 text-sm font-bold tracking-[0.4em] text-brand-yellow uppercase sm:text-base">
+          <div className="font-heading mt-3 text-sm font-bold tracking-[0.4em] text-paper/70 uppercase sm:text-base">
             Designer
           </div>
           <p className="font-heading mx-auto mt-6 max-w-2xl text-lg text-paper/80 sm:text-xl">
