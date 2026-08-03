@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, FileText } from 'lucide-react';
 import { HelixHero } from '@/components/viz/HelixHero';
-import { Button } from '@/components/ui/Button';
+import { Button, buttonClassName, buttonClipStyle } from '@/components/ui/Button';
 import { Sparkle } from '@/components/ui/Sparkle';
 import { CountUp } from '@/components/ui/CountUp';
 import { Tooltip } from '@/components/ui/Tooltip';
@@ -65,7 +65,7 @@ export function Landing() {
             From target gene to cloning-ready cassette — occlusion-aware RNA design, screened to
             prevent off-target toxicity and increase targeting efficacy.
           </p>
-          <div className="mt-10 flex justify-center">
+          <div className="mt-10 flex flex-wrap justify-center gap-3">
             <Button
               onClick={() => {
                 reset();
@@ -76,6 +76,16 @@ export function Landing() {
               New design run
               <ArrowRight size={16} />
             </Button>
+            <a
+              href="/nectar-project-summary.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={buttonClassName('secondary', 'text-base')}
+              style={buttonClipStyle}
+            >
+              <FileText size={16} />
+              Read project summary
+            </a>
           </div>
         </div>
       </div>
