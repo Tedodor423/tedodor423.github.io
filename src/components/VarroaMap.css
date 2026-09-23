@@ -1,0 +1,645 @@
+/* The colony-loss map.
+ *
+ * Same rules as the stakeholder map it shares a lattice with: brand tokens and
+ * nothing else, solid surfaces, 1px rules instead of shadows, the single
+ * --radius, and no motion that is not carrying information. The loss ramp and
+ * the two off-scale tones are the tokens added to brand.css for this figure;
+ * the note there records how they were checked.
+ *
+ * The one piece of motion is the map redrawing as the year advances, which is
+ * the figure's whole argument. It is a fill transition short enough to read as
+ * a change rather than as an animation, and a reader who has asked for reduced
+ * motion gets the last year drawn once, with the slider to move it by hand.
+ */
+
+.varroa-map {
+  /* Breaks the 36rem measure for the same reason the stakeholder map does: a
+   * world map at reading width is unreadable. */
+  width: min(72rem, calc(100vw - 4rem));
+  margin: 2.5rem 0;
+
+  /* The figure is a plate: its own paper, its own rule, whichever band of the
+   * page it lands in. A `##` section can fall on a wax band or a comb one
+   * depending only on how many sections precede it, and the loss ramp has to
+   * be judged against a fixed surface or the bands would be reading as part of
+   * the scale. Paper also means the figure never has to be moved up or down
+   * the page to stay legible. */
+  padding: 1.1rem 1.25rem 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  color: var(--text);
+}
+
+/* CombBands inverts type for a dark band, which is right for the page and
+ * wrong inside a plate that brought its own paper. These put the figure's ink
+ * back. Same reasoning as the blockquote rules in CombBands.css, which is
+ * where this treatment comes from; drop this block with that file. */
+[data-comb="on"] [data-band="comb"] .varroa-map h3,
+[data-comb="on"] [data-band="comb"] .varroa-map h4,
+[data-comb="on"] [data-band="comb"] .varroa-map strong,
+[data-comb="on"] [data-band="comb"] .varroa-map summary {
+  color: var(--ink);
+}
+
+[data-comb="on"] [data-band="comb"] .varroa-map a {
+  color: var(--link);
+}
+
+[data-comb="on"] [data-band="comb"] .varroa-map a:hover {
+  color: var(--ink);
+}
+
+[data-comb="on"] [data-band="comb"] .varroa-map th,
+[data-comb="on"] [data-band="comb"] .varroa-map td {
+  border-color: var(--rule);
+}
+
+.vm-heading {
+  margin: 0 0 0.35rem;
+  font-size: 1.15rem;
+}
+
+.vm-standfirst {
+  max-width: var(--measure);
+  margin: 0 0 1rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+/* ---------- layout ---------- */
+
+/* Map and panel side by side where there is room. The panel is fixed width
+ * because its content changes on every hover and a panel that resized with the
+ * country name would make the map jump under the cursor. */
+.vm-layout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 1.25rem;
+}
+
+.vm-canvas {
+  flex: 1 1 32rem;
+  min-width: 0;
+}
+
+.vm-side {
+  flex: 0 1 21rem;
+  min-width: 15rem;
+}
+
+/* ---------- the map ---------- */
+
+.vm-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--rule);
+  background: var(--surface-muted);
+  /* The hatch pattern is one <pattern> shared by both off-scale states, so the
+   * tint behind it is set per class below and read from here. */
+  --vm-hatch-bg: var(--loss-tolerated);
+  --vm-hatch-ink: #4d6a5b;
+}
+
+.vm-cell {
+  stroke: none;
+  transition: fill 160ms linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vm-cell {
+    transition: none;
+  }
+}
+
+.vm-cell--low {
+  fill: var(--loss-1);
+}
+.vm-cell--moderate {
+  fill: var(--loss-2);
+}
+.vm-cell--high {
+  fill: var(--loss-3);
+}
+.vm-cell--severe {
+  fill: var(--loss-4);
+}
+.vm-cell--catastrophic {
+  fill: var(--loss-5);
+}
+
+/* A country that has no loss percentage at all is hatched as well as tinted,
+ * so it can never be read as a step on the scale. */
+.vm-cell--no_economic_damage {
+  fill: url(#vm-hatch);
+}
+
+.vm-cell--varroa_free {
+  fill: url(#vm-hatch);
+  /* Same hatch, the stronger of the two cool tones behind it. */
+  --vm-hatch-bg: var(--loss-free);
+}
+
+/* Not measured, in this year or at all: the map's plain land tone, the same
+ * one the stakeholder map uses for ground. */
+.vm-cell--no_survey,
+.vm-cell--no_data {
+  fill: var(--map-land);
+}
+
+/* The halo behind the country under the cursor. Ink, and drawn before the
+ * cells, so only its outside edge survives: the country gets an outline and
+ * its own colours are untouched, which matters because that colour is the
+ * reading. */
+.vm-halo {
+  fill: var(--ink);
+  pointer-events: none;
+}
+
+/* ---------- the year control ---------- */
+
+.vm-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.6rem;
+}
+
+.vm-play {
+  flex: none;
+  min-width: 4.5rem;
+  padding: 0.2rem 0.7rem;
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+.vm-play[aria-pressed="true"] {
+  background: var(--honey);
+  color: var(--ink);
+}
+
+.vm-slider {
+  flex: 1 1 auto;
+  display: block;
+  min-width: 0;
+}
+
+.vm-slider input {
+  display: block;
+  width: 100%;
+  accent-color: var(--violet);
+}
+
+/* The year is the map's caption, so it is set in the display face at a size
+ * that can be read from the same distance as the map. Tabular figures and a
+ * fixed width keep the layout still as it counts up. */
+.vm-year {
+  flex: none;
+  width: 4.5ch;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--ink);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- legend ---------- */
+
+.vm-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 1.1rem;
+  margin: 0.7rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.74rem;
+  color: var(--text-muted);
+}
+
+.vm-legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* Drawn as a hexagon, so a key entry is the shape it is keying. */
+.vm-swatch {
+  display: inline-block;
+  width: 0.85rem;
+  height: 0.95rem;
+  background: currentcolor;
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+}
+
+/* The cell classes set `fill`, which an HTML span ignores, so the swatch reads
+ * the same tokens through `color` instead of duplicating the list. */
+.vm-legend .vm-cell--low {
+  color: var(--loss-1);
+}
+.vm-legend .vm-cell--moderate {
+  color: var(--loss-2);
+}
+.vm-legend .vm-cell--high {
+  color: var(--loss-3);
+}
+.vm-legend .vm-cell--severe {
+  color: var(--loss-4);
+}
+.vm-legend .vm-cell--catastrophic {
+  color: var(--loss-5);
+}
+.vm-legend .vm-cell--no_economic_damage {
+  color: var(--loss-tolerated);
+}
+.vm-legend .vm-cell--varroa_free {
+  color: var(--loss-free);
+}
+.vm-legend .vm-cell--no_survey {
+  color: var(--map-land);
+}
+
+/* The two hatched states are hatched in the key as well, because that hatch is
+ * what tells them apart from the ramp on the map.
+ *
+ * This is `repeating-linear-gradient` and the design guard flags it as item 1.
+ * It stays. There is no blend here: the stops are hard, and it is the only way
+ * CSS draws a stripe on an HTML element. The stripe is the secondary encoding
+ * that keeps "no varroa recorded" from being read as a loss band by someone
+ * who sees the hues differently, so removing it would cost the figure more
+ * than the rule is protecting. The map itself uses an SVG <pattern> for the
+ * same stripe. */
+.vm-legend .vm-cell--no_economic_damage,
+.vm-legend .vm-cell--varroa_free {
+  background-image: repeating-linear-gradient(
+    45deg,
+    #4d6a5b 0 2px,
+    transparent 2px 6px
+  );
+}
+
+/* Sits in the map column, filling the space the taller panel leaves beside it. */
+.vm-howto {
+  max-width: var(--measure);
+  margin: 1rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.7;
+}
+
+/* ---------- the detail panel ---------- */
+
+.vm-picks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-bottom: 0.6rem;
+}
+
+.vm-pick {
+  padding: 0.15rem 0.6rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+
+.vm-pick:hover {
+  border-color: var(--ink);
+}
+
+.vm-pick.is-on {
+  border-color: var(--ink);
+  background: var(--honey);
+  color: var(--ink);
+}
+
+.vm-detail {
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--surface-muted);
+  padding: 0.8rem 0.9rem;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  /* Tall enough for the longest note in the set, so the map does not shift
+   * when the panel fills. */
+  min-height: 20rem;
+}
+
+.vm-detail--empty {
+  color: var(--text-muted);
+}
+
+.vm-detail--empty p {
+  margin: 0;
+}
+
+.vm-detail-name {
+  margin: 0 0 0.4rem;
+  font-size: 0.95rem;
+}
+
+/* The reading itself: the number, then what the number is. The band is carried
+ * by a rule under it rather than by colouring the type, because the ramp's
+ * light steps do not have text contrast and its dark ones are close to ink. */
+.vm-reading {
+  margin: 0;
+  padding-bottom: 0.3rem;
+  border-bottom: 4px solid var(--map-land);
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+}
+
+.vm-reading--low {
+  border-bottom-color: var(--loss-1);
+}
+.vm-reading--moderate {
+  border-bottom-color: var(--loss-2);
+}
+.vm-reading--high {
+  border-bottom-color: var(--loss-3);
+}
+.vm-reading--severe {
+  border-bottom-color: var(--loss-4);
+}
+.vm-reading--catastrophic {
+  border-bottom-color: var(--loss-5);
+}
+.vm-reading--no_economic_damage {
+  border-bottom-color: var(--loss-tolerated);
+}
+.vm-reading--varroa_free {
+  border-bottom-color: var(--loss-free);
+}
+
+.vm-reading-value {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  line-height: 1;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.vm-reading-what {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+.vm-metric {
+  margin: 0.35rem 0 0;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+/* ---------- sparkline ---------- */
+
+/* The same series the map is animating, so a reader can see where the year
+ * they are on sits in the run. One series, so no legend: the panel heading
+ * names it. */
+.vm-spark {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0.5rem 0 0.2rem;
+}
+
+.vm-spark-base {
+  stroke: var(--rule);
+  stroke-width: 1;
+}
+
+.vm-spark-line {
+  fill: none;
+  stroke: var(--loss-4);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.vm-spark-dot {
+  fill: var(--ink);
+  stroke: var(--surface-muted);
+  stroke-width: 2;
+}
+
+.vm-spark-top {
+  fill: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 9px;
+}
+
+/* ---------- notes and provenance ---------- */
+
+.vm-notes {
+  margin: 0.6rem 0 0;
+  padding-left: 1.1rem;
+}
+
+.vm-notes li {
+  margin-bottom: 0.4rem;
+}
+
+.vm-provenance {
+  margin: 0.6rem 0 0;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+/* The three citation tags the wiki already uses in prose, as a label rather
+ * than as inline code, because here they sit beside a figure. */
+.vm-tag {
+  display: inline-block;
+  padding: 0 0.3em;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  font-size: 0.95em;
+  color: var(--violet);
+}
+
+.vm-tag--FLAG {
+  border-color: var(--ink);
+  color: var(--ink);
+  background: var(--honey);
+}
+
+/* ---------- caption, limits, table ---------- */
+
+.vm-caption {
+  max-width: 44rem;
+  margin-top: 1.5rem;
+  font-size: 0.8rem;
+  line-height: 1.7;
+  color: var(--text);
+}
+
+.vm-caption > p {
+  margin-bottom: 0.9rem;
+}
+
+/* The five featured countries, written out. Each entry is a term and its
+ * notes, so the country name and the reading for the year on the slider stay
+ * on one line and the prose hangs under it. */
+.vm-featured {
+  margin: 0 0 1rem;
+}
+
+.vm-featured > div {
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--rule);
+}
+
+.vm-featured > div + div {
+  margin-top: 0.7rem;
+}
+
+.vm-featured dt {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.vm-featured-value {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  color: var(--text-muted);
+  font-size: 0.9em;
+  font-variant-numeric: tabular-nums;
+}
+
+.vm-featured dd {
+  margin: 0.2rem 0 0;
+}
+
+.vm-featured dd p {
+  margin: 0 0 0.35rem;
+}
+
+.vm-limits,
+.vm-table-wrap {
+  margin-bottom: 0.9rem;
+  border-top: 1px solid var(--rule);
+  padding-top: 0.6rem;
+}
+
+.vm-limits summary,
+.vm-table-wrap summary {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.vm-limits ul {
+  margin: 0.6rem 0 0;
+  padding-left: 1.2rem;
+  color: var(--text-muted);
+}
+
+.vm-limits li {
+  margin-bottom: 0.4rem;
+}
+
+/* The table is the map's text form: every country, including the fifty that
+ * are smaller than a hexagon and are never drawn. It is wide, so it scrolls
+ * inside itself rather than pushing the page sideways. */
+.vm-table-wrap {
+  max-width: none;
+}
+
+.vm-table {
+  width: 100%;
+  margin: 0.8rem 0 0;
+  border-collapse: collapse;
+  font-size: 0.74rem;
+}
+
+.vm-table caption {
+  caption-side: top;
+  padding-bottom: 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.74rem;
+  text-align: left;
+}
+
+.vm-table th,
+.vm-table td {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--rule);
+  text-align: left;
+  vertical-align: top;
+  font-weight: 400;
+}
+
+.vm-table thead th {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  background: var(--surface-muted);
+  color: var(--ink);
+}
+
+.vm-table tbody th {
+  color: var(--ink);
+}
+
+.vm-num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.vm-offmap {
+  color: var(--text-muted);
+  font-size: 0.92em;
+}
+
+.vm-sub {
+  margin: 1.2rem 0 0.3rem;
+  font-size: 0.85rem;
+}
+
+.vm-sub--first {
+  margin-top: 0;
+}
+
+.vm-plain {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.vm-sources {
+  margin: 0;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--rule);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* ---------- narrow screens ---------- */
+
+@media (max-width: 45rem) {
+  .varroa-map {
+    width: 100%;
+  }
+
+  /* The panel goes under the map, so it no longer needs a fixed height to keep
+   * the map still. */
+  .vm-detail {
+    min-height: 0;
+  }
+
+  .vm-year {
+    font-size: 1.2rem;
+  }
+}

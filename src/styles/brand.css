@@ -1,0 +1,769 @@
+/* NECTAR brand tokens — type and colour, from the team brand kit.
+ *
+ * Kit:  CUBAO (display) · Basenji (sans) · TBJ Serial Port Monospace (bold)
+ *       #ffcb2f honey · #002147 Oxford navy · #000000 ink · #6b2895 violet
+ *
+ * Still deliberately restrained: this sets the brand, not a design. Layout
+ * comes later, once the content is right — per iGEM's own guidance that visual
+ * flourish on top of incomplete content only makes the gaps more visible.
+ *
+ * Contrast, checked: ink on honey 13.8:1, navy on white 15.3:1, violet on
+ * white 8.9:1, violet on honey 5.9:1 — all pass AA. Honey text on white is
+ * 1.6:1 and fails, so honey is only ever a background, a rule or a highlight
+ * here, never type.
+ */
+
+/* ---------- fonts ---------- */
+
+/* Served from static.igem.wiki, as iGEM requires — never Google Fonts or any
+ * other CDN, which fails the HAR check. Uploaded via the uploads tool; the
+ * /wiki/ segment in the path is what the tool returns, not a typo.
+ *
+ * These are .otf rather than .woff2 because that is what was uploaded. They
+ * work everywhere we care about, at roughly 2.5x the bytes of woff2 — worth
+ * converting before the freeze, but not worth blocking on.
+ *
+ * Two of the three kit faces are loaded below. The third is not, for reasons
+ * documented at its @font-face — read that before re-adding it.
+ */
+
+/* Cubao Free — Aaron Amar, SIL Open Font License 1.1, embedding unrestricted
+ * (fsType 0). Clean for our purposes and the face doing the real brand work.
+ * Narrow and wide cuts are uploaded alongside if a heavier look is wanted. */
+@font-face {
+  font-family: "Cubao Free";
+  src:
+    local("Cubao Free"),
+    url("https://static.igem.wiki/teams/6391/wiki/fonts/cubao-free-regular.otf")
+      format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Basenji SemiBold — Ray Larabie / Typodermic. Full character set, but note:
+ *   - it carries fsType 4 (preview & print embedding only), so serving it as
+ *     a webfont needs an embedding licence we should confirm we hold;
+ *   - only the semibold cut was uploaded, and Basenji is a headline face —
+ *     long body copy set in semibold is hard to read.
+ * So it is used for headings, navigation and labels only. Body text is
+ * monospace by design — see the TBJ note below. */
+@font-face {
+  font-family: "Basenji SemBd";
+  src:
+    local("Basenji SemBd"),
+    url("https://static.igem.wiki/teams/6391/wiki/fonts/basenji-semibold.otf")
+      format("opentype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Basenji SemBd";
+  src:
+    local("Basenji SemBd Slanted"),
+    url("https://static.igem.wiki/teams/6391/wiki/fonts/basenji-semiboldslanted.otf")
+      format("opentype");
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* TBJ Serial Port Monospace — uploaded, but NOT the active body face.
+ *
+ * Body text is monospace by design (see --font-mono). The uploaded files are
+ * the *demo* edition, and it cannot carry running prose: 68 glyphs, missing 22
+ * basic ASCII characters —  ! " # % & ' ( ) * + - / : ; = ? @ [ ] _ { }
+ * — plus the em dash, the middle dot and the arrow.
+ *
+ * Measured against the current content of src/content/: 7.7% of words contain
+ * at least one character it cannot draw (hyphen 647x, em dash 295x, middle dot
+ * 168x, colon 117x). Each of those words would swap font mid-word. That reads
+ * as broken rather than as styled, so the system mono stack leads instead.
+ *
+ * Demo editions are also licensed for personal use only, which a public CC-BY
+ * wiki is not.
+ *
+ * TO SWITCH IT ON once the full family is licensed and uploaded: uncomment the
+ * @font-face below and put "TBJ Serial Port Monospace" at the head of
+ * --font-mono. Nothing else changes. */
+
+/*
+@font-face {
+  font-family: "TBJ Serial Port Monospace";
+  src: url("https://static.igem.wiki/teams/6391/wiki/fonts/REPLACE-WITH-FULL-VERSION.otf")
+    format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+*/
+
+:root {
+  /* --font-display  page titles and the wordmark (Cubao)
+   * --font-heading  section headings, nav, labels (Basenji SemiBold)
+   * --font-mono     body copy, citation tags and code — the wiki reads mono
+   * --font-sans     kept for anything that must not be mono */
+  --font-display:
+    "Cubao Free", "Arial Black", "Helvetica Neue", Impact, sans-serif;
+  --font-heading:
+    "Basenji SemBd", "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+  --font-mono:
+    ui-monospace, "Cascadia Mono", "SF Mono", Consolas, "Liberation Mono",
+    monospace;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* ---------- colour ---------- */
+
+  --honey: #ffcb2f;
+  --oxford-navy: #002147;
+  --ink: #000000;
+  --violet: #6b2895;
+
+  --surface: #ffffff;
+  --surface-muted: #fbf7ec;
+  --rule: #e6ddc6;
+
+  /* Landmass on the stakeholder map: --rule darkened until honey reads clearly
+   * on top of it. The map needs three steps of the same wax hue (ground,
+   * marked, active) and --rule alone is too close to honey to be the ground. */
+  --map-land: #d9cdae;
+
+  --text: var(--oxford-navy);
+  --text-muted: #4a5a6b;
+  --link: var(--violet);
+
+  --measure: 36rem;
+
+  /* ---------- the colony-loss scale ---------- */
+
+  /* Five ordered steps for "how much was lost", used by the varroa map and by
+   * anything else that plots a loss figure, so two figures on this wiki never
+   * disagree about what a heavy loss looks like. Honey darkening into burnt
+   * wax: one hue family, the brand's own, and darker always means worse.
+   *
+   * Checked rather than chosen by eye. Hue spread 34 degrees, lightness
+   * monotone with every adjacent gap over 0.06, and the lightest step reads
+   * 2.13:1 against --surface-muted, which is the canvas the map sits on.
+   *
+   * The two states below the ramp are not points on it. A country where the
+   * mite is tolerated, and a country with no varroa on record, have no loss
+   * percentage at all, so they take cool tones well clear of the warm ramp
+   * under simulated protanopia and deuteranopia, and the map hatches them on
+   * top of that. Colour alone never carries the distinction. */
+  --loss-1: #d9a23f; /* under 8%    */
+  --loss-2: #c07d2c; /* 8 to 15%    */
+  --loss-3: #a15f20; /* 15 to 25%   */
+  --loss-4: #7a3f17; /* 25 to 40%   */
+  --loss-5: #4f240f; /* 40% and up  */
+  --loss-tolerated: #a8c2b0; /* present, no economic damage */
+  --loss-free: #6f9c86; /* no varroa on record */
+
+  /* One radius, used everywhere something is rounded at all. */
+  --radius: 0.2rem;
+}
+
+/* Hand the tokens to Bootstrap so its components inherit the brand rather than
+ * fighting it. Bootstrap is imported before this file, so these win. */
+:root,
+body {
+  --bs-body-font-family: var(--font-mono);
+  --bs-body-color: var(--text);
+  --bs-body-bg: var(--surface);
+  --bs-link-color: var(--link);
+  --bs-link-hover-color: var(--ink);
+  --bs-border-color: var(--rule);
+  --bs-emphasis-color: var(--ink);
+}
+
+body {
+  /* The wiki reads monospace. Mono sets wider and with less contrast between
+   * characters, so it wants a slightly smaller size, more leading and a
+   * narrower measure than a proportional face would. */
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  color: var(--text);
+  background: var(--surface);
+}
+
+a {
+  color: var(--link);
+}
+
+a:hover {
+  color: var(--ink);
+}
+
+/* ---------- cursor ---------- */
+
+/* A solid black pointer, inlined as a data URI rather than uploaded.
+ *
+ * Why not an uploaded .cur: CSS does accept .cur, and it is the only format
+ * that carries its own hotspot — but Safari ignores .cur cursors entirely,
+ * and the uploads tool auto-converts images, which would either mangle it or
+ * hand back an .avif that no browser accepts as a cursor. A 24x24 PNG works
+ * everywhere, costs one fewer request, and cannot be broken by the upload
+ * pipeline or its 24-hour cache. It is 354 bytes.
+ *
+ * The `0 0` after url() is the hotspot — the pixel that actually points. It
+ * is the arrow tip here. Getting it wrong is the usual reason a custom cursor
+ * feels off by a few pixels.
+ *
+ * The trailing `auto` is required. A cursor declaration with no keyword
+ * fallback is invalid and gets dropped whole.
+ *
+ * Links and buttons keep the system hand, because that affordance is worth
+ * more than a consistent silhouette. Remove the `a` rule below to override.
+ *
+ * To change it: draw a 24x24 PNG with the tip at the top-left, base64 it,
+ * and swap the string. Keep it under 32x32 — some browsers ignore anything
+ * larger, and the cursor silently reverts to the default. */
+body {
+  cursor:
+    url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAABKUlEQVR42rWUv0oDQRCHv7vkkIBgb6FoKaS1lNj5CLa+gdjY+Axi4SPkFUTwFaxtLAQhJFW6BCG6txb+BpaFQ93bHRhmWPbmmz97A3DLjwyBigLigRv5TQnAlyBXpSBtALksAfER5DyYSTZAF6TJCTCIk3+WC+IjddIVMMnRLt8B8cAaOOkL8R1q81gCR7o7yAkIIfM+EP+LWrsWwIG+qVMBLgjogY3sp+wLsKed9ae9NYxAlplTK66BR/kbYAR86G71nwqs168KaFU85Vx21uN9AVqdH6uCRhVWKUNeBK+kBh4CwLTPEwWYAWP5W7KnwepYA7spr8fkMMrQgjwH7btP/Ztr4E3WRYA7QWfAu3rfplQQl21D3AYugJ3ovIgMSgStFLho5r3lG6TmeBJF8lwNAAAAAElFTkSuQmCC")
+      0 0,
+    auto;
+}
+
+/* The same arrow with a thin white keyline, for the navy footer and any other
+ * dark surface — a pure black cursor is close to invisible on #002147. */
+/* The comb bands are a dark surface too, while that treatment is switched on.
+   Temporary, with CombBands.css; drop this selector with it. */
+.bg-dark,
+footer,
+[data-comb="on"] [data-band="comb"] {
+  cursor:
+    url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAACHUlEQVR42rXUsUscQRTH8d/M3LoccoQDSWETclbeEQj5C67JNcEyku6KVBZCIFik8fprbNIGtRAsAoKNpdiIhelFF+7kJAbUSoR4tzvfNHuyhRjdbAYeyzTvM/PeztPy8jLAV0k6PDwMjDEqeiUrKysAnyQJKBWa3TnnJcWrq6sAn1MkKAwwxpAio/X1dYCPRSNkkHhra8sDH4pEGCPWWl8qlZLt7W2A90UhZBFjTBIEQbK7u/sbaBbReLJhrUVSUq1W/f7+/k0RCA8gHBwc3ABv/gXhvnDOISmenp7m5OTkJ1BPEVcIkEVmZmaIoug8L8JDYYzxkoa1Wo2zs7MIeJ4i9smAtXZcfyQRBAFhGFKpVHDO0Ww2GQwGPaAKGOCvg+uuadZaee+9JOOcM0mSqNvtqtVq9W5vb4dBEHB9fQ1wKckaY3gMoEyt/ezsLHNzc+MbjObn5wG+hGEooDQ5OZlr2N01st/vnx4fH5+Wy2UvKZ6YmGBvb28AlO9O88jSZFdcq9Xo9/u/gBfAQrvdRlIsKV5cXARo534H9Xqdo6Ojc6CRJnm+s7Nz6ZzzxpjR1NSUj6LoRxAE6nQ69slAr9eLgFdp8jD9dlutFtbakaTh0tISwLtcDw2ojP/rNAzwcmNjYyjJNxoN1tbWABZylyn7aMYnvLi4+La5ucnV1dV34O24wXmSm3v2BngGvNb/Xp1Ox+YZcI+6WRGJ/wC0Labrz5bZQgAAAABJRU5ErkJggg==")
+      0 0,
+    auto;
+}
+
+/* Cubao for the page title, section headings and the wordmark; it is heavy
+ * enough that h2 takes it at a much smaller size. h3 and below are Basenji
+ * SemiBold. Change the split here, not per page. */
+h1,
+h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  color: var(--ink);
+  letter-spacing: 0.01em;
+}
+
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+/* Inline code carries the citation tags — [LIT], [CALC], [FLAG] — so it wants
+ * to read as a label rather than as source code. */
+:not(pre) > code {
+  padding: 0.1em 0.35em;
+  border-radius: var(--radius);
+  background: var(--surface-muted);
+  color: var(--violet);
+  font-size: 0.9em;
+}
+
+/* ---------- menu ---------- */
+
+/* Sticky, but it gets out of the way: Navbar adds .is-hidden on the way down
+ * the page and drops it again on the first scroll up, so the menu is always
+ * one flick away without eating reading room. `sticky` rather than `fixed`
+ * keeps the nav in normal flow at the top of the document, so nothing needs
+ * padding to compensate. Note that an `overflow` on any ancestor would break
+ * this silently. */
+.site-nav {
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  background: var(--honey);
+  border-bottom: 0.5rem solid var(--ink);
+  transition: transform 0.25s ease;
+}
+
+.site-nav.is-hidden {
+  /* -100% is the nav's own height, however the wordmark and links wrap. */
+  transform: translateY(-100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-nav {
+    transition: none;
+  }
+}
+
+.site-nav-bar {
+  display: flex;
+  flex-wrap: wrap;
+  /* Children stretch to the bar's height and centre their own label inside.
+   * Centring the list directly would work too, but then each dropdown would
+   * hang from the middle of the bar instead of from its bottom edge. */
+  align-items: stretch;
+  gap: 0.5rem 1.5rem;
+  padding: 0.75rem 1rem;
+}
+
+.site-nav-brand {
+  font-family: var(--font-display);
+  /* The wordmark is the loudest thing in the header by a wide margin, and it
+   * is the tallest item, so it sets the height everything else centres on. */
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.site-nav-brand:hover,
+.site-nav-brand:focus-visible {
+  text-decoration: underline;
+  /* Thickness scales with the font, so at wordmark size the default rule sits
+   * too close to the caps. */
+  text-underline-offset: 0.1em;
+}
+
+.site-nav-list {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  /* Scaled up to hold their own beside the wordmark, but kept well below it so
+   * the hierarchy stays obvious. Clamped so they do not crowd the wordmark on
+   * a narrow screen. */
+  font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+  display: flex;
+  flex-wrap: wrap;
+  /* Wide column gap: there are only five sections, and they read as separate
+   * destinations rather than as a run-on list. */
+  gap: 0.4rem 2.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-nav-group {
+  position: relative;
+  /* The item fills the bar's height so its dropdown hangs from the bottom
+   * edge; the label itself sits centred against the wordmark. */
+  display: flex;
+  align-items: center;
+}
+
+/* A group has no page behind it, so it is a <button>. These rules make it read
+ * as a menu item rather than as a form control. */
+.site-nav-group-label {
+  font: inherit;
+  color: var(--ink);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* The section you are in, and the menu you have opened, are both marked by the
+ * same underline. No 700 cut of Basenji is loaded, so weight is not available
+ * as a signal without synthetic emboldening. Ink, matching the bar's bottom
+ * rule and the wordmark's own hover underline. */
+.site-nav-group-label[aria-current],
+.site-nav-group-label[aria-expanded="true"] {
+  box-shadow: inset 0 -0.3rem 0 var(--ink);
+}
+
+.site-nav-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 10;
+  min-width: 15rem;
+  margin: 0;
+  padding: 0.4rem 0;
+  list-style: none;
+  /* Solid panel on a hard border: no shadow, no blur, nothing translucent. */
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  /* The bar's own type scales with the viewport; the panel does not need to. */
+  font-size: 1rem;
+}
+
+.site-nav-dropdown a {
+  display: block;
+  padding: 0.45rem 1rem;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.site-nav-dropdown a:hover,
+.site-nav-dropdown a:focus-visible {
+  background: var(--honey);
+  color: var(--ink);
+}
+
+.site-nav-dropdown a[aria-current="page"] {
+  box-shadow: inset 0.25rem 0 0 var(--honey);
+  color: var(--ink);
+}
+
+.site-nav-dropdown-name {
+  display: block;
+}
+
+/* The bracketed notes from the menu plan: smaller, muted, and never the thing
+ * you read first. */
+.site-nav-dropdown-subtitle {
+  display: block;
+  font-size: 0.78em;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+/* ---------- sub-pages of the current page ---------- */
+
+/* Rendered by SectionLinks at the top of the page body, not in the header, so
+ * the sticky bar stays a single row of top-level sections however deep the
+ * tree goes. Aligned to the lead's measure so the page head reads as a block. */
+.section-links {
+  max-width: 44rem;
+  margin: 0 0 2.25rem;
+  padding-bottom: 1.1rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.section-links ul {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.section-links a {
+  color: var(--text);
+  text-decoration: none;
+  border-bottom: 2px solid var(--honey);
+}
+
+.section-links a:hover {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+}
+
+/* ---------- page header ---------- */
+
+/* Where you are, set as a path. Mono because it reads as one, and small and
+ * muted because it orients rather than competes with the title under it. */
+.breadcrumbs {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 0.9rem;
+}
+
+.breadcrumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The empty alt text after the slash keeps screen readers from announcing the
+ * separator; the <ol> and the nav label already carry the structure. */
+.breadcrumbs li + li::before {
+  content: ">" / "";
+  margin: 0 0.45rem;
+}
+
+.breadcrumbs a {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.breadcrumbs a:hover,
+.breadcrumbs a:focus-visible {
+  color: var(--ink);
+  text-decoration: underline;
+}
+
+.breadcrumbs [aria-current="page"] {
+  color: var(--text);
+}
+
+.page-header {
+  padding: 2.5rem 1rem 1.5rem;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 2rem;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: clamp(2rem, 6vw, 3.25rem);
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.page-header .lead {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  margin: 0.75rem 0 0;
+  max-width: 44rem;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+}
+
+/* ---------- content ---------- */
+
+.markdown-page {
+  max-width: var(--measure);
+  line-height: 1.75;
+}
+
+/* Headings are link targets: the on-page index and every search result point
+ * at one. The menu is sticky, so an anchor scrolled flush to the top of the
+ * viewport lands underneath it. This is the clearance, once, rather than
+ * arithmetic at each call site. */
+.markdown-page h2,
+.markdown-page h3,
+.sm-profile[id],
+.tl-entry[id] {
+  scroll-margin-top: 7rem;
+}
+
+.markdown-page h2 {
+  margin-top: 2.75rem;
+  font-size: 1.5rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 3px solid var(--honey);
+}
+
+.markdown-page h3 {
+  margin-top: 2rem;
+  font-size: 1.15rem;
+}
+
+.markdown-page blockquote {
+  margin: 1.5rem 0;
+  padding: 0.75rem 1rem;
+  border-left: 5px solid var(--honey);
+  background: var(--surface-muted);
+}
+
+.markdown-page blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+.markdown-page table {
+  width: 100%;
+  margin: 1.5rem 0;
+  border-collapse: collapse;
+}
+
+.markdown-page th,
+.markdown-page td {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--rule);
+  text-align: left;
+  vertical-align: top;
+}
+
+.markdown-page th {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  background: var(--surface-muted);
+  color: var(--ink);
+}
+
+.markdown-page img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ---------- search ---------- */
+
+/* The search field, in the menu bar, and the only one on the wiki: the
+ * results page has no box of its own. It sits on honey like everything else
+ * in the bar, and lightens to the tinted neutral once you are in it, so the
+ * field you are typing into is the one pale thing in a saturated bar. */
+.site-search {
+  margin-left: auto;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.25rem 0.6rem;
+  background: transparent;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+}
+
+.site-search:focus-within {
+  background: var(--surface-muted);
+}
+
+/* Drawn in the component, two shapes, no icon set. Sized in em so it tracks
+ * the field it labels. */
+.site-search-glass {
+  flex: none;
+  width: 1em;
+  height: 1em;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2;
+  /* Square caps: the bar, the dropdown and the buttons are all hard-edged. */
+  stroke-linecap: square;
+}
+
+.site-search input {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1rem;
+  /* Wide enough for a term and its qualifier, and it gives way first when the
+   * bar runs out of room. */
+  width: 11rem;
+  min-width: 0;
+  padding: 0;
+  color: var(--ink);
+  background: transparent;
+  border: 0;
+}
+
+.site-search input::placeholder {
+  color: var(--ink);
+  opacity: 0.65;
+}
+
+.site-search input:focus {
+  /* The field already announces focus by lightening; a focus ring inside the
+   * border as well would be two signals for one state. */
+  outline: none;
+}
+
+/* Chrome and Safari draw their own clear button in a type=search field, in
+ * their own grey. Escape clears the field, and deleting the query is one
+ * keystroke anyway. */
+.site-search input::-webkit-search-decoration,
+.site-search input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* A term that had to be corrected to match anything, and what was used in
+ * its place. The typed word is set as the string it is, in the same treatment
+ * as inline code, because it is being quoted back rather than read. */
+.search-correction {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  max-width: 44rem;
+  margin: 0 0 0.6rem;
+  color: var(--ink);
+}
+
+.search-correction em {
+  font-family: var(--font-mono);
+  font-style: normal;
+  padding: 0.05em 0.3em;
+  background: var(--surface-muted);
+}
+
+/* The line above the results: what was searched for, and how much was found. */
+.search-count {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--text-muted);
+  max-width: 44rem;
+  margin: 0 0 2rem;
+}
+
+/* One page of results. The heading rule is the honey underline used for h2 in
+ * the page body, so a result reads as the section it will take you to. */
+.search-result {
+  max-width: 44rem;
+  margin-bottom: 2.5rem;
+}
+
+.search-result h2 {
+  font-size: 1.5rem;
+  margin: 0;
+  padding-bottom: 0.25rem;
+  border-bottom: 3px solid var(--honey);
+}
+
+.search-result h2 a {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.search-result h2 a:hover {
+  text-decoration: underline;
+}
+
+.search-hits {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.search-hits li {
+  margin-top: 1.1rem;
+}
+
+/* The whole passage is one link: heading, snippet and the space around them.
+ * A hit is a paragraph you decide about, not a title with some text beneath
+ * it, so the target is the paragraph. */
+.search-hit {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  color: var(--text);
+  text-decoration: none;
+  border-left: 2px solid var(--rule);
+}
+
+.search-hit:hover,
+.search-hit:focus-visible {
+  color: var(--text);
+  background: var(--surface-muted);
+  border-left-color: var(--ink);
+}
+
+.search-hit-heading {
+  display: block;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.search-hit:hover .search-hit-heading {
+  text-decoration: underline;
+}
+
+.search-snippet {
+  display: block;
+  margin-top: 0.3rem;
+  line-height: 1.7;
+}
+
+/* Honey is a background here, never type: at 1.6:1 on white it fails contrast
+ * as a text colour, which is why the palette reserves it for fills and rules. */
+.search mark,
+.markdown-page mark {
+  padding: 0.05em 0.1em;
+  background: var(--honey);
+  color: var(--ink);
+}

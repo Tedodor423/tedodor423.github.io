@@ -1,0 +1,201 @@
+/* The comb treatment: alternating bands down a page, and the switch that
+ * turns it off.
+ *
+ * TEMPORARY, and self-contained. Every rule here is scoped to
+ * html[data-comb="on"] except the switch, so with the switch off the bands are
+ * plain wrappers and the wiki renders from brand.css alone. See CombBands.tsx.
+ *
+ * THE PHOTOGRAPH IS NOT TOUCHED. It does not need to be: comb.JPG is dark
+ * almost everywhere (median luminance 0.11, and 0.20 at the 99th percentile),
+ * so wax type over the untouched frame never falls below about 9:1 and honey
+ * never below 6.5:1. A comb band is therefore a dark band, and the type in it
+ * inverts. That is the whole trade: the photo keeps its own colour, and the
+ * page gives way to it.
+ *
+ * WHY THE BANDS LINE UP. Every comb band paints the same photograph with
+ * `background-attachment: fixed`, which anchors it to the window rather than
+ * to the element. One frame of comb therefore sits behind the whole page and
+ * each band is a window onto its own part of it, so the cells run straight
+ * from one band into the next past the wax in between. iOS Safari ignores
+ * `fixed` and each band gets its own crop instead; that still reads as comb,
+ * it just stops being one continuous frame.
+ */
+
+[data-comb="on"] {
+  /* Type on the comb. Wax rather than white: white on a warm photograph reads
+     as a hole cut in it. */
+  --comb-ink: #fbf7ec;
+
+  /* What a comb band shows if the photograph is missing, which is the case on
+     the deployed site until comb-bg.jpg is uploaded. Dark enough that --comb-ink
+     stays readable on it, so a 404 degrades to a plain dark band. */
+  --comb-fallback: #2e1d0c;
+
+  /* The air a band needs to read as a band. Generous: the point of the run is
+     the alternation, and that only registers if each one is a block rather
+     than a stripe. */
+  --comb-band-space: 3.5rem;
+}
+
+/* ---------- the bands ---------- */
+
+/* MarkdownPage wraps every `##` section in one of these, alternating wax and
+   comb. Until the treatment is on they are bare wrappers with no styling at
+   all, which is what makes the switch a true revert. */
+[data-comb="on"] .page-band {
+  padding-block: var(--comb-band-space);
+}
+
+/* The band carries the page's own surface so the comb cannot show through the
+   gaps between bands. */
+[data-comb="on"] .page-band[data-band="wax"] {
+  background-color: var(--surface);
+}
+
+[data-comb="on"] .page-band[data-band="comb"] {
+  background-color: var(--comb-fallback);
+  background-image: var(--comb-src);
+  background-size: cover;
+  background-position: center;
+
+  /* Anchored to the window, so the bands are windows onto one frame. */
+  background-attachment: fixed;
+
+  color: var(--comb-ink);
+}
+
+/* The band already spaces the section; the first heading in it must not add
+   its own leading on top. */
+[data-comb="on"] .page-band .markdown-page > :first-child {
+  margin-top: 0;
+}
+
+/* ---------- type on the comb ---------- */
+
+/* Ink is invisible here, so the two heading levels take the two light brand
+   colours: honey for the section heading it already underlines in honey, wax
+   for everything below it. */
+[data-comb="on"] [data-band="comb"] h2 {
+  color: var(--honey);
+}
+
+[data-comb="on"] [data-band="comb"] h3,
+[data-comb="on"] [data-band="comb"] h4,
+[data-comb="on"] [data-band="comb"] h5,
+[data-comb="on"] [data-band="comb"] h6,
+[data-comb="on"] [data-band="comb"] strong {
+  color: var(--comb-ink);
+}
+
+/* Violet is a link colour for a white page. On the comb it is unreadable, so
+   links take honey and keep their underline to stay distinguishable from the
+   headings. */
+[data-comb="on"] [data-band="comb"] a {
+  color: var(--honey);
+  text-decoration: underline;
+}
+
+[data-comb="on"] [data-band="comb"] a:hover,
+[data-comb="on"] [data-band="comb"] a:focus-visible {
+  color: #ffffff;
+}
+
+/* Table rules drawn to read on white disappear on the photograph. */
+[data-comb="on"] [data-band="comb"] th,
+[data-comb="on"] [data-band="comb"] td {
+  border-color: #7d6242;
+}
+
+/* Blockquotes are the TODO / FIGURE / RESULT blocks, and they stay paper: a
+   light block on the comb is the strongest thing on the page, which is what a
+   placeholder should be. Their contents therefore keep the page's own ink. */
+[data-comb="on"] [data-band="comb"] blockquote {
+  background: var(--surface-muted);
+  color: var(--text);
+}
+
+[data-comb="on"] [data-band="comb"] blockquote a {
+  color: var(--link);
+}
+
+[data-comb="on"] [data-band="comb"] blockquote a:hover {
+  color: var(--ink);
+}
+
+[data-comb="on"] [data-band="comb"] blockquote strong,
+[data-comb="on"] [data-band="comb"] blockquote h3,
+[data-comb="on"] [data-band="comb"] blockquote h4 {
+  color: var(--ink);
+}
+
+/* ---------- the switch ---------- */
+
+/* Bottom right, above the bees (z-index 50 in BeeScene.css) and above the
+   page. Hard-edged honey and ink like the menu and the hive buttons: no pill,
+   no shadow, no fade. */
+.comb-switch {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 60;
+
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+
+  padding: 0.4rem 0.55rem;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--honey);
+
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.85rem;
+  line-height: 1;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.comb-switch-label {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.comb-switch-track {
+  /* Two knob widths: the knob sits at one end or the other and the empty half
+     is the travel. */
+  width: 2.1rem;
+  height: 1.05rem;
+  padding: 2px;
+  border: 2px solid var(--ink);
+  background: var(--surface);
+}
+
+.comb-switch-knob {
+  display: block;
+  width: 50%;
+  height: 100%;
+  background: var(--ink);
+  transition: transform 140ms ease;
+}
+
+.comb-switch[aria-checked="true"] .comb-switch-knob {
+  transform: translateX(100%);
+}
+
+.comb-switch[aria-checked="false"] {
+  /* Off is not the loud state: it drops to the page's own neutral so the switch
+     stops advertising itself once the comb is gone. */
+  background: var(--surface-muted);
+}
+
+.comb-switch:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .comb-switch-knob {
+    transition: none;
+  }
+}

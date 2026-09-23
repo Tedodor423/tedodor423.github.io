@@ -1,0 +1,395 @@
+/* The stakeholder map.
+ *
+ * Colours are the brand tokens from src/styles/brand.css and nothing else:
+ * wax for land, honey for a cell we have someone in, violet for the one under
+ * the cursor, navy for rules and type. Honey is a fill here, never type, for
+ * the contrast reason recorded at the top of brand.css.
+ *
+ * Surfaces are solid and separated by 1px rules rather than by shadow, corners
+ * take the single --radius the wiki already uses, and the only movement is the
+ * fill change that tells you which country you are pointing at.
+ */
+
+.stakeholder-map {
+  margin: 2.5rem 0;
+  /* The map breaks the 36rem measure on purpose: a world map at reading width
+   * is unreadable. It overflows to the right inside .container, which is where
+   * the room is, and falls back to the viewport on a narrow screen. */
+  width: min(68rem, calc(100vw - 4rem));
+}
+
+.sm-heading {
+  margin: 0 0 0.35rem;
+  font-size: 1.15rem;
+}
+
+.sm-standfirst {
+  max-width: var(--measure);
+  margin: 0 0 1rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+/* ---------- the question filter ---------- */
+
+/* Plain buttons in the mono face, honey when pressed. The pressed state is a
+ * fill, not a shadow, and "All" reads the same as a question so the row does
+ * not have a visually different escape hatch. */
+.sm-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin: 0 0 0.5rem;
+}
+
+.sm-filter button {
+  padding: 0.15rem 0.6rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+
+.sm-filter button:hover {
+  border-color: var(--ink);
+}
+
+.sm-filter button.is-on {
+  border-color: var(--ink);
+  background: var(--honey);
+  color: var(--ink);
+}
+
+.sm-filter-title {
+  max-width: var(--measure);
+  margin: 0 0 0.75rem;
+  font-size: 0.82rem;
+  color: var(--text);
+}
+
+.sm-filter-title strong {
+  font-family: var(--font-heading);
+  color: var(--ink);
+}
+
+/* ---------- the map itself ---------- */
+
+.sm-canvas {
+  position: relative;
+  border: 1px solid var(--rule);
+  background: var(--surface-muted);
+}
+
+.sm-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* The source SVG ships a painted background rectangle and one flat blue fill.
+ * Neither survives: the lattice is redrawn here, so the sea is simply the page
+ * behind it and the land takes a wax tone that honey can sit on top of. */
+.sm-land {
+  fill: var(--map-land);
+  pointer-events: none;
+}
+
+.sm-region {
+  cursor: pointer;
+  outline: none;
+}
+
+.sm-marker {
+  fill: var(--honey);
+  stroke: var(--ink);
+  stroke-width: 1.2;
+  transition: fill 120ms linear;
+}
+
+.sm-region.is-active .sm-marker:not(.is-dim),
+.sm-region:focus-visible .sm-marker:not(.is-dim) {
+  fill: var(--violet);
+}
+
+.sm-region:focus-visible .sm-marker:not(.is-dim) {
+  stroke: var(--ink);
+  stroke-width: 2.5;
+}
+
+/* Under a question filter: a cell with nobody on that question goes back to
+ * being land, and the cell holding the anchor interview gets a heavier rim. */
+.sm-marker.is-dim {
+  fill: var(--map-land);
+  stroke: none;
+}
+
+.sm-marker.is-anchor {
+  stroke-width: 3.4;
+}
+
+.sm-region.is-empty {
+  cursor: default;
+}
+
+/* Invisible, and the reason a 22-unit cell is comfortable to hit. */
+.sm-hit {
+  fill: transparent;
+}
+
+/* ---------- the card ---------- */
+
+.sm-card {
+  position: absolute;
+  z-index: 5;
+  width: 21rem;
+  max-width: calc(100vw - 3rem);
+  /* Offset from the pointer so the card sits beside it rather than under it. */
+  transform: translate(1.1rem, 1.1rem);
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--oxford-navy);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  pointer-events: none;
+}
+
+.sm-card.is-flipped {
+  transform: translate(calc(-100% - 1.1rem), 1.1rem);
+}
+
+.sm-card.is-raised {
+  transform: translate(1.1rem, calc(-100% - 1.1rem));
+}
+
+.sm-card.is-flipped.is-raised {
+  transform: translate(calc(-100% - 1.1rem), calc(-100% - 1.1rem));
+}
+
+/* A hover is a preview: roles run to four lines for some of these people, and
+ * five of those is a card taller than the map. Selecting the region drops the
+ * clamp and shows everything. */
+.sm-card:not(.is-pinned) .sm-role {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.sm-card.is-pinned {
+  width: 25rem;
+  max-height: 30rem;
+  overflow-y: auto;
+  border-width: 2px;
+  pointer-events: auto;
+}
+
+.sm-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid var(--honey);
+}
+
+.sm-card-title {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.sm-card-count {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+
+.sm-close {
+  margin-left: auto;
+  padding: 0.1rem 0.45rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--surface-muted);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+}
+
+.sm-close:hover {
+  background: var(--honey);
+}
+
+.sm-hint {
+  margin: 0.5rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+}
+
+/* ---------- one profile ---------- */
+
+.sm-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sm-profile {
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.sm-profile:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.sm-name {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.sm-name--withheld {
+  color: var(--text-muted);
+}
+
+.sm-role {
+  margin: 0.1rem 0 0;
+  color: var(--text);
+}
+
+.sm-meta {
+  margin: 0.15rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+
+.sm-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin: 0.35rem 0 0;
+}
+
+/* Three states, because a tag that we assigned ourselves should not look like
+ * one the team's own question table states. */
+.sm-tag {
+  padding: 0.05rem 0.3rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--surface-muted);
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  white-space: nowrap;
+}
+
+.sm-tag--anchor {
+  border-color: var(--ink);
+  background: var(--honey);
+  color: var(--ink);
+}
+
+.sm-tag--listed {
+  color: var(--text);
+}
+
+.sm-tag--provisional {
+  border-style: dashed;
+}
+
+/* Verbatim, as the team transcribed it. Set in italic with the quotation marks
+ * in the text, and no rule beside it: the words are the emphasis. */
+.sm-quote {
+  margin: 0.45rem 0 0;
+  font-style: italic;
+  color: var(--ink);
+}
+
+.sm-learnt {
+  margin: 0.4rem 0 0;
+  padding-left: 1rem;
+}
+
+.sm-learnt li {
+  margin-bottom: 0.25rem;
+}
+
+.sm-changed {
+  margin: 0.45rem 0 0;
+  padding: 0.4rem 0.5rem;
+  background: var(--surface-muted);
+  border-radius: var(--radius);
+}
+
+.sm-changed-label {
+  display: block;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--ink);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ---------- the text record ---------- */
+
+/* Not a duplicate of the map: it is the accessible and printable copy of the
+ * same record, and the reason none of this is hover-only. */
+.sm-roster {
+  max-width: var(--measure);
+  margin-top: 1.25rem;
+  font-size: 0.82rem;
+}
+
+.sm-roster > summary {
+  padding: 0.4rem 0;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.sm-roster-region h4 {
+  margin: 1.1rem 0 0.2rem;
+  padding-bottom: 0.15rem;
+  border-bottom: 2px solid var(--honey);
+  font-size: 0.95rem;
+}
+
+/* ---------- narrow screens ---------- */
+
+/* Hover is not available on a touch screen, so the card is pinned by tap only.
+ * Below this width it stops chasing the pointer and docks under the map, which
+ * also stops a 21rem card from covering the map it describes. */
+@media (max-width: 48rem) {
+  .stakeholder-map {
+    width: 100%;
+  }
+
+  .sm-card {
+    position: static;
+    width: 100%;
+    max-width: none;
+    transform: none;
+    margin-top: 0.75rem;
+    border-top-width: 2px;
+  }
+
+  .sm-card.is-flipped,
+  .sm-card.is-raised,
+  .sm-card.is-flipped.is-raised {
+    transform: none;
+  }
+
+  .sm-card:not(.is-pinned) .sm-role {
+    -webkit-line-clamp: none;
+  }
+
+  .sm-card.is-pinned {
+    width: 100%;
+    max-height: none;
+  }
+}

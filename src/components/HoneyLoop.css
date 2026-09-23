@@ -1,0 +1,196 @@
+/* The HONEY loop figure.
+ *
+ * Same tokens as everything else: honey cells, ink strokes, violet for the
+ * cell that is lit, navy arrows. The figure sits beside its legend at reading
+ * width and stacks under it on a narrow screen. The only motion is the fill
+ * change on the cell you are pointing at, mirrored in the legend.
+ */
+
+.honey-loop {
+  display: grid;
+  grid-template-columns: minmax(16rem, 22rem) minmax(0, 1fr);
+  gap: 1.5rem 2rem;
+  align-items: start;
+  /* Breaks the 36rem measure the same way the map does: a ring beside its
+   * legend needs the room, and inside the measure the legend collapses to a
+   * word a line. */
+  width: min(68rem, calc(100vw - 4rem));
+  max-width: none;
+  margin: 2rem 0;
+}
+
+.hl-legend {
+  min-width: 0;
+}
+
+.hl-frame {
+  border: 1px solid var(--rule);
+  background: var(--surface-muted);
+  padding: 0.5rem;
+}
+
+.hl-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ---------- the ring ---------- */
+
+.hl-arrow {
+  fill: none;
+  stroke: var(--oxford-navy);
+  stroke-width: 2.5;
+}
+
+/* The arrow that closes the loop is the point of the drawing. */
+.hl-arrow--close {
+  stroke: var(--violet);
+  stroke-width: 3.5;
+}
+
+.hl-head {
+  fill: var(--oxford-navy);
+}
+
+.hl-head--close {
+  fill: var(--violet);
+}
+
+.hl-centre {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  fill: var(--text-muted);
+}
+
+.hl-cell {
+  cursor: pointer;
+  outline: none;
+}
+
+.hl-hex {
+  fill: var(--honey);
+  stroke: var(--ink);
+  stroke-width: 2;
+  transition: fill 120ms linear;
+}
+
+.hl-cell.is-lit .hl-hex,
+.hl-cell:focus-visible .hl-hex {
+  fill: var(--violet);
+}
+
+.hl-cell:focus-visible .hl-hex {
+  stroke-width: 4;
+}
+
+.hl-letter {
+  font-family: var(--font-display);
+  font-size: 34px;
+  fill: var(--ink);
+  pointer-events: none;
+}
+
+.hl-name {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 15px;
+  fill: var(--ink);
+  pointer-events: none;
+}
+
+.hl-cell.is-lit .hl-letter,
+.hl-cell.is-lit .hl-name,
+.hl-cell:focus-visible .hl-letter,
+.hl-cell:focus-visible .hl-name {
+  fill: var(--surface);
+}
+
+/* ---------- the legend ---------- */
+
+.hl-legend {
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.hl-legend-lead {
+  margin: 0 0 0.5rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 2px solid var(--honey);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.hl-legend ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hl-legend li {
+  display: grid;
+  grid-template-columns: 9rem minmax(0, 1fr);
+  gap: 0 1rem;
+  padding: 0.55rem 0.4rem;
+  border-bottom: 1px solid var(--rule);
+  transition: background 120ms linear;
+}
+
+.hl-legend li:last-child {
+  border-bottom: 0;
+}
+
+.hl-legend li.is-lit {
+  background: var(--surface-muted);
+}
+
+.hl-beat {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.hl-beat-letter {
+  display: inline-block;
+  min-width: 1.4rem;
+  padding: 0 0.3rem;
+  margin-right: 0.15rem;
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--honey);
+  text-align: center;
+}
+
+.hl-legend li.is-lit .hl-beat-letter {
+  background: var(--violet);
+  color: var(--surface);
+}
+
+.hl-beat-asks {
+  display: block;
+  margin-top: 0.15rem;
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.hl-example {
+  color: var(--text);
+}
+
+@media (max-width: 52rem) {
+  .honey-loop {
+    grid-template-columns: 1fr;
+  }
+
+  .hl-frame {
+    max-width: 24rem;
+  }
+
+  .hl-legend li {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+  }
+}

@@ -1,0 +1,43 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ---------------------------------------------------------------------------
+# Local-only working folders. NEVER committed - the deployed wiki must stay
+# small and must not redistribute source documents or third-party material.
+#
+#   references/         - team source material given to humans/AI as context
+#                         (pitch decks, lab journals, papers, interview notes)
+#   wiki-assets-source/ - raw images staged for upload to static.igem.wiki
+#                         via the iGEM uploads tool
+#
+# Images, fonts and video NEVER live in this repo: upload them via
+# https://teams.igem.org/go/deliverables/wiki/uploads and reference the
+# static.igem.wiki URL the tool returns.
+# ---------------------------------------------------------------------------
+references/
+wiki-assets-source/
+
+# Per-user Claude Code settings
+.claude/settings.local.json

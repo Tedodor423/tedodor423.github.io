@@ -1,5 +1,10 @@
 name: Deploy to GitHub Pages
 
+# Dev preview of the wiki. The real wiki is built and served by iGEM from
+# .gitlab-ci.yml; this workflow only mirrors it onto GitHub Pages:
+#   /                        -> the wiki (repo root)
+#   /modelleing-frontend/    -> the NECTAR modelling GUI (modelleing-frontend/)
+
 on:
   push:
     branches: [main]
@@ -17,28 +22,38 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: modelleing-frontend
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: npm
-          cache-dependency-path: modelleing-frontend/package-lock.json
+          node-version: 22
 
-      - run: npm ci
-      - run: npm run build
+      # --- Wiki -------------------------------------------------------------
+      # vite.config.ts sets base to /<team-slug>/ for igem.wiki; Pages serves
+      # this repo from the domain root, so override it here only.
+      - run: yarn install --frozen-lockfile
+      - run: yarn build --base /
+
+      # --- Modelling frontend ----------------------------------------------
+      - working-directory: modelleing-frontend
+        run: npm ci
+      - working-directory: modelleing-frontend
+        run: npm run build -- --base /modelleing-frontend/
         env:
           # Always ship the mock backend on Pages — there is no live API to
           # point at, so a broken/misconfigured deploy can never try to reach one.
           VITE_API_MODE: mock
 
+      - name: Assemble site
+        run: |
+          cp -a modelleing-frontend/dist dist/modelleing-frontend
+          # The wiki uses BrowserRouter; serve index.html for deep links.
+          cp dist/index.html dist/404.html
+
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: modelleing-frontend/dist
+          path: dist
 
   deploy:
     needs: build

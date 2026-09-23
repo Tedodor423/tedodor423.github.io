@@ -77,7 +77,7 @@ export function Landing() {
               <ArrowRight size={16} />
             </Button>
             <a
-              href="/nectar-project-summary.pdf"
+              href={`${import.meta.env.BASE_URL}nectar-project-summary.pdf`}
               target="_blank"
               rel="noopener noreferrer"
               className={buttonClassName('secondary', 'text-base')}
