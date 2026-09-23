@@ -3,22 +3,16 @@ import { useLocation } from "react-router-dom";
 import { findFlowerSpots, type FlowerSpot } from "../utils/flowerSpots";
 import "./BeeScene.css";
 
-/* DEV ASSETS — temporary.
- *
- * Served straight out of the gitignored wiki-assets-source/images_dev/ folder
- * by the Vite dev server. They are NOT in the repository, so on the deployed
- * site these URLs 404, the artwork never appears, and the build still succeeds.
- *
- * TO SHIP: upload the files via the iGEM uploads tool and replace the base
- * below with the static.igem.wiki folder it returns. Nothing else changes.
- * Note the uploads tool rewrites raster images to .avif; SVG passes through,
- * but read the URL the tool gives back rather than assuming the extension.
+/* Artwork, served from static.igem.wiki via the iGEM uploads tool. The source
+ * files live in the gitignored wiki-assets-source/images_dev/ folder. To change
+ * one, re-upload it under the same name; Excalidraw exports must have their
+ * <?xml> and <!DOCTYPE> lines stripped first or the uploader rejects them.
  */
-const DEV_ASSETS = `${import.meta.env.BASE_URL}wiki-assets-source/images_dev/`;
-const BEE_FRAMES = [`${DEV_ASSETS}bee1.svg`, `${DEV_ASSETS}bee2.svg`];
-const FLOWER_SRC = `${DEV_ASSETS}flower.svg`;
-const POLLEN_SRC = `${DEV_ASSETS}pollen.svg`;
-const HIVE_SRC = `${DEV_ASSETS}hive.svg`;
+const ASSETS = "https://static.igem.wiki/teams/6391/wiki/assets/";
+const BEE_FRAMES = [`${ASSETS}bee1.svg`, `${ASSETS}bee2.svg`];
+const FLOWER_SRC = `${ASSETS}flower.svg`;
+const POLLEN_SRC = `${ASSETS}pollen.svg`;
+const HIVE_SRC = `${ASSETS}hive.svg`;
 
 /* ---------- artwork geometry ----------
  * Fractions of each drawing's own box, measured off the SVGs. Re-measure these

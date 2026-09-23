@@ -13,17 +13,12 @@ import "./CombBands.css";
  * TEMPORARY. To drop it: delete this file and CombBands.css, remove the line
  * in App.tsx, and collapse MarkdownPage's sections back into one <Markdown>.
  *
- * DEV ASSET, same arrangement as BeeScene: comb-bg.jpg is served out of the
- * gitignored wiki-assets-source/images_dev/ folder by the Vite dev server, so
- * on the deployed site this URL 404s, the comb bands fall back to their own
- * dark wax colour, and the build still succeeds. comb-bg.jpg is a 2000px,
- * 291 KB copy of the 6240px, 12 MB comb.JPG: upload that copy, not the
- * original. Replace the base below with the static.igem.wiki folder the
- * uploads tool returns; it rewrites raster images to .avif, so read the URL it
- * gives back rather than assuming the extension.
+ * The photograph is served from static.igem.wiki, same as BeeScene's artwork.
+ * It is the uploads tool's .avif conversion of comb-bg.jpg, a 2000px, 291 KB
+ * copy of the 6240px, 12 MB comb.JPG in wiki-assets-source/images_dev/. If it
+ * fails to load, the comb bands fall back to their own dark wax colour.
  */
-const DEV_ASSETS = `${import.meta.env.BASE_URL}wiki-assets-source/images_dev/`;
-const COMB_SRC = `${DEV_ASSETS}comb-bg.jpg`;
+const COMB_SRC = "https://static.igem.wiki/teams/6391/wiki/assets/comb-bg.avif";
 
 /** Remembered per browser so the choice survives a reload. */
 const STORAGE_KEY = "nectar:comb";
