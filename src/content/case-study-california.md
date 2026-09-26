@@ -53,4 +53,4 @@ laboratory project can claim, and saying so is stronger than not.
 [Human practices](/human-practices) ·
 [Economic modelling](/economic-modelling) ·
 [Entrepreneurship](/entrepreneurship) ·
-[Safety and security](/safety-and-security)
+[Safety and security](/project-safety)

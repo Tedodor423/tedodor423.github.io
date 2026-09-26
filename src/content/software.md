@@ -56,7 +56,7 @@ Which strand is likely to be loaded, and why that is a design lever.
 ### Step 4: Off-target screening
 
 Screening candidate sequences against non-target organisms, the host bee,
-related species, and humans. This step is where [safety](/safety-and-security)
+related species, and humans. This step is where [safety](/project-safety)
 becomes part of design rather than an assessment bolted on afterwards.
 
 ### Step 5: Combining the scores
@@ -111,6 +111,6 @@ to supply. A tool nobody else can run is not a contribution. See
 
 ## Where this connects
 
-[Dry lab and modelling](/model) · [Description](/description) ·
-[Safety and security](/safety-and-security) · [Parts](/parts) ·
+[Dry lab and modelling](/model) · [Description](/project-description) ·
+[Safety and security](/project-safety) · [Parts](/parts) ·
 [Wet lab](/wet-lab) · [Contribution](/contribution) · [Results](/results)

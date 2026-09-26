@@ -109,7 +109,7 @@ regulatory feasibility and social licence, rather than any one of them alone.
 **Yield.** We stopped building the inducible *S. alvi* and chose engineered
 yeast that is heat-inactivated before it reaches a colony. It shows up in
 [Engineering](/engineering), [Yeast](/yeast) and
-[Safety](/safety-and-security). It also opened Q4 and Q5 immediately: a
+[Safety](/project-safety). It also opened Q4 and Q5 immediately: a
 product that no longer persists has to be reapplied, and someone has to pay for
 that.
 
@@ -154,7 +154,7 @@ insisted that the choice of those species be justified rather than convenient.
 
 **Yield.** Off-target BLAST screening with justified representative species
 became a step inside [RNA design](/software) rather than a check after it, and
-the [safety](/safety-and-security) page is written as a risk-benefit case. His
+the [safety](/project-safety) page is written as a risk-benefit case. His
 last point — that communicating is the hardest step — is why the podcast and
 public talks in [outreach](/education) exist.
 
@@ -207,7 +207,7 @@ labour problem beekeepers were already leaving the industry over.
 **Yield.** Multiplexed targets and resistance management in [RNA
 design](/software), and a duration target that the [bee lab](/bee-lab)
 persistence work is measured against. Feeds [Project
-Description](/description) and [Engineering](/engineering).
+Description](/project-description) and [Engineering](/engineering).
 
 ### Q4 — What would a beekeeper actually use?
 
@@ -329,7 +329,7 @@ consumer perception, contamination.
 
 **Yield.** Honey-residue testing and NMR / LC-HRMS checks were added to the
 [wet lab](/wet-lab) plan, and the environmental-fate question in
-[Safety](/safety-and-security) now runs through honey as well as the bee.
+[Safety](/project-safety) now runs through honey as well as the bee.
 
 > **TODO —** Result of the dsRNA-in-honey test: not yet on the wiki. Report it
 > here with the eight-field result block, including if it is negative or
@@ -429,7 +429,7 @@ probably did not happen.
 
 ## Where this connects
 
-[Case studies](/case-studies) · [Safety and security](/safety-and-security) ·
+[Case studies](/case-studies) · [Safety and security](/project-safety) ·
 [Yeast](/yeast) · [Economic modelling](/economic-modelling) ·
 [Entrepreneurship](/entrepreneurship) ·
 [Sustainable development](/sustainability) · [Public outreach](/education) ·

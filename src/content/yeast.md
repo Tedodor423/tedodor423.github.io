@@ -96,4 +96,4 @@ whether the whole-cell formulation survives the route to the bee.
 
 [Wet lab](/wet-lab) · [Parts](/parts) · [Economic modelling](/economic-modelling) ·
 [Entrepreneurship](/entrepreneurship) · [Human practices](/human-practices) ·
-[Safety and security](/safety-and-security) · [Results](/results)
+[Safety and security](/project-safety) · [Results](/results)

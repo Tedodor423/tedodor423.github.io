@@ -94,5 +94,5 @@ actually done.
 [Human practices](/human-practices) ·
 [Ecological modelling](/ecological-modelling) ·
 [Economic modelling](/economic-modelling) ·
-[Safety and security](/safety-and-security) ·
+[Safety and security](/project-safety) ·
 [Entrepreneurship](/entrepreneurship) · [NECTAR for the future](/future)

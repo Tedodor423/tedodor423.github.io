@@ -87,4 +87,4 @@ implied.
 [Economic modelling](/economic-modelling) ·
 [Ecological modelling](/ecological-modelling) ·
 [Entrepreneurship](/entrepreneurship) ·
-[Safety and security](/safety-and-security)
+[Safety and security](/project-safety)

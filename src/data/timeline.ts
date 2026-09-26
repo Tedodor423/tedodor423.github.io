@@ -314,7 +314,7 @@ export const EVENTS: TimelineEvent[] = [
     title: "Final vote: Varroa, nine to two",
     detail: "The carbon-to-protein idea takes two, the space project none.",
     turn: true,
-    links: [{ label: "Project description", href: "/description" }],
+    links: [{ label: "Project description", href: "/project-description" }],
   },
   {
     id: "budge",
@@ -451,7 +451,7 @@ export const EVENTS: TimelineEvent[] = [
     detail:
       "Testing an engineered organism in the bee lab needs its own approvals, moving one between labs needs more, and the risk assessment needs an animal form because bees count as higher invertebrates.",
     threads: ["chassis"],
-    links: [{ label: "Safety and security", href: "/safety-and-security" }],
+    links: [{ label: "Safety and security", href: "/project-safety" }],
   },
   {
     id: "registered",
@@ -816,7 +816,7 @@ export const EVENTS: TimelineEvent[] = [
     links: [
       {
         label: "Regulatory position",
-        href: "/safety-and-security#regulatory-position",
+        href: "/project-safety#regulatory-position",
       },
     ],
   },
@@ -841,7 +841,7 @@ export const EVENTS: TimelineEvent[] = [
     links: [
       {
         label: "Resistance and stewardship",
-        href: "/safety-and-security#resistance-and-stewardship",
+        href: "/project-safety#resistance-and-stewardship",
       },
     ],
   },
@@ -1452,7 +1452,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-09-22",
     track: "team",
     title: "Safety check-in submitted",
-    links: [{ label: "Safety and security", href: "/safety-and-security" }],
+    links: [{ label: "Safety and security", href: "/project-safety" }],
   },
   {
     id: "beekeeping-differentiator",

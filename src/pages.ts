@@ -6,28 +6,46 @@
 //
 // See WIKI_PAGE_RULES.md for how to write a page.
 //
-// The menu has exactly two visible levels:
+// THE HEADER STRUCTURE IS AGREED, not improvised: it lives in
+// references/structure_source.md (gitignored team material). Any change to the
+// menu below — a page added, removed, renamed, moved or re-pathed — must be
+// mirrored there in the same sitting. A PreToolUse hook
+// (.claude/hooks/structure-sync.mjs) reminds AI assistants of this on every
+// edit to this file; humans, consider yourselves reminded here.
 //
+// The menu has two visible levels, plus two decorations the structure asks for:
+//
+//   Section  an overarching non-interactive title ("The project in detail")
+//            shown above a run of consecutive groups that share it
 //   Group    a dropdown label with no page behind it (Project, Team, ...)
 //     Page   the link, optionally with a `subtitle` under it
 //
+// Home is the one page that sits in the menu bar directly, as a plain link.
+//
 // A page's own `children` are routed and listed by SectionLinks at the top of
-// that page, but never appear in the menu. That is how RNA design, the lab
-// books and the case studies stay reachable without a third menu level.
+// that page, but never appear in the menu. A page marked `hidden` is routed
+// and searchable but absent from the menu entirely — that is where pages the
+// agreed header no longer lists live on, so their URLs and inbound links keep
+// working until the team decides their fate.
 //
 // IMPORTANT, paths marked "iGEM standard URL" are fixed by the competition.
 // Judges navigate to them directly and will not hunt for a renamed page. The
 // grouping below is for humans and is independent of those paths: a page can
-// sit anywhere in the menu while living at its required URL.
+// sit anywhere in the menu while living at its required URL. The 2026 standard
+// URL list is still uncaptured (IGEM_WIKI_REQUIREMENTS.md §4 GAP) — verify
+// /project-description and /project-safety against it when it lands.
 
 import home from "./content/home.md?raw";
-import description from "./content/description.md?raw";
+import description from "./content/project-description.md?raw";
 import timeline from "./content/timeline.md?raw";
 import contribution from "./content/contribution.md?raw";
 import results from "./content/results.md?raw";
 import engineering from "./content/engineering.md?raw";
 import beeLab from "./content/bee-lab.md?raw";
 import beeLabNotebook from "./content/bee-lab-notebook.md?raw";
+import workingWithBees from "./content/working-with-bees.md?raw";
+import hardware from "./content/hardware.md?raw";
+import userManual from "./content/user-manual.md?raw";
 import wetLab from "./content/wet-lab.md?raw";
 import yeast from "./content/yeast.md?raw";
 import experiments from "./content/experiments.md?raw";
@@ -37,7 +55,7 @@ import economicModelling from "./content/economic-modelling.md?raw";
 import ecologicalModelling from "./content/ecological-modelling.md?raw";
 import measurement from "./content/measurement.md?raw";
 import parts from "./content/parts.md?raw";
-import safety from "./content/safety-and-security.md?raw";
+import safety from "./content/project-safety.md?raw";
 import humanPractices from "./content/human-practices.md?raw";
 import caseStudies from "./content/case-studies.md?raw";
 import caseStudyAustralia from "./content/case-study-australia.md?raw";
@@ -66,12 +84,21 @@ export interface Page {
   subtitle?: string;
   /** Sub-pages: routed, listed at the top of this page, never in the menu. */
   children?: Page[];
+  /** Routed and searchable, but absent from the menu. Top level only. */
+  hidden?: boolean;
 }
 
 /** A top-level menu label that opens a dropdown and has no page of its own. */
 export interface Group {
   name: string;
   children: Page[];
+  /** Small, muted line at the top of the dropdown. Optional. */
+  subtitle?: string;
+  /**
+   * Overarching header title. Consecutive groups sharing the same `section`
+   * are clustered under one such title in the menu bar. Optional.
+   */
+  section?: string;
 }
 
 export type MenuEntry = Page | Group;
@@ -82,8 +109,8 @@ export function isGroup(entry: MenuEntry): entry is Group {
 }
 
 const Pages: MenuEntry[] = [
-  // --- Route-only pages. No menu entry; reached from the wordmark or from
-  // links inside other pages.
+  // --- The menu, in header order. Home is a direct link in the bar; the
+  // header logo links to it too.
   {
     name: "Home",
     title: "NECTAR",
@@ -92,139 +119,36 @@ const Pages: MenuEntry[] = [
     lead: "Oxford iGEM 2026.",
   },
   {
-    name: "NECTAR for the future",
-    title: "NECTAR for the Future",
-    path: "/future",
-    content: future,
-    lead: "Where this goes after iGEM.",
-  },
-  {
-    name: "Team",
-    title: "Team",
-    path: "/team", // iGEM standard URL
-    content: team,
-    lead: "The people behind NECTAR.",
-  },
-
-  // --- The menu.
-  {
     name: "Project",
+    subtitle: "Summary of our work",
     children: [
       {
-        name: "Project description",
-        subtitle: "what is NECTAR",
+        name: "Description",
         title: "Project Description",
-        path: "/description", // iGEM standard URL
+        path: "/project-description", // per structure_source.md — verify against the standard URL list
         content: description,
         lead: "The problem, the idea, and what we set out to build.",
       },
       {
-        name: "Contribution and Results",
-        title: "Results",
-        path: "/results", // iGEM standard URL
-        content: results,
-        lead: "What we found, and how strongly the evidence supports it.",
-        children: [
-          {
-            name: "Contribution",
-            title: "Contribution",
-            path: "/contribution", // iGEM standard URL
-            content: contribution,
-            lead: "What we leave behind for the teams that come after us.",
-          },
-        ],
-      },
-      {
-        name: "Timeline",
-        subtitle: "when is NECTAR",
-        title: "Timeline",
-        path: "/timeline",
-        content: timeline,
-        lead: "Eight months, five workstreams running at once, and the dates each one turned.",
-      },
-    ],
-  },
-  {
-    name: "Building NECTAR",
-    children: [
-      {
-        name: "Our engineering cycles",
+        name: "Engineering",
         title: "Engineering NECTAR",
         path: "/engineering", // iGEM standard URL
         content: engineering,
         lead: "Design, Build, Test, Learn, and what each turn of the cycle changed.",
       },
       {
-        name: "Bee lab",
-        subtitle: "experiments, bee biology",
-        title: "Bee Lab",
-        path: "/bee-lab",
-        content: beeLab,
-        lead: "Working with live bees: delivery, dosing and the assays we had to invent.",
-        children: [
-          {
-            name: "Experiments, lab book",
-            title: "Bee Lab, Experiments and Lab Book",
-            path: "/bee-lab/notebook",
-            content: beeLabNotebook,
-            lead: "Bee lab protocols and the dated record.",
-          },
-        ],
+        name: "Results",
+        title: "Results",
+        path: "/results", // iGEM standard URL
+        content: results,
+        lead: "What we found, and how strongly the evidence supports it.",
       },
       {
-        name: "Wet lab",
-        subtitle: "RNA",
-        title: "Wet Lab",
-        path: "/wet-lab",
-        content: wetLab,
-        lead: "Making the molecule: construct design, assembly and production.",
-        children: [
-          {
-            name: "Experiments, lab book",
-            title: "Experiments and Lab Book",
-            path: "/experiments", // iGEM standard URL
-            content: experiments,
-            lead: "Protocols in enough detail for another team to repeat them.",
-          },
-          {
-            name: "Yeast",
-            title: "Yeast",
-            path: "/yeast",
-            content: yeast,
-            lead: "Why S. cerevisiae, and how we engineered it to make loop-ended dsRNA.",
-          },
-        ],
-      },
-      {
-        name: "Dry lab / modelling",
-        subtitle: "RNA design, econ and ecol modelling",
-        title: "Dry Lab and Modelling",
-        path: "/model", // iGEM standard URL
-        content: model,
-        lead: "The models, their assumptions, and the decisions they changed.",
-        children: [
-          {
-            name: "RNA design",
-            title: "RNA Design",
-            path: "/software", // iGEM standard URL
-            content: software,
-            lead: "NectarDesigner: how we choose the sequence that silences the mite.",
-          },
-          {
-            name: "Economical modelling",
-            title: "Economic Modelling",
-            path: "/economic-modelling",
-            content: economicModelling,
-            lead: "Allowable cost, manufacturing cost, and the yeast titre they imply.",
-          },
-          {
-            name: "Ecological modelling",
-            title: "Ecological Modelling",
-            path: "/ecological-modelling",
-            content: ecologicalModelling,
-            lead: "Colony and Varroa dynamics, and what treatment efficacy has to reach.",
-          },
-        ],
+        name: "Contribution",
+        title: "Contribution",
+        path: "/contribution", // iGEM standard URL
+        content: contribution,
+        lead: "What we leave behind for the teams that come after us.",
       },
       {
         name: "Measurement",
@@ -234,26 +158,27 @@ const Pages: MenuEntry[] = [
         lead: "Quantifying dsRNA in bee material, and the methods we had to build to do it.",
       },
       {
-        name: "Parts design",
-        title: "Parts",
-        path: "/parts", // iGEM standard URL
-        content: parts,
-        lead: "The modular loop-ended dsRNA part collection.",
-      },
-      {
         name: "Safety",
         title: "Safety and Security",
-        path: "/safety-and-security", // iGEM standard URL
+        path: "/project-safety", // per structure_source.md — verify against the standard URL list
         content: safety,
         lead: "Risks of our system, and what we did about each of them.",
+      },
+      {
+        name: "Timeline",
+        title: "Timeline",
+        path: "/timeline",
+        content: timeline,
+        lead: "Eight months, five workstreams running at once, and the dates each one turned.",
       },
     ],
   },
   {
-    name: "NECTAR in the real world",
+    name: "Integrated human practices",
+    section: "The project in detail",
     children: [
       {
-        name: "Human practices",
+        name: "Integrated human practices",
         title: "NECTAR in the Real World",
         path: "/human-practices", // iGEM standard URL
         content: humanPractices,
@@ -289,24 +214,82 @@ const Pages: MenuEntry[] = [
           },
         ],
       },
+      {
+        name: "Economical modelling",
+        title: "Economic Modelling",
+        path: "/economic-modelling",
+        content: economicModelling,
+        lead: "Allowable cost, manufacturing cost, and the yeast titre they imply.",
+      },
     ],
   },
   {
-    name: "NECTAR for the future",
+    name: "Wet lab",
+    section: "The project in detail",
     children: [
       {
-        name: "Sustainable development",
-        title: "Sustainable Development",
-        path: "/sustainability", // iGEM standard URL
-        content: sustainability,
-        lead: "Which SDGs we affect, including where we affect them negatively.",
+        name: "Experiments",
+        title: "Experiments and Lab Book",
+        path: "/experiments", // iGEM standard URL
+        content: experiments,
+        lead: "Protocols in enough detail for another team to repeat them.",
       },
       {
-        name: "Entrepreneurship",
-        title: "Entrepreneurship",
-        path: "/entrepreneurship", // iGEM standard URL
-        content: entrepreneurship,
-        lead: "The product, the user, the cost, and the route to market.",
+        name: "dsRNA modelling",
+        title: "RNA Design",
+        path: "/software", // iGEM standard URL
+        content: software,
+        lead: "NectarDesigner: how we choose the sequence that silences the mite.",
+      },
+      {
+        name: "Yeast engineering",
+        title: "Yeast",
+        path: "/yeast",
+        content: yeast,
+        lead: "Why S. cerevisiae, and how we engineered it to make loop-ended dsRNA.",
+      },
+    ],
+  },
+  {
+    name: "Bee lab",
+    section: "The project in detail",
+    children: [
+      {
+        name: "Experiments",
+        title: "Bee Lab",
+        path: "/bee-lab",
+        content: beeLab,
+        lead: "Working with live bees: delivery, dosing and the assays we had to invent.",
+        children: [
+          {
+            name: "Experiments, lab book",
+            title: "Bee Lab, Experiments and Lab Book",
+            path: "/bee-lab/notebook",
+            content: beeLabNotebook,
+            lead: "Bee lab protocols and the dated record.",
+          },
+        ],
+      },
+      {
+        name: "How to work with bees as an iGEM team",
+        title: "How to Work with Bees as an iGEM Team",
+        path: "/working-with-bees",
+        content: workingWithBees,
+        lead: "What we wish another team had told us before our first hive.",
+      },
+      {
+        name: "Hardware",
+        title: "Hardware",
+        path: "/hardware", // iGEM standard URL
+        content: hardware,
+        lead: "The hive insert and the equipment we built around it.",
+      },
+      {
+        name: "NECTAR user manual",
+        title: "NECTAR User Manual",
+        path: "/user-manual",
+        content: userManual,
+        lead: "How a beekeeper would actually use this.",
       },
     ],
   },
@@ -314,18 +297,20 @@ const Pages: MenuEntry[] = [
     name: "Team",
     children: [
       {
-        name: "Fundraising / partners",
-        title: "Fundraising and Partners",
-        path: "/partners",
-        content: partners,
-        lead: "Who supported this project, and how.",
-      },
-      {
         name: "Team members",
-        title: "Team Members",
-        path: "/team/members",
-        content: members,
-        lead: "Who we are.",
+        title: "Team",
+        path: "/team", // iGEM standard URL
+        content: team,
+        lead: "The people behind NECTAR.",
+        children: [
+          {
+            name: "Members",
+            title: "Team Members",
+            path: "/team/members",
+            content: members,
+            lead: "Who we are.",
+          },
+        ],
       },
       {
         name: "Attributions",
@@ -334,7 +319,76 @@ const Pages: MenuEntry[] = [
         content: attributions,
         lead: "Who did what, and what help we received.",
       },
+      {
+        name: "Sponsors and partners",
+        title: "Fundraising and Partners",
+        path: "/partners",
+        content: partners,
+        lead: "Who supported this project, and how.",
+      },
     ],
+  },
+
+  // --- Routed, but not in the agreed header. Reached by URL and by links
+  // inside other pages. Each is either awaiting a decision (fold in, or drop)
+  // or lives at an iGEM standard URL that must keep resolving regardless of
+  // the menu.
+  {
+    name: "NECTAR for the future",
+    title: "NECTAR for the Future",
+    path: "/future",
+    content: future,
+    lead: "Where this goes after iGEM.",
+    hidden: true,
+  },
+  {
+    name: "Wet lab",
+    title: "Wet Lab",
+    path: "/wet-lab",
+    content: wetLab,
+    lead: "Making the molecule: construct design, assembly and production.",
+    hidden: true,
+  },
+  {
+    name: "Dry lab / modelling",
+    title: "Dry Lab and Modelling",
+    path: "/model", // iGEM standard URL
+    content: model,
+    lead: "The models, their assumptions, and the decisions they changed.",
+    hidden: true,
+    children: [
+      {
+        name: "Ecological modelling",
+        title: "Ecological Modelling",
+        path: "/ecological-modelling",
+        content: ecologicalModelling,
+        lead: "Colony and Varroa dynamics, and what treatment efficacy has to reach.",
+      },
+    ],
+  },
+  {
+    name: "Parts design",
+    title: "Parts",
+    path: "/parts", // iGEM standard URL
+    content: parts,
+    lead: "The modular loop-ended dsRNA part collection.",
+    hidden: true,
+  },
+  {
+    name: "Sustainable development",
+    title: "Sustainable Development",
+    path: "/sustainability", // iGEM standard URL
+    content: sustainability,
+    lead: "Which SDGs we affect, including where we affect them negatively.",
+    hidden: true,
+  },
+  {
+    name: "Entrepreneurship",
+    title: "Entrepreneurship",
+    path: "/entrepreneurship", // iGEM standard URL
+    content: entrepreneurship,
+    lead: "The product, the user, the cost, and the route to market.",
+    hidden: true,
   },
 ];
 

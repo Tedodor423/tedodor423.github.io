@@ -63,4 +63,4 @@ it is being carried by hope.
 [Sustainable development](/sustainability) ·
 [Entrepreneurship](/entrepreneurship) · [Public outreach](/education) ·
 [Results](/results) · [Human practices](/human-practices) ·
-[Safety and security](/safety-and-security)
+[Safety and security](/project-safety)

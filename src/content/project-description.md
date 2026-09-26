@@ -120,4 +120,4 @@ our own words, before a judge works it out independently.
 
 [Engineering](/engineering) · [RNA design](/software) · [Yeast](/yeast) ·
 [Results](/results) · [Human practices](/human-practices) ·
-[Safety and security](/safety-and-security) · [Timeline](/timeline)
+[Safety and security](/project-safety) · [Timeline](/timeline)

@@ -72,7 +72,7 @@ and pretending otherwise would misrepresent the confidence.
 
 By jurisdiction, since the answer differs materially. Where the position is
 genuinely unresolved, say so. See
-[safety and security](/safety-and-security) and
+[safety and security](/project-safety) and
 [the case studies](/case-studies).
 
 ## Development roadmap
@@ -128,5 +128,5 @@ here too as a productisation path rather than as work done.
 
 [Economic modelling](/economic-modelling) · [Yeast](/yeast) ·
 [Human practices](/human-practices) · [Case studies](/case-studies) ·
-[Safety and security](/safety-and-security) ·
+[Safety and security](/project-safety) ·
 [Sustainable development](/sustainability) · [NECTAR for the future](/future)

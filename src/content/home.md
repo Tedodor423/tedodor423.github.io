@@ -10,7 +10,7 @@ useful.
 
 > **FIGURE: hero.** The pipeline in one image: pest → target RNA → NECTAR
 > designs it → yeast produces it → formulation delivers it → RNAi silences the
-> pest. Two ways in underneath, one into [the project](/description), one
+> pest. Two ways in underneath, one into [the project](/project-description), one
 > straight to [the evidence](/results).
 
 ## Why this matters
@@ -36,7 +36,7 @@ to the field it was sprayed on.
 Six barriers sit between RNAi and the field: rational target selection,
 off-target screening, resistance to a single target, manufacturing cost,
 environmental degradation, and inefficient delivery. One line each. They are the
-spine of [the project description](/description) and the reason the platform is
+spine of [the project description](/project-description) and the reason the platform is
 shaped the way it is.
 
 ## Our solution
@@ -61,6 +61,13 @@ Varroa → bee → pollen patty → nurse bee and larva → mite. A short paragr
 why a mite feeding on a bee inside a sealed hive is an awkward place to deliver
 an RNA, and therefore a good place to find out whether the platform works.
 
+```component
+varroa-map
+```
+
+Reported colony losses by country and year. [Case studies](/case-studies)
+reads the map and explains what it does and does not show.
+
 ## What we actually achieved
 
 Five to seven cards, each carrying its honest status, **Demonstrated**,
@@ -80,5 +87,5 @@ most easily overstated.
 
 ## Where to go next
 
-[Project description](/description) · [Results](/results) ·
+[Project description](/project-description) · [Results](/results) ·
 [Engineering NECTAR](/engineering) · [NECTAR in the real world](/human-practices)

@@ -1,7 +1,30 @@
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import Pages, { isGroup, type Page } from "../pages.ts";
+import Pages, { isGroup, type Group, type MenuEntry, type Page } from "../pages.ts";
 import { SearchField } from "./SearchField";
+
+/**
+ * The bar's entries, with consecutive groups that share a `section` gathered
+ * under it, so "The project in detail" renders once above its three dropdowns.
+ * A `hidden` page is routed but not listed. Pages.ts never changes at runtime,
+ * so this is computed once at module load.
+ */
+interface Cluster {
+  section?: string;
+  entries: MenuEntry[];
+}
+
+const clusters: Cluster[] = [];
+for (const entry of Pages) {
+  if (!isGroup(entry) && entry.hidden) continue;
+  const section = isGroup(entry) ? entry.section : undefined;
+  const last = clusters[clusters.length - 1];
+  if (last && last.section === section) {
+    last.entries.push(entry);
+  } else {
+    clusters.push({ section, entries: [entry] });
+  }
+}
 
 /** True if `pathname` is this page or one of its descendants. */
 function containsPath(page: Page, pathname: string): boolean {
@@ -67,10 +90,6 @@ export function Navbar() {
   const [openGroup, setOpenGroup] = useState<string | null>(null);
   const navRef = useRef<HTMLElement>(null);
 
-  // Only groups appear in the menu. Anything at the top level with a path of
-  // its own (Home, and the two section landing pages) is routed but unlisted.
-  const groups = Pages.filter(isGroup);
-
   useEffect(() => setOpenGroup(null), [pathname]);
 
   // A dropdown left hanging while the bar slides away looks broken.
@@ -113,65 +132,20 @@ export function Navbar() {
         </Link>
 
         <ul className="site-nav-list">
-          {groups.map((group) => {
-            const open = openGroup === group.name;
-            const inSection = group.children.some((page) =>
-              containsPath(page, pathname),
-            );
-
-            return (
-              <li
-                key={group.name}
-                className="site-nav-group"
-                onMouseEnter={() => setOpenGroup(group.name)}
-                onMouseLeave={() =>
-                  setOpenGroup((current) =>
-                    current === group.name ? null : current,
-                  )
-                }
-              >
-                {/* A group has no page, so it is a button rather than a link:
-                    its only job is to open the dropdown. */}
-                <button
-                  type="button"
-                  className="site-nav-group-label"
-                  aria-expanded={open}
-                  aria-current={inSection ? "true" : undefined}
-                  onClick={() =>
-                    setOpenGroup((current) =>
-                      current === group.name ? null : group.name,
-                    )
-                  }
-                >
-                  {group.name}
-                </button>
-
-                {open && (
-                  <ul className="site-nav-dropdown">
-                    {group.children.map((page) => (
-                      <li key={page.path}>
-                        <Link
-                          to={page.path}
-                          aria-current={
-                            page.path === pathname ? "page" : undefined
-                          }
-                        >
-                          <span className="site-nav-dropdown-name">
-                            {page.name}
-                          </span>
-                          {page.subtitle && (
-                            <span className="site-nav-dropdown-subtitle">
-                              {page.subtitle}
-                            </span>
-                          )}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                )}
+          {clusters.map((cluster) =>
+            cluster.section ? (
+              // An overarching title with its groups gathered under it. The
+              // title is plain text: it labels the run, it is not a control.
+              <li key={cluster.section} className="site-nav-section">
+                <span className="site-nav-section-title">{cluster.section}</span>
+                <ul className="site-nav-section-list">
+                  {cluster.entries.map(renderEntry)}
+                </ul>
               </li>
-            );
-          })}
+            ) : (
+              cluster.entries.map(renderEntry)
+            ),
+          )}
         </ul>
 
         {/* The wiki's only search field. Typing in it navigates to /search,
@@ -180,4 +154,89 @@ export function Navbar() {
       </div>
     </nav>
   );
+
+  /** One bar item: a dropdown for a group, a plain link for a page (Home). */
+  function renderEntry(entry: MenuEntry) {
+    if (!isGroup(entry)) {
+      return (
+        <li key={entry.path} className="site-nav-item">
+          <Link
+            className="site-nav-link"
+            to={entry.path}
+            aria-current={entry.path === pathname ? "page" : undefined}
+          >
+            {entry.name}
+          </Link>
+        </li>
+      );
+    }
+    return renderGroup(entry);
+  }
+
+  function renderGroup(group: Group) {
+    const open = openGroup === group.name;
+    const inSection = group.children.some((page) =>
+      containsPath(page, pathname),
+    );
+
+    return (
+      <li
+        key={group.name}
+        className="site-nav-group"
+        onMouseEnter={() => setOpenGroup(group.name)}
+        onMouseLeave={() =>
+          setOpenGroup((current) => (current === group.name ? null : current))
+        }
+        // Focus stands in for hover on a keyboard: tabbing onto the
+        // label opens the dropdown, and it closes once focus has left
+        // the group entirely (not while moving between its links).
+        onFocus={() => setOpenGroup(group.name)}
+        onBlur={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+            setOpenGroup((current) =>
+              current === group.name ? null : current,
+            );
+          }
+        }}
+      >
+        {/* A group has no page, so it is a button rather than a link.
+            Hover and focus are what open the dropdown; clicking is
+            deliberately inert, so a click can never close a menu the
+            pointer is still over. */}
+        <button
+          type="button"
+          className="site-nav-group-label"
+          aria-expanded={open}
+          aria-current={inSection ? "true" : undefined}
+        >
+          {group.name}
+        </button>
+
+        {open && (
+          <ul className="site-nav-dropdown">
+            {/* The group's own subtitle, when it has one: a muted line at
+                the top of the panel, not a link. */}
+            {group.subtitle && (
+              <li className="site-nav-dropdown-lede">{group.subtitle}</li>
+            )}
+            {group.children.map((page) => (
+              <li key={page.path}>
+                <Link
+                  to={page.path}
+                  aria-current={page.path === pathname ? "page" : undefined}
+                >
+                  <span className="site-nav-dropdown-name">{page.name}</span>
+                  {page.subtitle && (
+                    <span className="site-nav-dropdown-subtitle">
+                      {page.subtitle}
+                    </span>
+                  )}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+      </li>
+    );
+  }
 }

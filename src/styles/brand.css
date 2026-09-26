@@ -431,6 +431,83 @@ pre {
   color: var(--text-muted);
 }
 
+/* A group's own subtitle ("Summary of our work"): first line of the panel,
+ * muted and inert, so the links below it stay the obvious targets. */
+.site-nav-dropdown-lede {
+  padding: 0.45rem 1rem 0.2rem;
+  font-size: 0.78em;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+/* A top-level page in the bar (Home): laid out like a group, but it is a real
+ * link, and the page you are on gets the same ink underline as an open or
+ * current group label. */
+.site-nav-item {
+  display: flex;
+  align-items: center;
+}
+
+.site-nav-link {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.site-nav-link[aria-current="page"] {
+  box-shadow: inset 0 -0.3rem 0 var(--ink);
+}
+
+/* An overarching title spanning a run of groups ("The project in detail").
+ * The title is not a control, so it is set apart by size and case only, in
+ * ink: the honey bar leaves the muted grey short of contrast. It is taken out
+ * of the flow so the run's labels keep the exact vertical line of every other
+ * item in the bar, and floats in the headroom the wordmark leaves above them. */
+.site-nav-section {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+}
+
+/* The title must visibly cover the whole run, not hang over its first label:
+ * centred, with an ink hairline reaching out to both edges of the cluster.
+ * Same line language as the bar's ink bottom rule and the dropdown border.
+ * Anchored just above the label row (half a label line, in rem because the
+ * title's own type is smaller), wherever the bar's height puts that row. */
+.site-nav-section-title {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(50% + 0.85rem);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.62em;
+  font-weight: 400;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.site-nav-section-title::before,
+.site-nav-section-title::after {
+  content: "";
+  flex: 1;
+  border-top: 1px solid var(--ink);
+}
+
+.site-nav-section-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  /* Tighter than the bar's own 2.75rem gap: these three read as one family,
+   * and the title above is what separates the family from its neighbours. */
+  gap: 0.4rem 1.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
 /* ---------- sub-pages of the current page ---------- */
 
 /* Rendered by SectionLinks at the top of the page body, not in the header, so
@@ -438,7 +515,7 @@ pre {
  * tree goes. Aligned to the lead's measure so the page head reads as a block. */
 .section-links {
   max-width: 44rem;
-  margin: 0 0 2.25rem;
+  margin: 0 auto 2.25rem;
   padding-bottom: 1.1rem;
   border-bottom: 1px solid var(--rule);
 }
@@ -502,10 +579,6 @@ pre {
   text-decoration: underline;
 }
 
-.breadcrumbs [aria-current="page"] {
-  color: var(--text);
-}
-
 .page-header {
   padding: 2.5rem 1rem 1.5rem;
   border-bottom: 1px solid var(--rule);
@@ -528,10 +601,21 @@ pre {
   font-size: 1.1rem;
 }
 
+/* The page is one centred column. The head shares the lead's 44rem measure and
+ * sits on the same axis as the 36rem body, so the whole page hangs from one
+ * centre line instead of the container's left edge. */
+.page-header .breadcrumbs,
+.page-header h1,
+.page-header .lead {
+  max-width: 44rem;
+  margin-inline: auto;
+}
+
 /* ---------- content ---------- */
 
 .markdown-page {
   max-width: var(--measure);
+  margin-inline: auto;
   line-height: 1.75;
 }
 
@@ -671,7 +755,7 @@ pre {
   font-family: var(--font-heading);
   font-weight: 600;
   max-width: 44rem;
-  margin: 0 0 0.6rem;
+  margin: 0 auto 0.6rem;
   color: var(--ink);
 }
 
@@ -688,13 +772,14 @@ pre {
   font-weight: 600;
   color: var(--text-muted);
   max-width: 44rem;
-  margin: 0 0 2rem;
+  margin: 0 auto 2rem;
 }
 
 /* One page of results. The heading rule is the honey underline used for h2 in
  * the page body, so a result reads as the section it will take you to. */
 .search-result {
   max-width: 44rem;
+  margin-inline: auto;
   margin-bottom: 2.5rem;
 }
 

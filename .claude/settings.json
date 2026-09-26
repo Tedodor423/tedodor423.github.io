@@ -11,6 +11,13 @@
             "args": [".claude/hooks/design-guard.mjs"],
             "timeout": 10,
             "statusMessage": "Checking design rules"
+          },
+          {
+            "type": "command",
+            "command": "node",
+            "args": [".claude/hooks/structure-sync.mjs"],
+            "timeout": 10,
+            "statusMessage": "Checking header structure sync"
           }
         ]
       }

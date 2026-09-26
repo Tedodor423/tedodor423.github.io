@@ -14,7 +14,7 @@ the construct as one thing to be ordered and start treating it as a set of
 modules to be combined.
 
 That modularity is what makes the platform argument on
-[the description page](/description) true, swap the targeting sequence, keep
+[the description page](/project-description) true, swap the targeting sequence, keep
 everything else.
 
 > **FIGURE: part hierarchy.** The collection and how the levels combine, using

@@ -42,7 +42,7 @@ this region raised that we have not answered.
 
 Why an inactivated product sits differently from a live engineered organism in
 this jurisdiction, and what that does and does not settle. Detail on
-[safety and security](/safety-and-security).
+[safety and security](/project-safety).
 
 ## Still missing
 
@@ -56,5 +56,5 @@ this jurisdiction, and what that does and does not settle. Detail on
 [Case studies](/case-studies) · [California](/case-studies/california) ·
 [Human practices](/human-practices) ·
 [Economic modelling](/economic-modelling) ·
-[Safety and security](/safety-and-security) ·
+[Safety and security](/project-safety) ·
 [Entrepreneurship](/entrepreneurship)

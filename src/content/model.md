@@ -81,4 +81,4 @@ sets what efficacy has to reach for any of it to be worth doing.
 [RNA design](/software) · [Economic modelling](/economic-modelling) ·
 [Ecological modelling](/ecological-modelling) · [Yeast](/yeast) ·
 [Entrepreneurship](/entrepreneurship) · [Results](/results) ·
-[Safety and security](/safety-and-security)
+[Safety and security](/project-safety)

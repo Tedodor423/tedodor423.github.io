@@ -100,4 +100,4 @@ summarises and links rather than repeating.
 
 [Bee lab notebook](/bee-lab/notebook) · [Measurement](/measurement) ·
 [Results](/results) · [Engineering](/engineering) ·
-[Safety and security](/safety-and-security) · [Contribution](/contribution)
+[Safety and security](/project-safety) · [Contribution](/contribution)

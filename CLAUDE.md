@@ -42,6 +42,11 @@ proposed text. It reports, it does not block. Turn it off for a session with
   `yarn install --frozen-lockfile` and fails if they drift.
 
 ## Working practice
+- The header structure is agreed in `references/structure_source.md` (gitignored).
+  Any change to the menu in `src/pages.ts` or to `Navbar.tsx` must be mirrored
+  there in the same sitting — a `PreToolUse` hook
+  (`.claude/hooks/structure-sync.mjs`) injects the current file as a reminder on
+  every edit to those two files.
 - Build the wiki **one page at a time**, from agreed principles and a skeleton.
   A previous whole-wiki single-prompt attempt failed and was reverted; it is
   parked on the `archive/ai-rebuild-2026-09-21` branch.

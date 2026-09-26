@@ -69,9 +69,9 @@ and how much work a single number represents.
 
 |                                             |                                      | Where it is argued                                    |
 | ------------------------------------------- | ------------------------------------ | ----------------------------------------------------- |
-| Project ideas pitched                       | 7, cut to 3, then to 1               | [Description](/description)                           |
+| Project ideas pitched                       | 7, cut to 3, then to 1               | [Description](/project-description)                           |
 | Candidate mite genes                        | 33 or more, cut to about 15          | [RNA design](/software)                               |
-| Off-target species screened against         | 5, one match disqualifies a sequence | [Safety](/safety-and-security#off-target-strategy)    |
+| Off-target species screened against         | 5, one match disqualifies a sequence | [Safety](/project-safety#off-target-strategy)    |
 | Bees harnessed and fed, per person per hour | 20                                   | [Delivering a dose](/engineering#cycle-b1)            |
 | Bees in the adult uptake design             | 400, in 8 batches                    | [Bee lab](/bee-lab#adult-bee-assays)                  |
 | Jurisdictions mapped for route to market    | 6                                    | [Entrepreneurship](/entrepreneurship#regulatory-path) |

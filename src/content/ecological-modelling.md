@@ -49,7 +49,7 @@ timing and reinfestation pressure, and how confident that is.
 
 Population effects are not confined to the target species. What the model does
 and does not capture about non-target organisms belongs here, and connects to
-[safety and security](/safety-and-security).
+[safety and security](/project-safety).
 
 > **How did this change NECTAR?**
 >
@@ -72,7 +72,7 @@ answer materially.
 
 ## Where this connects
 
-[Dry lab and modelling](/model) · [Safety and security](/safety-and-security) ·
+[Dry lab and modelling](/model) · [Safety and security](/project-safety) ·
 [Bee lab](/bee-lab) · [Case studies](/case-studies) ·
 [Economic modelling](/economic-modelling) ·
 [Sustainable development](/sustainability)
