@@ -18,10 +18,11 @@
  */
 
 .project-timeline {
-  margin: 2.5rem 0;
+  margin-block: 2.5rem;
   /* Five lanes will not fit the 36rem measure. Like the stakeholder map, this
-   * overflows to the right inside .container, which is where the room is. */
+   * breaks out of the centred column symmetrically, staying on its axis. */
   width: min(72rem, calc(100vw - 4rem));
+  margin-inline: calc((100% - min(72rem, calc(100vw - 4rem))) / 2);
   font-family: var(--font-mono);
 
   /* A plate, for the same reason the colony-loss map is one: a `##` section

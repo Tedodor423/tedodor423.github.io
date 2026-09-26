@@ -14,9 +14,11 @@
 
 .varroa-map {
   /* Breaks the 36rem measure for the same reason the stakeholder map does: a
-   * world map at reading width is unreadable. */
+   * world map at reading width is unreadable. Breaks out of the centred column
+   * symmetrically, staying on its axis. */
   width: min(72rem, calc(100vw - 4rem));
-  margin: 2.5rem 0;
+  margin-block: 2.5rem;
+  margin-inline: calc((100% - min(72rem, calc(100vw - 4rem))) / 2);
 
   /* The figure is a plate: its own paper, its own rule, whichever band of the
    * page it lands in. A `##` section can fall on a wax band or a comb one

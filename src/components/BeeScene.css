@@ -15,7 +15,10 @@
 .bee-scene {
   position: fixed;
   inset: 0;
-  z-index: 50;
+  /* Above the sticky menu (z-index 1030 in brand.css): a bee is a creature on
+   * the window, not part of the page, so it flies over the header rather than
+   * disappearing behind it. The comb switch stays above the bees in turn. */
+  z-index: 1040;
   overflow: hidden;
 
   /* Decoration must never eat a click. The switch opts back in. */
@@ -27,7 +30,19 @@
   inset: 0;
 }
 
-.bee-layer > * {
+/* Flowers and pollen belong to the page, not to the window, so they keep to
+ * their own fixed layer below the menu (z-index 1030 in brand.css) and slide
+ * behind it on scroll like the text they grow out of. */
+.flower-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.bee-layer > *,
+.flower-layer > * {
   position: absolute;
 }
 

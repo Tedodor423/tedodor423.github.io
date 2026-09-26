@@ -11,11 +11,13 @@
  */
 
 .stakeholder-map {
-  margin: 2.5rem 0;
+  margin-block: 2.5rem;
   /* The map breaks the 36rem measure on purpose: a world map at reading width
-   * is unreadable. It overflows to the right inside .container, which is where
-   * the room is, and falls back to the viewport on a narrow screen. */
+   * is unreadable. The column is centred in .container, so the room is on both
+   * sides: equal (negative) margins keep the figure on the column's axis, and
+   * it falls back to the viewport on a narrow screen. */
   width: min(68rem, calc(100vw - 4rem));
+  margin-inline: calc((100% - min(68rem, calc(100vw - 4rem))) / 2);
 }
 
 .sm-heading {

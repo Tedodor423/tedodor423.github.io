@@ -3,19 +3,18 @@ import Pages, { isGroup, type MenuEntry } from "../pages.ts";
 
 interface Crumb {
   name: string;
-  /** Absent for a menu group, which has no page to link to. */
-  path?: string;
+  path: string;
 }
 
 /**
  * The chain of ancestors down to `pathname`, or null when there is no such
- * page. Groups contribute a crumb with no path, so they render as plain text.
+ * page. A group has no page of its own, so its crumb points at its first page.
  */
 function trail(entries: MenuEntry[], pathname: string): Crumb[] | null {
   for (const entry of entries) {
     if (isGroup(entry)) {
       const rest = trail(entry.children, pathname);
-      if (rest) return [{ name: entry.name }, ...rest];
+      if (rest) return [{ name: entry.name, path: entry.children[0].path }, ...rest];
       continue;
     }
 
@@ -31,11 +30,11 @@ function trail(entries: MenuEntry[], pathname: string): Crumb[] | null {
 }
 
 /**
- * Where you are, as a path: Home > Building NECTAR > Bee lab
+ * Where you are, as a path: Home > Building NECTAR
  *
- * Every step that has a page of its own is a link. Menu groups do not, so they
- * are plain text. The last crumb is the page you are already on, so it is
- * plain text too, marked aria-current.
+ * Only the ancestors are listed. The page you are on is already the <h1> right
+ * below, so repeating it here adds nothing. Every crumb is a link; a menu
+ * group, which has no page of its own, links to its first page.
  *
  * Renders nothing on the home page, and nothing for a URL with no page behind
  * it, so the Not Found screen stays clean.
@@ -48,26 +47,16 @@ export function Breadcrumbs() {
   const rest = trail(Pages, pathname);
   if (!rest) return null;
 
-  const crumbs: Crumb[] = [{ name: "Home", path: "/" }, ...rest];
+  const crumbs: Crumb[] = [{ name: "Home", path: "/" }, ...rest.slice(0, -1)];
 
   return (
     <nav className="breadcrumbs" aria-label="Breadcrumb">
       <ol>
-        {crumbs.map((crumb, i) => {
-          const last = i === crumbs.length - 1;
-
-          return (
-            <li key={crumb.path ?? `group-${crumb.name}`}>
-              {crumb.path && !last ? (
-                <Link to={crumb.path}>{crumb.name}</Link>
-              ) : (
-                <span aria-current={last ? "page" : undefined}>
-                  {crumb.name}
-                </span>
-              )}
-            </li>
-          );
-        })}
+        {crumbs.map((crumb) => (
+          <li key={`${crumb.name}-${crumb.path}`}>
+            <Link to={crumb.path}>{crumb.name}</Link>
+          </li>
+        ))}
       </ol>
     </nav>
   );

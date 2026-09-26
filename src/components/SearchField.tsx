@@ -13,7 +13,8 @@ import { useLocation, useNavigate } from "react-router-dom";
  *
  * The first keystroke pushes a history entry, so Back returns to the page
  * being read. Every keystroke after that replaces it, or Back would walk the
- * query backwards one letter at a time.
+ * query backwards one letter at a time. Deleting the query back to nothing
+ * does what Back would: it pops that entry and returns to the page.
  */
 
 /** Drawn here rather than pulled from an icon set: two shapes, no dependency. */
@@ -33,7 +34,7 @@ function Glass() {
 
 export function SearchField() {
   const navigate = useNavigate();
-  const { pathname, search, hash } = useLocation();
+  const { pathname, search, hash, state } = useLocation();
   const input = useRef<HTMLInputElement>(null);
 
   const onSearchPage = pathname === "/search";
@@ -41,6 +42,9 @@ export function SearchField() {
   // result carries `?q=` to the page it opens, so the field keeps the query
   // while the reader works through what it found.
   const query = new URLSearchParams(search).get("q") ?? "";
+  // Set when the first keystroke pushed this search on top of a wiki page.
+  const cameFromPage =
+    onSearchPage && (state as { fromPage?: boolean } | null)?.fromPage === true;
 
   // Opening /search directly, from a bookmark or a link, means intending to
   // type. Anywhere else the field must not steal the caret.
@@ -59,8 +63,20 @@ export function SearchField() {
       return;
     }
 
+    // Emptying it on the search page means the search is over. If this field
+    // pushed the search entry, popping it returns the reader to the page they
+    // were on, scroll position and all. A search opened directly has nowhere
+    // to go back to inside the wiki, so it stays on an empty search.
+    if (!next && cameFromPage) {
+      navigate(-1);
+      return;
+    }
+
     navigate(next ? `/search?q=${encodeURIComponent(next)}` : "/search", {
       replace: onSearchPage,
+      // Marks the entry as pushed from a page, and carries that mark through
+      // every replace after it.
+      state: { fromPage: onSearchPage ? cameFromPage : true },
     });
   };
 

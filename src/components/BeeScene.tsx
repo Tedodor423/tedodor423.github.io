@@ -44,6 +44,10 @@ const MAX_SPEED = 950;
 const SLOW_RADIUS = 300;
 /** Inside this it has stopped. The gap it keeps from the cursor when parked. */
 const STOP_RADIUS = 52;
+/** The gap holds from both sides: move the cursor onto a parked bee and it
+ *  backs away to the same distance. This is how hard it backs off, px/s, with
+ *  the cursor dead on top of it; it eases to nothing at the edge of the gap. */
+const FLEE_SPEED = 340;
 /** Horizontal leeway before it turns round, px. Wider than STOP_RADIUS so a
  *  parked bee never flips back and forth on small cursor movements. */
 const TURN_DEADZONE = 90;
@@ -94,8 +98,15 @@ const IDLE_AFTER_MS = 2600;
 /** And how long the drift takes to come fully on, ms. Eased rather than
  *  switched, so nothing lurches at the moment it fires. */
 const IDLE_RAMP_MS = 1400;
-/** How long a wandering bee keeps the same waypoint, ms. */
-const ROAM_MS: [number, number] = [2600, 6000];
+/** Wandering is a stroll, not a chase. Cruising speed while the cursor is
+ *  idle, px/s, and a much lazier steer to go with it, so idle flight is long
+ *  slow curves rather than full-tilt darts between waypoints. Both fade in
+ *  with the idleness ramp. */
+const ROAM_SPEED = 130;
+const ROAM_STEER = 1.4;
+/** How long a wandering bee keeps the same waypoint, ms. Long enough, at
+ *  roaming speed, to actually get somewhere before changing its mind. */
+const ROAM_MS: [number, number] = [4200, 9000];
 /** Close enough to a waypoint to want a new one, px. */
 const ROAM_ARRIVE = 70;
 
@@ -294,6 +305,7 @@ interface Flower {
 export function BeeScene() {
   const sceneRef = useRef<HTMLDivElement>(null);
   const layerRef = useRef<HTMLDivElement>(null);
+  const flowerLayerRef = useRef<HTMLDivElement>(null);
   const clusterRef = useRef<HTMLDivElement>(null);
   const hiveRef = useRef<HTMLButtonElement>(null);
   const countRef = useRef<HTMLSpanElement>(null);
@@ -369,9 +381,11 @@ export function BeeScene() {
   useEffect(() => {
     const scene = sceneRef.current;
     const layer = layerRef.current;
+    const flowerLayer = flowerLayerRef.current;
     const cluster = clusterRef.current;
     const hive = hiveRef.current;
-    if (!enabled || !scene || !layer || !cluster || !hive) return;
+    if (!enabled || !scene || !layer || !flowerLayer || !cluster || !hive)
+      return;
 
     /** The menu is sticky and slides away on the way down the page. The hive
      *  rides with it, so its live bottom edge is read every frame. Unlike the
@@ -610,7 +624,7 @@ export function BeeScene() {
       img.alt = "";
       grow.appendChild(img);
       el.appendChild(grow);
-      layer.appendChild(el);
+      flowerLayer.appendChild(el);
 
       flowers.push({
         el,
@@ -659,7 +673,7 @@ export function BeeScene() {
         el.src = POLLEN_SRC;
         el.alt = "";
         el.style.width = `${POLLEN_SIZE}px`;
-        layer.appendChild(el);
+        flowerLayer.appendChild(el);
 
         // Scattered over the face of the bloom rather than all on its centre,
         // so that together they cover it.
@@ -813,13 +827,37 @@ export function BeeScene() {
           0,
           1,
         );
-        const speed = bee.speed * ramp * ramp;
+        // As the cursor goes stale the top speed winds down with it: a chase
+        // runs flat out, a wander does not.
+        const top =
+          bee.speed +
+          (ROAM_SPEED * (bee.speed / MAX_SPEED) - bee.speed) * idleness;
+        const speed = top * ramp * ramp;
+
+        let wantX = (dx / dist) * speed;
+        let wantY = (dy / dist) * speed;
+
+        // The parked gap holds from both sides. Approach speed is zero inside
+        // the stop radius, so without this a cursor moved onto a stopped bee
+        // would simply sit on it; instead the bee backs out to the same
+        // distance it parks at, harder the deeper in the cursor is.
+        if (cursor) {
+          const fx = bee.pos.x - cursor.x;
+          const fy = bee.pos.y - cursor.y;
+          const fd = Math.hypot(fx, fy) || 1;
+          if (fd < STOP_RADIUS) {
+            const depth = (STOP_RADIUS - fd) / STOP_RADIUS;
+            wantX += (fx / fd) * FLEE_SPEED * depth;
+            wantY += (fy / fd) * FLEE_SPEED * depth;
+          }
+        }
 
         // Ease the velocity towards the wanted one rather than setting it, so
-        // a bee banks into a new heading instead of snapping to it.
-        const k = 1 - Math.exp(-STEER * dt);
-        bee.vel.x += ((dx / dist) * speed - bee.vel.x) * k;
-        bee.vel.y += ((dy / dist) * speed - bee.vel.y) * k;
+        // a bee banks into a new heading instead of snapping to it. Idle
+        // steering is lazier still, for wide wandering arcs.
+        const k = 1 - Math.exp(-(STEER + (ROAM_STEER - STEER) * idleness) * dt);
+        bee.vel.x += (wantX - bee.vel.x) * k;
+        bee.vel.y += (wantY - bee.vel.y) * k;
 
         // Only turn when the target is clearly to one side. Inside the
         // deadzone a bee keeps whatever way it was facing, which is what stops
@@ -984,38 +1022,51 @@ export function BeeScene() {
   if (!enabled) return null;
 
   return (
-    <div className="bee-scene" ref={sceneRef}>
-      {/* Bees, flowers and pollen are created by the loop and live here. */}
-      <div className="bee-layer" ref={layerRef} aria-hidden="true" />
+    <>
+      {/* Flowers and pollen are created by the loop and live here: a separate
+          fixed layer, because they belong to the page and stay below the menu,
+          while the scene itself sits above it. A child of the scene could not
+          do that; its z-index would only order it within the scene. */}
+      <div className="flower-layer" ref={flowerLayerRef} aria-hidden="true" />
 
-      <div
-        className={running ? "hive-cluster" : "hive-cluster is-off"}
-        ref={clusterRef}
-      >
-        <button
-          type="button"
-          role="switch"
-          className="hive"
-          ref={hiveRef}
-          aria-checked={running}
-          aria-label="Bees"
-          onClick={() => setRunning((on) => !on)}
+      <div className="bee-scene" ref={sceneRef}>
+        {/* Bees are created by the loop and live here. */}
+        <div className="bee-layer" ref={layerRef} aria-hidden="true" />
+
+        <div
+          className={running ? "hive-cluster" : "hive-cluster is-off"}
+          ref={clusterRef}
         >
-          <img className="hive-art" src={HIVE_SRC} alt="" aria-hidden="true" />
-          <span className="hive-count" ref={countRef}>
-            {/* Says what the number counts without a word of explanation. */}
-            <img className="hive-count-icon" src={FLOWER_SRC} alt="" />
-            <span className="visually-hidden">Flowers pollinated: </span>
-            {collected}
-          </span>
-        </button>
+          <button
+            type="button"
+            role="switch"
+            className="hive"
+            ref={hiveRef}
+            aria-checked={running}
+            aria-label="Bees"
+            onClick={() => setRunning((on) => !on)}
+          >
+            <img
+              className="hive-art"
+              src={HIVE_SRC}
+              alt=""
+              aria-hidden="true"
+            />
+            <span className="hive-count" ref={countRef}>
+              {/* Says what the number counts without a word of explanation. */}
+              <img className="hive-count-icon" src={FLOWER_SRC} alt="" />
+              <span className="visually-hidden">Flowers pollinated: </span>
+              {collected}
+            </span>
+          </button>
 
-        {/* Shown on hover and on focus. The hive already carries its name and
-            state for assistive tech, so this is decoration of it. */}
-        <span className="hive-tip" aria-hidden="true">
-          {running ? "Put bees away" : "Bring bees back"}
-        </span>
+          {/* Shown on hover and on focus. The hive already carries its name and
+              state for assistive tech, so this is decoration of it. */}
+          <span className="hive-tip" aria-hidden="true">
+            {running ? "Put bees away" : "Bring bees back"}
+          </span>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

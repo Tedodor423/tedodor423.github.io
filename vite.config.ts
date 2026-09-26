@@ -13,5 +13,7 @@ export default () => {
   return defineConfig({
     base: `/${stringToSlug(env.VITE_TEAM_NAME)}/`,
     plugins: [react()],
+    server: { port: 5175 },
+    preview: { port: 5175 },
   });
 };

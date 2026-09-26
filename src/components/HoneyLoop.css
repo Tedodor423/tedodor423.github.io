@@ -13,10 +13,11 @@
   align-items: start;
   /* Breaks the 36rem measure the same way the map does: a ring beside its
    * legend needs the room, and inside the measure the legend collapses to a
-   * word a line. */
+   * word a line. Breaks out of the centred column symmetrically. */
   width: min(68rem, calc(100vw - 4rem));
   max-width: none;
-  margin: 2rem 0;
+  margin-block: 2rem;
+  margin-inline: calc((100% - min(68rem, calc(100vw - 4rem))) / 2);
 }
 
 .hl-legend {
