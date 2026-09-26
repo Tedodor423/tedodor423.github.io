@@ -130,6 +130,13 @@
    * marked, active) and --rule alone is too close to honey to be the ground. */
   --map-land: #d9cdae;
 
+  /* The same wax hue, deep enough to sit NEXT TO honey as a category of its
+   * own rather than under it as ground: "the rest" in the homepage stat
+   * combs, where honey is the quantity the claim is about. Checked with the
+   * dataviz validator against honey: ΔE 20.7 normal vision, 19.3 worst-case
+   * CVD, both clear of the floors --map-land fails (12.3 normal). */
+  --wax-deep: #a89868;
+
   --text: var(--oxford-navy);
   --text-muted: #4a5a6b;
   --link: var(--violet);
@@ -159,6 +166,45 @@
   --loss-5: #4f240f; /* 40% and up  */
   --loss-tolerated: #a8c2b0; /* present, no economic damage */
   --loss-free: #6f9c86; /* no varroa on record */
+
+  /* Honey darkened until it can carry a rule and small type: #ffcb2f reads
+   * 1.6:1 on white, which the palette note above restricts to fills, while this
+   * reads 5.0:1 and passes AA as text. It is the hive colour the engineering
+   * comb is drawn in, and it is the bee lab's colour below. Same value as
+   * --loss-3, which is a coincidence of the ramp rather than a shared meaning:
+   * that token means "15 to 25% of colonies lost" and must stay free to move. */
+  --burnt-honey: #a15f20;
+
+  /* The edge of every hexagon on the engineering comb. */
+  --comb-edge: var(--burnt-honey);
+
+  /* ---------- the three labs ---------- */
+
+  /* Which lab a piece of work came out of, used by the engineering comb and by
+   * anything else that has to mark dry, wet and bee lab side by side. Three
+   * roles, three tokens, so two figures on this wiki never disagree about
+   * which colour the bee lab is.
+   *
+   * Navy for the dry lab and violet for the wet lab are straight from the kit;
+   * the bee lab takes the burnt honey above, for the reason given there.
+   *
+   * These are the selector's colours, and the colour a hexagon takes when its
+   * lab is the selected one. An unselected hexagon is drawn in --comb-edge, so
+   * the comb reads as one hive until someone asks it a question.
+   *
+   * Lightness is the separator, not hue: 0.018, 0.089 and 0.159 relative
+   * luminance, which survives every colour-vision deficiency. Navy and violet
+   * do converge under deuteranopia, so nothing on the comb leans on colour
+   * alone — every hexagon prints its lab, and so does every filter button. */
+  --lab-dry: var(--oxford-navy);
+  --lab-wet: var(--violet);
+  --lab-bee: var(--burnt-honey);
+
+  /* The same three at roughly 12% over white, for the one state that needs a
+   * fill rather than a rule: a hexagon whose lab is the selected one. */
+  --lab-dry-fill: #e7ecf1;
+  --lab-wet-fill: #f0e9f5;
+  --lab-bee-fill: #f7ecdd;
 
   /* One radius, used everywhere something is rounded at all. */
   --radius: 0.2rem;
@@ -347,6 +393,13 @@ pre {
   font-size: clamp(1.05rem, 1.5vw, 1.3rem);
   display: flex;
   flex-wrap: wrap;
+  /* The links are centred in the space the wordmark and the search field
+   * leave, rather than sitting flush against the wordmark. Growing the list
+   * and centring inside it keeps that true at every width: the wordmark is
+   * fluid-sized and the search field is not, so any fixed offset would drift.
+   * Not centred on the viewport, which would need the two flanks to match. */
+  flex: 1;
+  justify-content: center;
   /* Wide column gap: there are only five sections, and they read as separate
    * destinations rather than as a run-on list. */
   gap: 0.4rem 2.75rem;
@@ -626,7 +679,8 @@ pre {
 .markdown-page h2,
 .markdown-page h3,
 .sm-profile[id],
-.tl-entry[id] {
+.tl-entry[id],
+.dbtl-cell[id] {
   scroll-margin-top: 7rem;
 }
 
@@ -651,6 +705,28 @@ pre {
 
 .markdown-page blockquote > :last-child {
   margin-bottom: 0;
+}
+
+/* Pages use bold to mark the load-bearing phrase in a paragraph, so emphasis
+ * is the bold cut of the body face, not a different face: switching typeface
+ * mid-sentence reads as a design flourish rather than as emphasis.
+ *
+ * The weight is stated rather than left to `bolder`, which resolves against
+ * the inherited weight and is not guaranteed to land on the cut we want. 700
+ * is the weight the mono stack actually ships: ui-monospace, Cascadia Mono and
+ * Consolas all have a real bold at 700, so this picks a designed cut rather
+ * than a synthesised one.
+ *
+ * Weight only, no colour: honey fails contrast as a text colour (see the mark
+ * rule below), and colouring emphasis would make it decoration rather than
+ * meaning.
+ *
+ * The engineering cycles render through their own component rather than
+ * .markdown-page, so they are named here too: emphasis should not change
+ * appearance depending on which container a page happens to use. */
+.markdown-page strong,
+.dbtl strong {
+  font-weight: 700;
 }
 
 .markdown-page table {

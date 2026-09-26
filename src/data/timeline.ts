@@ -413,7 +413,7 @@ export const EVENTS: TimelineEvent[] = [
     title: "Protocol-writing sprint",
     detail:
       "Nearly three pages of protocols and assays, numbered and claimed individually across the team.",
-    links: [{ label: "Protocol library", href: "/experiments" }],
+    links: [{ label: "Protocol library", href: "/wet-lab-experiments" }],
   },
   {
     id: "hiscribe",
@@ -576,7 +576,7 @@ export const EVENTS: TimelineEvent[] = [
     title: "Bee lab work begins, and the lab journal opens",
     detail: "The first entry is sucrose preparation.",
     threads: ["story"],
-    links: [{ label: "Bee lab notebook", href: "/bee-lab/notebook" }],
+    links: [{ label: "Bee lab notebook", href: "/bee-lab-labbook" }],
   },
 
   /* ------------------ Act 3: two labs at once (Jul to Aug) ---------------- */
@@ -648,10 +648,12 @@ export const EVENTS: TimelineEvent[] = [
     until: "2026-07-21",
     track: "bee",
     title: "Feeding hardware, printed in house",
+    // Hardware moved off /bee-lab onto its own page; the section headings there
+    // carry status labels, so link the page rather than a status-bearing anchor.
     detail:
       "Feeding-tube adapters printed on the team's own machine, then a batch of sixty-six, with an evaporation assay across six adapter combinations to check they hold a dose.",
     threads: ["dose"],
-    links: [{ label: "The hive insert", href: "/bee-lab#the-hive-insert" }],
+    links: [{ label: "The hive insert", href: "/hardware" }],
   },
   {
     id: "wrong-fragments",
@@ -749,7 +751,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-07-22",
     track: "bee",
     title: "A hive frame measured for the insert",
-    links: [{ label: "The hive insert", href: "/bee-lab#the-hive-insert" }],
+    links: [{ label: "The hive insert", href: "/hardware" }],
   },
   {
     id: "honey-company",
@@ -763,7 +765,7 @@ export const EVENTS: TimelineEvent[] = [
     links: [
       {
         label: "What must it cost?",
-        href: "/human-practices#q5-what-must-it-cost",
+        href: "/human-practices#q5-what-would-a-beekeeper-actually-use-and-what-can-they-afford",
       },
     ],
   },
@@ -792,7 +794,7 @@ export const EVENTS: TimelineEvent[] = [
       "Stakeholders had been collected but not connected to each other, markets and the public were under-explored, and misuse was unaddressed. The stakeholder map, the profiles and the debate podcast all come out of this meeting.",
     turn: true,
     threads: ["story"],
-    links: [{ label: "Who we spoke to", href: "/human-practices#the-record" }],
+    links: [{ label: "Who we spoke to", href: "/human-practices#who-we-spoke-to" }],
   },
   {
     id: "first-dbtl-week",
@@ -1064,7 +1066,9 @@ export const EVENTS: TimelineEvent[] = [
     turn: true,
     threads: ["story"],
     links: [
-      { label: "How we worked", href: "/human-practices#honey-how-we-worked" },
+      // The id is set by the HoneyHex figure that opens the page, not by a
+      // Markdown heading.
+      { label: "How we worked", href: "/human-practices#how-we-worked" },
     ],
   },
   {
@@ -1119,8 +1123,8 @@ export const EVENTS: TimelineEvent[] = [
       "A scientist who assesses synthetic biology solutions, with dsRNA experience.",
     links: [
       {
-        label: "Should we be making a GMO at all?",
-        href: "/human-practices#q1-should-we-be-making-a-gmo-at-all",
+        label: "Should we be making a living GMO at all?",
+        href: "/human-practices#q3-should-we-be-making-a-living-gmo-at-all",
       },
     ],
   },
@@ -1188,7 +1192,7 @@ export const EVENTS: TimelineEvent[] = [
     detail:
       "Key takeaways per interview, and what each one led the team to do differently.",
     threads: ["story"],
-    links: [{ label: "Who we spoke to", href: "/human-practices#the-record" }],
+    links: [{ label: "Who we spoke to", href: "/human-practices#who-we-spoke-to" }],
   },
   {
     id: "mite-soak-designed",
@@ -1244,7 +1248,7 @@ export const EVENTS: TimelineEvent[] = [
     links: [
       {
         label: "What would a beekeeper use?",
-        href: "/human-practices#q4-what-would-a-beekeeper-actually-use",
+        href: "/human-practices#q5-what-would-a-beekeeper-actually-use-and-what-can-they-afford",
       },
     ],
   },
@@ -1294,7 +1298,7 @@ export const EVENTS: TimelineEvent[] = [
     links: [
       {
         label: "Validation in matrix",
-        href: "/measurement#validation-in-biological-matrix",
+        href: "/measurement#what-the-matrix-costs-measured",
       },
     ],
   },
@@ -1381,7 +1385,7 @@ export const EVENTS: TimelineEvent[] = [
     detail:
       "Wet lab, bee lab and standard operating procedures. The single file had outgrown itself.",
     threads: ["story"],
-    links: [{ label: "Experiments and lab book", href: "/experiments" }],
+    links: [{ label: "Experiments and lab book", href: "/wet-lab-experiments" }],
   },
   {
     id: "sequencing-1",
@@ -1445,7 +1449,7 @@ export const EVENTS: TimelineEvent[] = [
       "One ribozyme-flanked fragment either side of a bidirectional promoter, in two sequential assembly rounds. A yeast titre is needed whichever route reaches it first.",
     turn: true,
     threads: ["chassis", "build"],
-    links: [{ label: "Yeast", href: "/yeast" }],
+    links: [{ label: "Yeast", href: "/wet-lab-experiments#yeast-production" }],
   },
   {
     id: "safety-form",

@@ -8,8 +8,12 @@ import { rehypeMark } from "../utils/markTree";
 import { MarksContext } from "../utils/marksContext";
 import { StakeholderMap } from "./StakeholderMap";
 import { HoneyLoop } from "./HoneyLoop";
+import { HoneyHex } from "./HoneyHex";
+import { HpStats } from "./HpStats";
 import { VarroaMap } from "./VarroaMap";
 import { ProjectTimeline } from "./ProjectTimeline";
+import { HeadlineStats } from "./HeadlineStats";
+import { DbtlGallery } from "./DbtlGallery";
 
 /* Components a content file may place in the page.
  *
@@ -28,8 +32,12 @@ import { ProjectTimeline } from "./ProjectTimeline";
 const SLOTS: Record<string, () => ReactNode> = {
   "stakeholder-map": () => <StakeholderMap />,
   "honey-loop": () => <HoneyLoop />,
+  "honey-hex": () => <HoneyHex />,
+  "hp-stats": () => <HpStats />,
   "varroa-map": () => <VarroaMap />,
   "project-timeline": () => <ProjectTimeline />,
+  "headline-stats": () => <HeadlineStats />,
+  "dbtl-cycles": () => <DbtlGallery />,
 };
 
 /** One array, so a page with no marks does not rerender its consumers. */

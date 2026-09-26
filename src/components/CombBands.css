@@ -127,6 +127,16 @@
   color: var(--ink);
 }
 
+/* The stakeholder map's standfirst and filter caption set page inks for the
+   white page; on the comb they take the band's light ink like body text does.
+   The map's canvas and panel are paper like the blockquotes, and set their
+   own colours in StakeholderMap.css. */
+[data-comb="on"] [data-band="comb"] .sm-standfirst,
+[data-comb="on"] [data-band="comb"] .sm-filter-title,
+[data-comb="on"] [data-band="comb"] .sm-filter-key {
+  color: var(--comb-ink);
+}
+
 /* ---------- the switch ---------- */
 
 /* Bottom right, above the bees (z-index 1040 in BeeScene.css) and above the

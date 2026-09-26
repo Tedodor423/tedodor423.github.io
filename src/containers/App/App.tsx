@@ -14,6 +14,7 @@ import { ScrollToHash } from "../../components/ScrollToHash";
 import { Footer } from "../../components/Footer";
 import { BeeScene } from "../../components/BeeScene";
 import { CombBands } from "../../components/CombBands";
+import { HomeHero } from "../../components/HomeHero";
 
 const App = () => {
   const pathMapping = getPathMapping();
@@ -67,7 +68,14 @@ const App = () => {
                 path={path}
                 element={
                   <>
-                    <Header title={title} lead={lead} />
+                    {/* Home opens on the full-screen hero instead of the
+                        standard header band; the hero carries the page's
+                        <h1>, so heading order stays semantic. */}
+                    {path === "/" ? (
+                      <HomeHero />
+                    ) : (
+                      <Header title={title} lead={lead} />
+                    )}
                     <div className="container">
                       <SectionLinks />
                     </div>

@@ -1,24 +1,29 @@
-> **Skeleton: structure only. No results, numbers or quotes yet.**
-
 > **What this page proves:** that the problem, the approach and the goal are
 > clear, contextualised and referenced, and that prior work is credited rather
 > than absorbed.
 > **Where the evidence is:** [Results](/results), [Engineering](/engineering).
 
-This page tells the story once, in full, for a reader who knows nothing. It is
-the long version of [the home page](/) and the entry point to everything else.
-Nine sections; the order is the argument.
+NECTAR is an **end-to-end platform** for designing, validating, producing and
+deploying RNAi interventions. _Varroa destructor_ is the first real-world case
+study through which we demonstrate and stress-test the platform.
+
+This page tells that story once, in full, for a reader who knows nothing. It is
+the long version of [the home page](/). Nine sections; the order is the argument.
 
 ## 1. The problem
 
-Crop and colony losses to pests, and where conventional pesticides fall short:
-resistance, non-target harm, residue, and the treadmill of reapplication. Two or
-three numbers, each cited.
+Crop and colony losses to pests, and where **conventional pesticides fall short**:
+resistance, non-target harm, residue, and the treadmill of reapplication.
+
+> **TODO —** Two or three numbers, each with a resolvable citation. The global
+> pesticide-spend figure and the pesticide-pollution projection both come from
+> the human-practices and competition-application work and are not yet sourced
+> on this wiki. Owner: HP.
 
 ## 2. Why RNAi
 
-Specificity and programmability are the whole case. A sequence is a design
-parameter in a way a small molecule never is, change the sequence, change the
+**Specificity and programmability** are the whole case. A sequence is a design
+parameter in a way a small molecule never is: change the sequence, change the
 target, keep the manufacturing route. Explain the mechanism plainly enough for a
 non-biologist to follow, with a glossary term on first use.
 
@@ -26,46 +31,69 @@ non-biologist to follow, with a glossary term on first use.
 
 ## 3. Why RNAi is not already everywhere
 
-The six barriers, a short subsection each. These are settled, the jamboree deck
-uses exactly this list, so keep the wording identical here and on [the home
-page](/):
+Six barriers, one subsection each. The wording is settled and is identical on
+[the home page](/):
 
-1. Rational target selection
-2. Off-target screening
-3. Single-target resistance
-4. Manufacturing costs
-5. Environmental degradation
-6. Delivery systems
+1. **Rational target selection** — which gene to silence is the first hard problem.
+2. **Off-target screening** — a sequence that hits the pest may hit something else.
+3. **Single-target resistance** — one target is one mutation away from failing.
+4. **Manufacturing cost** — the RNA has to be cheap enough to use at field scale.
+5. **Environmental degradation** — RNA does not last long outside a cell.
+6. **Inefficient delivery** — the RNA still has to get inside the pest.
 
 Be explicit about which are scientific problems and which are economic or
-regulatory; they need different answers, and NECTAR answers them on different
+regulatory; **they need different answers**, and NECTAR answers them on different
 pages.
 
 ## 4. Introducing NECTAR
 
-The pipeline end to end, framed as a platform rather than a product. Each stage
-links to the page that documents it.
+The pipeline end to end, framed as **a platform rather than a product**, with each
+stage linking to the page that documents it: design
+([RNA design](/software)), production ([yeast](/wet-lab-experiments#yeast-production)), delivery
+([bee lab](/bee-lab)), validation ([measurement](/measurement)).
+
+### Prior work, and what is genuinely ours
+
+Yeast-delivered dsRNA against _Varroa_ is **not** novel. It is anticipated by
+Beeologics/USDA US 9,540,642 and by Duman-Scheel US 11,252,965, and loop-ended
+dsRNA against _Varroa_ is published work. We say so here rather than leaving a
+judge to find it.
+
+What is new is the **RNA design method**: how a target sequence is chosen,
+screened and iterated, and the instrumented loop around it. That is the claim
+this project defends, and it is the claim [Engineering](/engineering),
+[RNA design](/software) and [Contribution](/contribution) have to support.
+
+> **TODO —** Verify that both patent numbers resolve and that each actually
+> anticipates what we say it anticipates, and cite the loop-ended dsRNA
+> publication. Agree the final novelty wording as a team before the freeze.
+> Owner: team lead.
+
+> **TODO —** The specific _Varroa_ gene target is withheld pending confirmation
+> of the patent priority filing date against the 21 October freeze. No page on
+> this wiki names it until that is resolved. Owner: team lead.
 
 ## 5. RNA design
 
 What [NectarDesigner](/software) contributes, and why choosing the sequence is a
-design problem rather than a lookup.
+design problem rather than a lookup. This is **the novel core of the platform**, so
+this section carries the weight of the novelty claim made in section 4.
 
 ## 6. Production
 
-Why _S. cerevisiae_. Keep the three arguments separate, the scientific one, the
-industrial one and the formulation one. Detail on [yeast](/yeast).
+Why _S. cerevisiae_. Keep the three arguments separate: the scientific one, the
+industrial one and the formulation one. Detail on [yeast](/wet-lab-experiments#yeast-production).
 
-> **TODO:** The Zhong 2019 argument (hairpin RNA accumulating intact in
-> _S. cerevisiae_, which lacks canonical Dicer, versus degradation in _E. coli_
-> HT115) is the strongest scientific case for the chassis and is currently used
-> nowhere on the wiki. Verify the citation, then use it here and on
-> [yeast](/yeast).
+> **TODO —** Use the Zhong 2019 argument here: hairpin RNA accumulates intact in
+> _S. cerevisiae_, which lacks a canonical Dicer, but is degraded in _E. coli_
+> HT115. The team's own note calls this the best scientific argument for the
+> chassis and records that it is currently used nowhere on the wiki. Verify the
+> citation, then use it here and on [yeast](/wet-lab-experiments#yeast-production). Owner: wet lab.
 
 ## 7. Delivery
 
 Why whole, inactivated yeast in an application-specific formulation rather than
-purified RNA. Delivery is where most field RNAi fails, so this section carries
+purified RNA. Delivery is **where most field RNAi fails**, so this section carries
 more weight than its length suggests.
 
 Delivery is also where the project has a physical product: a 3D-printed **hive
@@ -73,20 +101,22 @@ insert** that mounts inside a standard frame and presents the formulation to the
 colony. Introduce it here in two sentences and send the reader to the page that
 documents it.
 
-> **TODO:** The hive insert has no page of its own and is barely mentioned
+> **TODO —** The hive insert has no page of its own and is barely mentioned
 > across this wiki, despite being the delivery half of the platform and a
 > candidate for the Hardware criterion. Decide whether it gets its own page
 > before writing this section. Owner: team lead.
 
 ## 8. Varroa as the case study
 
-Why this pest, on this host, in this setting is a hard proving ground rather than
-a convenient one. [The case studies](/case-studies) show what changes when the
-setting changes.
+Why this pest, on this host, in this setting is **a hard proving ground** rather
+than a convenient one: a mite feeding on a bee inside a sealed hive, reached
+through a pollen patty by way of a nurse bee or a larva. If the platform works
+here, the awkward cases elsewhere look more tractable.
+[The case studies](/case-studies) show what changes when the setting changes.
 
 ## 9. What Oxford iGEM 2026 actually did
 
-The honest ledger, split four ways and never blurred:
+**The honest ledger**, split four ways and never blurred:
 
 | Status           | Means                                        |
 | ---------------- | -------------------------------------------- |
@@ -98,26 +128,22 @@ The honest ledger, split four ways and never blurred:
 The same four labels are used everywhere on this wiki. A reader who learns them
 here can read any other page.
 
-## Prior work, and what is genuinely ours
-
-Loop-ended dsRNA against _Varroa_ is published work, and yeast-delivered dsRNA
-against _Varroa_ is anticipated by existing patents. The novel core of this
-project is the RNA _design_ method and the instrumented loop. Say that here, in
-our own words, before a judge works it out independently.
-
-> **TODO:** Confirm the two patent numbers and the benchmark publication, and
-> agree the exact novelty wording as a team. This paragraph is load-bearing for
-> [Engineering](/engineering), [Parts](/parts) and [Contribution](/contribution).
+> **TODO —** Write the ledger itself: every workstream's work sorted into those
+> four columns, each row linking to its block on [Results](/results). Nothing
+> may sit in a higher column than the results page supports, and the same set
+> of claims must match the achievement cards on [the home page](/).
+> Owner: team lead.
 
 ## Still missing
 
-- The six barriers written out, each with a source.
+- Section 1's numbers, sourced.
 - Mechanism figure and pipeline diagram.
 - The chassis argument, with its citation verified.
-- The novelty paragraph, agreed and checked against the IP position.
+- The novelty wording, agreed and checked against the IP position.
+- The four-level ledger in section 9.
 
 ## Where this connects
 
-[Engineering](/engineering) · [RNA design](/software) · [Yeast](/yeast) ·
+[Engineering](/engineering) · [RNA design](/software) · [Yeast](/wet-lab-experiments#yeast-production) ·
 [Results](/results) · [Human practices](/human-practices) ·
 [Safety and security](/project-safety) · [Timeline](/timeline)

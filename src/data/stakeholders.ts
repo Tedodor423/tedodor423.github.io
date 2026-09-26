@@ -41,6 +41,31 @@
  * one. `provisional` tags are ones the table does not state and that follow
  * from the profile's own content; they render dashed so a reader can tell the
  * two apart, and the team should confirm or delete them.
+ *
+ * The question set itself changed with the 25 September write-up
+ * (`references/wiki-writeup-update-9-25.md`): the six questions were renumbered
+ * and reworded, and every tag below was re-derived from that document's table
+ * rather than carried over. Interviews the new table does not mention at all -
+ * Thurman, Frost, Teece, Bowden, the Scottish Government team, McLoughlin and
+ * Colin - carry provisional tags only.
+ *
+ * PHOTOS. Profile photographs live in the gitignored
+ * `wiki-assets-source/stakeholder-photos/`, named by the ids below. In dev
+ * they are served straight from that folder (the stakeholder-photos plugin
+ * in vite.config.ts), so the map shows real faces while we work. The
+ * published build references the static.igem.wiki URL each photo will have
+ * once uploaded (the uploads tool converts images to `.avif` and keeps the
+ * basename); until that upload happens the published map falls back to a
+ * drawn silhouette, by design. A withheld entry NEVER carries `photo`, even
+ * though a file may exist for it: a face identifies a person as surely as a
+ * name does.
+ *
+ * TODO - the 25 September write-up lists three more interviews "to write up
+ * and integrate": Professor Nancy Moran, Professor Peter Unrau, and a second
+ * pass on Professor Giles Budge. No written content exists for the first two
+ * in `references/`, so they are not entries here yet - adding them with
+ * invented summaries would violate the integrity rules. Add them when the
+ * write-ups land. Owner: HP.
  */
 
 /** The six HONEY questions the page is organised around. */
@@ -51,12 +76,12 @@ export type QuestionId = "Q1" | "Q2" | "Q3" | "Q4" | "Q5" | "Q6";
  * and the page's headings cannot drift apart.
  */
 export const QUESTION_TITLES: Record<QuestionId, string> = {
-  Q1: "Should we be making a GMO at all?",
+  Q1: "How and why is Varroa a problem, and what treatments exist?",
   Q2: "Why RNAi rather than another chemical?",
-  Q3: "What is wrong with today's Varroa treatments?",
-  Q4: "What would a beekeeper actually use?",
-  Q5: "What must it cost?",
-  Q6: "What if it ends up in the honey?",
+  Q3: "Should we be making a living GMO at all?",
+  Q4: "Could our solution harm anything else?",
+  Q5: "What would a beekeeper actually use, and what can they afford?",
+  Q6: "Would the same solution work everywhere?",
 };
 
 export const QUESTION_IDS: QuestionId[] = ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6"];
@@ -87,6 +112,17 @@ export interface Stakeholder {
   quote?: string;
   /** What it changed, where the source states it. */
   changed?: string;
+  /**
+   * Profile photograph on static.igem.wiki. See PHOTOS above: absent for the
+   * withheld entries on purpose, and 404s harmlessly until the upload is done.
+   */
+  photo?: string;
+  /**
+   * Who the photograph actually shows, when that is not simply `name` (the
+   * Scottish Government entry names three people; the photo is of one).
+   * Rendered next to the photo so a face is never silently misattributed.
+   */
+  photoShows?: string;
   /** Set if this interview may not be published yet. See CONSENT above. */
   consent?: {
     status: "not-given" | "review-pending";
@@ -105,6 +141,24 @@ export function questionsOf(s: Stakeholder): QuestionId[] {
   return [...new Set([...(s.anchors ?? []), ...s.questions, ...(s.provisional ?? [])])];
 }
 
+/**
+ * Where the photos will live once uploaded. The uploads tool converts every
+ * image to `.avif` and keeps the basename, so the URL is knowable before the
+ * upload happens (the fonts and the comb photo follow the same pattern).
+ * Source files: `wiki-assets-source/stakeholder-photos/<basename>.{jpg,png}`.
+ */
+const PHOTO_BASE =
+  "https://static.igem.wiki/teams/6391/wiki/human-practices/stakeholders/";
+
+function photoUrl(basename: string): string {
+  // Dev serves the same-named local file (see PHOTOS above), so faces show
+  // before the upload; the published site loads only from iGEM servers.
+  if (import.meta.env.DEV) {
+    return `${import.meta.env.BASE_URL}stakeholder-photos/${basename}.avif`;
+  }
+  return `${PHOTO_BASE}${basename}.avif`;
+}
+
 export const STAKEHOLDERS: Stakeholder[] = [
   /* ---------- Australia ---------- */
   {
@@ -115,10 +169,10 @@ export const STAKEHOLDERS: Stakeholder[] = [
     region: "Australia",
     lat: -34.93,
     lon: 138.6,
+    photo: photoUrl("le-feuvre"),
     date: "28 May 2026",
-    questions: [],
-    anchors: ["Q3"],
-    provisional: ["Q1", "Q4"],
+    questions: ["Q2", "Q3"],
+    anchors: ["Q1", "Q6"],
     learnt: [
       "Varroa was declared endemic in Australia after eradication failed. Beekeepers across eastern Australia have moved to permanent monitoring and treatment, complicated by resistant mites and by reinvasion from untreated feral colonies.",
       "Even successfully treated hives are back at threshold within weeks, so a treatment that only kills mites well is not enough: it has to cut repeated labour, hold up under reinfestation, and fit a resistance-management rotation.",
@@ -140,11 +194,11 @@ export const STAKEHOLDERS: Stakeholder[] = [
     region: "Australia",
     lat: -33.87,
     lon: 151.21,
-    questions: ["Q3", "Q4"],
-    provisional: ["Q1"],
+    photo: photoUrl("allerton"),
+    questions: ["Q1", "Q3", "Q5", "Q6"],
     learnt: [
       "Feral colonies in Australia are dense because forage is available all year. Under Varroa and small hive beetle together they collapsed within weeks rather than the projected two or three years, seeding managed colonies and removing free pollination that agriculture had relied on.",
-      "Membership of Amateur Beekeepers Australia fell from 5,000 to 3,000 when Varroa arrived in 2022.",
+      "Membership of Amateur Beekeepers Australia fell from 5,000 to 3,000 when Varroa arrived in 2022, and has since recovered to about 4,000.",
       "Bayvarol was initially the most effective treatment, but is expensive, slow to install and now faces resistance. Oxalic acid, as strips or vapour, is the most used treatment today.",
       "Cost and labour are the biggest problems with every treatment, and hit small commercial operators of 200-300 hives hardest - they are being bought out by larger operators with more staff.",
       "A recreational beekeeper himself: he produced 500-700 kg of honey a year before Varroa and is now focused on keeping bees alive. Some hobbyists cannot afford treatments and resort to off-label homemade ones.",
@@ -160,8 +214,8 @@ export const STAKEHOLDERS: Stakeholder[] = [
     lat: -35.28,
     lon: 149.13,
     date: "24 July 2026",
-    questions: [],
-    anchors: ["Q1"],
+    questions: ["Q4", "Q6"],
+    anchors: ["Q3"],
     learnt: [
       "A non-living engineered yeast product would not be regulated by the OGTR. Both S. alvi delivery systems, constitutive or inducible, would fall within its remit.",
       "Constitutive and inducible S. alvi would be regulated similarly: an inducible switch changes aspects of the risk assessment but not the regulatory route, even if it makes the system seem more acceptable to the public.",
@@ -181,9 +235,10 @@ export const STAKEHOLDERS: Stakeholder[] = [
     region: "Australia",
     lat: -32.69,
     lon: 151.6,
+    photo: photoUrl("frost"),
     date: "12 August 2026",
-    questions: ["Q3"],
-    provisional: ["Q1", "Q4"],
+    questions: [],
+    provisional: ["Q1", "Q5", "Q6"],
     learnt: [
       "Dual resistance has been detected, which means essentially all legal synthetic miticide options will soon be unusable.",
       "Formic acid is hard to use in Australian heat and humidity, and most of the continent has a long brood period with often no brood break at all.",
@@ -206,8 +261,9 @@ export const STAKEHOLDERS: Stakeholder[] = [
     // Sea island here, by a tenth of a unit. This is the Queensland coast cell.
     hex: [137, 26],
     date: "13 August 2026",
-    questions: ["Q6"],
-    anchors: ["Q4"],
+    questions: ["Q1", "Q6"],
+    anchors: ["Q5"],
+    provisional: ["Q4"],
     learnt: [
       "Varroa has had a huge impact on Australia, although honey supply has not fallen yet, partly because suppliers hold on to their yields. New South Wales beekeepers have lost over 1,200 hives and seen about a 50% drop in honey production.",
       "Mainstream Australian treatments are oxalic and formic acid, with off-label use and a temperature ceiling on formic. Synthetics like Apivar and Bayvarol face resistance, and thyme oil leaves a bitter taste in honey.",
@@ -229,7 +285,10 @@ export const STAKEHOLDERS: Stakeholder[] = [
     lat: -33.77,
     lon: 151.11,
     date: "10 August 2026",
-    questions: ["Q2", "Q5"],
+    // The 25 September table does not mention this interview, so the Q2/Q5
+    // tags it carried from the earlier write-up are provisional now.
+    questions: [],
+    provisional: ["Q2", "Q5"],
     learnt: [],
     consent: {
       status: "review-pending",
@@ -247,8 +306,8 @@ export const STAKEHOLDERS: Stakeholder[] = [
     lat: -37.79,
     lon: 176.32,
     date: "23 July 2026",
-    questions: ["Q5", "Q6"],
-    provisional: ["Q1"],
+    questions: ["Q5"],
+    provisional: ["Q3"],
     learnt: [],
     consent: {
       status: "not-given",
@@ -265,9 +324,10 @@ export const STAKEHOLDERS: Stakeholder[] = [
     region: "Hong Kong",
     lat: 22.32,
     lon: 114.17,
+    photo: photoUrl("lam"),
     date: "6 July 2026",
     questions: [],
-    anchors: ["Q2"],
+    anchors: ["Q2", "Q4"],
     learnt: [
       "The major environmental impacts of chemical pesticides are toxicity to non-target species, bioaccumulation and biomagnification, and the development of resistance.",
       "Off-target effects were his key environmental concern for our project. He agreed with screening against representative species with bioinformatic tools, and said the choice of those species has to be justified.",
@@ -287,9 +347,10 @@ export const STAKEHOLDERS: Stakeholder[] = [
     region: "United States",
     lat: 42.73,
     lon: -84.48,
+    photo: photoUrl("barrick"),
     date: "27 May 2026",
     questions: [],
-    provisional: ["Q1"],
+    provisional: ["Q3"],
     learnt: [
       "Has engineered S. alvi to produce dsRNA against Varroa. Spoke to us while we were still deciding between yeast and S. alvi.",
       "His team had found no S. alvi promoter stronger than the synthetic CP25, though characterised by GFP rather than dsRNA output. Suggested vanillic acid as an inducer: wide expression range, low leak, non-toxic, and already used in bee supplements, so a beekeeper could control dosage through feed.",
@@ -309,9 +370,10 @@ export const STAKEHOLDERS: Stakeholder[] = [
     region: "United States",
     lat: 35.78,
     lon: -78.64,
+    photo: photoUrl("thurman"),
     date: "29 July 2026",
     questions: [],
-    anchors: ["Q5"],
+    provisional: ["Q5"],
     learnt: [
       "Start from an average commercial beekeeping operation, use existing treatments as the counterfactual, and assess the change in costs and revenues rather than non-monetary metrics like survival rates and honey yields.",
       "Use a simpler partial-equilibrium approach, assuming elasticities of supply and demand, to estimate market-level outcomes such as market surpluses.",
@@ -329,9 +391,10 @@ export const STAKEHOLDERS: Stakeholder[] = [
     region: "United States",
     lat: 37.77,
     lon: -122.42,
+    photo: photoUrl("lewis"),
     date: "24 July 2026",
-    questions: ["Q4"],
-    provisional: ["Q1"],
+    questions: ["Q5"],
+    anchors: ["Q6"],
     learnt: [
       "Almonds bloom early and require insect pollination. Around 80% of US honeybee colonies are transported to California for the February to March bloom, and after it move on to cherries, apples, melons and sunflowers.",
       "Almond growers and commercial beekeepers are economically codependent: growers need the bees, and almond pollination is the main income for many commercial beekeepers.",
@@ -353,8 +416,10 @@ export const STAKEHOLDERS: Stakeholder[] = [
     region: "United States",
     lat: 36.75,
     lon: -119.77,
+    photo: photoUrl("hiatt"),
     date: "30 July 2026",
-    questions: ["Q3", "Q4"],
+    questions: ["Q1", "Q2", "Q5"],
+    anchors: ["Q6"],
     learnt: [
       "Manages around 18,000 colonies with his five brothers, in a business his father started 58 years ago, and owns a 46-acre almond farm. Colonies move from California almonds to North Dakota for honey and on to Washington for apples.",
       "In the mid-2000s a single annual CheckMite+ (coumaphos organophosphate) strip gave highly effective control. By the third year the mites were resistant and he lost 55% of his colonies.",
@@ -376,8 +441,10 @@ export const STAKEHOLDERS: Stakeholder[] = [
     region: "United States",
     lat: 40.11,
     lon: -88.21,
+    photo: photoUrl("goodrich"),
     date: "7 August 2026",
-    questions: ["Q5"],
+    questions: [],
+    anchors: ["Q5", "Q6"],
     learnt: [
       "Models the costs and revenues of a commercial operation across a year: 8,500 colonies, of which about 5,000 go to California for almond pollination.",
       "About 27% of total costs are capital recovery and equipment, 21% labour, and 9% Varroa treatment products alone - excluding the labour to administer them and the cost of replacing lost hives, so the real figure is higher.",
@@ -397,7 +464,7 @@ export const STAKEHOLDERS: Stakeholder[] = [
     lat: 38.9,
     lon: -77.04,
     date: "14 August 2026",
-    questions: ["Q1"],
+    questions: ["Q2", "Q3", "Q4", "Q6"],
     learnt: [
       "US biotechnology regulation is split across agencies, with jurisdiction set by how a product functions and what it is intended for.",
       "Living GMO versus non-living engineered product does not by itself make the path easier or harder. It changes what evidence of safety is required.",
@@ -418,8 +485,8 @@ export const STAKEHOLDERS: Stakeholder[] = [
     lat: 51.75,
     lon: -1.26,
     date: "29 May 2026",
-    questions: ["Q3"],
-    provisional: ["Q1"],
+    questions: ["Q1", "Q5", "Q6"],
+    provisional: ["Q3"],
     learnt: [
       "Keeps bees at University College and Botley Meadow with no chemical treatments, preferring to let them live as naturally as possible.",
       "Varroa arrived in the UK in the 1990s but has not, in his experience, devastated the Oxford beekeepers he knows. He has never seen mites in his established colonies, though colonies acquired from a beekeeper who had died showed deformed wings consistent with Varroa-associated disease.",
@@ -438,8 +505,9 @@ export const STAKEHOLDERS: Stakeholder[] = [
     region: "United Kingdom",
     lat: 51.71,
     lon: -1.17,
+    photo: photoUrl("oxnatbees"),
     date: "30 May 2026",
-    questions: ["Q3"],
+    questions: ["Q1", "Q6"],
     learnt: [
       "Joined their lunch gathering at Mark's invitation, and were welcomed despite a different approach to Varroa - down to being lent suits to get close to a treatment-free apiary.",
       "Many of them used chemical treatments in the past, moved to treatment-free beekeeping, and report lower Varroa counts since. Their view is that Varroa may not need managing at all if bees are given the chance to adapt.",
@@ -456,8 +524,9 @@ export const STAKEHOLDERS: Stakeholder[] = [
     region: "United Kingdom",
     lat: 51.75,
     lon: -1.26,
+    photo: photoUrl("krebs"),
     date: "23 July 2026",
-    questions: ["Q1", "Q6"],
+    questions: ["Q3", "Q4", "Q6"],
     learnt: [
       "Deployment in the UK could touch three regulatory areas: contained GMO use (the Health and Safety Executive), environmental release (ACRE), and food and feed safety (the Food Standards Agency).",
       "Even though our product is used on bees rather than being the food, regulators would want to know that none of it could reach honey, beeswax, pollen or the environment.",
@@ -476,8 +545,10 @@ export const STAKEHOLDERS: Stakeholder[] = [
     region: "United Kingdom",
     lat: 51.44,
     lon: -0.94,
+    photo: photoUrl("dunwell"),
     date: "4 August 2026",
-    questions: ["Q1"],
+    questions: ["Q3", "Q6"],
+    anchors: ["Q4"],
     learnt: [
       "ACRE is the statutory committee advising the UK Government on the risks of releasing GMOs, and assesses whether a release could harm human health or the environment.",
       "Environmental regulation is about identifying every plausible pathway to harm: could the dsRNA or organism leave the bee gut, what would encounter it, and could that cause harm. Non-target mites are the particular concern, and experimental evidence in relevant off-target organisms would likely be required.",
@@ -497,7 +568,7 @@ export const STAKEHOLDERS: Stakeholder[] = [
     lat: 51.45,
     lon: -2.59,
     date: "27 July 2026",
-    questions: ["Q1", "Q6"],
+    questions: ["Q3", "Q4", "Q6"],
     learnt: [
       "GMOs are fundamentally incompatible with organic production standards, and that extends to products made using GMOs: a GMO anywhere in the production pathway can cost a product its organic status.",
       "Organic compatibility therefore depends on more than whether the final treatment contains a living GMO. The production process and method of use matter too.",
@@ -515,8 +586,9 @@ export const STAKEHOLDERS: Stakeholder[] = [
     region: "United Kingdom",
     lat: 54.98,
     lon: -1.61,
+    photo: photoUrl("budge"),
     date: "9 April and 13 July 2026",
-    questions: ["Q2"],
+    questions: ["Q1", "Q2"],
     learnt: [
       "We had read Ramsey et al. (2019), which found Varroa feed on the fat body rather than haemolymph, and feared dsRNA in haemolymph would never reach the mite. His view: the fat body is bathed in haemolymph, so mites feeding on it do ingest haemolymph and are exposed to dsRNA in it - consistent with Garbian et al. (2012) measuring mite mortality off dsRNA-fed adult bees.",
       "Considered Mango-biotin fluorescence a logical way to quantify dsRNA in our samples. We went on to complete that assay.",
@@ -533,7 +605,11 @@ export const STAKEHOLDERS: Stakeholder[] = [
     region: "United Kingdom",
     lat: 55.95,
     lon: -3.19,
-    questions: ["Q1", "Q6"],
+    // The team's photo set has one picture for this three-person conversation.
+    photo: photoUrl("scottish-government--molero"),
+    photoShows: "Luis Molero",
+    questions: [],
+    provisional: ["Q3", "Q4", "Q6"],
     learnt: [
       "Varroa is recognised as one of the top three threats to bees in Scotland, which puts the problem beyond our two main case studies.",
       "Raised concern over pesticide contamination in honey.",
@@ -549,7 +625,9 @@ export const STAKEHOLDERS: Stakeholder[] = [
     region: "United Kingdom",
     lat: 55.95,
     lon: -3.19,
-    questions: ["Q1"],
+    photo: photoUrl("bowden"),
+    questions: [],
+    provisional: ["Q3"],
     learnt: [
       "Set out the regulatory protocol in Scotland.",
       "Our product sits in a grey area, which confirms that heat-killed yeast does help to potentially bypass GM regulation.",
@@ -567,8 +645,7 @@ export const STAKEHOLDERS: Stakeholder[] = [
     lon: -3.31,
     date: "20 August 2026",
     questions: [],
-    anchors: ["Q6"],
-    provisional: ["Q5"],
+    provisional: ["Q4", "Q5", "Q6"],
     learnt: [
       "Thirty years in the food industry. Most of Hilltop's honey originates from China or South America, and Varroa has not majorly affected their colonies or supply; transport and testing costs are high.",
       "Their beekeepers will often choose the cheapest option, so cost-effectiveness is the factor to prioritise.",
@@ -587,7 +664,8 @@ export const STAKEHOLDERS: Stakeholder[] = [
     lat: 51.75,
     lon: -1.26,
     date: "30 July 2026",
-    questions: ["Q1"],
+    questions: [],
+    provisional: ["Q3"],
     learnt: [],
     consent: {
       status: "review-pending",
@@ -603,7 +681,8 @@ export const STAKEHOLDERS: Stakeholder[] = [
     lat: 51.75,
     lon: -1.26,
     date: "8 September 2026",
-    questions: ["Q1"],
+    questions: [],
+    provisional: ["Q3"],
     learnt: [],
     consent: {
       status: "review-pending",
@@ -620,7 +699,9 @@ export const STAKEHOLDERS: Stakeholder[] = [
     region: "Canada",
     lat: 45.5,
     lon: -73.57,
-    questions: ["Q1", "Q2"],
+    photo: photoUrl("mcloughlin"),
+    questions: [],
+    provisional: ["Q2", "Q3"],
     learnt: [
       "Under the Cartagena Protocol our product is not a living modified organism.",
       "Comparisons to conventional practice are essential.",

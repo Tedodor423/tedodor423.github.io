@@ -1,4 +1,6 @@
-import { defineConfig, loadEnv } from "vite";
+import { readFileSync, existsSync } from "node:fs";
+import { join } from "node:path";
+import { defineConfig, loadEnv, type Connect, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 // Import directly, NOT from the ./src/utils barrel. The barrel re-exports
 // getPathMapping, which pulls in pages.ts and its `.md?raw` imports. Vite bundles
@@ -7,12 +9,53 @@ import react from "@vitejs/plugin-react";
 //   "No loader is configured for .md files"
 import { stringToSlug } from "./src/utils/stringToSlug";
 
+/* Serves the gitignored stakeholder photos to the DEV server only, at
+ * <base>/stakeholder-photos/<basename>.avif, so the human-practices map shows
+ * real faces while we work. Nothing is copied into the build: the published
+ * site asks static.igem.wiki and shows silhouettes until the photos go
+ * through the uploads tool (see wiki-assets-source/stakeholder-photos/
+ * README.md). The requested .avif name is matched to whichever source file
+ * exists, because the uploads tool converts to .avif but the originals are
+ * jpg and png.
+ *
+ * The four withheld interviews are refused by name: their consent is
+ * outstanding, so their faces do not render even on a dev screen, and a
+ * data-file mistake that pointed at one would show a silhouette, not a face.
+ */
+function stakeholderPhotosDevServer(): Plugin {
+  const dir = join(__dirname, "wiki-assets-source", "stakeholder-photos");
+  const WITHHELD = ["colin", "comvita--evans", "morrison", "coy"];
+  const middleware: Connect.NextHandleFunction = (req, res, next) => {
+    const url = (req.url ?? "").split("?")[0];
+    const match = url.match(/\/stakeholder-photos\/([a-z0-9-]+)\.\w+$/);
+    if (!match || WITHHELD.includes(match[1])) return next();
+    for (const ext of ["jpg", "png"] as const) {
+      const file = join(dir, `${match[1]}.${ext}`);
+      if (!existsSync(file)) continue;
+      res.setHeader(
+        "Content-Type",
+        ext === "png" ? "image/png" : "image/jpeg",
+      );
+      res.end(readFileSync(file));
+      return;
+    }
+    next();
+  };
+  return {
+    name: "stakeholder-photos-dev-server",
+    apply: "serve",
+    configureServer(server) {
+      server.middlewares.use(middleware);
+    },
+  };
+}
+
 // https://vitejs.dev/config/
 export default () => {
   const env = loadEnv("dev", process.cwd());
   return defineConfig({
     base: `/${stringToSlug(env.VITE_TEAM_NAME)}/`,
-    plugins: [react()],
+    plugins: [react(), stakeholderPhotosDevServer()],
     server: { port: 5175 },
     preview: { port: 5175 },
   });

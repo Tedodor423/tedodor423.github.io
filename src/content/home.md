@@ -1,91 +1,92 @@
-> **Skeleton: structure only. No results, numbers or quotes yet.**
-
-NECTAR is an end-to-end platform for designing, validating, producing and
+NECTAR is an **end-to-end platform** for designing, validating, producing and
 deploying RNAi interventions. _Varroa destructor_ is the first real-world case
 study through which we demonstrate and stress-test the platform.
 
-Every other page on this wiki is downstream of that sentence. This page has one
-job: make a non-biologist understand it in ten seconds, then send them somewhere
-useful.
+> **FIGURE: hero.** The pipeline in one image, readable in ten seconds:
+> pest → target RNA → NECTAR designs it → yeast produces it → formulation
+> delivers it → RNAi silences the pest. Two ways in underneath, one into
+> [the project](/project-description), one straight to [the evidence](/results).
 
-> **FIGURE: hero.** The pipeline in one image: pest → target RNA → NECTAR
-> designs it → yeast produces it → formulation delivers it → RNAi silences the
-> pest. Two ways in underneath, one into [the project](/project-description), one
-> straight to [the evidence](/results).
+[Explore NECTAR](/project-description) · [See our results](/results)
 
 ## Why this matters
 
-Three claims, no more. Each needs a number and a source that resolves. The
-argument runs: pests cost us an enormous amount, the chemistry we use against
-them is running out of road, and the damage that chemistry does is not confined
-to the field it was sprayed on.
+Pests cost us an enormous amount, the chemistry we use against them is **running
+out of road**, and the damage that chemistry does is not confined to the field it
+was sprayed on.
 
-> **TODO:** The jamboree deck already picked the opening numbers, so the
-> framing is settled and only the sourcing is outstanding. Pick three of these
-> four and give each a resolvable citation before any of them goes on the page:
->
-> - By 2050 humanity will need to produce 50% more food
-> - Over 1/3 of global food production relies on bee pollination
-> - Varroa drives annual losses of ~$2 bn
-> - By 2050, 100% of agricultural land will be at risk of pesticide pollution
->
-> None is citable as it stands; our own slide is not a source. Owner: HP.
+```component
+headline-stats
+```
+
+> **TODO —** Three claims maximum here; the component shows four, and every
+> tile is `[FLAG]` because our own jamboree slide is not a source. Cite each in
+> `src/components/HeadlineStats.tsx` and swap the tag to `[LIT]`, or drop the
+> tile. The global pesticide-spend figure the team wants alongside these is
+> still to be pulled from the human-practices work. Owner: HP.
 
 ## Why RNAi is not already everywhere
 
-Six barriers sit between RNAi and the field: rational target selection,
-off-target screening, resistance to a single target, manufacturing cost,
-environmental degradation, and inefficient delivery. One line each. They are the
-spine of [the project description](/project-description) and the reason the platform is
-shaped the way it is.
+Six barriers sit between RNAi and the field:
+
+- **Rational target selection** — which gene to silence is the first hard problem.
+- **Off-target screening** — a sequence that hits the pest may hit something else.
+- **Single-target resistance** — one target is one mutation away from failing.
+- **Manufacturing cost** — the RNA has to be cheap enough to use at field scale.
+- **Environmental degradation** — RNA does not last long outside a cell.
+- **Inefficient delivery** — the RNA still has to get inside the pest.
+
+They are the spine of [the project description](/project-description) and the
+reason the platform is shaped the way it is.
 
 ## Our solution
 
-One diagram and one paragraph. The point to land is that NECTAR treats those six
-barriers as a single pipeline rather than six unrelated problems.
+NECTAR treats those six barriers as one pipeline rather than six unrelated
+problems. The novel core is the **RNA design method**: yeast-delivered dsRNA
+against _Varroa_ is anticipated by prior patents, and we say so on
+[the project description](/project-description) rather than claiming it.
 
-The deck presents that pipeline in four parts, and it is a clearer public
-framing than our internal workstream numbering. Use it consistently:
+1. **dsRNA design** — [RNA design](/software)
+2. **Engineering yeast** — [yeast](/wet-lab-experiments#yeast-production)
+3. **Optimised delivery: the hive insert** — [bee lab](/bee-lab)
+4. **Measurement and validation** — [measurement](/measurement)
 
-1. **dsRNA design**: see [RNA design](/software)
-2. **Engineering yeast**: see [yeast](/yeast)
-3. **Optimised delivery: the hive insert**: see [bee lab](/bee-lab)
-4. **Measurement and validation**: see [measurement](/measurement)
-
-> **FIGURE: system diagram.** The four-part stack, each stage linking to the
-> page that documents it.
+> **FIGURE: system diagram.** The four-part stack as one image, each stage
+> labelled with the barrier it answers.
 
 ## Our first use case
 
-Varroa → bee → pollen patty → nurse bee and larva → mite. A short paragraph on
-why a mite feeding on a bee inside a sealed hive is an awkward place to deliver
-an RNA, and therefore a good place to find out whether the platform works.
+Varroa → bee → pollen patty → nurse bee and larva → mite. A mite feeding on a
+bee inside a sealed hive is an awkward place to deliver an RNA, and therefore a
+good place to find out **whether the platform works**.
 
 ```component
 varroa-map
 ```
 
-Reported colony losses by country and year. [Case studies](/case-studies)
-reads the map and explains what it does and does not show.
+Reported colony losses by country and year. [Case studies](/case-studies) reads
+the map and explains what it does and does not show.
 
 ## What we actually achieved
 
-Five to seven cards, each carrying its honest status, **Demonstrated**,
-**Investigated**, **Modelled** or **Proposed**, and each linking to the page
-that holds the evidence. This is the block a judge reads hardest and the one
-most easily overstated.
+| What we did                                     | Status  | Evidence            |
+| ----------------------------------------------- | ------- | ------------------- |
+| Designed candidate RNAs                          | TODO    | [RNA design](/software)       |
+| Built modular dsRNA constructs                   | TODO    | [Parts](/parts)               |
+| Measured dsRNA uptake and stability              | TODO    | [Measurement](/measurement)   |
+| Developed NectarDesigner                         | TODO    | [RNA design](/software)       |
+| Engineered and tested the yeast production system| TODO    | [Yeast](/wet-lab-experiments#yeast-production)               |
+| Modelled industrial production and colony impact | TODO    | [Modelling](/model)           |
+| Integrated stakeholder feedback into deployment  | TODO    | [Human practices](/human-practices) |
 
-> **TODO:** Write these cards last, once [Results](/results) exists. No card
-> may claim more than the results page can support.
-
-## Still missing
-
-- The one-sentence proposition, agreed and frozen. Every other page borrows it.
-- The three "why this matters" numbers, sourced.
-- Hero image and system diagram.
-- The achievement cards and their status chips.
+> **TODO —** Every status above is unset on purpose. [Results](/results) carries
+> no result blocks yet, so no card here may yet be called **Demonstrated**,
+> **Investigated**, **Modelled** or **Proposed**. Fill each status from the
+> matching result block, add the count to "designed candidate RNAs", and delete
+> this note. No card may claim more than [Results](/results) supports.
+> Owner: team lead.
 
 ## Where to go next
 
 [Project description](/project-description) · [Results](/results) ·
-[Engineering NECTAR](/engineering) · [NECTAR in the real world](/human-practices)
+[Engineering](/engineering) · [NECTAR in the real world](/human-practices)

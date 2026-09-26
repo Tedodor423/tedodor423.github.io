@@ -1,67 +1,100 @@
-> **Skeleton: structure only. No results, numbers or quotes yet.**
+> **What this page proves —** at present, very little. Our outreach is real but
+> undocumented, and this page records that honestly rather than reconstructing
+> it.
+> **Where the evidence is —** nowhere yet. Every claim below is either marked
+> unrecorded or marked planned.
 
-> **What this page proves:** that our outreach was a conversation rather than a
-> broadcast, and that we can show what came back.
+The bar we set for this page was whether anything went **in both directions**:
+whether we changed how someone thought about synthetic biology, and whether
+they changed anything about how we work. We cannot currently clear that bar,
+because we did not record the activities as we ran them.
 
-The bar here is whether anything went in both directions: whether we changed
-how someone thought about synthetic biology, and whether they changed anything
-about how we work.
+**Undocumented outreach scores nothing, and reconstructing attendance after the
+fact is not acceptable.** So this page lists what genuinely happened, marks what
+is unrecorded, and says what is planned. It will be rewritten as the record is
+recovered and the planned work lands.
 
 ## What we did
 
-One subsection per activity. For each: what it was, who the audience was, when
-it happened, how many people, and what materials we used.
+### A talk at St Clare's
 
-> **TODO:** Several activities are currently undated and unquantified,
-> including a schools talk. Undocumented outreach scores nothing, and
-> reconstructing attendance after the fact is not acceptable, record what is
-> genuinely known and mark the rest as unrecorded. Owner: outreach.
+We gave a talk at St Clare's. The date, the size of the audience and the
+materials we used were **not recorded at the time**.
+
+> **TODO —** Recover the date, audience size, year group and materials for the
+> St Clare's talk from whoever delivered it, along with anything that came back
+> from the audience. If the details cannot be established, this section says so
+> and the activity is not counted. Owner: outreach.
+
+## What is planned
+
+### The podcast
+
+At least two episodes, recorded and released before the freeze. The reason it
+exists is on the human practices page: Professor Paul Lam set out risk handling
+as identify, assess, manage and communicate, and singled out communication with
+beekeepers and the public as **the hardest and most important step**. The brief that
+follows from that is a podcast which discusses the risks of an engineered
+treatment as openly as the benefits, rather than one that advertises the
+project.
+
+> **TODO —** Record and release at least two podcast episodes, hosted on iGEM
+> infrastructure, with a transcript on this page. Owner: outreach.
+
+### The glossary
+
+A plain-language glossary of the terms used across this wiki, written for
+someone with no background, and linked from the jargon itself. It makes the site
+readable outside the field and is a reusable artefact in its own right.
+
+> **TODO —** Build the glossary once the content pages are written, so that it
+> covers the terms actually used rather than the terms we expect to use. Owner:
+> outreach.
 
 ## What came back
 
-The part that distinguishes education from publicity. What our audiences asked,
-what they disagreed with, what they were worried about, and what we did
+This is the section that distinguishes education from publicity: what our
+audiences asked, what they disagreed with, what worried them, and what we did
 differently afterwards.
 
-If an activity produced nothing in this section, say so. An honest "this did not
-teach us anything" is better than an invented insight.
+It is empty. Nothing from the St Clare's talk was written down, so we have no
+**honest account** of what came back from it. An invented insight here would be
+worth less than an admission.
 
 ## Materials
 
-What we made, released so that someone else can use it. Slides, worksheets,
-explainers and the public glossary all belong here, with a licence.
+Nothing has been released yet. When the talk materials are recovered and the
+podcast is published, both go here under CC-BY-4.0 so that another team can use
+them.
 
-> **PDF:** Outreach materials, uploaded to `static.igem.wiki` and linked here
+> **PDF —** Outreach materials, uploaded to `static.igem.wiki` and linked here
 > under CC-BY-4.0.
-
-## The glossary
-
-A plain-language glossary of the terms used across this wiki, written for
-someone with no background. It serves two purposes: it makes this site readable
-by people outside the field, and it is a reusable artefact in its own right.
-
-> **TODO:** Build the glossary once the content pages are written, so that it
-> covers the terms actually used rather than the terms we expect to use.
 
 ## Accessibility
 
-Who could not take part, and what we did about it. Language, cost, scheduling,
-and the accessibility of this wiki itself, readable contrast, semantic heading
-order, alt text on every informational image, and nothing important hidden
-behind a hover.
+Who could not take part, and what we did about it — language, cost, scheduling —
+is unaddressed for the activities above, because the activities are unrecorded.
+
+The accessibility of this wiki itself is a separate commitment we can state
+now: readable contrast, semantic heading order with no skipped levels, alt text
+on every informational image, and nothing important reachable only by hovering.
 
 ## How we evaluated it
 
-How we know whether any of this worked. Attendance is an input, not an outcome.
-Where we did not evaluate an activity properly, say that instead of implying we
-did.
+We did not. Attendance is **an input, not an outcome**, and we did not record even
+that. Any evaluation designed after the fact would be a description of what we
+wish we had measured.
+
+> **TODO —** Before the podcast is released, decide what would count as
+> evidence that it worked, and collect it at the time. Owner: outreach.
 
 ## Still missing
 
-- Dates, audience sizes and materials for each activity.
-- The "what came back" section.
+- Dates, audience sizes and materials for the St Clare's talk.
+- The podcast episodes.
 - The glossary.
-- Any evaluation at all for most activities.
+- Anything at all in "what came back".
+- An evaluation method fixed before the next activity, not after it.
 
 ## Where this connects
 

@@ -1,0 +1,212 @@
+/* The opening stat tiles: hard ink borders on a solid surface, like every
+ * other panel on the wiki. The value wears the heading face (the same sans
+ * the labels wear, no display face — a number set in Cubao reads as
+ * decoration); the claim stays in body mono with its citation tag.
+ *
+ * Colour in the combs is the map's own vocabulary: honey for the quantity
+ * the claim is about, the map's land tone for the rest (brand.css already
+ * checked that pair), hatching for a state that is not a measurement, and
+ * the rule tone for cells a pressed button has de-emphasised.
+ */
+
+.headline-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hs-tile {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.25rem 1rem;
+}
+
+.hs-value {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: clamp(2.4rem, 3.5vw, 3.2rem);
+  line-height: 1;
+  color: var(--ink);
+  margin: 0 0 0.6rem;
+}
+
+/* The honesty prefix — "over", "~" — kept small so the number stays the
+ * headline but the hedge is never separated from it. */
+.hs-value span {
+  font-size: 0.45em;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.hs-claim {
+  font-size: 0.95rem;
+  margin: 0 0 1rem;
+}
+
+/* ---------- the combs ---------- */
+
+.hs-figure,
+.hs-combs {
+  margin-bottom: 0.75rem;
+}
+
+.hs-figure svg,
+.hs-comb svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.hs-cell {
+  transition: fill 160ms linear;
+}
+
+.hs-cell--honey {
+  fill: var(--honey);
+}
+
+.hs-cell--wax {
+  fill: var(--wax-deep);
+}
+
+.hs-cell--risk {
+  fill: url(#hs-hatch);
+}
+
+.hs-cell--empty {
+  fill: var(--surface);
+  stroke: var(--wax-deep);
+  stroke-width: 1.5;
+}
+
+.hs-cell.is-dim {
+  fill: var(--rule);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hs-cell {
+    transition: none;
+  }
+}
+
+/* The two combs of the food tile are themselves the buttons. */
+.hs-combs {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.4rem;
+}
+
+.hs-comb {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.3rem 0.5rem;
+  background: none;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.hs-comb:hover,
+.hs-comb.is-on {
+  border-color: var(--ink);
+}
+
+.hs-comb.is-off .hs-cell {
+  fill: var(--rule);
+}
+
+.hs-comb-label {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text);
+  min-width: 2.6rem;
+  text-align: left;
+}
+
+/* ---------- picks and captions, in the varroa map's dress ---------- */
+
+.hs-picks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-bottom: 0.6rem;
+}
+
+.hs-pick {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.15rem 0.6rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+.hs-pick:hover {
+  border-color: var(--ink);
+}
+
+.hs-pick.is-on {
+  border-color: var(--ink);
+  background: var(--honey);
+  color: var(--ink);
+}
+
+.hs-swatch {
+  display: inline-block;
+  width: 0.85rem;
+  height: 0.95rem;
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+}
+
+.hs-swatch--honey {
+  background: var(--honey);
+}
+
+.hs-swatch--wax {
+  background: var(--wax-deep);
+}
+
+/* The caption a press rewrites. Two lines are reserved so a longer caption
+ * does not push the grid row taller mid-interaction. */
+.hs-caption {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  min-height: 3em;
+  margin: auto 0 0;
+}
+
+/* ---------- the ticker ---------- */
+
+.hs-ticker {
+  margin: 0 0 0.75rem;
+}
+
+/* Tabular figures, exceptionally: this number redraws every second, and with
+ * proportional digits the line would shiver as widths change. */
+.hs-ticker-amount {
+  display: block;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1.6rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.hs-ticker-what {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}

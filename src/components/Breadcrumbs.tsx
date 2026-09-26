@@ -47,7 +47,12 @@ export function Breadcrumbs() {
   const rest = trail(Pages, pathname);
   if (!rest) return null;
 
-  const crumbs: Crumb[] = [{ name: "Home", path: "/" }, ...rest.slice(0, -1)];
+  // A group's crumb links to its first page, so on that first page the last
+  // crumb would point back at the page itself. Drop it.
+  const ancestors = rest.slice(0, -1);
+  if (ancestors[ancestors.length - 1]?.path === pathname) ancestors.pop();
+
+  const crumbs: Crumb[] = [{ name: "Home", path: "/" }, ...ancestors];
 
   return (
     <nav className="breadcrumbs" aria-label="Breadcrumb">

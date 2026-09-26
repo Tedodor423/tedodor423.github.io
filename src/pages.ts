@@ -20,7 +20,9 @@
 //   Group    a dropdown label with no page behind it (Project, Team, ...)
 //     Page   the link, optionally with a `subtitle` under it
 //
-// Home is the one page that sits in the menu bar directly, as a plain link.
+// Home is not in the menu bar. It is marked `hidden` below, so it stays
+// routed and searchable while the bar carries only the groups the agreed
+// structure lists; the header logo is the way back to it.
 //
 // A page's own `children` are routed and listed by SectionLinks at the top of
 // that page, but never appear in the menu. A page marked `hidden` is routed
@@ -42,13 +44,14 @@ import contribution from "./content/contribution.md?raw";
 import results from "./content/results.md?raw";
 import engineering from "./content/engineering.md?raw";
 import beeLab from "./content/bee-lab.md?raw";
-import beeLabNotebook from "./content/bee-lab-notebook.md?raw";
+import beeLabExperiments from "./content/bee-lab-experiments.md?raw";
+import beeLabLabbook from "./content/bee-lab-labbook.md?raw";
 import workingWithBees from "./content/working-with-bees.md?raw";
 import hardware from "./content/hardware.md?raw";
 import userManual from "./content/user-manual.md?raw";
 import wetLab from "./content/wet-lab.md?raw";
-import yeast from "./content/yeast.md?raw";
-import experiments from "./content/experiments.md?raw";
+import wetLabExperiments from "./content/wet-lab-experiments.md?raw";
+import wetLabLabbook from "./content/wet-lab-labbook.md?raw";
 import model from "./content/model.md?raw";
 import software from "./content/software.md?raw";
 import economicModelling from "./content/economic-modelling.md?raw";
@@ -109,18 +112,19 @@ export function isGroup(entry: MenuEntry): entry is Group {
 }
 
 const Pages: MenuEntry[] = [
-  // --- The menu, in header order. Home is a direct link in the bar; the
-  // header logo links to it too.
+  // --- The menu, in header order. Home leads the table because it is the
+  // root route, but it is hidden, so the bar starts at Project and the
+  // header logo is the only link back to it.
   {
     name: "Home",
     title: "NECTAR",
     path: "/",
     content: home,
     lead: "Oxford iGEM 2026.",
+    hidden: true,
   },
   {
     name: "Project",
-    subtitle: "Summary of our work",
     children: [
       {
         name: "Description",
@@ -131,10 +135,10 @@ const Pages: MenuEntry[] = [
       },
       {
         name: "Engineering",
-        title: "Engineering NECTAR",
+        title: "Engineering",
         path: "/engineering", // iGEM standard URL
         content: engineering,
-        lead: "Design, Build, Test, Learn, and what each turn of the cycle changed.",
+        // No lead: the page opens on its own paragraph and then the comb.
       },
       {
         name: "Results",
@@ -158,13 +162,6 @@ const Pages: MenuEntry[] = [
         lead: "Quantifying dsRNA in bee material, and the methods we had to build to do it.",
       },
       {
-        name: "Safety",
-        title: "Safety and Security",
-        path: "/project-safety", // per structure_source.md — verify against the standard URL list
-        content: safety,
-        lead: "Risks of our system, and what we did about each of them.",
-      },
-      {
         name: "Timeline",
         title: "Timeline",
         path: "/timeline",
@@ -174,7 +171,7 @@ const Pages: MenuEntry[] = [
     ],
   },
   {
-    name: "Integrated human practices",
+    name: "Human practices",
     section: "The project in detail",
     children: [
       {
@@ -182,10 +179,10 @@ const Pages: MenuEntry[] = [
         title: "NECTAR in the Real World",
         path: "/human-practices", // iGEM standard URL
         content: humanPractices,
-        lead: "Who we spoke to, what they told us, and what it changed.",
+        // No lead: the page opens straight onto the approach + HONEY figure.
       },
       {
-        name: "Public outreach",
+        name: "Outreach and Education",
         title: "Public Outreach",
         path: "/education", // iGEM standard URL
         content: education,
@@ -228,25 +225,42 @@ const Pages: MenuEntry[] = [
     section: "The project in detail",
     children: [
       {
-        name: "Experiments",
-        title: "Experiments and Lab Book",
-        path: "/experiments", // iGEM standard URL
-        content: experiments,
-        lead: "Protocols in enough detail for another team to repeat them.",
+        name: "Wet lab",
+        title: "Wet Lab",
+        path: "/wet-lab",
+        content: wetLab,
+        lead: "Making the molecule: construct design, assembly and production.",
       },
       {
-        name: "dsRNA modelling",
+        name: "RNA design",
         title: "RNA Design",
         path: "/software", // iGEM standard URL
         content: software,
         lead: "NectarDesigner: how we choose the sequence that silences the mite.",
       },
       {
-        name: "Yeast engineering",
-        title: "Yeast",
-        path: "/yeast",
-        content: yeast,
-        lead: "Why S. cerevisiae, and how we engineered it to make loop-ended dsRNA.",
+        name: "Parts",
+        title: "Parts",
+        path: "/parts", // iGEM standard URL
+        content: parts,
+        lead: "The modular loop-ended dsRNA part collection.",
+      },
+      {
+        // Was /experiments, an iGEM standard URL. Re-pathed per
+        // structure_source.md; if the 2026 standard list keeps /experiments,
+        // this has to move back or gain a redirect.
+        name: "Experiments & protocols",
+        title: "Wet Lab Experiments and Protocols",
+        path: "/wet-lab-experiments",
+        content: wetLabExperiments,
+        lead: "Protocols in enough detail for another team to repeat them, and why yeast is the chassis.",
+      },
+      {
+        name: "Lab book",
+        title: "Wet Lab Lab Book",
+        path: "/wet-lab-labbook",
+        content: wetLabLabbook,
+        lead: "The dated record of the wet lab.",
       },
     ],
   },
@@ -255,27 +269,25 @@ const Pages: MenuEntry[] = [
     section: "The project in detail",
     children: [
       {
-        name: "Experiments",
+        name: "Bee lab",
         title: "Bee Lab",
         path: "/bee-lab",
         content: beeLab,
         lead: "Working with live bees: delivery, dosing and the assays we had to invent.",
-        children: [
-          {
-            name: "Experiments, lab book",
-            title: "Bee Lab, Experiments and Lab Book",
-            path: "/bee-lab/notebook",
-            content: beeLabNotebook,
-            lead: "Bee lab protocols and the dated record.",
-          },
-        ],
       },
       {
-        name: "How to work with bees as an iGEM team",
-        title: "How to Work with Bees as an iGEM Team",
-        path: "/working-with-bees",
-        content: workingWithBees,
-        lead: "What we wish another team had told us before our first hive.",
+        name: "Experiments & protocols",
+        title: "Bee Lab Experiments and Protocols",
+        path: "/bee-lab-experiments",
+        content: beeLabExperiments,
+        lead: "The bee-lab methods, written to be followed.",
+      },
+      {
+        name: "Safety",
+        title: "Safety and Security",
+        path: "/project-safety", // per structure_source.md — verify against the standard URL list
+        content: safety,
+        lead: "Risks of our system, and what we did about each of them.",
       },
       {
         name: "Hardware",
@@ -290,6 +302,20 @@ const Pages: MenuEntry[] = [
         path: "/user-manual",
         content: userManual,
         lead: "How a beekeeper would actually use this.",
+      },
+      {
+        name: "Bee research guide (for iGEM teams)",
+        title: "How to Work with Bees as an iGEM Team",
+        path: "/working-with-bees",
+        content: workingWithBees,
+        lead: "What we wish another team had told us before our first hive.",
+      },
+      {
+        name: "Lab book",
+        title: "Bee Lab Lab Book",
+        path: "/bee-lab-labbook",
+        content: beeLabLabbook,
+        lead: "The dated record of the bee lab, 29 June to 25 September 2026.",
       },
     ],
   },
@@ -342,14 +368,6 @@ const Pages: MenuEntry[] = [
     hidden: true,
   },
   {
-    name: "Wet lab",
-    title: "Wet Lab",
-    path: "/wet-lab",
-    content: wetLab,
-    lead: "Making the molecule: construct design, assembly and production.",
-    hidden: true,
-  },
-  {
     name: "Dry lab / modelling",
     title: "Dry Lab and Modelling",
     path: "/model", // iGEM standard URL
@@ -365,14 +383,6 @@ const Pages: MenuEntry[] = [
         lead: "Colony and Varroa dynamics, and what treatment efficacy has to reach.",
       },
     ],
-  },
-  {
-    name: "Parts design",
-    title: "Parts",
-    path: "/parts", // iGEM standard URL
-    content: parts,
-    lead: "The modular loop-ended dsRNA part collection.",
-    hidden: true,
   },
   {
     name: "Sustainable development",

@@ -1,6 +1,6 @@
 > **Skeleton: structure only. No results, numbers or quotes yet.**
 
-NECTAR was built by a student team, with help from a lot of people who were
+NECTAR was built by **a student team**, with help from a lot of people who were
 under no obligation to give it. This section says who did what, and who helped.
 
 ## Who we are

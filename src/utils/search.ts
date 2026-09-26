@@ -43,6 +43,7 @@
 
 import { getPathMapping, type PageEntry } from "./getPathMapping";
 import { headingId } from "./headingId";
+import { CYCLES, LAB_NAME, cycleText } from "./dbtlCycles";
 import { STAKEHOLDERS } from "../data/stakeholders";
 import {
   EVENTS_BY_DATE,
@@ -290,6 +291,43 @@ function timelinePassages(path: string, page: PageEntry): Passage[] {
   });
 }
 
+/**
+ * The engineering cycles, as passages, one per cycle.
+ *
+ * Same reasoning as the two above, and more pressing: the cycles live in
+ * src/content/cycles/ rather than in the page, and they reach the page through
+ * the comb of hexagons, so the walk over the page source finds a paragraph and
+ * a component slot where four thousand words used to be. Without this, the
+ * single densest body of evidence on the wiki would be unfindable.
+ *
+ * The anchor is the cycle's own id, which is what the rest of the wiki already
+ * links to, and the gallery opens the cycle the fragment names. So a result
+ * lands on an opened hexagon showing the passage that matched, rather than on a
+ * closed one the reader then has to guess at.
+ */
+function cyclePassages(path: string, page: PageEntry): Passage[] {
+  const foldedTitle = fold(page.title);
+
+  return CYCLES.map((cycle) => {
+    const heading = `DBTL ${cycle.number}: ${cycle.question}`;
+    const text = toPlainText(
+      [LAB_NAME[cycle.lab], cycle.workstream, cycleText(cycle)].join("\n\n"),
+    );
+
+    return {
+      path,
+      title: page.title,
+      lead: page.lead,
+      heading,
+      anchor: cycle.id,
+      text,
+      foldedTitle,
+      foldedHeading: fold(heading),
+      foldedText: fold(text),
+    };
+  });
+}
+
 let index: Passage[] | null = null;
 
 /** Builds the index on first use, then reuses it for the session. */
@@ -316,6 +354,13 @@ function corpus(): Passage[] {
     if (timelineHost) {
       index.push(...timelinePassages(timelineHost[0], timelineHost[1]));
     }
+
+    // And the engineering cycles, which are Markdown but not this page's
+    // Markdown: they are separate files behind the comb.
+    const combHost = Object.entries(pages).find(([, page]) =>
+      /```component\s+dbtl-cycles\s*```/.test(page.content),
+    );
+    if (combHost) index.push(...cyclePassages(combHost[0], combHost[1]));
   }
   return index;
 }

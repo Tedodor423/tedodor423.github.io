@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# TypeScript incremental-build state: output, never source
+*.tsbuildinfo
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -38,6 +41,12 @@ dist-ssr
 # ---------------------------------------------------------------------------
 references/
 wiki-assets-source/
+
+# Local-only video for dev preview. Video NEVER ships from this repo: the
+# real thing goes to the iGEM Video Universe and is embedded from there.
+# Because this folder is ignored, CI builds without it and the deployed
+# page shows the component's fallback instead.
+public/local/
 
 # Per-user Claude Code settings
 .claude/settings.local.json

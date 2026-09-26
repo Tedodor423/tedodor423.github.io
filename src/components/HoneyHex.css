@@ -1,0 +1,154 @@
+/* The HONEY framework figure that opens the human practices page.
+ *
+ * Same tokens as everything else: honey letter cells on ink strokes, the comb
+ * edge in burnt honey, violet for the cell you are pointing at — the same
+ * lit-cell convention the engineering comb and the old loop figure use. The
+ * written column sits left of the comb at reading width and stacks above it
+ * on a narrow screen. The only motion is the fill change on the lit cell,
+ * mirrored in the list.
+ */
+
+.honey-hex {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 26rem);
+  gap: 1.5rem 3rem;
+  align-items: center;
+  /* Breaks the 36rem measure the same way the map and the loop before it do:
+   * prose beside a figure needs the room. Breaks out of the centred column
+   * symmetrically. */
+  width: min(64rem, calc(100vw - 4rem));
+  max-width: none;
+  margin-block: 1rem 2rem;
+  margin-inline: calc((100% - min(64rem, calc(100vw - 4rem))) / 2);
+}
+
+/* The opening band has no heading above this one, so the h2 does not need
+ * the usual clearance from a previous section. */
+.honey-hex h2 {
+  margin-top: 0;
+}
+
+.hh-copy {
+  min-width: 0;
+}
+
+/* ---------- the comb ---------- */
+
+.hh-frame {
+  position: relative;
+  border: 1px solid var(--rule);
+  background: var(--surface-muted);
+  padding: 0.5rem;
+}
+
+.hh-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.hh-comb {
+  fill: var(--surface);
+  stroke: var(--comb-edge);
+  stroke-width: 2.5;
+}
+
+.hh-cell {
+  cursor: pointer;
+  outline: none;
+}
+
+.hh-hex {
+  fill: var(--honey);
+  stroke: var(--ink);
+  stroke-width: 2;
+  /* The lit cell grows enough to hold its whole word. Scaled about its own
+   * centre, so each corner swells in place. */
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    fill 120ms linear,
+    transform 160ms ease;
+}
+
+.hh-cell.is-lit .hh-hex,
+.hh-cell:focus-visible .hh-hex {
+  fill: var(--violet);
+  transform: scale(1.25);
+}
+
+.hh-cell:focus-visible .hh-hex {
+  stroke-width: 4;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hh-hex {
+    transition: fill 120ms linear;
+  }
+}
+
+/* At rest the cell shows the letter; lit, the letter gives way to the word
+ * it is short for. Both are painted, opacity does the swap. */
+.hh-letter {
+  font-family: var(--font-display);
+  font-size: 44px;
+  fill: var(--ink);
+  pointer-events: none;
+  transition: opacity 120ms linear;
+}
+
+.hh-word {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 19px;
+  fill: var(--surface);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 120ms linear;
+}
+
+.hh-cell.is-lit .hh-letter,
+.hh-cell:focus-visible .hh-letter {
+  opacity: 0;
+}
+
+.hh-cell.is-lit .hh-word,
+.hh-cell:focus-visible .hh-word {
+  opacity: 1;
+}
+
+/* ---------- the centre panel ---------- */
+
+/* Overlaid on the comb's interior, so appearing and disappearing moves no
+ * layout. It only repeats what the list already says. */
+.hh-centre {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 52%;
+  text-align: center;
+  pointer-events: none;
+}
+
+.hh-centre p {
+  margin: 0;
+}
+
+/* The resting honey pot. A placeholder at the team's request, to be replaced
+ * by a proper drawing; sized against the frame so it scales with the comb. */
+.hh-emoji {
+  font-size: clamp(2.5rem, 6vw, 3.5rem);
+  line-height: 1;
+}
+
+@media (max-width: 52rem) {
+  .honey-hex {
+    grid-template-columns: 1fr;
+  }
+
+  .hh-frame {
+    max-width: 24rem;
+    margin-inline: auto;
+  }
+}

@@ -1,0 +1,116 @@
+/* The home-page hero: video behind, the title set straight over it, arrow
+ * at the foot.
+ *
+ * Same line language as the menu bar it sits under: solid surfaces on hard
+ * ink rules, no shadow, no scrim, nothing translucent. The title is bare
+ * honey type on the footage. brand.css bans honey as type on the light
+ * surfaces (1.6:1 on white); here the ground is the ink fallback below and
+ * the dark hive footage, where ink/honey contrast is 13.8:1 — the same
+ * pairing as the menu bar, inverted.
+ */
+
+.home-hero {
+  position: relative;
+  /* The menu bar above is sticky and in flow, so bar + hero = one viewport.
+   * --nav-height is measured onto this element by HomeHero.tsx; the fallback
+   * only matters for the first paint. */
+  height: calc(100dvh - var(--nav-height, 5rem));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  /* The ground behind the video: what you see while it loads, and the whole
+   * hero when the local file is absent (CI, a fresh clone). Ink, not wax,
+   * because the honey title sits directly on it. */
+  background: var(--ink);
+  /* The same rule the menu bar closes on, so the hero reads as part of the
+   * same masthead when the page body slides up under it. */
+  border-bottom: 0.5rem solid var(--ink);
+}
+
+.home-hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.home-hero-title {
+  position: relative;
+  text-align: center;
+  padding: 0 1rem;
+  max-width: min(56rem, 100%);
+}
+
+.home-hero-title h1 {
+  /* The wordmark's face, at masthead size: this is the loudest thing on the
+   * wiki and it is saying the project's name. Honey, per the header comment. */
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  line-height: 1.05;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin: 0;
+  color: var(--honey);
+}
+
+.home-hero-title p {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: clamp(1.15rem, 2.2vw, 1.6rem);
+  margin: 0.75rem 0 0;
+  color: var(--honey);
+}
+
+/* The missing-file note keeps a solid panel of its own: it is a placeholder,
+ * in the same dress as the TODO blockquotes, not part of the hero design. */
+.home-hero-missing {
+  font-size: 0.95rem;
+  text-align: left;
+  color: var(--text);
+  background: var(--surface-muted);
+  border-left: 5px solid var(--honey);
+  border-radius: var(--radius);
+  padding: 0.5rem 1rem;
+  margin: 1.5rem auto 0;
+  max-width: 36rem;
+}
+
+/* The way down. Held invisible for half a second so the title lands first,
+ * then shown; it does not bounce or drift, it is a door, not a firework. */
+.home-hero-arrow {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3.25rem;
+  height: 3.25rem;
+  padding: 0.9rem 0.75rem;
+  background: var(--honey);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  cursor: pointer;
+  opacity: 0;
+  animation: home-hero-arrow-in 0.3s ease 0.5s forwards;
+}
+
+.home-hero-arrow svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes home-hero-arrow-in {
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-hero-arrow {
+    animation: none;
+    opacity: 1;
+  }
+}
