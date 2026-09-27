@@ -54,19 +54,21 @@ jobs:
 
       # --- Dev-only media ---------------------------------------------------
       # The home hero and the Varroa slide load their clips from /local/, and
-      # the engineering comb falls back to /local/eng-icons/ while the icons
-      # are not yet on static.igem.wiki. That is public/local/ in the source
+      # the engineering comb and the HONEY badge fall back to /local/ while
+      # their icons and logo are not yet on static.igem.wiki (the bee scene
+      # artwork and the comb photo already are). That is public/local/ in the source
       # tree, gitignored so nothing heavy can reach the iGEM build (5 MB
       # ceiling; video must come from the Video Universe). The sources are
       # tracked under wiki-assets-source/images_dev/ for the moment, so this
       # preview puts them where the components look. Copy only what the
       # components reference. Remove this step once the clips are embedded
-      # from the Video Universe and the icons answer from static.igem.wiki.
+      # from the Video Universe and the icons and logo answer from static.igem.wiki.
       - name: Add dev-only media
         run: |
           mkdir -p dist/local/eng-icons
           cp wiki-assets-source/images_dev/bees_entering_hive_short.mp4 dist/local/
           cp wiki-assets-source/images_dev/mite_back.mp4 dist/local/
+          cp wiki-assets-source/images_dev/oxford-igem-logo.png dist/local/
           cp wiki-assets-source/images_dev/eng-icons-upload/*.svg dist/local/eng-icons/
 
       - uses: actions/upload-pages-artifact@v3

@@ -67,10 +67,18 @@ const R = 46;
  * wiki-assets-source/images_dev/ via the images-dev plugin in vite.config.ts,
  * the same arrangement as the stakeholder photos. Its navy fill is slightly
  * transparent, so it sits on a honey disc rather than straight on the comb
- * edge. */
+ * edge.
+ *
+ * TEMPORARY FALLBACK, as for the comb icons (src/data/cycleIcons.ts). Until
+ * the upload is done, a published build that cannot load the static.igem.wiki
+ * URL tries the copy in the gitignored public/local/, which the GitHub Pages
+ * preview fills from wiki-assets-source/images_dev/ and the wiki's own CI
+ * never has. Once the static.igem.wiki URL answers, drop LOGO_FALLBACK and
+ * the onError below. */
 const LOGO_SRC = import.meta.env.DEV
   ? `${import.meta.env.BASE_URL}images-dev/oxford-igem-logo.png`
   : "https://static.igem.wiki/teams/6391/wiki/assets/oxford-igem-logo.avif";
+const LOGO_FALLBACK = `${import.meta.env.BASE_URL}local/oxford-igem-logo.png`;
 
 function cornerAt(i: number): { x: number; y: number } {
   const a = (Math.PI / 180) * (-90 + i * 60);
@@ -79,6 +87,7 @@ function cornerAt(i: number): { x: number; y: number } {
 
 export function HoneyHex() {
   const [lit, setLit] = useState<number | null>(null);
+  const [logo, setLogo] = useState<string | undefined>(LOGO_SRC);
 
   return (
     <figure className="honey-hex">
@@ -123,11 +132,14 @@ export function HoneyHex() {
               <g className="hh-logo">
                 <circle cx={p.x} cy={p.y} r={44} className="hh-logo-disc" />
                 <image
-                  href={LOGO_SRC}
+                  href={logo}
                   x={p.x - 38}
                   y={p.y - 38}
                   width={76}
                   height={76}
+                  onError={() =>
+                    setLogo((s) => (s === LOGO_FALLBACK ? undefined : LOGO_FALLBACK))
+                  }
                 />
               </g>
             );
