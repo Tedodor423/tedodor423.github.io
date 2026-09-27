@@ -1,0 +1,26 @@
+/* The bee counter reset, bottom right of the bee lab page. Deliberately
+ * quiet: it is housekeeping for a game, not part of the page's content. It
+ * takes its colour from the band it lands in, so it reads on wax and on comb
+ * alike. */
+
+.bee-reset {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2.5rem;
+}
+
+.bee-reset-button {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  color: inherit;
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: var(--radius);
+  padding: 0.3rem 0.7rem;
+  opacity: 0.7;
+}
+
+.bee-reset-button:hover,
+.bee-reset-button:focus-visible {
+  opacity: 1;
+}

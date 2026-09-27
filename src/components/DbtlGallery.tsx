@@ -16,6 +16,7 @@ import {
   type Lab,
 } from "../utils/dbtlCycles";
 import { layOutComb, slantOf } from "../utils/combLayout";
+import { cycleIcon } from "../data/cycleIcons";
 import { DbtlFamilyPanel } from "./DbtlFamilyPanel";
 import "./DbtlGallery.css";
 
@@ -41,6 +42,25 @@ import "./DbtlGallery.css";
  * replace the DOM node and the browser would have nothing to animate between, so
  * the cell would snap to its new size while its neighbours glided.
  */
+
+/** A hexagon's drawn icon. Decorative: the name under it says the same thing,
+ * so it carries no alt text. Falls back once to the local copy while the
+ * upload is pending (see cycleIcons.ts), then hides rather than show a broken
+ * image. */
+function CycleIcon({ familyId }: { familyId: string }) {
+  const icon = cycleIcon(familyId);
+  const [src, setSrc] = useState(icon?.src);
+  if (!icon || !src) return null;
+  return (
+    <img
+      className="dbtl-shut-icon"
+      src={src}
+      alt=""
+      draggable={false}
+      onError={() => setSrc(src === icon.fallback ? undefined : icon.fallback)}
+    />
+  );
+}
 
 /** The family a `#cycle-3-4` fragment belongs to, and the cycle it named. */
 function findByHash(hash: string): { family: string; cycle: string } | null {
@@ -122,17 +142,13 @@ export function DbtlGallery() {
   };
 
   /* Clicking away closes: on the comb between the cells, on the page beside it,
-   * anywhere that is not the open panel itself. Clicking another hexagon is not
-   * "away" (it opens that one instead), and nor is reaching for the lab filter. */
+   * the lab buttons, anywhere that is not the open panel itself. Clicking another
+   * hexagon is not "away": it opens that one instead. */
   useEffect(() => {
     if (!openId) return;
     const away = (event: PointerEvent) => {
       const spot = event.target as Element | null;
-      if (
-        spot?.closest('[data-state="open"]') ||
-        spot?.closest(".dbtl-shut") ||
-        spot?.closest(".dbtl-filters")
-      ) {
+      if (spot?.closest('[data-state="open"]') || spot?.closest(".dbtl-shut")) {
         return;
       }
       handBack.current = openId;
@@ -344,9 +360,7 @@ export function DbtlGallery() {
                     }}
                   >
                     <span className="dbtl-shut-body">
-                      {/* The short half of the name, with the other half over it.
-                          The question is too long for a box this narrow, so it is
-                          in the preview below and on the opened panel. */}
+                      <CycleIcon familyId={family.id} />
                       {splitName(family.name).lead ? (
                         <span className="dbtl-shut-num">
                           {splitName(family.name).lead}
@@ -364,16 +378,10 @@ export function DbtlGallery() {
                             {family.question}
                           </span>
                         ) : null}
-                        {/* Only where there is more than one: a single hexagon
-                            listing "B1" tells the reader nothing the kicker has
-                            not already said. */}
-                        {family.cycles.length > 1 ? (
-                          <span className="dbtl-shut-turns">
-                            {family.cycles.map((one) => (
-                              <span key={one.id}>{one.number}</span>
-                            ))}
-                          </span>
-                        ) : null}
+                        <span className="dbtl-shut-turns">
+                          {family.cycles.length}{" "}
+                          {family.cycles.length === 1 ? "cycle" : "cycles"}
+                        </span>
                       </span>
                     </span>
                   </button>

@@ -50,12 +50,42 @@ function stakeholderPhotosDevServer(): Plugin {
   };
 }
 
+/* Same arrangement for the figure artwork whose sources live in the
+ * gitignored wiki-assets-source/images_dev/: the DEV server answers
+ * <base>/images-dev/<basename>.<ext> straight from that folder, so a figure
+ * can show an asset before its upload. The published site references only the
+ * static.igem.wiki URL the upload will have (the tool keeps the basename). */
+function imagesDevServer(): Plugin {
+  const dir = join(__dirname, "wiki-assets-source", "images_dev");
+  const TYPES = {
+    png: "image/png",
+    svg: "image/svg+xml",
+    jpg: "image/jpeg",
+  } as const;
+  const middleware: Connect.NextHandleFunction = (req, res, next) => {
+    const url = (req.url ?? "").split("?")[0];
+    const match = url.match(/\/images-dev\/([a-z0-9-]+)\.(png|svg|jpg)$/);
+    if (!match) return next();
+    const file = join(dir, `${match[1]}.${match[2]}`);
+    if (!existsSync(file)) return next();
+    res.setHeader("Content-Type", TYPES[match[2] as keyof typeof TYPES]);
+    res.end(readFileSync(file));
+  };
+  return {
+    name: "images-dev-server",
+    apply: "serve",
+    configureServer(server) {
+      server.middlewares.use(middleware);
+    },
+  };
+}
+
 // https://vitejs.dev/config/
 export default () => {
   const env = loadEnv("dev", process.cwd());
   return defineConfig({
     base: `/${stringToSlug(env.VITE_TEAM_NAME)}/`,
-    plugins: [react(), stakeholderPhotosDevServer()],
+    plugins: [react(), stakeholderPhotosDevServer(), imagesDevServer()],
     server: { port: 5175 },
     preview: { port: 5175 },
   });

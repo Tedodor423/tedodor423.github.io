@@ -1,29 +1,20 @@
-NECTAR is an **end-to-end platform** for designing, validating, producing and
-deploying RNAi interventions. _Varroa destructor_ is the first real-world case
-study through which we demonstrate and stress-test the platform.
-
-> **FIGURE: hero.** The pipeline in one image, readable in ten seconds:
-> pest → target RNA → NECTAR designs it → yeast produces it → formulation
-> delivers it → RNAi silences the pest. Two ways in underneath, one into
-> [the project](/project-description), one straight to [the evidence](/results).
-
-[Explore NECTAR](/project-description) · [See our results](/results)
-
-## Why this matters
-
-Pests cost us an enormous amount, the chemistry we use against them is **running
-out of road**, and the damage that chemistry does is not confined to the field it
-was sprayed on.
-
 ```component
-headline-stats
+bee-importance
 ```
 
-> **TODO —** Three claims maximum here; the component shows four, and every
-> tile is `[FLAG]` because our own jamboree slide is not a source. Cite each in
-> `src/components/HeadlineStats.tsx` and swap the tag to `[LIT]`, or drop the
-> tile. The global pesticide-spend figure the team wants alongside these is
-> still to be pulled from the human-practices work. Owner: HP.
+```component
+varroa-slide
+```
+
+> **TODO —** Slide three shows the jamboree deck's "over $2 bn a year" as
+> `[FLAG]`: no published source has been traced for it. Find one, or replace
+> it with the sourced "over $600 million" estimate for the June 2024 to March
+> 2025 US losses (Project Apis m., 3 April 2025), and swap the tag in
+> `src/components/VarroaSlide.tsx`.
+> The deck's "100% of agricultural land at risk of pesticide pollution by
+> 2050" is still uncited and off the page; it returns as a slide once sourced.
+> The sections below are the old skeleton, kept until they become slides or
+> move to [the project description](/project-description). Owner: HP.
 
 ## Why RNAi is not already everywhere
 
@@ -53,19 +44,6 @@ against _Varroa_ is anticipated by prior patents, and we say so on
 
 > **FIGURE: system diagram.** The four-part stack as one image, each stage
 > labelled with the barrier it answers.
-
-## Our first use case
-
-Varroa → bee → pollen patty → nurse bee and larva → mite. A mite feeding on a
-bee inside a sealed hive is an awkward place to deliver an RNA, and therefore a
-good place to find out **whether the platform works**.
-
-```component
-varroa-map
-```
-
-Reported colony losses by country and year. [Case studies](/case-studies) reads
-the map and explains what it does and does not show.
 
 ## What we actually achieved
 

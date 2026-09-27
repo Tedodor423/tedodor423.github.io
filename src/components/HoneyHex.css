@@ -22,14 +22,14 @@
   margin-inline: calc((100% - min(64rem, calc(100vw - 4rem))) / 2);
 }
 
-/* The opening band has no heading above this one, so the h2 does not need
- * the usual clearance from a previous section. */
-.honey-hex h2 {
-  margin-top: 0;
-}
-
+/* The copy opens the band, so its first paragraph does not need the usual
+ * clearance from a previous section. */
 .hh-copy {
   min-width: 0;
+}
+
+.hh-copy > p:first-child {
+  margin-top: 0;
 }
 
 /* ---------- the comb ---------- */
@@ -51,6 +51,20 @@
   fill: var(--surface);
   stroke: var(--comb-edge);
   stroke-width: 2.5;
+}
+
+/* The sixth corner: the team badge on a honey disc. The disc takes the letter
+ * cells' honey-on-ink so the corner reads as part of the comb, and it backs
+ * the badge's slightly transparent navy so the comb edge cannot show through
+ * it. Inert, unlike the five cells. */
+.hh-logo {
+  pointer-events: none;
+}
+
+.hh-logo-disc {
+  fill: var(--honey);
+  stroke: var(--ink);
+  stroke-width: 2;
 }
 
 .hh-cell {

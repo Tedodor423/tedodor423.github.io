@@ -36,8 +36,9 @@ function trail(entries: MenuEntry[], pathname: string): Crumb[] | null {
  * below, so repeating it here adds nothing. Every crumb is a link; a menu
  * group, which has no page of its own, links to its first page.
  *
- * Renders nothing on the home page, and nothing for a URL with no page behind
- * it, so the Not Found screen stays clean.
+ * Renders nothing on the home page, nothing when the trail would be "Home"
+ * alone, and nothing for a URL with no page behind it, so the Not Found screen
+ * stays clean.
  */
 export function Breadcrumbs() {
   const { pathname } = useLocation();
@@ -51,6 +52,9 @@ export function Breadcrumbs() {
   // crumb would point back at the page itself. Drop it.
   const ancestors = rest.slice(0, -1);
   if (ancestors[ancestors.length - 1]?.path === pathname) ancestors.pop();
+
+  // "Home" on its own says nothing the logo does not already.
+  if (ancestors.length === 0) return null;
 
   const crumbs: Crumb[] = [{ name: "Home", path: "/" }, ...ancestors];
 

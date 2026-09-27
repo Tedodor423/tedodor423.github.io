@@ -129,12 +129,17 @@
 
 /* The stakeholder map's standfirst and filter caption set page inks for the
    white page; on the comb they take the band's light ink like body text does.
-   The map's canvas and panel are paper like the blockquotes, and set their
-   own colours in StakeholderMap.css. */
-[data-comb="on"] [data-band="comb"] .sm-standfirst,
-[data-comb="on"] [data-band="comb"] .sm-filter-title,
-[data-comb="on"] [data-band="comb"] .sm-filter-key {
-  color: var(--comb-ink);
+   Narrow screens only: from 48rem up the map is a fullscreen stage and this
+   text sits inside solid paper panels, which restate their own colours in
+   StakeholderMap.css. The map's canvas and card are paper like the
+   blockquotes and do the same at every width. */
+@media (max-width: 47.99rem) {
+  [data-comb="on"] [data-band="comb"] .sm-standfirst,
+  [data-comb="on"] [data-band="comb"] .sm-filter-key,
+  [data-comb="on"] [data-band="comb"] .sm-head .hp-stat-value,
+  [data-comb="on"] [data-band="comb"] .sm-head .hp-stat-label {
+    color: var(--comb-ink);
+  }
 }
 
 /* ---------- the switch ---------- */

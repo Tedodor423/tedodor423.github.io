@@ -127,9 +127,9 @@ export function DbtlFamilyPanel({ family, startAt, onClose }: PanelProps) {
   const goTo = (index: number) =>
     setAt(Math.max(0, Math.min(stops.length - 1, index)));
 
-  /* A family that holds several turns and has no overarching question written yet
-   * carries a TODO in the family file saying so. There the name is the heading
-   * rather than a kicker above a repeat of itself. */
+  /* The heading is the question and nothing else: the lab is already said by the
+   * colour of the rule round the panel. A family with no question written yet
+   * (the family file carries a TODO for it) falls back to its name. */
   const asked = Boolean(family.question);
   const turn = family.cycles.findIndex((one) => one.id === stop.cycle);
 
@@ -150,7 +150,6 @@ export function DbtlFamilyPanel({ family, startAt, onClose }: PanelProps) {
 
       <div className="dbtl-panel">
         <header className="dbtl-panel-head">
-          <p className="dbtl-panel-kicker">{splitName(family.name).lead}</p>
           <h3>{asked ? family.question : splitName(family.name).rest}</h3>
         </header>
 

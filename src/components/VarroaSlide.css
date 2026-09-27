@@ -1,0 +1,300 @@
+/* Slide three of the home page: the mite, then the map.
+ *
+ * Two screens in one. First the mite's footage, coated in ink so the two
+ * numbers over it read, the numbers counting up as on slide two. Then, on
+ * the next wheel tick, the footage rides off to the left and the colony-loss
+ * map rides in from the right while the numbers shrink into a bar across the
+ * top. The ride is the scroll: the stage pins for one window of travel and
+ * --p, 0 to 1, is how far through it the reader is. VarroaSlide.tsx sets it,
+ * and snaps the window to either end so nobody is left half way.
+ *
+ * Same line language as the rest of the page: the hero's honey-on-dark for
+ * the numbers, the masthead's ink-on-honey for the qualifying words, the wax
+ * paper for the map. The scrim is a flat coat of ink at 55%, not a gradient:
+ * the footage is dark already and only needs to be a little darker.
+ *
+ * Mobile first, like slide two. By default the stats sit over the footage and
+ * the map follows underneath, and nothing pins; the pinned ride is only for
+ * a screen wide and tall enough to hold it, for a reader who has not asked
+ * for reduced motion.
+ */
+
+.varroa-slide {
+  margin-inline: calc(50% - 50vw);
+}
+
+.page-band:has(> .container > .markdown-page > .varroa-slide) {
+  padding-block: 0;
+  overflow-x: clip;
+}
+
+/* ---------- the stage, stacked ---------- */
+
+.vs-stage {
+  /* How far through the ride, 0 (the mite) to 1 (the map). Stays 0 unless
+     the stage is pinned; the sizes below interpolate on it. */
+  --p: 0;
+  /* The height of the numbers once they are a bar, which the map panel keeps
+     clear at its top. A first guess; VarroaSlide.tsx measures the bar at the
+     end of the ride and sets the real figure. */
+  --vs-bar: 9rem;
+  /* The numbers at full size. Clamped to the window, since "1.7 million" in
+     the display face has to fit a phone. */
+  --vs-figure-big: clamp(2.4rem, 8.5vw, 4.5rem);
+  --vs-words-big: clamp(1.15rem, 3.2vw, 1.5rem);
+  --vs-when-big: clamp(0.95rem, 2.4vw, 1.2rem);
+
+  position: relative;
+  display: grid;
+  grid-template-columns: 100%;
+  background: var(--ink);
+  border-bottom: 0.5rem solid var(--ink);
+}
+
+/* Stacked, the strip is no box at all: its two panels are the stage's own
+   grid items, the footage in row one under the numbers and the map in row
+   two. */
+.vs-strip {
+  display: contents;
+}
+
+.vs-video {
+  grid-area: 1 / 1;
+  position: relative;
+  min-height: 70dvh;
+  overflow: hidden;
+  background: var(--ink);
+}
+
+.vs-video video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.vs-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgb(0 0 0 / 0.55);
+}
+
+/* The map's panel. The figure inside is VarroaMap's slide form, which brings
+   no plate of its own, so the gutter is this padding. */
+.vs-map {
+  grid-area: 2 / 1;
+  padding: 1rem 1rem 1.5rem;
+  background: var(--surface-muted);
+  color: var(--text);
+}
+
+/* ---------- the numbers ---------- */
+
+.vs-stats {
+  grid-area: 1 / 1;
+  align-self: center;
+  position: relative;
+  z-index: 1;
+  padding: 3rem 1rem;
+  color: var(--surface-muted);
+  text-align: center;
+}
+
+/* The running head, honey on the footage, and the first line of the bar. */
+.varroa-slide .vs-title {
+  font-family: var(--font-display);
+  font-size: calc(1.15rem * (1 - var(--p)) + 0.8rem * var(--p));
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--honey);
+  margin: 0 0 calc(1.75rem * (1 - var(--p)) + 0.5rem * var(--p));
+  border-bottom: 0;
+}
+
+.vs-pair {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: calc(2.5rem * (1 - var(--p)) + 1rem * var(--p))
+    calc(4rem * (1 - var(--p)) + 3rem * var(--p));
+}
+
+.vs-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 24rem;
+  color: var(--surface-muted);
+}
+
+/* The heading is the whole claim, read top to bottom: the qualifying word,
+ * the number, the words. The selector outweighs .markdown-page h3. */
+.varroa-slide .vs-claim {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--surface-muted);
+}
+
+/* The qualifying words, on the masthead's honey. */
+.vs-when {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: calc(var(--vs-when-big) * (1 - var(--p)) + 0.7rem * var(--p));
+  line-height: 1.55;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+  margin-bottom: calc(0.6rem * (1 - var(--p)) + 0.2rem * var(--p));
+}
+
+.vs-when span {
+  background: var(--honey);
+  padding: 0.22em 0.5em 0.18em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* The number: the wordmark's face in honey, the hero's own pairing. It
+ * counts up while the reader watches, so tabular figures where the face has
+ * them. */
+.vs-figure {
+  font-family: var(--font-display);
+  font-size: calc(var(--vs-figure-big) * (1 - var(--p)) + 1.7rem * var(--p));
+  line-height: 0.95;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+  color: var(--honey);
+}
+
+.vs-words {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: calc(var(--vs-words-big) * (1 - var(--p)) + 0.85rem * var(--p));
+  line-height: 1.15;
+  margin-top: calc(0.5rem * (1 - var(--p)) + 0.15rem * var(--p));
+  max-width: 18em;
+}
+
+/* The sentence under each number. It fades over the first half of the ride
+ * and leaves the layout at the midpoint, so the bar the numbers become is
+ * numbers and references only; the references never go. */
+.vs-note {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0.8rem 0 0;
+  max-width: 28em;
+  opacity: calc(1 - 2 * var(--p));
+  /* The light wax rule tone: wax at a step down, for the smaller type on
+     ink, where full wax would shout over the number. 11.7:1 on ink. */
+  color: var(--rule);
+}
+
+.vs-stage.is-map .vs-note {
+  display: none;
+}
+
+.vs-refs {
+  font-family: var(--font-mono);
+  font-size: calc(0.8rem * (1 - var(--p)) + 0.68rem * var(--p));
+  line-height: 1.5;
+  color: var(--rule);
+  margin: calc(2rem * (1 - var(--p)) + 0.5rem * var(--p)) auto 0;
+  max-width: 60rem;
+}
+
+/* The placeholder for the footage while it is hosted locally: the same
+   paper block the hero uses for its own. */
+.vs-missing {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  text-align: left;
+  color: var(--text);
+  background: var(--surface-muted);
+  border-left: 5px solid var(--honey);
+  border-radius: var(--radius);
+  padding: 0.5rem 1rem;
+  margin: 1.5rem auto 0;
+  max-width: 36rem;
+}
+
+/* ---------- the ride ---------- */
+
+@media (min-width: 48rem) and (min-height: 36rem) and (prefers-reduced-motion: no-preference) {
+  /* One window of travel: the stage pins at the top of the track and the
+     ride runs as the reader scrolls the second window's worth. */
+  .vs-track {
+    height: 200dvh;
+  }
+
+  .vs-stage {
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    display: block;
+    overflow: hidden;
+  }
+
+  /* The strip is two windows wide, footage then map, and slides one window
+     to the left over the ride. */
+  .vs-strip {
+    display: flex;
+    position: absolute;
+    inset: 0;
+    width: 200%;
+    transform: translateX(calc(-50% * var(--p)));
+  }
+
+  .vs-video,
+  .vs-map {
+    flex: none;
+    width: 50%;
+    height: 100%;
+    min-height: 0;
+  }
+
+  .vs-video {
+    grid-area: auto;
+  }
+
+  /* The map keeps the bar clear at its top and scrolls inside itself if the
+     window is shorter than the whole figure. */
+  .vs-map {
+    grid-area: auto;
+    overflow-y: auto;
+    padding: var(--vs-bar) 1rem 1rem;
+  }
+
+  /* The figure is exactly the panel under the bar, and its frame, the room
+     the map has, is the height the strip of controls leaves. Making the frame
+     a size container is what lets the map and its column size themselves to
+     that room with 100cqh (VarroaMap.css). */
+  .vs-map > .varroa-map--slide {
+    height: 100%;
+  }
+
+  .vs-map .vm-frame {
+    flex: 1 1 auto;
+    min-height: 0;
+    container-type: size;
+  }
+
+  /* From centred over the footage to a bar across the top. Position, size
+     and the ink behind it all follow --p. */
+  .vs-stats {
+    grid-area: auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(50% * (1 - var(--p)));
+    transform: translateY(calc(-50% * (1 - var(--p))));
+    padding: calc(3rem * (1 - var(--p)) + 0.75rem * var(--p)) 1rem;
+    background: rgb(0 0 0 / var(--p));
+  }
+}

@@ -6,33 +6,21 @@ import { STAGE_NAME, STAGE_ORDER, type StageKey } from "../utils/dbtlCycles";
  * The band is quartered, one quarter per stage, with a chevron on each boundary so
  * the ring reads as a cycle and not as a pie chart.
  *
- * IT TURNS, a quarter turn per stage, so the stage you are reading sits at the top.
- * Each label is pre-rotated by exactly the amount the dial's own turn cancels when
- * its quarter reaches the top, so the current stage is always the horizontal,
- * readable one and the others lie on their sides. That is the point of a dial:
- * position tells you where you are before you have read anything.
+ * IT STAYS STILL. Design is always at the top, Build on the right, Test at the
+ * bottom and Learn on the left, and the current stage is shown by filling its
+ * quarter. An earlier version turned the dial to bring the current stage to the
+ * top; that moved every target the reader might want to click next, so it went.
+ * The top and bottom words are set level and the side words run along the band.
  *
  * WHERE THE QUARTERS SIT, and why it matters. They are centred on the top, right,
- * bottom and left, with their boundaries on the diagonals. That makes the turn a
- * multiple of ninety degrees and leaves Design, the first stage, at zero: the dial
- * then reads as the same flat-top hexagon as the comb around it. Cut the other way
- * round, with the quarters centred on the diagonals, every position would sit at
- * fifteen or forty-five degrees and the dial would look permanently crooked inside
- * its own slot. Four stages will not divide a six-sided shape evenly, so the two
- * side positions still come out pointy-top; that is a dial turning, not a mistake.
+ * bottom and left, with their boundaries on the diagonals, which leaves the dial
+ * as the same flat-top hexagon as the comb around it. Cut the other way round,
+ * with the quarters centred on the diagonals, the dial would look crooked inside
+ * its own slot. Four stages will not divide a six-sided shape evenly, so the top
+ * and bottom quarters span two corners each and the side ones a single point.
  *
- * WHAT ROTATES. The <svg> element itself, about the centre of its own box, which is
- * the one rotation CSS does without any argument about reference boxes: an SVG laid
- * out by HTML takes `transform-origin: center` exactly as a div would. Doing it on
- * an inner <g> instead means relying on `transform-box: view-box`, where the origin
- * resolves against the viewBox in some browsers and against the group's bounding
- * box in others, and the dial swings on an arc rather than turning on the spot.
- * The box is square for the same kind of reason: a flat-top hexagon is taller than
- * it is wide once turned ninety degrees, so a box shaped to fit it upright would
- * clip it halfway round.
- *
- * The number in the middle is an HTML span over the top, not part of the drawing,
- * so it stays upright while everything behind it turns.
+ * The number in the middle is an HTML span over the top, not part of the
+ * drawing.
  */
 
 /* Geometry, in viewBox units. A flat-top hexagon of circumradius R is 2R wide and
@@ -126,21 +114,17 @@ const SEAT: Array<{ x: number; y: number }> = [
 const CORNER = (CROSS * Math.SQRT2 * (1 + HOLE)) / 2;
 
 interface DialProps {
-  /** Which stage is current. The dial turns to put this one at the top. */
+  /** Which stage is current. Its quarter is filled. */
   current: StageKey;
   /** Which stage is under the cursor, here or in the text beside it. */
   lit: StageKey | null;
   onLight: (stage: StageKey | null) => void;
   onPick: (stage: StageKey) => void;
-  /** Shown in the middle, which does not turn. */
+  /** Shown in the middle. */
   label: string;
 }
 
 export function DbtlDial({ current, lit, onLight, onPick, label }: DialProps) {
-  const index = STAGE_ORDER.indexOf(current);
-  // A quarter turn per stage, and none at all for the first one.
-  const turn = -90 * index;
-
   return (
     <div className="dbtl-dial">
       {/* Pointer-driven and hidden from assistive technology on purpose: every
@@ -150,17 +134,9 @@ export function DbtlDial({ current, lit, onLight, onPick, label }: DialProps) {
         className="dbtl-dial-ring"
         viewBox="-104 -104 208 208"
         aria-hidden="true"
-        style={{ transform: `rotate(${turn}deg)` }}
       >
         {STAGE_ORDER.map((stage, i) => {
           const seat = SEAT[i];
-          /* Whichever quarter is two steps round from the current one has swung
-           * to the bottom, where its pre-rotation leaves it upside down. Turn that
-           * one word the rest of the way so it reads. It snaps rather than
-           * animating, because it is set as an attribute on the text and nothing
-           * transitions it: mid-turn is exactly when a word spinning on its own
-           * axis would look wrong. */
-          const upsideDown = (i - index + 4) % 4 === 2;
           return (
             <g
               key={stage}
@@ -176,11 +152,10 @@ export function DbtlDial({ current, lit, onLight, onPick, label }: DialProps) {
                 className="dbtl-dial-word"
                 textAnchor="middle"
                 dominantBaseline="central"
-                /* Pre-rotated so the dial's own turn cancels it exactly when this
-                   quarter reaches the top, plus a half turn when it is at the
-                   bottom and would otherwise be upside down. */
+                /* Level at the top and bottom; along the band at the sides,
+                   reading downwards on the right and upwards on the left. */
                 transform={`translate(${n(seat.x)} ${n(seat.y)}) rotate(${
-                  90 * i + (upsideDown ? 180 : 0)
+                  [0, 90, 0, -90][i]
                 })`}
               >
                 {STAGE_NAME[stage].toUpperCase()}

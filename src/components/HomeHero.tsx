@@ -1,4 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { REDUCED_MOTION, glideTo } from "../utils/glide";
+import { useDeckRests } from "../utils/deck";
 import "./HomeHero.css";
 
 /* The home page opens on this and nothing else: the menu bar, the hive
@@ -14,55 +16,24 @@ import "./HomeHero.css";
  * only plays on a machine that has the file; anywhere else the hero keeps
  * its solid surface and says so under the title.
  *
- * The scroll has two rests: the hero filling the screen, or the page body
- * with the hero entirely above the fold. One wheel tick rides the whole
- * way in either direction, and any other input (touch, keyboard,
- * scrollbar) that stops between the rests settles to the nearer one.
- * Muted autoplay is the only autoplay browsers permit, and a silent
+ * The scroll has two rests here: the hero filling the screen, or the page
+ * body with the hero entirely above the fold. They are registered with the
+ * deck in src/utils/deck.ts, as the slides below register theirs, so one
+ * wheel tick rides from rest to rest all the way down the page and any
+ * other input (touch, keyboard, scrollbar) that stops between two rests
+ * settles to the nearer one. Muted autoplay is the only autoplay browsers permit, and a silent
  * ambient loop is what this clip is; under prefers-reduced-motion it
  * holds its first frame, scrolling jumps instead of gliding, and the
  * arrow appears without the fade.
  */
-
-const REDUCED_MOTION =
-  typeof window !== "undefined" &&
-  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /** Where the page body starts, in document coordinates. */
 function bottomOf(hero: HTMLElement): number {
   return hero.getBoundingClientRect().bottom + window.scrollY;
 }
 
-/* The glide between the two rests. Driven by hand rather than by
- * scrollTo({ behavior: "smooth" }) because the browser's own curve is quick
- * and uneven across engines, and this one ride is the page's single piece
- * of motion — it should feel the same everywhere. Ease in and out, 700 ms.
- * A new call cancels the ride in flight, so reversing the wheel mid-glide
- * turns it around from wherever it is.
- */
-let glide = 0;
-
-function easeInOut(t: number): number {
-  return t < 0.5 ? 2 * t * t : 1 - (2 - 2 * t) ** 2 / 2;
-}
-
-function go(top: number) {
-  cancelAnimationFrame(glide);
-  if (REDUCED_MOTION) {
-    window.scrollTo(0, top);
-    return;
-  }
-  const from = window.scrollY;
-  const distance = top - from;
-  if (Math.abs(distance) < 1) return;
-  const started = performance.now();
-  const step = (now: number) => {
-    const t = Math.min((now - started) / 700, 1);
-    window.scrollTo(0, from + distance * easeInOut(t));
-    if (t < 1) glide = requestAnimationFrame(step);
-  };
-  glide = requestAnimationFrame(step);
-}
+/* The glide between the two rests lives in src/utils/glide.ts, shared with
+ * the slides further down the page so that only one ride ever runs. */
 
 export function HomeHero() {
   const heroRef = useRef<HTMLElement>(null);
@@ -84,52 +55,20 @@ export function HomeHero() {
     return () => observer.disconnect();
   }, []);
 
-  // The two-rest scroll lock. A wheel tick anywhere in the hero zone is
-  // taken over and ridden to a rest; everything else is let through and
-  // settled after it stops, so touch and keyboard still work unaided.
-  useEffect(() => {
+  // The hero's two rests, handed to the deck: the top of the page, and the
+  // top of the page body.
+  const rests = useCallback(() => {
     const hero = heroRef.current;
-    if (!hero) return;
-
-    const onWheel = (event: WheelEvent) => {
-      if (event.ctrlKey) return; // pinch-zoom on a trackpad
-      const bottom = bottomOf(hero);
-      const y = window.scrollY;
-      if (event.deltaY > 0 && y < bottom - 1) {
-        event.preventDefault();
-        go(bottom);
-      } else if (event.deltaY < 0 && y > 0 && y <= bottom + 1) {
-        event.preventDefault();
-        go(0);
-      }
-    };
-
-    let settle: number | undefined;
-    const onScroll = () => {
-      window.clearTimeout(settle);
-      settle = window.setTimeout(() => {
-        const bottom = bottomOf(hero);
-        const y = window.scrollY;
-        if (y > 1 && y < bottom - 1) go(y < bottom / 2 ? 0 : bottom);
-      }, 150);
-    };
-
-    window.addEventListener("wheel", onWheel, { passive: false });
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      window.removeEventListener("wheel", onWheel);
-      window.removeEventListener("scroll", onScroll);
-      window.clearTimeout(settle);
-      cancelAnimationFrame(glide);
-    };
+    return hero ? [0, bottomOf(hero)] : [];
   }, []);
+  useDeckRests(rests);
 
   return (
     <header className="home-hero" ref={heroRef}>
       {!missing && (
         <video
           className="home-hero-video"
-          src={`${import.meta.env.BASE_URL}local/bees_entering_hive.mp4`}
+          src={`${import.meta.env.BASE_URL}local/bees_entering_hive_short.mp4`}
           autoPlay={!REDUCED_MOTION}
           loop
           muted
@@ -155,7 +94,7 @@ export function HomeHero() {
         type="button"
         className="home-hero-arrow"
         aria-label="Scroll to the page content"
-        onClick={() => go(bottomOf(heroRef.current!))}
+        onClick={() => glideTo(bottomOf(heroRef.current!))}
       >
         <svg viewBox="0 0 24 14" aria-hidden="true">
           <path

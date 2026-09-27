@@ -137,6 +137,14 @@
    * CVD, both clear of the floors --map-land fails (12.3 normal). */
   --wax-deep: #a89868;
 
+  /* Leaf green, for the one thing on the wiki drawn as a plant: the stand of
+   * trees on the home page's second slide, before the pollinated share of it
+   * turns honey. A muted natural green rather than a screen green, and dark
+   * enough to stand on the wax paper: 4.6:1 on --surface-muted. It is not a
+   * data colour; the loss ramp and the two green states below it keep their
+   * own meanings. */
+  --leaf: #4a7c3f;
+
   --text: var(--oxford-navy);
   --text-muted: #4a5a6b;
   --link: var(--violet);

@@ -1,23 +1,27 @@
 /* The stakeholder map.
  *
  * Colours are the brand tokens from src/styles/brand.css and nothing else:
- * wax for land, honey for a cell we have someone in, navy for rules, links
- * and the silhouette, ink for type and rims. Honey is a fill here, never
- * type, for the contrast reason recorded at the top of brand.css.
+ * wax for land, honey for a cell we have someone in and for the arrows'
+ * casing, navy for rules, arrows, badges and the silhouette, ink for type
+ * and rims. Honey is a fill here, never type on white, for the contrast
+ * reason recorded at the top of brand.css; the one honey glyph is the stage
+ * letter on a navy badge, the same pairing the comb band uses for headings.
  *
- * Surfaces are solid and separated by 1px rules rather than by shadow,
- * corners take the single --radius the wiki already uses, and the only
- * movement is the one that carries meaning: a cell growing into the person
- * you are pointing at, and a filtered cluster easing apart so the faces stay
- * legible. Both are disabled under prefers-reduced-motion.
+ * Surfaces are solid and separated by 1px rules rather than by shadow, and
+ * every movement carries meaning: the cell growing into the person you are
+ * pointing at, a question's faces spreading to become its HONEY loop, and
+ * the stage easing in and out as the reader scrolls through it. All of it
+ * is disabled under prefers-reduced-motion.
+ *
+ * Layout is mobile-first: everything in normal flow, card under the map.
+ * From 48rem up the map becomes a full-viewport stage that pins briefly
+ * while the reader scrolls (position: sticky inside the tall .sm-pin), with
+ * the heading, the question picker and the person card floating over it as
+ * solid panels.
  */
 
 .stakeholder-map {
   margin-block: 2.5rem;
-  /* The map breaks the 36rem measure on purpose: a world map at reading width
-   * is unreadable. The column is centred in .container, so the room is on both
-   * sides: equal (negative) margins keep the figure on the column's axis, and
-   * it falls back to the viewport on a narrow screen. */
   width: min(68rem, calc(100vw - 4rem));
   margin-inline: calc((100% - min(68rem, calc(100vw - 4rem))) / 2);
 }
@@ -35,26 +39,52 @@
   line-height: 1.6;
 }
 
-/* ---------- the question filter ---------- */
+/* Mobile order: heading, picker, map, card. The stage machinery is inert
+ * here; .sm-pin and .sm-stage are plain boxes until the desktop query. */
+.sm-frame {
+  display: flex;
+  flex-direction: column;
+}
 
-/* Plain buttons in the mono face, honey when pressed. The pressed state is a
- * fill, not a shadow, and "All" reads the same as a question so the row does
- * not have a visually different escape hatch. */
+.sm-head {
+  order: 1;
+}
+
+.sm-filterbox {
+  order: 2;
+}
+
+.sm-canvas {
+  order: 3;
+}
+
+.sm-pop {
+  order: 4;
+}
+
+/* ---------- the question picker ---------- */
+
+/* One row per question, the whole question readable before anything is
+ * selected. Plain buttons in the mono face, honey when pressed: the pressed
+ * state is a fill, not a shadow, and "All conversations" reads the same as
+ * a question so the list does not have a visually different escape hatch. */
 .sm-filter {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 0.3rem;
   margin: 0 0 0.5rem;
 }
 
 .sm-filter button {
-  padding: 0.15rem 0.6rem;
+  padding: 0.3rem 0.6rem;
   border: 1px solid var(--rule);
   border-radius: var(--radius);
   background: var(--surface);
   color: var(--text);
   font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  text-align: left;
 }
 
 .sm-filter button:hover {
@@ -67,29 +97,37 @@
   color: var(--ink);
 }
 
-.sm-filter-title {
-  max-width: var(--measure);
-  margin: 0 0 0.75rem;
-  font-size: 0.82rem;
-  color: var(--text);
-}
-
-.sm-filter-title strong {
+/* The Qn label leads its row. Restated at .stakeholder-map depth so the
+ * comb band's light `strong` rule cannot bleach it inside a white button. */
+.stakeholder-map .sm-filter button strong {
   font-family: var(--font-heading);
   color: var(--ink);
+  margin-right: 0.35rem;
 }
 
-/* How to read the network: set apart from the question itself, not hidden. */
+/* How to read the loop: set apart from the question itself, not hidden. */
 .sm-filter-key {
   display: block;
-  margin-top: 0.15rem;
+  margin-top: 0.3rem;
   color: var(--text-muted);
-  font-size: 0.75rem;
+  font-size: 0.73rem;
+  line-height: 1.5;
+}
+
+/* While the fullscreen stage covers the viewport (the attribute is set by
+ * StakeholderMap.tsx's scroll handler, wide screens only), the site menu
+ * stays out of the way: it re-shows itself on any upward scroll and would
+ * sit over the map's top edge and the heading panel. Cross-component on
+ * purpose; this rule ships and dies with the map. The menu's own
+ * transition carries the slide. */
+html[data-map-stage] .site-nav {
+  transform: translateY(-100%);
 }
 
 /* ---------- the map itself ---------- */
 
 .sm-canvas {
+  position: relative;
   border: 1px solid var(--rule);
   background: var(--surface-muted);
 }
@@ -98,6 +136,7 @@
   display: block;
   width: 100%;
   height: auto;
+  aspect-ratio: 1852 / 733;
 }
 
 /* The source SVG ships a painted background rectangle and one flat blue fill.
@@ -108,66 +147,80 @@
   pointer-events: none;
 }
 
-/* One HONEY cycle drawn as its network. Navy, like the other rules on the
- * wiki; dashes mark a provisional tag, the same signal as the dashed tag
- * chips in the profiles. */
-.sm-link {
-  stroke: var(--oxford-navy);
-  stroke-width: 1.5;
+/* ---------- the HONEY loop ---------- */
+
+/* One closed tour through the question's faces, Hear to Yield and back.
+ * Curved so the eye can follow one arrow across a crowded stretch, cased in
+ * honey so the navy core reads over land and sea alike, and headed so the
+ * direction of the loop is a fact on the page rather than a caption. */
+.sm-link-casing {
+  fill: none;
+  stroke: var(--honey);
+  stroke-width: 7;
+  stroke-linecap: round;
 }
 
-.sm-link.is-provisional {
-  stroke-dasharray: 5 4;
+.sm-link {
+  fill: none;
+  stroke: var(--oxford-navy);
+  stroke-width: 3.2;
+  stroke-linecap: round;
+}
+
+.sm-arrowhead {
+  fill: var(--oxford-navy);
 }
 
 /* ---------- one cell = one conversation ---------- */
 
 .sm-node {
-  cursor: pointer;
   outline: none;
-  /* The relax drift under a question filter. */
-  transition: transform 260ms ease;
+  /* The drift between resting cell and loop position. */
+  transition: transform 450ms ease;
 }
 
-/* Under a question filter, a cell with nobody on that question goes back to
- * being land and stops being a control. */
+/* Under a question, a cell with nobody on it fades back into the land it
+ * sits on and stops being a control. */
 .sm-node.is-dim {
-  cursor: default;
   pointer-events: none;
 }
 
+.sm-node.is-dim .sm-zoom {
+  opacity: 0;
+}
+
 /* The growth happens on an inner group so it scales around the cell centre,
- * independent of the outer group's positioning transform. */
+ * independent of the outer group's positioning transform. The visuals are
+ * pointer-inert; .sm-hit is the whole target. */
 .sm-zoom {
   transform-box: fill-box;
   transform-origin: center;
-  transition: transform 200ms ease;
+  transition:
+    transform 300ms ease,
+    opacity 300ms ease;
+  pointer-events: none;
 }
 
+/* Mirrored by FACE_SCALE / ACTIVE_SCALE in StakeholderMap.tsx. */
 .sm-node.is-face .sm-zoom {
-  transform: scale(1.7);
+  transform: scale(3.6);
 }
 
 .sm-node.is-active .sm-zoom {
-  transform: scale(2.35);
+  transform: scale(4.3);
 }
 
 .sm-cell {
   fill: var(--honey);
 }
 
-.sm-node.is-dim .sm-cell {
-  fill: var(--map-land);
-}
-
 /* The photograph, and the drawn stand-in for one. Both are cropped to the
- * cell and only appear once the cell is big enough to read: a filtered face,
- * or the cell under the pointer. */
+ * cell and only appear once the cell is big enough to read: a face in the
+ * loop, or the cell under the pointer. */
 .sm-face,
 .sm-silhouette {
   opacity: 0;
-  pointer-events: none;
-  transition: opacity 160ms linear;
+  transition: opacity 200ms linear;
 }
 
 .sm-silhouette {
@@ -182,18 +235,20 @@
 }
 
 /* A withheld interview shows a ghost of the silhouette: a person whose
- * identity is deliberately not shown, as the panel explains. */
+ * identity is deliberately not shown, as the card explains. */
 .sm-node.is-withheld.is-face .sm-silhouette,
 .sm-node.is-withheld.is-active .sm-silhouette {
   opacity: 0.4;
 }
 
-/* The rim sits above the image so a face stays framed. Its width scales with
- * the cell, which reads as a heavier frame on the enlarged face. */
+/* The rim sits above the image so a face stays framed; its width scales with
+ * the cell, which reads as a heavier frame on the enlarged face. The anchor
+ * interview carries the heaviest rim, and a dashed rim marks a provisional
+ * tag - the same signal as the dashed tag chips in the profiles. */
 .sm-rim {
   fill: none;
   stroke: var(--ink);
-  stroke-width: 1.2;
+  stroke-width: 1.1;
 }
 
 .sm-node.is-dim .sm-rim {
@@ -201,54 +256,78 @@
 }
 
 .sm-node.is-anchor .sm-rim {
-  stroke-width: 3.4;
+  stroke-width: 2.6;
+}
+
+.sm-node.is-provisional .sm-rim {
+  stroke-dasharray: 3 2.4;
 }
 
 .sm-node.is-pinned .sm-rim,
 .sm-node:focus-visible .sm-rim {
-  stroke-width: 2.6;
+  stroke-width: 2;
 }
 
 .sm-node.is-anchor.is-pinned .sm-rim,
 .sm-node.is-anchor:focus-visible .sm-rim {
-  stroke-width: 4.2;
+  stroke-width: 3.2;
 }
 
-/* Invisible, and the reason a 22-unit cell is comfortable to hit. */
+/* The stage letter, worn on the face's shoulder: navy hexagon, honey letter,
+ * the pairing the comb band already uses for type on a dark ground. */
+.sm-stage-badge polygon {
+  fill: var(--oxford-navy);
+}
+
+.sm-stage-badge text {
+  fill: var(--honey);
+  font-family: var(--font-mono);
+  font-size: 5.2px;
+  text-anchor: middle;
+}
+
+/* Invisible, and the whole pointer target: it does not grow with the face,
+ * so an enlarged cell cannot steal the cells around it. */
 .sm-hit {
   fill: transparent;
+  pointer-events: all;
+  cursor: pointer;
 }
 
-/* ---------- the panel under the map ---------- */
+/* ---------- the card beside the face ---------- */
 
-/* Fixed in the page, never chasing the pointer, and always occupying its
- * space so hovering the map does not reflow anything. A hover previews; a
- * selection shows the whole record and stays until the reader clicks away. */
-.sm-dock {
-  min-height: 9rem;
+/* Anchored to the face it describes, not to the pointer. On mobile it is a
+ * plain block under the map instead; the inline left/top only exist on wide
+ * screens. Hover previews are pointer-inert so the card never blocks the
+ * face it points at; a selected card takes the pointer for its own
+ * scrollbar and Close. */
+.sm-pop {
   padding: 0.7rem 0.85rem;
-  border-top: 1px solid var(--rule);
+  border: 1px solid var(--oxford-navy);
+  border-radius: var(--radius);
   background: var(--surface);
   /* Explicit, because the section can sit on the page's dark comb band and
-   * the panel must not inherit that band's light text onto white. */
+   * the card must not inherit that band's light text onto white. */
   color: var(--text);
   font-size: 0.78rem;
   line-height: 1.5;
+  margin-top: 0.75rem;
+  min-height: 7.5rem;
 }
 
-.sm-dock-hint {
+.sm-pop-hint {
   margin: 0;
   color: var(--text-muted);
 }
 
-.sm-dock-profile {
+.sm-pop-profile {
   display: grid;
-  grid-template-columns: 6rem minmax(0, 1fr);
+  grid-template-columns: 5.5rem minmax(0, 1fr);
   gap: 0.85rem;
   align-items: start;
 }
 
-.sm-dock-media img {
+.sm-pop-media img {
   display: block;
   width: 100%;
   aspect-ratio: 1;
@@ -257,37 +336,42 @@
   border-radius: var(--radius);
 }
 
-.sm-dock-media svg {
+.sm-pop-media svg {
   display: block;
   width: 100%;
 }
 
-.sm-dock-media .sm-silhouette {
+.sm-pop-media .sm-silhouette {
   opacity: 1;
 }
 
-.sm-dock-hex {
+.sm-pop-hex {
   fill: var(--honey);
   stroke: var(--ink);
   stroke-width: 0.6;
 }
 
-/* Names who is actually in the photograph when that is not simply the entry's
- * name, so a face is never silently misattributed. */
-.sm-dock-photonote {
+/* Names who is actually in the photograph when that is not simply the
+ * entry's name, so a face is never silently misattributed. */
+.sm-pop-photonote {
   margin: 0.25rem 0 0;
   color: var(--text-muted);
   font-size: 0.68rem;
 }
 
-/* A hover is a preview: one quote or one point, clamped, and an invitation to
- * select. Selecting drops the clamp and shows everything. */
-.sm-dock-teaser {
+/* A hover is a preview: one quote or one point, clamped, and an invitation
+ * to select. Selecting drops the clamp and shows everything. */
+.sm-pop-teaser {
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   margin: 0.45rem 0 0;
+}
+
+.sm-stageline {
+  font-family: var(--font-mono);
+  color: var(--ink);
 }
 
 .sm-close {
@@ -444,24 +528,171 @@
   font-size: 0.95rem;
 }
 
-/* ---------- motion and narrow screens ---------- */
+/* ---------- the fullscreen stage, from 48rem ---------- */
+
+@media (min-width: 48rem) {
+  /* Full bleed: the section leaves the reading column entirely. */
+  .stakeholder-map {
+    width: 100vw;
+    margin-inline: calc(50% - 50vw);
+    margin-block: 3rem;
+  }
+
+  /* The pin: the stage is sticky inside a taller wrapper, so the whole map
+   * holds briefly and then releases. The hold is short because wheel
+   * scrolling snaps to the map and past it (StakeholderMap.tsx); the extra
+   * 35vh is what a scrollbar drag feels as the hold, and what the glide
+   * past the map spends fading the stage out. The nav bar hides itself on
+   * the way down, so the stage gets the full viewport. */
+  .sm-pin {
+    height: 135vh;
+  }
+
+  .sm-stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100dvh;
+    background: var(--surface-muted);
+    border-block: 1px solid var(--rule);
+  }
+
+  .sm-frame {
+    position: absolute;
+    inset: 0;
+    display: block;
+    /* Driven per scroll frame from StakeholderMap.tsx; the transition only
+     * smooths discrete wheel steps. */
+    transition:
+      transform 160ms linear,
+      opacity 160ms linear;
+  }
+
+  .sm-canvas {
+    position: absolute;
+    inset: 0;
+    border: 0;
+  }
+
+  .sm-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+  }
+
+  /* The floating panels. Solid paper over the map, separated by their rule,
+   * like the placeholder blocks on the comb band. Their text colours are
+   * restated at .stakeholder-map depth so the comb band's light-on-dark
+   * rules (CombBands.css) cannot bleach type that now sits on white. */
+  .stakeholder-map .sm-head {
+    position: absolute;
+    top: 1rem;
+    left: 1.25rem;
+    z-index: 3;
+    width: min(24rem, 42vw);
+    padding: 0.7rem 0.85rem;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+
+  .stakeholder-map .sm-head .sm-heading {
+    color: var(--ink);
+  }
+
+  /* The record's headline numbers, compacted to panel size. */
+  .stakeholder-map .sm-head .hp-stats {
+    margin: 0.5rem 0 0.6rem;
+    gap: 0.4rem 0;
+  }
+
+  .stakeholder-map .sm-head .hp-stats li {
+    flex: 1 1 5.5rem;
+    padding: 0.1rem 0.8rem;
+  }
+
+  .stakeholder-map .sm-head .hp-stats li:first-child {
+    padding-left: 0;
+  }
+
+  .stakeholder-map .sm-head .hp-stat-value {
+    font-size: 1.55rem;
+  }
+
+  .stakeholder-map .sm-head .hp-stat-label {
+    font-size: 0.68rem;
+  }
+
+  .stakeholder-map .sm-head .sm-standfirst {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+  }
+
+  /* Bottom-left, because the other three corners are taken: the heading
+   * panel sits top-left, the BeeScene hive rides the menu at top-right (a
+   * fixed layer above this one, so anything under it loses its clicks), and
+   * the comb switch owns bottom-right. Anchoring by bottom also makes the
+   * list grow upward, over sea, instead of off the screen; on a short
+   * viewport it scrolls rather than colliding with the heading panel. */
+  .stakeholder-map .sm-filterbox {
+    position: absolute;
+    bottom: 1.25rem;
+    left: 1.25rem;
+    z-index: 4;
+    width: min(26rem, 42vw);
+    max-height: calc(100vh - 4rem);
+    max-height: calc(100dvh - 4rem);
+    overflow-y: auto;
+    padding: 0.7rem 0.85rem;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--text);
+  }
+
+  .stakeholder-map .sm-filterbox .sm-filter {
+    margin: 0;
+  }
+
+  .stakeholder-map .sm-filterbox .sm-filter-key {
+    margin-top: 0.5rem;
+  }
+
+  /* The card floats beside, below or above the face it describes; the
+   * component picks the spot that covers nothing else (see cardPos) and
+   * sets left/top inline as the box's own corner. */
+  .sm-pop {
+    position: absolute;
+    z-index: 5;
+    width: 23rem;
+    max-width: 26rem;
+    margin-top: 0;
+    pointer-events: none;
+  }
+
+  .sm-pop.is-pinned {
+    width: 24rem;
+    /* Kept modest so a clean spot for it exists even in a dense question
+     * view; the record scrolls inside. Mirrored by the estimate in
+     * cardPos. */
+    max-height: min(52vh, 30rem);
+    overflow-y: auto;
+    border-width: 2px;
+    pointer-events: auto;
+  }
+}
+
+/* ---------- motion ---------- */
 
 @media (prefers-reduced-motion: reduce) {
   .sm-node,
   .sm-zoom,
   .sm-face,
-  .sm-silhouette {
+  .sm-silhouette,
+  .sm-frame {
     transition: none;
-  }
-}
-
-@media (max-width: 48rem) {
-  .stakeholder-map {
-    width: 100%;
-  }
-
-  .sm-dock-profile {
-    grid-template-columns: 4.5rem minmax(0, 1fr);
-    gap: 0.6rem;
   }
 }

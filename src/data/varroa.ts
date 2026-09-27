@@ -551,28 +551,75 @@ export const NOTES: Record<string, string[]> = {
   ],
 };
 
-export const SOURCES: { ref: string; url: string }[] = [
+/** The sources, keyed so a country's panel can cite the ones its figures come from. */
+export const SOURCES: { id: string; ref: string; url: string }[] = [
   {
+    id: "coloss",
     ref: "Gray et al. 2022, J. Apic. Res. 61(2), COLOSS winter 2019-20 loss rates across 37 countries",
     url: "https://strathprints.strath.ac.uk/82475/1/Gray_etal_JAR_2022_Honey_bee_colony_loss_rates_in_37_countries_using_the_COLOSS_survey_for_winter_2019_2020.pdf",
   },
   {
+    id: "aia-bip",
     ref: "Apiary Inspectors of America / Bee Informed Partnership, US Beekeeping Survey 2024-25",
     url: "https://apiaryinspectors.org/US-beekeeping-survey-24-25",
   },
   {
+    id: "bip-2023",
     ref: "Bee Informed Partnership 2022-23 loss abstract, varroa the most-reported cause of winter loss",
     url: "https://www.sdnewswatch.org/content/files/wp-content/uploads/2023/06/bip-2022-23-loss-abstract.pdf",
   },
   {
+    id: "nz",
     ref: "NZ Colony Loss Survey 2024, Manaaki Whenua Landcare Research",
     url: "https://www.landcareresearch.co.nz/discover-our-research/environment/sustainable-society-and-policy/nz-colony-loss-survey/2024-colony-loss-survey",
   },
   {
+    id: "au",
     ref: "Australian Colony Loss Survey Results Report 2025, AHBIC and AgriFutures",
     url: "https://honeybee.org.au/australian-colony-loss-survey-results-report-2025/",
   },
 ];
+
+/**
+ * For each of the five featured countries: the caveats from the list under
+ * the full map that bear on it, said of that country, and the sources its
+ * figures come from, by id in SOURCES. The home page shows the map without
+ * its caption, so a reader there meets these in the country's panel instead.
+ * Nothing here is new: every sentence restates CAVEATS, metricOf() or the
+ * standfirst, and the sources are the same five.
+ */
+export const FEATURED_CONTEXT: Record<string, { caveats: string[]; sources: string[] }> = {
+  "United States of America": {
+    caveats: [
+      "Total reported losses, not losses to varroa alone.",
+      "2008 to 2010 are winter-loss figures. The annual survey began in 2010-11.",
+    ],
+    sources: ["aia-bip", "bip-2023"],
+  },
+  California: {
+    caveats: ["Total reported losses, not losses to varroa alone."],
+    sources: ["aia-bip"],
+  },
+  "United Kingdom": {
+    caveats: [
+      "Winter loss, on the COLOSS definition, where the United States and New Zealand series count a whole year.",
+    ],
+    sources: ["coloss"],
+  },
+  Australia: {
+    caveats: [
+      "The one country where the run happens to show an arrival: first detection June 2022, first survey a year later. Everywhere else a country appears when its survey starts, not when the mite did.",
+      "Annual loss attributed to varroa, where the other national series count losses from every cause.",
+    ],
+    sources: ["au"],
+  },
+  "New Zealand": {
+    caveats: [
+      "Total reported losses. Varroa is the most-reported cause in the New Zealand survey, not the sole cause.",
+    ],
+    sources: ["nz"],
+  },
+};
 
 export const CAVEATS: string[] = [
   "This is reported colony loss, not the spread of the mite. A country appears in the year its survey coverage begins, which for most of Europe is 2008.",

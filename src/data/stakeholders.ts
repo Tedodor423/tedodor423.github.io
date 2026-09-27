@@ -33,8 +33,10 @@
  *
  * LOCATIONS are the institution or region named in the source, resolved to
  * coordinates. They are a plotting position, not a claim about where a person
- * was sitting. One cell of the map spans roughly 4.7 degrees, so Oxford,
- * Reading and Bristol share a cell - which is why the map groups by country.
+ * was sitting: at rest each conversation sits on the map cell nearest its
+ * coordinates, and in a question view the enlarged faces spread out to fit
+ * near their true locations, so a face's exact spot on the map carries no
+ * information beyond "this country".
  *
  * QUESTION TAGS reproduce the six-questions table exactly: `anchors` where the
  * table names the anchor interview, `questions` where it lists a supporting
@@ -85,6 +87,59 @@ export const QUESTION_TITLES: Record<QuestionId, string> = {
 };
 
 export const QUESTION_IDS: QuestionId[] = ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6"];
+
+/* ---------- the HONEY loop ---------- */
+
+/** The five stages of the team's HONEY loop, in cycle order. */
+export type HoneyStage = "H" | "O" | "N" | "E" | "Y";
+
+export const STAGE_ORDER: HoneyStage[] = ["H", "O", "N", "E", "Y"];
+
+export const STAGE_NAMES: Record<HoneyStage, string> = {
+  H: "Hear",
+  O: "Observe",
+  N: "Navigate",
+  E: "Evaluate",
+  Y: "Yield",
+};
+
+/**
+ * Where a question's write-up places a conversation in its HONEY cycle, for
+ * the questions whose write-up says. Sources, both in `references/`:
+ *
+ *   - Q3: the 25 September write-up's "GMO yes or no?" chapter. Its
+ *     O-OBSERVE section covers the OGTR, Dunwell (ACRE), Bowden (SASA), the
+ *     EPA/FDA/USDA meeting, Krebs and Hartley; its E-EVALUATE section covers
+ *     Barrick (containment) and Coy (scalability, as RRI input).
+ *   - Q5: Thurman set the method of the economic model, which the page's Q5
+ *     Navigate paragraph records (transcribed from `writeup.md`).
+ *
+ * Everyone else is Hear. That is not a guess so much as the write-up's own
+ * definition of the stage ("Hear - stakeholders"): every conversation is a
+ * Hear input unless the team's text places it later in the loop. Do not
+ * invent a stage; a wrong one misstates the team's process.
+ */
+const STATED_STAGES: Partial<Record<QuestionId, Record<string, HoneyStage>>> =
+  {
+    Q3: {
+      ogtr: "O",
+      dunwell: "O",
+      bowden: "O",
+      "us-regulators": "O",
+      krebs: "O",
+      hartley: "O",
+      barrick: "E",
+      coy: "E",
+    },
+    Q5: {
+      thurman: "N",
+    },
+  };
+
+/** The HONEY stage of one conversation within one question's cycle. */
+export function stageOf(q: QuestionId, id: string): HoneyStage {
+  return STATED_STAGES[q]?.[id] ?? "H";
+}
 
 export interface Stakeholder {
   id: string;

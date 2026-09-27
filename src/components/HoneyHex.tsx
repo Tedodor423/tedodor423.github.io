@@ -4,8 +4,8 @@ import "./HoneyHex.css";
 
 /* The HONEY framework, drawn as the comb cell it is named for.
  *
- * One hexagon, a letter cell on five of its corners; at the sixth the comb's
- * two edges simply meet — the team is keeping that corner free. Pointing at
+ * One hexagon, a letter cell on five of its corners; the sixth carries the
+ * team's own badge, where the loop closes. Pointing at
  * a letter, or reaching it with the keyboard, grows its cell so the letter
  * becomes the full word; a click does nothing a hover does not. The team
  * chose to keep the figure to the words alone, so each beat's fuller meaning
@@ -61,6 +61,17 @@ const CY = 230;
 const RING = 165;
 const R = 46;
 
+/* The team badge takes the sixth corner. Served from static.igem.wiki once
+ * uploaded (the uploads tool keeps the basename and converts to .avif, so the
+ * URL is knowable now); dev serves the local source from
+ * wiki-assets-source/images_dev/ via the images-dev plugin in vite.config.ts,
+ * the same arrangement as the stakeholder photos. Its navy fill is slightly
+ * transparent, so it sits on a honey disc rather than straight on the comb
+ * edge. */
+const LOGO_SRC = import.meta.env.DEV
+  ? `${import.meta.env.BASE_URL}images-dev/oxford-igem-logo.png`
+  : "https://static.igem.wiki/teams/6391/wiki/assets/oxford-igem-logo.avif";
+
 function cornerAt(i: number): { x: number; y: number } {
   const a = (Math.PI / 180) * (-90 + i * 60);
   return { x: CX + RING * Math.cos(a), y: CY + RING * Math.sin(a) };
@@ -71,9 +82,10 @@ export function HoneyHex() {
 
   return (
     <figure className="honey-hex">
-      <div className="hh-copy">
-        {/* Linked to from the timeline; keep the id if the heading moves. */}
-        <h2 id="how-we-worked">How we worked</h2>
+      {/* The heading is gone by design - the loop drawing carries the idea -
+       * but the timeline still deep-links here, so its id stays on the
+       * copy block. */}
+      <div className="hh-copy" id="how-we-worked">
         <p>
           Our human practices run on a loop rather than a checklist: five
           moves, one per letter, and the last hands a new question back to the
@@ -97,10 +109,29 @@ export function HoneyHex() {
         >
           <title id="hh-title">
             The HONEY framework: Hear, Observe, Navigate, Evaluate and Yield on
-            five corners of one honeycomb cell.
+            five corners of one honeycomb cell, with the Oxford iGEM team badge
+            on the sixth.
           </title>
 
           <polygon points={hexPoints(CX, CY, RING)} className="hh-comb" />
+
+          {/* The sixth corner: the badge where the comb's edges meet. Inert —
+              the five letter cells are the interactive ones. */}
+          {(() => {
+            const p = cornerAt(5);
+            return (
+              <g className="hh-logo">
+                <circle cx={p.x} cy={p.y} r={44} className="hh-logo-disc" />
+                <image
+                  href={LOGO_SRC}
+                  x={p.x - 38}
+                  y={p.y - 38}
+                  width={76}
+                  height={76}
+                />
+              </g>
+            );
+          })()}
 
           {CELLS.map((c, i) => {
             const p = cornerAt(i);

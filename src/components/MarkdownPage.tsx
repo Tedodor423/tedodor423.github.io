@@ -14,6 +14,10 @@ import { VarroaMap } from "./VarroaMap";
 import { ProjectTimeline } from "./ProjectTimeline";
 import { HeadlineStats } from "./HeadlineStats";
 import { DbtlGallery } from "./DbtlGallery";
+import { BeeReset } from "./BeeReset";
+import { NectarDesigner } from "./NectarDesigner";
+import { BeeImportance } from "./BeeImportance";
+import { VarroaSlide } from "./VarroaSlide";
 
 /* Components a content file may place in the page.
  *
@@ -38,6 +42,10 @@ const SLOTS: Record<string, () => ReactNode> = {
   "project-timeline": () => <ProjectTimeline />,
   "headline-stats": () => <HeadlineStats />,
   "dbtl-cycles": () => <DbtlGallery />,
+  "bee-reset": () => <BeeReset />,
+  "nectar-designer": () => <NectarDesigner />,
+  "bee-importance": () => <BeeImportance />,
+  "varroa-slide": () => <VarroaSlide />,
 };
 
 /** One array, so a page with no marks does not rerender its consumers. */

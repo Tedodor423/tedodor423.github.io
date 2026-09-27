@@ -235,7 +235,37 @@
   justify-content: center;
   gap: 0.3rem;
   position: absolute;
-  inset: 8% calc(var(--slant) + 0.35rem);
+  inset: 8% calc(var(--slant) * 0.45);
+}
+
+/* The cycle's icon, over its lab and name: the team's own drawings
+   (src/data/cycleIcons.ts). They come in very different proportions, so the
+   height is fixed and the width follows, capped so the widest stays inside the
+   hexagon. Scoped under .dbtl to outrank brand.css's `.markdown-page img
+   { height: auto }`. */
+.dbtl .dbtl-shut-icon {
+  display: block;
+  align-self: center;
+  height: 2.8rem;
+  width: auto;
+  max-width: 80%;
+  object-fit: contain;
+  margin-bottom: 0.25rem;
+  transition:
+    height 0.22s ease,
+    margin 0.22s ease,
+    opacity 0.18s ease;
+}
+
+/* It folds away while the preview is open: the longest questions need the room,
+   and the icon has done its job by the time the reader is hovering. */
+.dbtl-comb[data-open="no"] .dbtl-cell:hover .dbtl-shut-icon,
+.dbtl-comb[data-open="no"]
+  .dbtl-cell:has(.dbtl-shut:focus-visible)
+  .dbtl-shut-icon {
+  height: 0;
+  margin-bottom: 0;
+  opacity: 0;
 }
 
 .dbtl-shut-num {
@@ -262,21 +292,24 @@
    and lists the turns it holds, so the reader knows what they are about to get.
    Nothing here exists only on hover; the numbers are on the panel too. */
 .dbtl-comb[data-open="no"] .dbtl-cell:hover,
-.dbtl-comb[data-open="no"] .dbtl-cell:focus-within {
+.dbtl-comb[data-open="no"] .dbtl-cell:has(.dbtl-shut:focus-visible) {
   transform: scale(1.12);
   z-index: 4;
 }
 
 .dbtl-comb[data-open="no"] .dbtl-cell:hover > .dbtl-face,
-.dbtl-comb[data-open="no"] .dbtl-cell:focus-within > .dbtl-face {
+.dbtl-comb[data-open="no"]
+  .dbtl-cell:has(.dbtl-shut:focus-visible)
+  > .dbtl-face {
   --rule-width: 18px;
 }
 
-/* Focus, without an outline: the clip-path would eat it. Honey is the wiki's
-   focus colour everywhere else too. Scoped to the closed state, or focusing the
-   panel's own Close button would flood the open hexagon with it. */
-.dbtl-cell[data-state="shut"]:focus-within > .dbtl-face {
-  background: var(--honey);
+/* Focus, without an outline: the clip-path would eat it. Keyboard focus only, as
+   a tint of the lab's own colour: a clicked hexagon keeps focus, and a fill that
+   followed the mouse read as a stray highlight. Scoped to the closed state, or
+   focusing the panel's own Close button would tint the open hexagon. */
+.dbtl-cell[data-state="shut"]:has(.dbtl-shut:focus-visible) > .dbtl-face {
+  background: var(--lab-fill);
 }
 
 .dbtl-shut:focus-visible {
@@ -293,8 +326,10 @@
 }
 
 .dbtl-comb[data-open="no"] .dbtl-cell:hover .dbtl-shut-more,
-.dbtl-comb[data-open="no"] .dbtl-cell:focus-within .dbtl-shut-more {
-  max-height: 8rem;
+.dbtl-comb[data-open="no"]
+  .dbtl-cell:has(.dbtl-shut:focus-visible)
+  .dbtl-shut-more {
+  max-height: 12rem;
   opacity: 1;
 }
 
@@ -310,7 +345,7 @@
   border-top: 1px solid var(--rule);
 }
 
-/* The turns this hexagon holds: 1.1 · 1.2 · 1.3 · 1.4 */
+/* How many turns of the cycle this hexagon holds: "4 cycles". */
 .dbtl-shut-turns {
   display: block;
   font-family: var(--font-heading);
@@ -319,11 +354,6 @@
   letter-spacing: 0.06em;
   color: var(--lab);
   padding-top: 0.3rem;
-}
-
-.dbtl-shut-turns span + span::before {
-  content: " · ";
-  color: var(--text-muted);
 }
 
 /* ---------- the opened cell ---------- */
@@ -402,26 +432,18 @@
   text-align: center;
 }
 
-/* The lab, and the loudest thing in the panel: it is the one word that says where
-   in the project you have landed, and at this size the reader does not have to go
-   looking for it. Cubao, like every other display line on the wiki. */
-.dbtl-panel-kicker {
-  font-family: var(--font-display);
-  font-size: clamp(1.3rem, 2.4vw, 2rem);
-  line-height: 1;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  margin: 0 0 0.15rem;
-  color: var(--lab);
-}
-
-.dbtl-panel-head h3 {
+/* The question the cycle asked, and the only thing in the head. The long
+   selector is there to beat CombBands, which inverts headings for the dark band;
+   the panel brings its own paper. Same treatment as ProjectTimeline.css. */
+.dbtl-panel-head h3,
+[data-comb="on"] [data-band="comb"] .dbtl-panel-head h3 {
   margin: 0 auto;
   max-width: 44rem;
-  font-size: 0.95rem;
+  font-family: var(--font-heading);
+  font-size: clamp(1.1rem, 1.8vw, 1.45rem);
   font-weight: 600;
-  line-height: 1.3;
-  color: var(--text-muted);
+  line-height: 1.25;
+  color: var(--ink);
 }
 
 /* ---------- text and controls ---------- */
@@ -765,15 +787,10 @@
   animation: dbtl-open-dial 0.34s ease-out both;
 }
 
-/* The turn. An <svg> laid out by HTML rotates about the centre of its own box with
-   no argument about reference boxes, which is why the rotation is here and not on
-   a group inside the drawing. See the note in DbtlDial.tsx. */
 .dbtl-dial-ring {
   display: block;
   width: 100%;
   height: 100%;
-  transform-origin: center;
-  transition: transform 0.42s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 .dbtl-dial-band {
@@ -939,12 +956,8 @@
 }
 
 @media (max-width: 52rem) {
-  .dbtl-panel-kicker {
-    font-size: 1.25rem;
-  }
-
   .dbtl-panel-head h3 {
-    font-size: 0.85rem;
+    font-size: 1rem;
   }
 
   .dbtl-stage {
@@ -954,7 +967,7 @@
   /* A phone has no room for a cell to swell by an eighth without covering its
      neighbours entirely, and no cursor to do it with. */
   .dbtl-comb[data-open="no"] .dbtl-cell:hover,
-  .dbtl-comb[data-open="no"] .dbtl-cell:focus-within {
+  .dbtl-comb[data-open="no"] .dbtl-cell:has(.dbtl-shut:focus-visible) {
     transform: scale(1.05);
   }
 }
@@ -963,6 +976,7 @@
   .dbtl-cell,
   .dbtl-face,
   .dbtl-shut-more,
+  .dbtl-shut-icon,
   .dbtl-mark,
   .dbtl-dial-ring,
   .dbtl-dial-band {
@@ -983,7 +997,7 @@
   }
 
   .dbtl-comb[data-open="no"] .dbtl-cell:hover,
-  .dbtl-comb[data-open="no"] .dbtl-cell:focus-within {
+  .dbtl-comb[data-open="no"] .dbtl-cell:has(.dbtl-shut:focus-visible) {
     transform: none;
   }
 }

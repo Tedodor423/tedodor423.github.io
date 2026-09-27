@@ -1,8 +1,18 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { HEXES, HEX_R, hexPoints } from "../utils/worldHexes";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
+import { Link } from "react-router-dom";
+import { HEXES, HEX_R, hexPoints, type Hex } from "../utils/worldHexes";
 import { HEX_COUNTRY, cellKey } from "../utils/hexCountries";
 import {
   CAVEATS,
+  FEATURED_CONTEXT,
   LOSS_COUNTRIES,
   NOTES,
   SOURCES,
@@ -34,14 +44,27 @@ import "./VarroaMap.css";
  * Australia is the exception, and the only place where the animation happens
  * to show an arrival.
  *
+ * TWO FORMS. The case-studies page gets the full figure: every country answers
+ * to the pointer, and the caption underneath carries the five featured
+ * countries written out, the caveats, the table of every country in the
+ * dataset and the sources. The home page gets the "slide" form, which is the
+ * map and nothing else: it fills the window, only the five countries this wiki
+ * argues from can be pressed, and the panel is a column beside the map
+ * carrying each one's notes, caveats and sources, with a line pointing at the
+ * full record. Both forms are this one component, so the map can never
+ * disagree with itself.
+ *
  * WHY A PANEL AND NOT A TOOLTIP. The detail for a country runs to a sparkline,
  * a provenance line and up to three notes. That does not fit in a tooltip that
  * follows a cursor, and the wiki rules forbid putting a number or a citation
- * somewhere only a mouse can reach. So hovering fills a panel that stays
- * filled, five buttons reach the countries this wiki argues from without a
- * mouse, and the table at the bottom carries every country the dataset has,
- * including the fifty that are too small to draw.
+ * somewhere only a mouse can reach. So the panel stays filled, five buttons
+ * reach the featured countries without a mouse, and on the case-studies page
+ * the table at the bottom carries every country the dataset has, including
+ * the fifty that are too small to draw.
  */
+
+/** The two forms the figure takes. See the note above. */
+export type VarroaMapVariant = "full" | "slide";
 
 /** Viewport of the lattice, as the stakeholder map crops it. */
 const VIEW = { x: 12, y: 1, w: 1808, h: 729 };
@@ -60,6 +83,8 @@ const FEATURED = [
   "Australia",
   "New Zealand",
 ] as const;
+
+const FEATURED_SET = new Set<string>(FEATURED);
 
 const SHORT: Record<string, string> = {
   "United States of America": "USA",
@@ -92,7 +117,7 @@ const LEGEND: Status[] = [
 
 /** Cells grouped by country, so the active country can be outlined as one. */
 const CELLS_BY_COUNTRY = (() => {
-  const map = new Map<string, typeof HEXES>();
+  const map = new Map<string, Hex[]>();
   for (const hex of HEXES) {
     const name = HEX_COUNTRY.get(cellKey(hex.col, hex.row));
     if (!name) continue;
@@ -102,6 +127,17 @@ const CELLS_BY_COUNTRY = (() => {
   }
   return map;
 })();
+
+/** The featured countries' cells, and every other cell, split once for the slide form. */
+const FEATURED_CELLS = FEATURED.map((name) => ({
+  name,
+  cells: CELLS_BY_COUNTRY.get(name) ?? [],
+}));
+const OTHER_HEXES = HEXES.filter(
+  (hex) => !FEATURED_SET.has(HEX_COUNTRY.get(cellKey(hex.col, hex.row)) ?? ""),
+);
+
+const SOURCE_BY_ID = new Map(SOURCES.map((source) => [source.id, source]));
 
 /** One line of the country's series, with the current year marked. */
 function Sparkline({ name, year }: { name: string; year: number }) {
@@ -137,14 +173,30 @@ function Sparkline({ name, year }: { name: string; year: number }) {
 }
 
 /** Everything the dataset holds about one country, in the side panel. */
-function Detail({ name, year }: { name: string | null; year: number }) {
+function Detail({
+  name,
+  year,
+  variant,
+}: {
+  name: string | null;
+  year: number;
+  variant: VarroaMapVariant;
+}) {
   if (!name) {
     return (
       <div className="vm-detail vm-detail--empty">
-        <p>
-          Point at a country, or pick one below the map. The panel keeps what you
-          last looked at, so you can then run the years past it.
-        </p>
+        {variant === "slide" ? (
+          <p>
+            Five countries are outlined: the ones this wiki argues from. Press
+            one, or pick it above. The panel keeps what you chose while the
+            years run past it.
+          </p>
+        ) : (
+          <p>
+            Point at a country, or pick one below the map. The panel keeps what you
+            last looked at, so you can then run the years past it.
+          </p>
+        )}
       </div>
     );
   }
@@ -154,6 +206,9 @@ function Detail({ name, year }: { name: string | null; year: number }) {
   const listed = LOSS_COUNTRIES.includes(name);
   const provenance = listed ? provenanceOf(name) : null;
   const notes = NOTES[name];
+  // The caveats and sources the caption under the full map carries, for the
+  // featured countries; the slide form has no caption, so they are here.
+  const context = FEATURED_CONTEXT[name];
 
   return (
     <div className="vm-detail">
@@ -194,6 +249,34 @@ function Detail({ name, year }: { name: string | null; year: number }) {
         </p>
       )}
 
+      {context && context.caveats.length > 0 && (
+        <ul className="vm-caveats">
+          {context.caveats.map((caveat) => (
+            <li key={caveat}>
+              <Marked text={caveat} />
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {context && (
+        <p className="vm-cite">
+          {context.sources.length > 1 ? "Sources: " : "Source: "}
+          {context.sources.map((id, i) => {
+            const source = SOURCE_BY_ID.get(id);
+            if (!source) return null;
+            return (
+              <span key={id}>
+                {i > 0 && "; "}
+                <a href={source.url} target="_blank" rel="noreferrer">
+                  {source.ref}
+                </a>
+              </span>
+            );
+          })}
+        </p>
+      )}
+
       {!listed && status === "no_economic_damage" && (
         <p className="vm-provenance">
           <span className="vm-tag vm-tag--LIT">LIT</span> Within the native range
@@ -218,7 +301,8 @@ function Detail({ name, year }: { name: string | null; year: number }) {
   );
 }
 
-export function VarroaMap() {
+export function VarroaMap({ variant = "full" }: { variant?: VarroaMapVariant }) {
+  const slide = variant === "slide";
   const [index, setIndex] = useState(0);
   const [active, setActive] = useState<string | null>(null);
   const [running, setRunning] = useState(true);
@@ -265,15 +349,22 @@ export function VarroaMap() {
     [reduced],
   );
 
+  /** Put a country in the panel. The picks, and the slide's pressable countries. */
+  const select = useCallback(
+    (name: string) => {
+      setActive(name);
+      hold(true);
+    },
+    [hold],
+  );
+
+  /* The full form: whatever is under the pointer fills the panel. */
   const onPointer = useCallback(
     (event: React.PointerEvent<SVGSVGElement>) => {
       const name = (event.target as SVGElement).dataset?.country;
-      if (name && name !== active) {
-        setActive(name);
-        hold(true);
-      }
+      if (name && name !== active) select(name);
     },
-    [active, hold],
+    [active, select],
   );
 
   /* Status per country for this year, computed once rather than once per cell:
@@ -288,19 +379,223 @@ export function VarroaMap() {
 
   const rows = useMemo(
     () =>
-      LOSS_COUNTRIES.map((name) => {
-        const value = lossAt(name, year);
-        return {
-          name,
-          value,
-          status: statusAt(name, year),
-          provenance: provenanceOf(name),
-          metric: metricOf(name),
-          onMap: CELLS_BY_COUNTRY.has(name),
-        };
-      }).sort((a, b) => (b.value ?? -1) - (a.value ?? -1) || a.name.localeCompare(b.name)),
-    [year],
+      slide
+        ? []
+        : LOSS_COUNTRIES.map((name) => {
+            const value = lossAt(name, year);
+            return {
+              name,
+              value,
+              status: statusAt(name, year),
+              provenance: provenanceOf(name),
+              metric: metricOf(name),
+              onMap: CELLS_BY_COUNTRY.has(name),
+            };
+          }).sort((a, b) => (b.value ?? -1) - (a.value ?? -1) || a.name.localeCompare(b.name)),
+    [slide, year],
   );
+
+  const cell = (hex: Hex): ReactNode => {
+    const name = HEX_COUNTRY.get(cellKey(hex.col, hex.row));
+    const status = name ? (paint.get(name) ?? "no_data") : "no_data";
+    return (
+      <polygon
+        key={`${hex.col}.${hex.row}`}
+        className={`vm-cell vm-cell--${status}`}
+        points={hexPoints(hex.x, hex.y)}
+        data-country={name}
+      />
+    );
+  };
+
+  /* The halo under a country, drawn before its cells. Enlarging each cell
+   * past the lattice pitch makes them overlap, so the cells painted on top
+   * leave only the outside edge showing: one outline round the country.
+   * Outlining each cell instead reads as 39 outlined hexagons rather than as
+   * one country, which is what Australia looked like before this. */
+  const halo = (hex: Hex): ReactNode => (
+    <polygon
+      key={`halo-${hex.col}.${hex.row}`}
+      className="vm-halo"
+      points={hexPoints(hex.x, hex.y, HEX_R + 5)}
+    />
+  );
+
+  /** What a screen reader hears for a pressable country, this year. */
+  const labelOf = (name: string): string => {
+    const value = lossAt(name, year);
+    return value !== null
+      ? `${name}: ${value.toFixed(1)}% of colonies lost in ${year}`
+      : `${name}: ${STATUS_LABEL[statusAt(name, year)]}`;
+  };
+
+  const svg = (
+    <svg
+      className="vm-svg"
+      viewBox={`${VIEW.x} ${VIEW.y} ${VIEW.w} ${VIEW.h}`}
+      role={slide ? "group" : "img"}
+      aria-label={
+        slide
+          ? `World map of reported honey-bee colony losses in ${year}. Five countries can be pressed for their detail.`
+          : `World map of reported honey-bee colony losses in ${year}. The same figures are in the table below.`
+      }
+      onPointerMove={slide ? undefined : onPointer}
+      onPointerLeave={slide ? undefined : () => hold(true)}
+    >
+      <defs>
+        {/* The two states that are not a loss percentage are hatched as
+            well as tinted, so they can never be misread as a point on
+            the scale by a reader who sees the hues differently. */}
+        <pattern id="vm-hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <rect width="6" height="6" fill="var(--vm-hatch-bg)" />
+          <line x1="0" y1="0" x2="0" y2="6" stroke="var(--vm-hatch-ink)" strokeWidth="2" />
+        </pattern>
+      </defs>
+
+      {slide ? (
+        <>
+          {/* The rest of the world is a reading, not a control. */}
+          <g aria-hidden="true">{OTHER_HEXES.map(cell)}</g>
+
+          {/* The five that answer. Each is one button: its halo, in the deep
+              wax tone at rest and ink when it is pressed, hovered or focused,
+              then its cells. The halo takes pointer events here so the ring
+              round a three-cell country is part of the target. Featured
+              countries touch only where California sits on the US coast, and
+              a halo reaches exactly to its neighbour's edge, never over it. */}
+          {FEATURED_CELLS.map(({ name, cells }) => (
+            <g
+              key={name}
+              className={`vm-country${active === name ? " is-on" : ""}`}
+              role="button"
+              tabIndex={0}
+              aria-pressed={active === name}
+              aria-label={labelOf(name)}
+              onClick={() => select(name)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  select(name);
+                }
+              }}
+            >
+              {cells.map(halo)}
+              {cells.map(cell)}
+            </g>
+          ))}
+        </>
+      ) : (
+        <>
+          {activeCells?.map(halo)}
+          {HEXES.map(cell)}
+        </>
+      )}
+    </svg>
+  );
+
+  const controls = (
+    <div className="vm-controls">
+      <button
+        type="button"
+        className="vm-play"
+        aria-pressed={running}
+        onClick={() => {
+          window.clearTimeout(idle.current);
+          setRunning((r) => !r);
+        }}
+      >
+        {running ? "Pause" : "Play"}
+      </button>
+
+      <label className="vm-slider">
+        <span className="visually-hidden">Year</span>
+        <input
+          type="range"
+          min={0}
+          max={YEARS.length - 1}
+          step={1}
+          value={index}
+          aria-valuetext={String(year)}
+          onChange={(event) => {
+            setIndex(Number(event.target.value));
+            hold(true);
+          }}
+          onPointerDown={() => hold(false)}
+          onPointerUp={() => hold(true)}
+          onKeyDown={() => hold(true)}
+        />
+      </label>
+
+      <output className="vm-year" aria-live="off">
+        {year}
+      </output>
+    </div>
+  );
+
+  const legend = (
+    <ul className="vm-legend">
+      {LEGEND.map((status) => (
+        <li key={status}>
+          <span className={`vm-swatch vm-cell--${status}`} aria-hidden="true" />
+          {STATUS_LABEL[status]}
+        </li>
+      ))}
+    </ul>
+  );
+
+  const picks = (
+    <div className="vm-picks">
+      {FEATURED.map((name) => (
+        <button
+          key={name}
+          type="button"
+          className={`vm-pick${active === name ? " is-on" : ""}`}
+          aria-pressed={active === name}
+          onClick={() => select(name)}
+        >
+          {SHORT[name] ?? name}
+        </button>
+      ))}
+    </div>
+  );
+
+  if (slide) {
+    return (
+      <figure
+        className="varroa-map varroa-map--slide"
+        style={{ "--vm-ratio": VIEW.w / VIEW.h } as CSSProperties}
+      >
+        {/* The frame is the room the slide leaves for the map; the plate is
+            the map and its panel, sized to fit that room. VarroaMap.css lays
+            them out; VarroaSlide.css tells the frame how tall the room is. */}
+        <div className="vm-frame">
+          <div className="vm-plate">
+            {svg}
+            <aside className="vm-side">
+              {picks}
+              <Detail name={active} year={year} variant="slide" />
+              <p className="vm-full">
+                Every country in the dataset, what the map cannot show and the
+                sources are on <Link to="/case-studies">case studies</Link>.
+              </p>
+            </aside>
+          </div>
+        </div>
+
+        <div className="vm-strip">
+          <h3 className="vm-heading">Reported honey-bee colony losses, 2008 to 2025</h3>
+          {controls}
+          {legend}
+          <p className="vm-standfirst">
+            Each hexagon is shaded by the share of managed colonies its country
+            reported losing that year. This is loss, not the spread of the
+            mite: a country appears when its survey starts, and for most of
+            Europe that is 2008. The two hatched states are off the scale.
+          </p>
+        </div>
+      </figure>
+    );
+  }
 
   return (
     <figure className="varroa-map">
@@ -315,98 +610,9 @@ export function VarroaMap() {
 
       <div className="vm-layout">
         <div className="vm-canvas">
-          <svg
-            className="vm-svg"
-            viewBox={`${VIEW.x} ${VIEW.y} ${VIEW.w} ${VIEW.h}`}
-            role="img"
-            aria-label={`World map of reported honey-bee colony losses in ${year}. The same figures are in the table below.`}
-            onPointerMove={onPointer}
-            onPointerLeave={() => hold(true)}
-          >
-            <defs>
-              {/* The two states that are not a loss percentage are hatched as
-                  well as tinted, so they can never be misread as a point on
-                  the scale by a reader who sees the hues differently. */}
-              <pattern id="vm-hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-                <rect width="6" height="6" fill="var(--vm-hatch-bg)" />
-                <line x1="0" y1="0" x2="0" y2="6" stroke="var(--vm-hatch-ink)" strokeWidth="2" />
-              </pattern>
-            </defs>
-
-            {/* The active country, drawn UNDER the map as one ink halo.
-                Enlarging each of its cells past the lattice pitch makes them
-                overlap, so the cells painted on top leave only the outside
-                edge showing. Outlining each cell instead reads as 39 outlined
-                hexagons rather than as one country, which is what Australia
-                looked like before this. */}
-            {activeCells?.map((hex) => (
-              <polygon
-                key={`halo-${hex.col}.${hex.row}`}
-                className="vm-halo"
-                points={hexPoints(hex.x, hex.y, HEX_R + 5)}
-              />
-            ))}
-
-            {HEXES.map((hex) => {
-              const name = HEX_COUNTRY.get(cellKey(hex.col, hex.row));
-              const status = name ? (paint.get(name) ?? "no_data") : "no_data";
-              return (
-                <polygon
-                  key={`${hex.col}.${hex.row}`}
-                  className={`vm-cell vm-cell--${status}`}
-                  points={hexPoints(hex.x, hex.y)}
-                  data-country={name}
-                />
-              );
-            })}
-
-          </svg>
-
-          <div className="vm-controls">
-            <button
-              type="button"
-              className="vm-play"
-              aria-pressed={running}
-              onClick={() => {
-                window.clearTimeout(idle.current);
-                setRunning((r) => !r);
-              }}
-            >
-              {running ? "Pause" : "Play"}
-            </button>
-
-            <label className="vm-slider">
-              <span className="visually-hidden">Year</span>
-              <input
-                type="range"
-                min={0}
-                max={YEARS.length - 1}
-                step={1}
-                value={index}
-                aria-valuetext={String(year)}
-                onChange={(event) => {
-                  setIndex(Number(event.target.value));
-                  hold(true);
-                }}
-                onPointerDown={() => hold(false)}
-                onPointerUp={() => hold(true)}
-                onKeyDown={() => hold(true)}
-              />
-            </label>
-
-            <output className="vm-year" aria-live="off">
-              {year}
-            </output>
-          </div>
-
-          <ul className="vm-legend">
-            {LEGEND.map((status) => (
-              <li key={status}>
-                <span className={`vm-swatch vm-cell--${status}`} aria-hidden="true" />
-                {STATUS_LABEL[status]}
-              </li>
-            ))}
-          </ul>
+          {svg}
+          {controls}
+          {legend}
 
           {/* Under the legend rather than below the figure, because the panel
               beside the map is the taller column and this is what fills the
@@ -422,23 +628,8 @@ export function VarroaMap() {
         </div>
 
         <aside className="vm-side">
-          <div className="vm-picks">
-            {FEATURED.map((name) => (
-              <button
-                key={name}
-                type="button"
-                className={`vm-pick${active === name ? " is-on" : ""}`}
-                aria-pressed={active === name}
-                onClick={() => {
-                  setActive(name);
-                  hold(true);
-                }}
-              >
-                {SHORT[name] ?? name}
-              </button>
-            ))}
-          </div>
-          <Detail name={active} year={year} />
+          {picks}
+          <Detail name={active} year={year} variant="full" />
         </aside>
       </div>
 
@@ -550,7 +741,7 @@ export function VarroaMap() {
         <p className="vm-sources">
           <strong>Sources.</strong>{" "}
           {SOURCES.map((source, i) => (
-            <span key={source.url}>
+            <span key={source.id}>
               {i > 0 && " · "}
               <a href={source.url} target="_blank" rel="noreferrer">
                 {source.ref}

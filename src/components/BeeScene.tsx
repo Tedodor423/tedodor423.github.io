@@ -65,12 +65,44 @@ const MAX_DT = 1 / 20;
 
 /* ---------- the swarm ---------- */
 
-const MAX_BEES = 12;
 /** What the hive starts with, before any flower has been brought in. */
 const INITIAL_BEES = 1;
-/** Flowers to the bee. The tally persists, so the swarm a visitor comes back
- *  to is the one their collection has paid for. */
-const FLOWERS_PER_BEE = 4;
+/** Flowers the second bee costs. Each bee after it costs one more than the
+ *  last: 3 for the second, 4 more for the third, 5 more for the fourth, with
+ *  no ceiling. The tally persists, so the swarm a visitor comes back to is the
+ *  one their collection has paid for. */
+const FIRST_BEE_COST = 3;
+
+/** Sent by the reset button on the bee lab page (BeeReset.tsx). The scene is
+ *  mounted outside the routes, so a window event is the way across. */
+const RESET_EVENT = "nectar:bees-reset";
+
+/** Zero the tally and send the swarm back down to what an empty tally has
+ *  paid for. */
+export function resetBees() {
+  window.dispatchEvent(new Event(RESET_EVENT));
+}
+
+/** Whether this browser shows the bees at all: they need a cursor to follow,
+ *  and they stay away for anyone who has asked for reduced motion. */
+export function beesAvailable(): boolean {
+  return (
+    window.matchMedia("(hover: hover) and (pointer: fine)").matches &&
+    !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
+}
+
+/** How many bees a tally of flowers has paid for. */
+function beesFor(flowers: number): number {
+  let bees = INITIAL_BEES;
+  let cost = FIRST_BEE_COST;
+  while (flowers >= cost) {
+    flowers -= cost;
+    bees += 1;
+    cost += 1;
+  }
+  return bees;
+}
 /* Every bee chases the cursor just as hard however many there are. What grows
  * with the swarm is how far apart they hold: each keeps its own station on a
  * slowly turning ring around the cursor, so a crowd reads as a cloud rather
@@ -154,11 +186,15 @@ const FLOWER_HOLD_MS = 420;
 const FLOWER_FADE_MS = 430;
 
 /** Where the running total of pollinated flowers is kept, and whether the
- *  visitor has switched the whole thing off. */
+ *  visitor has let the bees out. Renamed from "nectar.bees-on" when the bees
+ *  went from on to off by default: the old key was written on every mount, so
+ *  an "on" under it records a default, not a choice. */
 const STORAGE_KEY = "nectar.flowers-pollinated";
-const RUNNING_KEY = "nectar.bees-on";
-/** Whether the one-time step aside on first navigation has been spent. */
-const STOOD_ASIDE_KEY = "nectar.bees-stood-aside";
+const RUNNING_KEY = "nectar.bees-running";
+/** Whether the bees have had their one unprompted outing, on the bee lab. */
+const INTRODUCED_KEY = "nectar.bees-introduced";
+/** The page where the bees come out by themselves, once. */
+const INTRODUCED_ON = "/bee-lab";
 
 const rand = (min: number, max: number) => min + Math.random() * (max - min);
 const randIn = ([min, max]: [number, number]) => rand(min, max);
@@ -180,32 +216,32 @@ function readCollected(): number {
   }
 }
 
-/** Whether the bees are showing. A preference, so it outlives the page. */
+/** Whether the bees are showing. Off until the visitor lets them out from the
+ *  hive; a preference, so it outlives the page. */
 function readRunning(): boolean {
   try {
-    return window.localStorage.getItem(RUNNING_KEY) !== "off";
+    return window.localStorage.getItem(RUNNING_KEY) === "on";
   } catch {
-    return true;
-  }
-}
-
-/** The bees get out of the way once, the first time a visitor goes off to read
- *  something. After that the switch is theirs: if they turn the bees back on,
- *  they stay on. Spent once and remembered, so it is not re-offered on every
- *  visit to someone who has already made their choice. */
-function hasStoodAside(): boolean {
-  try {
-    return window.localStorage.getItem(STOOD_ASIDE_KEY) === "yes";
-  } catch {
-    // Without storage the courtesy happens once per page load instead, which
-    // is the nearest honest thing to once ever.
     return false;
   }
 }
 
-function markStoodAside() {
+/** The bees let themselves out the first time a visitor reaches the bee lab.
+ *  After that the switch is theirs: spent once and remembered, so someone who
+ *  put the bees away is not overruled on the next visit. */
+function wereIntroduced(): boolean {
   try {
-    window.localStorage.setItem(STOOD_ASIDE_KEY, "yes");
+    return window.localStorage.getItem(INTRODUCED_KEY) === "yes";
+  } catch {
+    // Without storage it happens once per page load instead, which is the
+    // nearest honest thing to once ever.
+    return false;
+  }
+}
+
+function markIntroduced() {
+  try {
+    window.localStorage.setItem(INTRODUCED_KEY, "yes");
   } catch {
     // Nothing to do: see above.
   }
@@ -273,7 +309,7 @@ interface Flower {
 /**
  * The wiki's bees.
  *
- * Bees stream out of the hive when the page opens and fly to the cursor,
+ * Once let out, bees stream out of the hive and fly to the cursor,
  * slowing to a hover as they get close. Leave the mouse alone for a few
  * seconds and they drift off about their own business until it moves again.
  * The hive itself is the switch: click it to put the bees away, click it again
@@ -282,14 +318,14 @@ interface Flower {
  * and the hive in the top right counts it. Bees never go into the hive; they
  * only ever come out of it.
  *
- * Every fourth flower brought in hatches another bee, up to a ceiling, so the
- * swarm is the record of what has been collected. The more bees there are the wider they
- * hold around the cursor, but each one answers it exactly as fast as a lone bee
- * would.
+ * Flowers brought in hatch more bees, each bee costing one flower more than the
+ * last (3, then 4, then 5...) with no ceiling, so the swarm is the record of
+ * what has been collected. The more bees there are the wider they hold around
+ * the cursor, but each one answers it exactly as fast as a lone bee would.
  *
- * The hive goes faint while they are away, and the choice is remembered. It
- * also puts itself away the first time a visitor navigates off the page they
- * arrived on, once ever, so that nothing buzzes over the wiki while they read.
+ * The bees start in the hive, which is faint while they are away. They come
+ * out by themselves the first time a visitor reaches the bee lab, once ever;
+ * after that the switch is the visitor's, and the choice is remembered.
  *
  * Only the two buttons are interactive. Everything else is `aria-hidden`, never
  * takes a pointer event, and is not rendered at all for a coarse pointer (no
@@ -311,11 +347,7 @@ export function BeeScene() {
   const countRef = useRef<HTMLSpanElement>(null);
 
   // Settings, not state: decided once, on mount.
-  const [enabled] = useState(
-    () =>
-      window.matchMedia("(hover: hover) and (pointer: fine)").matches &&
-      !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
-  );
+  const [enabled] = useState(beesAvailable);
   const [collected, setCollected] = useState(readCollected);
   const [running, setRunning] = useState(readRunning);
 
@@ -328,17 +360,13 @@ export function BeeScene() {
     dropFlowers.current?.();
   }, [pathname]);
 
-  /** The page the scene came up on. Moving off it is the signal that someone
-   *  has come to read rather than to play. */
-  const openedOn = useRef(pathname);
-  const [stoodAside, setStoodAside] = useState(hasStoodAside);
+  const [introduced, setIntroduced] = useState(wereIntroduced);
   useEffect(() => {
-    if (pathname === openedOn.current || stoodAside) return;
-    openedOn.current = pathname;
-    setStoodAside(true);
-    markStoodAside();
-    setRunning(false);
-  }, [pathname, stoodAside]);
+    if (pathname !== INTRODUCED_ON || introduced) return;
+    setIntroduced(true);
+    markIntroduced();
+    setRunning(true);
+  }, [pathname, introduced]);
 
   // The loop reads both of these rather than depending on them, so that
   // switching off or bringing in a flower never tears the scene down and
@@ -363,6 +391,17 @@ export function BeeScene() {
       // No storage: the tally still works, it just will not outlive the page.
     }
   }, [collected]);
+
+  // The tally half of a reset. The swarm half lives in the loop below, which
+  // is the only thing that can reach the bees.
+  useEffect(() => {
+    const onReset = () => {
+      collectedRef.current = 0;
+      setCollected(0);
+    };
+    window.addEventListener(RESET_EVENT, onReset);
+    return () => window.removeEventListener(RESET_EVENT, onReset);
+  }, []);
 
   // Nudge the number when it changes, but not for the value restored on load.
   // Comparing against the last value rather than tracking a first run keeps
@@ -515,10 +554,7 @@ export function BeeScene() {
      *  big as the flower bank has earned, so a visitor who comes back to a
      *  full tally comes back to a full hive. */
     const restock = () => {
-      const earned = Math.min(
-        MAX_BEES,
-        INITIAL_BEES + Math.floor(collectedRef.current / FLOWERS_PER_BEE),
-      );
+      const earned = beesFor(collectedRef.current);
 
       // Queued, not placed: every bee arrives by flying out of the hive, so a
       // fresh page opens with the swarm streaming out of the door rather than
@@ -652,9 +688,10 @@ export function BeeScene() {
       collectedRef.current = total;
       setCollected(total);
 
-      // Every fourth flower is another bee out of the hive. This is the only
-      // way the swarm grows, which is what makes a flower worth chasing.
-      if (total % FLOWERS_PER_BEE === 0 && bees.length < MAX_BEES) {
+      // A flower that completes the next bee's price lets it out of the hive.
+      // This is the only way the swarm grows, which is what makes a flower
+      // worth chasing.
+      if (beesFor(total) > beesFor(total - 1)) {
         bees.push(makeBee(door, { x: rand(-240, -110), y: rand(60, 210) }));
         pulseHive();
       }
@@ -997,6 +1034,15 @@ export function BeeScene() {
       }
     };
 
+    /** Back to what an empty tally pays for: the newest bees shrink away where
+     *  they are, and any still queued in the hive stay there. */
+    const onReset = () => {
+      const keep = beesFor(0);
+      const now = performance.now();
+      bees.splice(keep).forEach((bee) => retire(bee, now));
+      pendingHatch = live ? Math.min(pendingHatch, keep - bees.length) : 0;
+    };
+
     placeCluster(nav ? Math.max(nav.getBoundingClientRect().bottom, 0) : 0);
 
     // The loop only restocks on a change of switch, so the opening hive has to
@@ -1005,6 +1051,7 @@ export function BeeScene() {
 
     window.addEventListener("pointermove", onPointerMove, { passive: true });
     window.addEventListener("resize", onResize);
+    window.addEventListener(RESET_EVENT, onReset);
     raf = requestAnimationFrame(tick);
 
     return () => {
@@ -1012,6 +1059,7 @@ export function BeeScene() {
       window.clearTimeout(pulseTimer);
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("resize", onResize);
+      window.removeEventListener(RESET_EVENT, onReset);
       clearFlowers();
       dropFlowers.current = null;
       bees.forEach((bee) => bee.el.remove());
@@ -1063,7 +1111,7 @@ export function BeeScene() {
           {/* Shown on hover and on focus. The hive already carries its name and
               state for assistive tech, so this is decoration of it. */}
           <span className="hive-tip" aria-hidden="true">
-            {running ? "Put bees away" : "Bring bees back"}
+            {running ? "Put bees away" : "Let bees out"}
           </span>
         </div>
       </div>

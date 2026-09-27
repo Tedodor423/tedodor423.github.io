@@ -2,12 +2,6 @@
 honey-hex
 ```
 
-## Who we spoke to
-
-```component
-hp-stats
-```
-
 ```component
 stakeholder-map
 ```

@@ -628,6 +628,220 @@
   line-height: 1.6;
 }
 
+/* ---------- the home page's form ---------- */
+
+/* On the home page the figure is the slide: no plate, no caption, the map as
+ * wide as the window allows, and the five countries this wiki argues from as
+ * the only ones that answer. The full record, every country and the caveats
+ * with it, stays on the case-studies page, which the panel points at.
+ *
+ * Mobile first. Stacked: the map, then its controls, then the panel. Side by
+ * side, from 48rem: the panel a column beside the map, which takes everything
+ * else; from 78rem the column is wide enough to read without scrolling. */
+.varroa-map--slide {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: 0;
+}
+
+/* Stacked, the frame and the plate are no boxes at all, so the map, the strip
+ * and the panel are the figure's own children and can be put in reading
+ * order: map, controls, panel. */
+.varroa-map--slide .vm-frame,
+.varroa-map--slide .vm-plate {
+  display: contents;
+}
+
+.varroa-map--slide .vm-svg {
+  order: 0;
+}
+
+.varroa-map--slide .vm-strip {
+  order: 1;
+}
+
+.varroa-map--slide .vm-side {
+  order: 2;
+  margin-top: 1rem;
+}
+
+/* The five countries that answer. Outlined at rest in the deep wax tone, the
+ * hint that they can be pressed, and in ink under the pointer, on focus and
+ * while in the panel. The halo takes pointer events here so the ring round a
+ * three-cell country is part of its target. */
+.vm-country {
+  cursor: pointer;
+  outline: none;
+}
+
+.vm-country .vm-halo {
+  fill: var(--wax-deep);
+  pointer-events: fill;
+}
+
+.vm-country:hover .vm-halo,
+.vm-country:focus-visible .vm-halo,
+.vm-country.is-on .vm-halo {
+  fill: var(--ink);
+}
+
+/* The panel, as a card on the paper the plate used to bring. */
+.varroa-map--slide .vm-side {
+  flex: none;
+  min-width: 0;
+  padding: 0.75rem 0.85rem;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+}
+
+.varroa-map--slide .vm-picks {
+  margin-bottom: 0.5rem;
+}
+
+.varroa-map--slide .vm-detail {
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+/* The caveats the caption carried, now in the country's panel, and the source
+ * line under them. Muted, like the provenance they follow. */
+.vm-caveats {
+  margin: 0.6rem 0 0;
+  padding-left: 1.1rem;
+  font-size: 0.72rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+.vm-caveats li {
+  margin-bottom: 0.3rem;
+}
+
+.vm-cite {
+  margin: 0.5rem 0 0;
+  font-size: 0.72rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+/* The line at the foot of the panel that points at the full record. */
+.vm-full {
+  margin: 0.7rem 0 0;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--rule);
+  font-size: 0.72rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+/* Under the map: its title, the year control, the key and the one sentence
+ * that says what the map is and is not. */
+.vm-strip {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.4rem 1.5rem;
+  align-items: center;
+  padding-top: 0.6rem;
+}
+
+.varroa-map--slide .vm-heading {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.varroa-map--slide .vm-controls,
+.varroa-map--slide .vm-legend {
+  margin: 0;
+}
+
+.varroa-map--slide .vm-standfirst {
+  max-width: none;
+  margin: 0;
+  font-size: 0.78rem;
+}
+
+/* Side by side, from 48rem: the panel is a column beside the map, and the map
+ * takes every pixel the column leaves, in width and, where the slide has made
+ * the frame a size container (VarroaSlide.css), in height too. Its width is
+ * whichever is smaller: the room's height at the map's own ratio, or what the
+ * column leaves. Elsewhere 100cqh falls back to the viewport, which is never
+ * the tighter bound. The column scrolls inside itself when a country's notes
+ * run past the room.
+ *
+ * A column, not a card floating over the ocean, because that was tried: with
+ * a country's notes, caveats and sources in it the panel runs to some 700px,
+ * and the only ocean that tall is west of the Americas, so it covered Alaska,
+ * the US west coast and California, one of the five it exists to explain. */
+@media (min-width: 48rem) {
+  /* One track with no minimum, or the implicit auto track would grow to the
+   * map's uncapped width and the percentage cap below would resolve against
+   * that instead of the room. */
+  .varroa-map--slide .vm-frame {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    place-items: center;
+  }
+
+  .varroa-map--slide .vm-plate {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .varroa-map--slide .vm-svg {
+    flex: none;
+    width: calc(100cqh * var(--vm-ratio));
+    max-width: calc(100% - 18rem);
+  }
+
+  .varroa-map--slide .vm-side {
+    flex: 1 1 0;
+    min-width: 17rem;
+    max-width: 26rem;
+    max-height: 100cqh;
+    overflow: auto;
+    order: 0;
+    margin-top: 0;
+  }
+
+  .vm-strip {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .varroa-map--slide .vm-legend,
+  .varroa-map--slide .vm-standfirst {
+    grid-column: 1 / -1;
+  }
+
+  /* The comb switch sits fixed in the page's bottom right corner, over
+   * whatever ends there. This is the line that would. */
+  .varroa-map--slide .vm-standfirst {
+    max-width: calc(100% - 10rem);
+  }
+}
+
+/* Wide: a column the longest panel can be read in without scrolling. */
+@media (min-width: 78rem) {
+  .varroa-map--slide .vm-svg {
+    max-width: calc(100% - 22rem);
+  }
+
+  .varroa-map--slide .vm-side {
+    min-width: 21rem;
+  }
+}
+
 /* ---------- narrow screens ---------- */
 
 @media (max-width: 45rem) {

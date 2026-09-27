@@ -171,56 +171,6 @@ const Pages: MenuEntry[] = [
     ],
   },
   {
-    name: "Human practices",
-    section: "The project in detail",
-    children: [
-      {
-        name: "Integrated human practices",
-        title: "NECTAR in the Real World",
-        path: "/human-practices", // iGEM standard URL
-        content: humanPractices,
-        // No lead: the page opens straight onto the approach + HONEY figure.
-      },
-      {
-        name: "Outreach and Education",
-        title: "Public Outreach",
-        path: "/education", // iGEM standard URL
-        content: education,
-        lead: "What we taught, to whom, and what we learned back.",
-      },
-      {
-        name: "Case studies",
-        title: "Case Studies",
-        path: "/case-studies",
-        content: caseStudies,
-        lead: "The same technology meets very different realities.",
-        children: [
-          {
-            name: "Australia",
-            title: "Case Study: Australia",
-            path: "/case-studies/australia",
-            content: caseStudyAustralia,
-            lead: "Recent establishment, reinvasion pressure and an industry under strain.",
-          },
-          {
-            name: "California",
-            title: "Case Study: California",
-            path: "/case-studies/california",
-            content: caseStudyCalifornia,
-            lead: "Migratory beekeeping at enormous scale, and the almond pollination market.",
-          },
-        ],
-      },
-      {
-        name: "Economical modelling",
-        title: "Economic Modelling",
-        path: "/economic-modelling",
-        content: economicModelling,
-        lead: "Allowable cost, manufacturing cost, and the yeast titre they imply.",
-      },
-    ],
-  },
-  {
     name: "Wet lab",
     section: "The project in detail",
     children: [
@@ -316,6 +266,56 @@ const Pages: MenuEntry[] = [
         path: "/bee-lab-labbook",
         content: beeLabLabbook,
         lead: "The dated record of the bee lab, 29 June to 25 September 2026.",
+      },
+    ],
+  },
+  {
+    name: "Human practices",
+    section: "The project in detail",
+    children: [
+      {
+        name: "Integrated human practices",
+        title: "NECTAR in the Real World",
+        path: "/human-practices", // iGEM standard URL
+        content: humanPractices,
+        // No lead: the page opens straight onto the approach + HONEY figure.
+      },
+      {
+        name: "Outreach and Education",
+        title: "Public Outreach",
+        path: "/education", // iGEM standard URL
+        content: education,
+        lead: "What we taught, to whom, and what we learned back.",
+      },
+      {
+        name: "Case studies",
+        title: "Case Studies",
+        path: "/case-studies",
+        content: caseStudies,
+        lead: "The same technology meets very different realities.",
+        children: [
+          {
+            name: "Australia",
+            title: "Case Study: Australia",
+            path: "/case-studies/australia",
+            content: caseStudyAustralia,
+            lead: "Recent establishment, reinvasion pressure and an industry under strain.",
+          },
+          {
+            name: "California",
+            title: "Case Study: California",
+            path: "/case-studies/california",
+            content: caseStudyCalifornia,
+            lead: "Migratory beekeeping at enormous scale, and the almond pollination market.",
+          },
+        ],
+      },
+      {
+        name: "Economical modelling",
+        title: "Economic Modelling",
+        path: "/economic-modelling",
+        content: economicModelling,
+        lead: "Allowable cost, manufacturing cost, and the yeast titre they imply.",
       },
     ],
   },

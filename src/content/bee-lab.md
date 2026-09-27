@@ -314,3 +314,7 @@ the RT-qPCR programme. The handbook written for other teams is
 [Hardware](/hardware) · [Measurement](/measurement) · [Results](/results) ·
 [Engineering](/engineering) · [Safety and security](/project-safety) ·
 [Contribution](/contribution)
+
+```component
+bee-reset
+```

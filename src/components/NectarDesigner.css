@@ -1,0 +1,1229 @@
+/* The NectarDesigner walkthrough on /software. See NectarDesigner.tsx for what
+ * it is and src/utils/rnaDesign.ts for where its numbers come from.
+ *
+ * SAME LINE LANGUAGE AS THE REST OF THE WIKI: solid surfaces on hard ink
+ * rules, one radius, no shadow, no gradient, no translucency. The stage is a
+ * paper panel; the band behind it shows around it. That is the menu bar's
+ * grammar and the engineering comb's, applied to a figure.
+ *
+ * TYPE. Labels and headings take the heading face, every number and every
+ * sequence takes the mono face, and sequences get tabular figures and extra
+ * letter-spacing so a 24-mer can be read off the screen character by
+ * character. Nothing here uses the display face: a number set in Cubao reads
+ * as decoration, and this figure is not decorative.
+ *
+ * MOTION. Four things move, and each one shows a process rather than dressing
+ * one. The fold settles under a real spring simulation, so stems visibly pull
+ * their partners together. The guide melts its site open and then docks, which
+ * is the cost-to-open number happening. The screen sweeps a species at a time,
+ * so a rejection is watched rather than presented. And switching step moves
+ * the panel, which is the one piece of pure chrome and the shortest.
+ *
+ * All of it is off under prefers-reduced-motion, and the component also
+ * carries its own switch, because a reader may want it still on a machine that
+ * never set the preference. The switch is the authority: when it is off the
+ * component computes final positions synchronously and draws once.
+ */
+
+.nd {
+  /* Out of the 36rem reading measure and into the band, the same escape the
+     engineering comb and the stakeholder map use. The fold and the tables both
+     need the width. */
+  width: min(74rem, calc(100vw - 3rem));
+  max-width: none;
+  margin-inline: calc((100% - min(74rem, calc(100vw - 3rem))) / 2);
+  margin-block: 2rem 2.5rem;
+
+  /* ---------- screening status ---------- */
+
+  /* Three steps for a state, not for identity, and the only true colour scale
+     in this component. Checked with the dataviz validator against the wax
+     surface these cells sit on: every step clears the lightness band, the
+     chroma floor, adjacent separation under simulated protanopia and
+     deuteranopia, the normal-vision floor and 3:1 contrast.
+     --nd-caution is the brand's own --loss-2; the other two are new.
+
+     THESE ARE CANDIDATES FOR PROMOTION TO brand.css. The wiki already needs a
+     status key: five content files currently use coloured-circle emoji for
+     supported / preliminary / failed / modelled, which the design skill flags
+     as an open tension because emoji are an AI tell and the colours duplicate
+     the written status labels. A validated three-step scale rendered as a
+     designed label would settle it. That is a team decision, not one to make
+     inside a component, so the tokens stay scoped here until someone takes it.
+
+     Colour never travels alone on this figure: every cell carries a title,
+     every row states its outcome in a word, the species that cannot be
+     screened are hatched as well as coloured, and the whole matrix is
+     repeated as a table. */
+  --nd-pass: #1f7a4d;
+  --nd-caution: #c07d2c;
+  --nd-hit: #9b2c1f;
+}
+
+/* ---------- the standing warning ---------- */
+
+/* The loudest panel on the page, and deliberately so. Ink on honey is the
+   brand's strongest pairing at 13.8:1, it is the treatment the menu bar and
+   the hive buttons already use, and a reader cannot scroll past it by
+   accident. Everything below it is generated, and that has to be impossible
+   to miss. */
+.nd-warning {
+  margin: 1.25rem 0 0;
+  padding: 0.9rem 1.1rem;
+  background: var(--honey);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* The standing marker in the tool's own header. Small on purpose: the full
+   note is a scroll away under the figure, and this only has to make sure a
+   number is never on screen alone. Ink on honey again, the same pairing the
+   note uses, so the two read as one statement in two sizes. */
+.nd-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.6rem;
+  background: var(--honey);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  line-height: 1.1;
+}
+
+.nd-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.nd-toolbar-note {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  max-width: 40rem;
+}
+
+.nd-toolbar-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* ---------- the step rail ---------- */
+
+/* Seven cells across the top, and the only navigation the figure has. Flat-top
+   hexagons, like the engineering comb, so a reader who has met one knows what
+   these are. The selected one fills with honey; the rest are outlines. No step
+   is ever locked, unlike the standalone tool this came from: every stage is
+   computed whatever you are looking at, so a judge who wants the safety screen
+   can go straight to it. */
+.nd-rail {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.2rem;
+  overflow-x: auto;
+  padding-bottom: 0.4rem;
+  margin-bottom: 0.9rem;
+  border-bottom: 3px solid var(--honey);
+}
+
+.nd-rail-step {
+  flex: 1 1 0;
+  min-width: 5.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.4rem 0.3rem;
+  background: none;
+  border: 0;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.nd-rail-step:hover .nd-rail-cell {
+  fill: var(--lab-bee-fill);
+}
+
+.nd-rail-step:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+
+.nd-rail-cell {
+  fill: var(--surface);
+  stroke: var(--comb-edge);
+  stroke-width: 2;
+}
+
+.nd-rail-step[aria-selected="true"] .nd-rail-cell {
+  fill: var(--honey);
+  stroke: var(--ink);
+}
+
+.nd-rail-step svg text {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 13px;
+  fill: var(--ink);
+}
+
+.nd-rail-label {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.7rem;
+  letter-spacing: 0.03em;
+  line-height: 1.2;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.nd-rail-step[aria-selected="true"] .nd-rail-label {
+  color: var(--ink);
+}
+
+/* ---------- the stage ---------- */
+
+.nd-stage {
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  scroll-margin-top: 7rem;
+}
+
+/* Keyed on the step in the component, so this replays on every switch. Short,
+   because it is the one piece of motion here that carries no information: it
+   says the panel was replaced, nothing more. */
+.nd-stage[data-motion="on"] {
+  animation: nd-stage-in 0.26s ease-out both;
+}
+
+@keyframes nd-stage-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.nd-step-head {
+  padding-bottom: 0.7rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+/* Beats CombBands, which recolours every h3 for the dark photograph. This
+   panel brings its own paper, so its headings keep the page's ink. */
+.nd-step-head h3,
+[data-comb="on"] [data-band="comb"] .nd-step-head h3 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1.15rem;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.nd-step-ordinal {
+  color: var(--text-muted);
+}
+
+.nd-step-decides {
+  margin: 0.3rem 0 0;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.nd-body > * + * {
+  margin-top: 1rem;
+}
+
+.nd-subhead,
+[data-comb="on"] [data-band="comb"] .nd-subhead {
+  margin: 1.5rem 0 0.5rem;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+/* ---------- moving between steps ---------- */
+
+.nd-move {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.9rem;
+}
+
+.nd-move-where {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ---------- prose inside a step ---------- */
+
+.nd-fact {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: var(--text);
+}
+
+/* A limitation the reader has to see. A hairline box on the tinted neutral,
+   not a coloured stripe: the stripe is the page's placeholder language and
+   this is a live statement about the run, not a TODO. */
+.nd-flag {
+  margin: 0;
+  padding: 0.6rem 0.8rem;
+  background: var(--surface-muted);
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+/* While the sweep is still running. */
+.nd-sweeping {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* ---------- controls ---------- */
+
+.nd-field {
+  margin: 0;
+}
+
+.nd-field-label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.82rem;
+  letter-spacing: 0.03em;
+  color: var(--ink);
+}
+
+.nd-field-hint {
+  margin: 0.45rem 0 0;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+.nd-pair {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+}
+
+.nd-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.nd-chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.65rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.nd-chip:hover {
+  border-color: var(--ink);
+}
+
+.nd-chip[aria-pressed="true"] {
+  background: var(--honey);
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+.nd-chip:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+/* A species with no reference transcriptome. It can still be put in the panel,
+   because leaving it out would hide the gap; what it cannot do is return a
+   result, and the matrix hatches its column to say so. */
+.nd-chip.is-unscreenable {
+  border-style: dashed;
+  color: var(--text-muted);
+}
+
+/* Recommended for the selected pest. A small honey square, and the field's
+   own hint says in words what it means, so the mark is never the only
+   carrier. */
+.nd-chip-mark {
+  width: 0.45rem;
+  height: 0.45rem;
+  background: var(--honey);
+  border: 1px solid var(--ink);
+}
+
+.nd-chip-tag {
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* A value the pipeline worked out rather than one the reader dialled. Set
+   apart so the difference is visible at a glance. */
+.nd-derived {
+  padding: 0.75rem 0.9rem;
+  background: var(--surface-muted);
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+}
+
+.nd-derived-value {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--ink);
+  margin-right: 0.5rem;
+}
+
+.nd-derived-label {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.nd-derived p {
+  margin: 0.4rem 0 0;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+/* Flat track, honey thumb on an ink rule. No gradient fill: a gradient is the
+   default AI hero treatment and this one would carry no information the
+   printed value beside the label does not already carry. */
+.nd-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  max-width: 24rem;
+  height: 1.1rem;
+  background: transparent;
+  cursor: pointer;
+}
+
+.nd-range::-webkit-slider-runnable-track {
+  height: 0.35rem;
+  background: var(--rule);
+  border: 1px solid var(--ink);
+}
+
+.nd-range::-moz-range-track {
+  height: 0.35rem;
+  background: var(--rule);
+  border: 1px solid var(--ink);
+}
+
+.nd-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  margin-top: -0.4rem;
+  background: var(--honey);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+}
+
+.nd-range::-moz-range-thumb {
+  width: 1rem;
+  height: 1rem;
+  background: var(--honey);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+}
+
+.nd-range:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.nd-switch {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  cursor: pointer;
+}
+
+.nd-switch input {
+  flex: none;
+  margin-top: 0.25rem;
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--honey);
+}
+
+.nd-button {
+  padding: 0.35rem 0.8rem;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: var(--ink);
+  background: var(--honey);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.nd-button:hover:not(:disabled) {
+  background: var(--surface-muted);
+}
+
+.nd-button:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.nd-button:disabled {
+  color: var(--text-muted);
+  background: var(--surface);
+  border-color: var(--rule);
+  cursor: default;
+}
+
+/* The secondary weight: the motion switch and Back, neither of which should
+   compete with the thing that moves you forward. */
+.nd-button.is-quiet {
+  background: var(--surface);
+  border-color: var(--ink);
+}
+
+.nd-button.is-quiet[aria-pressed="true"] {
+  background: var(--surface-muted);
+  color: var(--text-muted);
+}
+
+/* The in-table choose control. Smaller and quieter than a button, because
+   there is one on every row and ten loud buttons is a wall. */
+.nd-pick {
+  padding: 0.1rem 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.nd-pick:hover {
+  border-color: var(--ink);
+}
+
+.nd-pick[aria-pressed="true"] {
+  background: var(--honey);
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+.nd-pick:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+
+/* ---------- tables ---------- */
+
+/* Every figure in this component has one. A chart that cannot be read as a
+   table is a chart that gates its values behind a pointer, which the house
+   rules forbid and which no screen reader can follow. */
+
+.nd-scroll {
+  overflow-x: auto;
+}
+
+.nd-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.nd-table-caption {
+  caption-side: top;
+  text-align: left;
+  padding-bottom: 0.4rem;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.nd-table th,
+.nd-table td,
+[data-comb="on"] [data-band="comb"] .nd-table th,
+[data-comb="on"] [data-band="comb"] .nd-table td {
+  padding: 0.3rem 0.5rem;
+  border: 1px solid var(--rule);
+  text-align: left;
+  vertical-align: top;
+  color: var(--text);
+}
+
+.nd-table thead th,
+[data-comb="on"] [data-band="comb"] .nd-table thead th {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  background: var(--surface-muted);
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.nd-table tbody th {
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+/* Columns of numbers align, so they get tabular figures. Standalone values
+   elsewhere keep proportional ones. */
+.nd-num {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* A sequence is read character by character, so it is spaced to be. */
+.nd-seq {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.nd-table tr.is-chosen > * {
+  background: var(--lab-bee-fill);
+}
+
+/* A window the screen threw out. Struck through as well as dimmed, so the
+   outcome does not rest on a colour. */
+.nd-table tr.is-out th,
+.nd-table tr.is-out td {
+  color: var(--text-muted);
+}
+
+.nd-table tr.is-out .nd-seq {
+  text-decoration: line-through;
+}
+
+/* ---------- figures ---------- */
+
+.nd-figure {
+  margin: 0;
+}
+
+.nd-caption {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.1rem;
+  margin-top: 0.6rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* A caption that is a paragraph rather than a key. */
+.nd-caption--block {
+  display: block;
+  line-height: 1.55;
+  max-width: 44rem;
+}
+
+.nd-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.nd-key-swatch {
+  width: 0.85rem;
+  height: 0.74rem;
+  flex: none;
+  border: 1px solid var(--ink);
+  /* Flat-top, matching every cell on the figures it keys. */
+  clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+}
+
+.nd-key-swatch--open {
+  background: var(--honey);
+}
+
+.nd-key-swatch--capped {
+  background: var(--wax-deep);
+}
+
+/* The selected window carries a heavy ink rule on the comb and the fold rather
+   than a fill, so the cell underneath can still show how capped it is. */
+.nd-key-swatch--marked {
+  background: var(--honey);
+  border-width: 3px;
+}
+
+.nd-key-swatch--pass {
+  background: var(--nd-pass);
+}
+
+.nd-key-swatch--caution {
+  background: var(--nd-caution);
+}
+
+.nd-key-swatch--hit {
+  background: var(--nd-hit);
+}
+
+/* Hatching, not a gradient in the sense the design rules ban. The banned one
+   is a decorative colour wash; this is the texture channel, drawn at 45
+   degrees to match the SVG pattern on the matrix cells it keys, and it is
+   carrying the one state that colour must not carry alone: a species we
+   could not screen at all. The varroa map and the risk tile hatch for the
+   same reason, that a state is not a measurement. */
+.nd-key-swatch--unscreenable {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--rule) 0 2px,
+    var(--ink) 2px 3px
+  );
+}
+
+/* ---------- the folding view ---------- */
+
+/* A DARK INSET, and the only one on the wiki. Every colour inside it is set
+   on the elements themselves from the dry lab's own palette (see the note in
+   NectarDesigner.tsx), because this panel is the team's instrument carried
+   over as they designed it rather than a figure restyled into honey and wax.
+   The stylesheet's job here is only the box. */
+.nd-fold {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+}
+
+/* The two views of the same fold, above the panel. */
+.nd-fold-modes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.nd-fold-modes .nd-field-label {
+  margin-bottom: 0;
+}
+
+/* The label on the leader pointing at the selected window. Inside the dark
+   panel, so it takes the panel's yellow rather than a page token. */
+.nd-fold-leader {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 10px;
+}
+
+/* Wax, for the key beneath the panel. The same value the caps are drawn in. */
+.nd-key-swatch--wax {
+  background: #bfa97c;
+}
+
+.nd-fold-status {
+  margin: 0.35rem 0 0;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ---------- the accessibility comb ---------- */
+
+/* Which stretch the fold above is drawing, in words, under the panel. */
+.nd-fold-where {
+  margin: 0.5rem 0 0;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+.nd-comb-title {
+  margin-bottom: 0.4rem;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.nd-comb {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.nd-comb-open {
+  fill: var(--honey);
+}
+
+/* Wax closing over the cell from its flat top, the way a brood cell caps.
+   The height of this rectangle IS the occlusion, so the encoding is a length
+   rather than a hue and it survives any colour-vision deficiency. */
+.nd-comb-cap {
+  fill: var(--wax-deep);
+}
+
+.nd-comb-edge {
+  fill: none;
+  stroke: var(--comb-edge);
+  stroke-width: 1;
+}
+
+.nd-comb-edge.is-marked {
+  stroke: var(--ink);
+  stroke-width: 3;
+}
+
+.nd-comb-axis {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.2rem;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+/* ---------- the docking readout ---------- */
+
+.nd-dock {
+  margin-top: 1rem;
+  padding: 0.9rem;
+  background: var(--surface-muted);
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+}
+
+.nd-dock-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.nd-dock-cell {
+  fill: var(--surface);
+  stroke: none;
+}
+
+.nd-dock-cell.is-footprint {
+  fill: var(--honey);
+}
+
+.nd-dock-cell.is-guide {
+  fill: var(--lab-wet-fill);
+}
+
+/* The competing structure, lifting off the site. It only appears when the
+   window is occluded, and the time it takes is the cost-to-open number in the
+   readouts below made visible. */
+.nd-dock-melt {
+  fill: var(--wax-deep);
+  transition: height 0.5s ease-in-out;
+}
+
+.nd-dock-base {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  fill: var(--ink);
+}
+
+.nd-dock-bond {
+  stroke: var(--ink);
+  stroke-width: 1;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+.nd-dock-bonds[data-on="yes"] .nd-dock-bond {
+  animation: nd-bond 0.2s linear forwards;
+}
+
+@keyframes nd-bond {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* The guide sliding in from the right to meet its site. The transform lives on
+   this inner group; the outer one carries the position, so the two never
+   fight. */
+.nd-dock-guide {
+  opacity: 0;
+  transform: translateX(90px);
+  transition:
+    transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.3s ease;
+}
+
+.nd-dock-guide[data-on="yes"] {
+  opacity: 1;
+  transform: none;
+}
+
+.nd-dock-note {
+  margin: 0.8rem 0 0;
+  font-size: 0.84rem;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.nd-readouts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 0.9rem;
+  margin: 0.9rem 0 0;
+}
+
+.nd-readouts dt {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* A standalone value, so proportional figures rather than tabular: at this
+   size tabular digits make a short number look loose. */
+.nd-readouts dd {
+  margin: 0.1rem 0 0;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: 1.1;
+  color: var(--ink);
+}
+
+.nd-readouts p {
+  margin: 0.15rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+/* ---------- the screening matrix ---------- */
+
+/* Drawn at its natural size and allowed to shrink, never to grow. SVG text
+   scales with the viewBox, so a matrix stretched to fill the column would set
+   its species labels several times larger than the prose beside them. */
+.nd-matrix {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.nd-cell {
+  stroke: var(--surface);
+  stroke-width: 2;
+  transition: fill 0.25s linear;
+}
+
+.nd-cell--pass {
+  fill: var(--nd-pass);
+}
+
+.nd-cell--caution {
+  fill: var(--nd-caution);
+}
+
+.nd-cell--hit {
+  fill: var(--nd-hit);
+}
+
+/* A column the sweep has not reached. Empty, not clear: it says "not yet",
+   which is a different thing from a pass, and it is why the count in the
+   sentence above holds off until the sweep finishes. */
+.nd-cell--waiting {
+  fill: var(--rule);
+}
+
+/* Fill comes from the hatch pattern in the markup; this only draws the edge. */
+.nd-cell--unscreenable {
+  stroke: var(--ink);
+  stroke-width: 1;
+}
+
+.nd-hatch-ground {
+  fill: var(--rule);
+}
+
+.nd-hatch-line {
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+
+.nd-matrix-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  fill: var(--text);
+  text-anchor: start;
+}
+
+.nd-matrix-label.is-waiting {
+  fill: var(--text-muted);
+  opacity: 0.45;
+}
+
+.nd-matrix-row {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 10px;
+  fill: var(--text-muted);
+}
+
+/* ---------- the construct map ---------- */
+
+.nd-map {
+  display: flex;
+  width: 100%;
+  height: 2.1rem;
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+/* Emphasis, not a categorical palette: the insert is the thing the pipeline
+   produced and the only honey on the bar. The 2px surface gap between parts is
+   what separates them, rather than a stroke drawn round each one. */
+.nd-map-part {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2px;
+  background: var(--wax-deep);
+  box-shadow: inset -2px 0 0 var(--surface);
+  overflow: hidden;
+}
+
+.nd-map-part:last-child {
+  box-shadow: none;
+}
+
+.nd-map-part.is-insert {
+  background: var(--honey);
+}
+
+/* Only rendered when the part is wide enough to hold it, so a label is never
+   clipped by its own segment. Ink on both honey and wax clears contrast. */
+.nd-map-label {
+  padding: 0 0.3rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  white-space: nowrap;
+  color: var(--ink);
+}
+
+.nd-sites {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.82rem;
+}
+
+.nd-sites li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.nd-site-done {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.74rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--nd-pass);
+}
+
+/* ---------- export ---------- */
+
+.nd-downloads {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.nd-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 0.7rem 1.2rem;
+  margin: 0;
+}
+
+.nd-summary dt {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.74rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.nd-summary dd {
+  margin: 0.1rem 0 0;
+  font-size: 0.84rem;
+  line-height: 1.45;
+  color: var(--text);
+}
+
+/* Real generated output, shown because it is the actual deliverable of the
+   last step. This is not a decorative terminal window: it is the file. */
+.nd-preview {
+  max-height: 18rem;
+  overflow: auto;
+  margin: 0;
+  padding: 0.7rem 0.8rem;
+  background: var(--surface-muted);
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 0.72rem;
+  line-height: 1.5;
+  color: var(--text);
+  white-space: pre;
+}
+
+.nd-preview:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+/* ---------- the comb band ---------- */
+
+/* CombBands recolours headings, bold text and table rules so they read on the
+   dark photograph. Every surface in this component is its own paper, so it
+   opts back out wholesale rather than rule by rule. */
+[data-comb="on"] [data-band="comb"] .nd h3,
+[data-comb="on"] [data-band="comb"] .nd h4,
+[data-comb="on"] [data-band="comb"] .nd strong {
+  color: var(--ink);
+}
+
+/* Except the toolbar note and the rail, which sit on the band itself with no
+   panel under them, so there they take the band's own light ink. */
+[data-comb="on"] [data-band="comb"] .nd-toolbar-note,
+[data-comb="on"] [data-band="comb"] .nd-rail-label {
+  color: var(--comb-ink);
+}
+
+[data-comb="on"] [data-band="comb"] .nd-rail-step[aria-selected="true"] .nd-rail-label {
+  color: var(--honey);
+}
+
+/* ---------- narrow screens ---------- */
+
+@media (max-width: 48rem) {
+  .nd-stage {
+    padding: 0.9rem;
+  }
+
+  .nd-step-head h3 {
+    font-size: 1rem;
+  }
+
+  /* The rail stops trying to fit seven across and scrolls instead, so a cell
+     stays big enough to touch. */
+  .nd-rail-step {
+    flex: 0 0 auto;
+    min-width: 4.5rem;
+  }
+
+  /* The comb is the one figure that must not shrink with the column: at phone
+     width forty-four cells would be two pixels each. It scrolls instead. */
+  .nd-comb {
+    min-width: 34rem;
+  }
+
+  .nd-figure:has(.nd-comb) {
+    overflow-x: auto;
+  }
+
+  .nd-readouts {
+    gap: 0.6rem;
+  }
+
+  .nd-readouts dd {
+    font-size: 1.25rem;
+  }
+}
+
+/* ---------- reduced motion ---------- */
+
+/* The backstop. The component also reads the preference in JavaScript and
+   computes final positions synchronously when it is set, so the fold is never
+   mid-settle when this rule lands; this only catches the CSS half. */
+@media (prefers-reduced-motion: reduce) {
+  .nd-stage[data-motion="on"] {
+    animation: none;
+  }
+
+  .nd-dock-melt,
+  .nd-dock-guide,
+  .nd-cell {
+    transition: none;
+  }
+
+  .nd-dock-bonds[data-on="yes"] .nd-dock-bond {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+
+  .nd-dock-guide {
+    opacity: 1;
+    transform: none;
+  }
+}

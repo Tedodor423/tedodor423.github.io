@@ -1,0 +1,301 @@
+/* Slide two of the home page: two numbers side by side, on paper.
+ *
+ * The same line language as the hero above it and the menu bar above that:
+ * solid surfaces on hard ink rules, no shadow, nothing translucent. The stage
+ * is the wax paper (--surface-muted) rather than the page's white, closed at
+ * the foot by the masthead's 0.5rem ink rule. Nothing parts the two halves:
+ * each is its own centred column, and the honey label opens each claim.
+ *
+ * Colour is the wiki's own vocabulary: honey for the quantity the claim is
+ * about (the five extra plates, the pollinated share), ink rules and rims,
+ * and the leaf green from brand.css for the one thing on the wiki that is a
+ * plant. The qualifying word above each number sits on a honey label, the
+ * masthead's own pairing.
+ *
+ * Mobile first. The default layout stacks the two halves; from 48rem they
+ * sit side by side on a screen-high stage, sharing their rows so the two
+ * numbers sit level. Motion is on a clock in BeeImportance.tsx, not on the
+ * scroll, so nothing here pins.
+ */
+
+/* Full-bleed. The slide is placed from a Markdown file, so it renders inside
+ * the 36rem reading column; these margins pull it back out to the window's
+ * edges. 100vw includes the scrollbar, which is why the band hosting it
+ * clips horizontally below. */
+.bee-importance {
+  margin-inline: calc(50% - 50vw);
+}
+
+/* The band that hosts the slide gives up its padding (the comb treatment
+ * adds some) so the stage meets the hero's rule with nothing in between, and
+ * clips the scrollbar's width of overshoot from the full-bleed margins. */
+.page-band:has(> .container > .markdown-page > .bee-importance) {
+  padding-block: 0;
+  overflow-x: clip;
+}
+
+/* ---------- the stage ---------- */
+
+.bi-stage {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-muted);
+  color: var(--text);
+  border-bottom: 0.5rem solid var(--ink);
+}
+
+/* A running head, not a headline: the two h3s below are the loud ones. The
+ * selector outweighs .markdown-page h2, which would underline it in honey. */
+.bee-importance .bi-title {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+  margin: 0;
+  padding: 1.25rem clamp(1rem, 4vw, 3rem) 0;
+  border-bottom: 0;
+}
+
+.bi-halves {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+/* Each half is four things top to bottom: the claim, the figure, the note,
+ * the reference. They sit in one column of at most 24rem, centred in the
+ * half, so the two blocks hang either side of the middle rather than from
+ * the window's edges. */
+.bi-half {
+  display: grid;
+  grid-template-columns: minmax(0, 24rem);
+  justify-content: center;
+  align-content: center;
+  row-gap: 0.85rem;
+  min-height: 0;
+  padding: 2.5rem 1rem;
+}
+
+.bi-visual {
+  width: 100%;
+}
+
+/* ---------- the claim ---------- */
+
+/* The heading is the whole claim, read top to bottom: the qualifying word,
+ * the number, the words. Sizes are in vh where the stage is screen-high, so
+ * the claim fits the screen it is on, and in vw where it flows. */
+.bee-importance .bi-claim {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 0;
+  line-height: 1;
+  color: var(--ink);
+}
+
+/* "By 2050 humanity will require", "Already": the words that make the
+ * number a claim, on the masthead's honey so they are read before the
+ * number rather than after. The honey is on an inline span inside, cloned
+ * per line, so a label that wraps reads as two highlighted lines rather
+ * than one block with a ragged second line. */
+.bi-when {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: clamp(1rem, 4vw, 1.3rem);
+  line-height: 1.55;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+}
+
+.bi-when span {
+  background: var(--honey);
+  padding: 0.22em 0.5em 0.18em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* The number takes the wordmark's face: this is the presentation voice, and
+ * the hero sets the precedent one screen up. It counts up while the reader
+ * watches, so it asks for tabular figures where the face has them. */
+.bi-figure {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 14vw, 5rem);
+  line-height: 0.95;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+.bi-words {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: clamp(1.2rem, 4.5vw, 1.6rem);
+  line-height: 1.15;
+  color: var(--text);
+  margin-top: 0.5rem;
+  max-width: 16em;
+}
+
+/* ---------- the plates ---------- */
+
+.bi-plates {
+  display: block;
+  width: min(100%, 20rem);
+  height: auto;
+}
+
+/* Each extra plate lands with a short pop: scaled up from small and faded
+ * in, with a touch of overshoot so it reads as set down rather than faded.
+ * transform-box makes the group scale about its own centre. */
+.bi-plate {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    transform 260ms cubic-bezier(0.2, 0.9, 0.3, 1.15),
+    opacity 140ms linear;
+}
+
+.bi-plate:not(.is-on) {
+  opacity: 0;
+  transform: scale(0.4);
+}
+
+.bi-plate-rim {
+  fill: var(--surface);
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+
+.bi-plate--more .bi-plate-rim {
+  fill: var(--honey);
+}
+
+.bi-plate-well {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.25;
+}
+
+/* ---------- the forest ---------- */
+
+.bi-forest {
+  display: block;
+  width: min(100%, 17rem);
+  height: auto;
+}
+
+/* Leaf green until the sweep reaches a tree, honey after. The thin ink
+ * outline is what keeps a honey tree legible on the paper: honey on this
+ * surface is 1.4:1 as a fill, and the rim does the same job for the honey
+ * plates on the other side. */
+.bi-tree {
+  fill: var(--leaf);
+  stroke: var(--ink);
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+  transition: fill 120ms linear;
+}
+
+.bi-tree.is-honey {
+  fill: var(--honey);
+}
+
+/* The pie's two edges: a thin fixed line at twelve o'clock, and the hand
+ * that sweeps out from it and stops at 35%. Burnt honey, the hive colour
+ * that can carry a line on paper where plain honey cannot. */
+.bi-noon {
+  stroke: var(--burnt-honey);
+  stroke-width: 1.25;
+}
+
+.bi-hand {
+  stroke: var(--burnt-honey);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
+/* ---------- the words underneath ---------- */
+
+.bi-note {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  max-width: 30em;
+}
+
+.bi-ref {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+/* ---------- side by side ---------- */
+
+/* Side by side, the two halves share their rows: both claims on one line,
+ * both figures on the next, and so on down, so the two numbers sit level
+ * however many lines their words take. The halves are subgrids of the same
+ * four rows; a browser without subgrid gets two independent columns. */
+@media (min-width: 48rem) {
+  .bi-stage {
+    /* A slide: it fills the screen the hero's glide lands on. min-height, so
+       a short window grows the stage rather than clipping it. */
+    min-height: 100dvh;
+  }
+
+  /* The two columns are a pair, centred as one: each at most 24rem, a hand's
+   * width apart, so both statistics sit close to the middle of the page
+   * rather than spread to its edges. */
+  .bi-halves {
+    grid-template-columns: minmax(0, 24rem) minmax(0, 24rem);
+    grid-template-rows: repeat(4, auto);
+    justify-content: center;
+    align-content: center;
+    column-gap: clamp(2.5rem, 7vw, 6rem);
+    row-gap: 0.85rem;
+    padding-inline: 1rem;
+  }
+
+  .bi-half {
+    grid-template-rows: subgrid;
+    grid-row: 1 / -1;
+    align-items: start;
+    row-gap: 0;
+    padding: 1.5rem 0 2.5rem;
+  }
+
+  .bi-when {
+    font-size: clamp(1rem, 2.6vh, 1.4rem);
+  }
+
+  .bi-figure {
+    font-size: clamp(3rem, 8.5vh, 5.5rem);
+  }
+
+  .bi-words {
+    font-size: clamp(1.2rem, 3vh, 1.8rem);
+  }
+
+  .bi-plates {
+    width: min(100%, 22rem, 52vh);
+  }
+
+  .bi-forest {
+    width: min(100%, 19rem, 40vh);
+  }
+}
+
+/* ---------- still ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .bi-plate,
+  .bi-tree {
+    transition: none;
+  }
+}
