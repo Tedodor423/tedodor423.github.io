@@ -106,7 +106,7 @@ export const THREADS: Thread[] = [
     id: "chassis",
     name: "From symbiont to yeast",
     line: "The project's largest change, and it was decided by regulation and cost rather than by an experiment.",
-    page: "/engineering#cycle-2-1",
+    page: "/engineering#cycle-2-2",
   },
   {
     id: "target",
@@ -136,7 +136,7 @@ export const THREADS: Thread[] = [
     id: "mite",
     name: "Getting to the mite",
     line: "Three redesigns, driven by a mite shortage and by the discovery that a mite alone does not survive.",
-    page: "/engineering#cycle-b3",
+    page: "/engineering#cycle-v1",
   },
   {
     id: "money",
@@ -334,7 +334,7 @@ export const EVENTS: TimelineEvent[] = [
       "The objection that decides the project five months later is already on the table: making dsRNA costs the bacterium energy, so it may not compete in the bee gut. Deferred to a hackathon.",
     threads: ["chassis"],
     links: [
-      { label: "Which chassis, in the end", href: "/engineering#cycle-2-1" },
+      { label: "Which chassis, in the end", href: "/engineering#cycle-2-2" },
     ],
   },
   {
@@ -717,7 +717,7 @@ export const EVENTS: TimelineEvent[] = [
     links: [
       {
         label: "Can we transcribe it reliably?",
-        href: "/engineering#cycle-1-3",
+        href: "/engineering#cycle-2-1",
       },
     ],
   },
@@ -908,7 +908,7 @@ export const EVENTS: TimelineEvent[] = [
     links: [
       {
         label: "Can the dsRNA report its own concentration?",
-        href: "/engineering#cycle-3-4",
+        href: "/engineering#cycle-4-1",
       },
     ],
   },
@@ -970,7 +970,7 @@ export const EVENTS: TimelineEvent[] = [
       "The dye degrades above about 50 °C, which a gel passes after twenty minutes at 100 V. Run shorter and cooler, or run at the recommended field strength and wait longer.",
     turn: true,
     threads: ["quantify"],
-    links: [{ label: "The measurement cycle", href: "/engineering#cycle-3-4" }],
+    links: [{ label: "The measurement cycle", href: "/engineering#cycle-4-1" }],
   },
   {
     id: "stability-course",
@@ -992,7 +992,7 @@ export const EVENTS: TimelineEvent[] = [
     links: [
       {
         label: "Can we transcribe it reliably?",
-        href: "/engineering#cycle-1-3",
+        href: "/engineering#cycle-2-1",
       },
     ],
   },
@@ -1044,7 +1044,7 @@ export const EVENTS: TimelineEvent[] = [
     setback: true,
     threads: ["build"],
     links: [
-      { label: "The four build failures", href: "/engineering#cycle-1-3" },
+      { label: "The four build failures", href: "/engineering#cycle-2-1" },
     ],
   },
   {
@@ -1312,7 +1312,7 @@ export const EVENTS: TimelineEvent[] = [
     turn: true,
     threads: ["mite"],
     check: true,
-    links: [{ label: "Does it kill the mite?", href: "/engineering#cycle-b3" }],
+    links: [{ label: "Does it kill the mite?", href: "/engineering#cycle-v1" }],
   },
   {
     id: "sybr-series",
@@ -1320,13 +1320,13 @@ export const EVENTS: TimelineEvent[] = [
     track: "bee",
     title: "A stain dilution series, logged",
     detail:
-      "A tenfold series gives signal at the low end of the range. The calibrated detection and quantification limits described in cycle 3.5, with blanks and replicates, have still to be run.",
+      "A tenfold series gives signal at the low end of the range. The calibrated detection and quantification limits described in cycle 4.3, with blanks and replicates, have still to be run.",
     threads: ["quantify"],
     check: true,
     links: [
       {
         label: "Would an ordinary stain do better?",
-        href: "/engineering#cycle-3-5",
+        href: "/engineering#cycle-4-3",
       },
     ],
   },
@@ -1350,7 +1350,7 @@ export const EVENTS: TimelineEvent[] = [
     turn: true,
     setback: true,
     threads: ["mite", "dose"],
-    links: [{ label: "Husbandry, cycle B3", href: "/engineering#cycle-b3" }],
+    links: [{ label: "Husbandry, cycle V1", href: "/engineering#cycle-v1" }],
   },
   {
     id: "nanodrop-qubit",
@@ -1362,7 +1362,7 @@ export const EVENTS: TimelineEvent[] = [
     turn: true,
     threads: ["quantify"],
     links: [
-      { label: "How much dsRNA do we have?", href: "/engineering#cycle-1-4" },
+      { label: "How much dsRNA do we have?", href: "/engineering#cycle-2-6" },
     ],
   },
   {
@@ -1374,7 +1374,7 @@ export const EVENTS: TimelineEvent[] = [
       "A twofold dilution series, with the interpretation fixed in advance: a flat line means the conversion reflects real chemistry, and readings that rise on dilution mean the instrument is compressing its range.",
     threads: ["quantify"],
     links: [
-      { label: "The measurement headline", href: "/engineering#cycle-1-4" },
+      { label: "The measurement headline", href: "/engineering#cycle-2-6" },
     ],
   },
   {

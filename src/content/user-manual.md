@@ -10,8 +10,8 @@ Written for **a beekeeper, not a judge**. Plain words, short steps, and honest
 about what is proposed rather than proven. Everything practical here must
 agree with the evidence pages it summarises.
 
-> **TODO —** This page is unwritten. The manual is being drafted by Anna; the
-> team write-up records no content for it yet. Nothing below has been filled in
+> **TODO —** This page is unwritten. The NECTAR Product Handbook is being drafted
+> by Anna; the team write-up still records no content for it, only her name. Nothing below has been filled in
 > from another source on purpose: usage instructions for a treatment that has
 > not been through a field trial cannot be inferred from the lab work, and
 > inventing them would be the one thing this wiki must not do. Owner: Anna,
@@ -58,11 +58,28 @@ What approval it would still need is on
 
 ## A second manual, for researchers
 
-A separate handbook on running ingestible honeybee therapeutics research is
-owned by Roman and is also unwritten. The practical bee-handling half of that
-material already exists as
+The **NECTAR Manual for Bee Research** is a separate document: a complete,
+holistic manual for doing research on ingestible honeybee therapeutics. It is
+owned by Roman and is unwritten, but its contents are agreed:
+
+1. The primary literature on testing novel biopesticide systems on honeybees.
+2. How to approach bee labs and apiarists so that honeybee research can happen at
+   all.
+3. How to fund honeybee research, in the UK and internationally.
+4. The core unanswered questions to date.
+5. **Experimental protocols** — testing uptake and stability of molecules in
+   honeybee haemolymph, adult and larval; dissecting the bee gut, fat bodies and
+   hypopharyngeal glands; quantifying _Varroa_ death-response to a molecule, by
+   soaking, by phoretic mites on bees, or by rearing mites on larvae.
+6. **Bee husbandry** — extracting frames in and out of hives, and dealing with
+   stings and aggressiveness.
+
+The practical bee-handling half of that material already exists as
 [How to work with bees as an iGEM team](/working-with-bees); the two should be
 reconciled rather than written twice.
+
+> **TODO —** The manual itself. Chapters 1–4 and the dissection and mite-assay
+> protocols have no text anywhere yet. Owner: Roman.
 
 ## Where this connects
 

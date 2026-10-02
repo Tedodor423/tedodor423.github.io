@@ -51,8 +51,13 @@ standardised framework** for comparing candidate genes, and none for choosing th
 region within a gene. That leaves the two things that most affect whether a
 construct works, accessibility and off-target risk, to chance.
 
-We therefore split the problem in two: **which gene**, then **which window
-inside it**.
+We therefore designed **a three-stage strategy** to build our own framework:
+**which gene**, then **which region inside it**, then **what else that region
+hits**. Each stage constrains the next, and the third can veto the first two.
+
+The analysis scripts behind all three stages are integrated into an interactive
+user interface, so the complete workflow — gene selection, within-gene target
+design, off-target analysis — runs as a single pipeline.
 
 ## Inputs
 
@@ -67,6 +72,13 @@ than merely optimised.
 > person.
 
 ## Stage 1: ranking the target genes
+
+Three independent sources, each giving its own ranking or pool: **functional
+connectivity** from a STRING analysis of the _Varroa_ proteome, **abundance** from
+transcriptomics, and **direct RNAi effects** from published _Varroa_ RNAi studies
+read and scored by hand for genes with previously confirmed experimental knockdown.
+The first two are combined into one ranking below; the third is kept as a separate
+pool, and both are used in the multigene design on [wet lab](/wet-lab).
 
 The ideal target has two properties. It encodes a protein **the mite cannot do
 without**, and it is highly transcribed, which is itself a signal of importance. We
@@ -143,9 +155,11 @@ which makes it a genuinely broad population. **24 nt nearly doubles under
 abundance weighting**, which says its dominance rests on a smaller number of
 very abundant species.
 
-This is why the pipeline scores **24 nt windows** rather than the canonical
-21 nt Dicer-2 product. What Dicer cuts and what the mite accumulates are
-different questions, and for choosing a window it is the second that matters.
+This is why the pipeline uses **23 and 24 nt windows** as its basic units rather
+than the canonical 21 nt Dicer-2 product. What Dicer cuts and what the mite
+accumulates are different questions, and for choosing a window it is the second
+that matters. For each candidate transcript, **every possible 23 and 24 nt window
+is enumerated**: the set of sRNA sequences a longer dsRNA region could generate.
 
 ### Two features we tested and dropped
 
@@ -179,6 +193,18 @@ metrics are scored, and we state all five publicly: mRNA accessibility, siRNA
 length, end nucleotide identity, thermodynamic asymmetry, and off-target
 sequence homology.
 
+Those metrics are aggregated across the enumerated windows as **three layers of
+evidence**, and the steps below are how each layer is computed:
+
+| Layer                                                                       | Step   | Tool                                    |
+| --------------------------------------------------------------------------- | ------ | --------------------------------------- |
+| Does the window's sequence composition resemble sRNAs that are abundant in the _Varroa_ dataset? | Step 2 | Regression fitted to the viral sRNAs    |
+| Does the guide strand have the biophysics of favourable strand selection and low self-folding? | Step 3 | ViennaRNA                               |
+| Is the corresponding site in the target mRNA accessible?                     | Step 1 | RNAplfold, on the whole target site and on the guide seed region separately |
+
+Together the three layers let us rank regions quantitatively **within** a target
+gene on predicted RNAi ability. Stage 3, the off-target screen, is Step 4.
+
 ### Step 1: Accessibility
 
 Which regions of the transcript are actually available to the silencing
@@ -187,9 +213,11 @@ window inside a stable stem is **not a usable window**.
 
 Structures are folded with **ViennaRNA 2.7.2**, Turner 2004 parameters, 37 °C,
 partition function, which is the same setup the construct-architecture work in
-[Engineering](/engineering) uses. Step 4 of the walkthrough draws the result as
-capping: an open cell is a stretch the fold leaves reachable, a cell sealed in
-wax is one it does not.
+[Engineering](/engineering) uses. Accessibility of the target site is estimated
+with **RNAplfold**, and estimated twice: once for the complete target site, and
+once for the **guide seed region** within it. Step 4 of the walkthrough draws the
+result as capping: an open cell is a stretch the fold leaves reachable, a cell
+sealed in wax is one it does not.
 
 > **Note on the figure.** The structure that settles in step 4 is laid out by a
 > real spring simulation, but which bases pair with which is generated rather
@@ -202,7 +230,8 @@ wax is one it does not.
 Windows are scored for how closely they resemble the mite's own abundant viral
 small RNAs, using the population described above. The scoring uses terminal
 nucleotide identity and regional base composition, fitted against observed
-abundance.
+abundance: a **regression model fitted to the viral sRNAs of the _Varroa_ sRNA
+dataset**, which estimates abundance from sequence features.
 
 The features and their coefficients are held back; see below. The reason to
 score this at all is not held back, and it is the whole point: a window that
@@ -212,15 +241,30 @@ machinery is already equipped to process.
 ### Step 3: Thermodynamic asymmetry
 
 Which strand gets loaded into RISC is set by the relative stability of the duplex
-ends. That is **a design lever, not an accident**, and it is scored as one. The
-walkthrough shows the two halves of the energy balance for any window you select:
-what it costs to melt the site open, and what the duplex returns when it forms.
+ends. That is **a design lever, not an accident**, and it is scored as one.
+Guide-strand thermodynamic asymmetry and guide **self-folding** are both computed
+with ViennaRNA. The walkthrough shows the two halves of the energy balance for any
+window you select: what it costs to melt the site open, and what the duplex returns
+when it forms.
 
 ### Step 4: Off-target screening
 
-Candidate sequences are screened against non-target organisms: the host bee,
-related arthropods, pollinators sharing the environment, and humans. The design
-of this step is a documented external contribution. **Prof. Paul Lam advised
+This is Stage 3 of the strategy, and it can veto a window that scored well on
+every other axis. A region that looks ideal inside _Varroa_ may be identical or
+near-identical to a transcript in a non-target species, and **_Apis mellifera_ is
+the one that matters most**, because it is the animal we are dosing.
+
+Selected regions are evaluated against the _Apis mellifera_ transcriptome **on two
+levels**, which answer different questions:
+
+| Level                 | How                                                                        | What it tells us                                                  |
+| --------------------- | -------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| **Local**             | Strict mapping of sequences ≥ 16 nt, with **Bowtie1**                      | Risk that local stretches of the region produce off-target sRNAs   |
+| **Whole-region**      | Relaxed mapping with **Edlib**, at set fractions of mismatches, insertions and deletions | Broader homology between the region and _Apis_ transcripts        |
+
+Candidate sequences are also screened against the wider set of non-target
+organisms: related arthropods, pollinators sharing the environment, and humans. The
+design of this step is a documented external contribution. **Prof. Paul Lam advised
 against scanning everything and in favour of a justified set of representative
 species**, which is what makes the screen both defensible and runnable. See
 [attributions](/attributions), and [safety and security](/project-safety), where
@@ -232,12 +276,14 @@ matrix hatches their column rather than passing them. **Absence of a hit against
 a species we could not screen is absence of data**, and reading it as a clear
 result would be the most dangerous mistake available at this step.
 
-> **TODO —** Our own records disagree about which tool performs the homology
-> screen: one description says BLAST, another says Bowtie1 with Edlib. These give
-> different sensitivity at short seed lengths, so the difference is not cosmetic.
-> Resolve against the code and state one answer with its parameters. Owner: dry
-> lab. Flagged rather than resolved here, because guessing would be worse than the
-> gap.
+> **TODO —** Our own records still disagree about which tool performs the homology
+> screen. The wet-lab write-up's Build section names **Bowtie1 and Edlib**, as
+> above; the RNA design outline for this page says **BLAST with justified
+> representative species** and credits Prof. Paul Lam. These give different
+> sensitivity at short seed lengths, so the difference is not cosmetic. Resolve
+> against the code, state one answer with its parameters, and state the mismatch and
+> indel fractions used with Edlib, which are recorded only as "set fractions".
+> Owner: dry lab.
 
 ### Step 5: Combining the scores
 
@@ -253,15 +299,27 @@ the walkthrough builds that construct, offers only the promoters and markers tha
 actually work in the chosen chassis, and finds the Golden Gate recognition sites
 that would cut the construct during assembly.
 
-A sequence-concatenation strategy, joining several target windows into one
-multimer, was tested computationally and set aside on our own calculations. We
-present it as **tested and rejected**, not as an active construct.
+**Multigene concatenation is now part of the output, not an abandoned idea.** The
+pipeline is used to pick one favourable **175 bp** region per target gene, and four
+such regions are concatenated into a single **700 bp** construct, so one dsRNA
+molecule silences four genes. Which four, and from which candidate pool, is on
+[wet lab](/wet-lab).
+
+> **TODO —** Two of our own records conflict on this, and we state both rather than
+> pick one. An earlier calculation set the concatenation strategy aside and it was
+> written up here as **tested and rejected**; the current wet-lab write-up designs
+> two four-gene concatenated constructs and treats concatenation as the design. The
+> mite screen that decides it is also already scoped — "see whether a shortened
+> 100 bp fragment is comparable to the 700 bp construct, to validate concatenating
+> into a multimer". Resolve which record stands, and if concatenation is adopted,
+> publish the calculation that was previously read as a rejection. Owner: dry lab
+> with wet lab.
 
 ### Step 7: Experimental validation
 
-What the bench said. The mite screen that would test the algorithm's gene choice
-is at cycle B3 on [Engineering](/engineering); the husbandry cycle closed
-negative, so the efficacy screen **has not yet run**.
+What the bench said. The test set for the first pipeline output was a **mite screen
+on the unlooped construct**; it sits at cycle V1 on [Engineering](/engineering), and
+the husbandry cycle closed negative, so the efficacy screen **has not yet run**.
 
 ### Step 8: Feeding results back in
 
@@ -306,7 +364,9 @@ page.
 
 - Real data behind the walkthrough, in place of the generated demonstration set.
 - The repository link and run instructions.
-- The BLAST-versus-Bowtie discrepancy, resolved.
+- The BLAST-versus-Bowtie discrepancy, resolved, and the Edlib mismatch and indel
+  fractions stated as numbers.
+- Whether concatenation is adopted or rejected, stated once.
 - The overhang and transitivity tables, with their parameters explained.
 - The disclosure decision, and the IP gate on the target name.
 - Experimental validation of the algorithm's gene choice, and with it Step 8.

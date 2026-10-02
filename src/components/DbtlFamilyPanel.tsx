@@ -85,7 +85,7 @@ interface Stop {
 
 interface PanelProps {
   family: Family;
-  /** A turn to open at, from a `#cycle-3-4` link. */
+  /** A turn to open at, from a `#cycle-4-1` link. */
   startAt?: string;
   onClose: () => void;
 }

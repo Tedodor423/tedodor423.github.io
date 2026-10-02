@@ -4,10 +4,10 @@
 > **Where the evidence is:** [the bee lab](/bee-lab) and
 > [the bee lab notebook](/bee-lab-labbook).
 
-Everything on this page was **built rather than pipetted**. Three of the four items
-exist because a measurement was otherwise impossible: we could not afford the
-dsRNA a standard feeder consumes, we could not tell consumption from
-evaporation, and the lab had no extraction tubes.
+Everything on this page was **built rather than pipetted**. Most of it exists
+because a measurement was otherwise impossible: we could not afford the dsRNA a
+standard feeder consumes, we could not tell consumption from evaporation, and the
+lab had no extraction tubes.
 
 Two different objects are called an "insert" in our own notebook. The **feeding
 adaptor** holds a PCR tube in a cage wall. The **hive insert** is a separate,
@@ -30,16 +30,26 @@ arrived, hand-made equivalents were used: an Eppendorf cut just below the 1.5 ml
 mark, a hole in the top for a PCR tube to pass through, and two small side holes
 in the PCR tube matching the standard feeding-tube hole size (10 July).
 
-**The comparison it made possible.** Four feeding-vessel forms were run on the
-same weigh–fill–incubate–reweigh method, 30 bees per cage over 24 h, across six
-adaptor combinations with two repeats of four tubes:
+**The comparison it made possible.** Five feeding-vessel forms — three
+orientations, with the 20-gauge feeding hole in the top or in the bottom — were run
+on the same weigh–fill–incubate–reweigh method, 250 µl of 1 M sucrose per PCR tube,
+mini-cages of 15 bees over 24 h, across five adaptor combinations with two repeats
+of four tubes:
 
-| Form | Why it was tested |
+| Orientation | 20-gauge hole |
 | --- | --- |
-| Vertical PCR tube | Baseline orientation |
-| Flat-lying PCR tube | Least headspace, suspected lowest evaporation |
-| Angled-down PCR tube | Compromise between bee access and spillage |
-| Perforated 2 ml Eppendorf | The original design, as control |
+| Horizontal | Top |
+| Horizontal | Bottom |
+| Tilted | Top |
+| Tilted | Bottom |
+| Vertical | Top |
+
+The single question put to all five was **which form loses the least volume of
+sucrose to spillage and evaporation**, and so most accurately reflects real bee
+uptake. The feeding pilot itself ran four candidate designs — horizontal, tilted,
+vertical and the cut-up 2 ml Eppendorf — and **lost two of them to handling
+failures** before any 24 h reading. The comparison was ultimately abandoned; see
+[the bee lab](/bee-lab) for why.
 
 **Limitation.** A number of the printed adaptors had minor print defects. They
 were usable, but they **may have added variance** between nominally identical tube
@@ -53,19 +63,23 @@ results. It was never ordered. **Proposed.**
 > **FIGURE —** The batch of 3D-printed PCR-tube feeding adaptors, laid out so
 > the count and the print quality are both visible.
 
-> **FIGURE —** An adaptor holding a PCR tube in the wall of a 30-bee cage, with
+> **FIGURE —** An adaptor holding a PCR tube in the wall of a feeding cage, with
 > the tube angled down, showing how a bee reaches the solution.
 
 > **TODO —** Print file, material and printer model for the adaptor, so another
 > team can reproduce it. Owner: bee lab. The STL should be uploaded to
 > `static.igem.wiki` and linked here.
 
-## The 30-bee feeding cages — **Demonstrated**
+## The feeding cages — **Demonstrated**
 
-Fifteen nutrition assay boxes, four feeding tubes each, 30 bees per box, used
+Fifteen nutrition assay boxes, four feeding tubes each, **15 bees per box**, used
 for the salt-concentration trial and the vessel comparison. Commercial boxes,
 modified: only three of the four tube holes were factory-drilled, so the fourth
-was taped over.
+was taped over. One box was run **without bees** in every session, as the
+evaporation control.
+
+> **FIGURE —** The honeybee cage feeder setup as it ran: a box with its four
+> tubes in place, so the hole spacing and the taped fourth hole are visible.
 
 **Two failure modes** worth passing on. Air bubbles form while filling a tube and
 are almost impossible to correct once formed — empty and refill instead.
@@ -73,9 +87,22 @@ Forcing a fresh tube into an already-crowded cage causes major spillage, and the
 fix is to discard that cage and move the bees to a new one rather than persist
 with a compromised seal.
 
+## The PER feeding and incubation rig — **Demonstrated**
+
+The apparatus that replaced the cages, and the one that delivered every dose on
+this project. Live bees are strapped into tubes with the head and thorax
+protruding and fed from the tip of a **19-gauge syringe**. Gorilla tape alone did
+not hold them — bees slipped out repeatedly on 14 July — so **a strap over the
+abdomen** was added. Incubation is a sealed plastic container with a warm, wet
+towel at the base of the tubes, standing in for in-hive temperature and humidity.
+
+> **TODO —** The write-up lists the PER assay as bee-lab hardware but records no
+> tube type, restraint material, dimensions or assembly drawing, so it cannot yet
+> be rebuilt from this page. Owner: bee lab.
+
 ## The hive insert — **Investigated**
 
-A **triagonal yeast-feeding insert**, designed in-house, printed, and used in our
+A **triagonal yeast-feeding insert**, designed by Theo, printed, and used in our
 bee lab hives. It is the delivery end of the platform: the part that would
 present a yeast-produced formulation to a colony rather than to a caged group.
 
@@ -88,7 +115,7 @@ present a yeast-produced formulation to a colony rather than to a caged group.
 > **TODO —** The design brief, dimensions, material, iteration dates and what
 > the colony actually did with the insert are not written up, and no performance
 > data was recorded. Until they are, this is a built object without a test
-> result. Owner: bee lab and the insert's designer.
+> result. Owner: Theo, with bee lab.
 
 ## The custom centrifuge tube — **Demonstrated**
 

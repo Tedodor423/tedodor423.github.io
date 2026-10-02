@@ -317,6 +317,13 @@ const Pages: MenuEntry[] = [
         content: economicModelling,
         lead: "Allowable cost, manufacturing cost, and the yeast titre they imply.",
       },
+      {
+        name: "Sustainable development",
+        title: "Sustainable Development",
+        path: "/sustainability", // iGEM standard URL
+        content: sustainability,
+        lead: "Which SDGs we affect, including where we affect them negatively.",
+      },
     ],
   },
   {
@@ -383,14 +390,6 @@ const Pages: MenuEntry[] = [
         lead: "Colony and Varroa dynamics, and what treatment efficacy has to reach.",
       },
     ],
-  },
-  {
-    name: "Sustainable development",
-    title: "Sustainable Development",
-    path: "/sustainability", // iGEM standard URL
-    content: sustainability,
-    lead: "Which SDGs we affect, including where we affect them negatively.",
-    hidden: true,
   },
   {
     name: "Entrepreneurship",

@@ -1,35 +1,37 @@
-<!-- The ten overarching cycles the comb on /engineering is made of.
+<!-- The overarching cycles the comb on /engineering is made of.
 
      One `##` per hexagon, in the order they appear on the page. The heading has
      to match the `workstream:` line in the cycle files in src/content/cycles/
      exactly, because that is what groups the iterations under it.
 
+     THE FAMILIES ARE THE TEAM'S OWN, from the 29 Sep write-up: five wet lab
+     DBTLs (dsRNA design; production and delivery; optimising rt-qPCR; Mango;
+     functionalising), three bee lab groups (adult, larval, mite) and two dry lab
+     ones. Numbering follows the write-up too, so a cycle's number is its family
+     plus its iteration index — 2.3 is the third iteration of DBTL 2. Where the
+     write-up names fewer iterations than we ran, the extra ones keep their place
+     in the family and are flagged in the file, so nothing is lost and the shape
+     still matches the document.
+
      `**Question.**` is the line shown large at the top of an opened hexagon.
      Everything after it is the standfirst under that question. Both are the
-     team's own words, moved here from the old engineering page.
+     team's own words.
 
      A section with only ONE cycle under it needs no `**Question.**`: that turn's
-     own question is the overarching one, and the hexagon uses it. Four sections
-     are like that — the two single-turn bee lab ones, killing the mite, and
-     choosing the sequence. The larvae and modelling sections hold several turns
-     each, so they state a question of their own. Workstream 3 has eight turns and
-     no stated question, so it carries a TODO. -->
+     own question is the overarching one, and the hexagon uses it. -->
 
-## Wet lab: Making the molecule
+## Wet lab: dsRNA design
 
-**Question.** Can we produce a defined, measurable quantity of a structurally
-non-trivial dsRNA?
+**Question.** Which sequence, and in what shape, should the molecule be?
 
-## Wet lab: Where the dsRNA is made
+## Wet lab: Production and delivery of dsRNA
 
-**Question.** Which chassis both produces the dsRNA and delivers it?
+**Question.** What makes the dsRNA, and what carries it into the hive?
 
-## Wet lab: Measuring dsRNA in bee material
+## Wet lab: Optimising rt-qPCR for honeybee samples
 
-> **TODO —** This workstream's overarching question, in one line, in the shape
-> Workstreams 1, 2 and 4 use. The paragraph below says why the workstream exists
-> but never puts the question itself; until it does, the hexagon shows the
-> workstream name as its title. Owner: wet lab.
+**Question.** Can we recover ingested dsRNA from bee material and put a number on
+it by the reference method?
 
 There is no established method for quantifying ingested dsRNA in honeybee
 haemolymph. Maori et al. 2019 fed 500 ng of DIG-labelled dsRNA per bee and recovered
@@ -41,34 +43,35 @@ densitometry. We could not cite an expected working range because none exists. T
 absence is why this workstream exists, and why [measurement](/measurement) is where
 we make our strongest claim.
 
+## Wet lab: Mango
+
+**Question.** Can the dsRNA report its own concentration, without an extraction
+step?
+
 ## Wet lab: Functionalising the dsRNA
 
 **Question.** Can we attach protein to the dsRNA to change where it goes?
 
-## Bee lab: Delivering a dose
+## Bee lab: Adult bee assays
 
 The wet lab makes the molecule; the bee lab is where it meets an animal. These
 cycles are method development, and we count them as engineering because without them
 there is nothing to test NECTAR with. Detail and dated entries on
 [bee lab](/bee-lab).
 
-> **TODO —** The paragraph above introduces the whole bee lab, not this one cycle,
-> and it now sits on the first of three bee-lab hexagons because that is where it
-> reads least oddly. Either give each of the three its own standfirst or cut it
-> back to one about dosing. Owner: bee lab.
+**Question.** How do we get a known dose into an adult bee, and get the haemolymph
+back out?
 
-## Bee lab: Sampling haemolymph
-
-## Bee lab: Working with larvae
+## Bee lab: Larval assays
 
 **Question.** How do we get a dose into a larva in the hive, and get the larva back
 once the cell is capped?
 
-## Bee lab: Killing the mite
+## Bee lab: Varroa mite testing
 
-## Dry lab: Choosing the sequence
+## Dry lab: Designing the RNA to kill mites
 
-## Dry lab: Modelling the efficacy
+## Dry lab: BEEHAVE modelling
 
 **Question.** What efficacy, applied how often and for how long, changes the
 trajectory of a colony under mite pressure — and which link in the delivery chain is

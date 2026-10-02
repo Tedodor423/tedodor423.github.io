@@ -43,6 +43,16 @@ expertise, including everyone whose input shaped
 > record so that nobody who influenced the project is missing, and so that
 > nobody appears here who asked not to be named.
 
+> **TODO —** Podcast guests and members of the public. Episode 1 of *Buzz In*
+> hosted **Professor Stephen Martin** and **Paul Horton** (commercial beekeeper,
+> Lincolnshire), and the street interviews involved members of the public — see
+> [public outreach](/education). Both guests are named there on the strength of our
+> own write-up and nothing else. Record here, for each: consent to be named,
+> consent to release of the recording, and the affiliation or description they want
+> used — before the episode goes up, and before either is quoted anywhere. Professor
+> Martin's affiliation breaks off mid-sentence in our notes and must be confirmed
+> with him rather than inferred. Owner: outreach with team lead.
+
 ## Third-party materials
 
 Any asset on this wiki that we did not make: source and licence, credited beside
@@ -109,6 +119,8 @@ violation but **research misconduct**, and there are none on this wiki.
 
 - The iGEM template format, checked and applied.
 - Per-person contributions, confirmed by each person.
+- Consent and agreed attributions for the podcast guests and the street-interview
+  participants.
 - The AI disclosure section.
 - Third-party asset licences, collected.
 

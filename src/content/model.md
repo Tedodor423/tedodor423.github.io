@@ -142,6 +142,60 @@ the transfer chain and the full parameter sweep list.
 > This is the one place on the wiki where a model hands the wet lab a target
 > number rather than a graph.
 
+### The feeding pathway, and the mite-titre curve
+
+**Status: Proposed.** Nothing here has been built. It is scoped work for the next
+month, to be done **if** we cannot analyse the haemolymph results from the adult
+and larval stability assays, and if those assays do not give the results we want.
+
+- **Question** — what dose of ledRNA actually reaches a mite by way of a bee, and
+  what knockdown and mortality follow from that dose?
+- **Inputs** — dosage and volume fed; expected degradation in the gut; passage
+  from gut to haemolymph; expected ledRNA degradation in adult and in larval
+  haemolymph; entry into the hypopharyngeal glands and the concentration and
+  volume in gland secretions; the volume of larval haemolymph taken by *Varroa*
+  between the 5th instar and pupation.
+- **Assumptions** — each model takes the previous model's output as its assumed
+  input dose, so the three compound: an error at the gut propagates all the way to
+  a mortality figure.
+- **The model** — three linked models. First, dsRNA uptake into the nurse bee gut
+  and assimilation into haemolymph, from which the expected ledRNA dose reaching
+  larvae is extrapolated. Second, ledRNA stability in larval haemolymph. Third,
+  expected knockdown of the *Varroa* target, and the mortality that results. These
+  are deliberately different from the models published by
+  [Estonia-TUiT 2023](https://2023.igem.wiki/estonia-tuit/), which were themselves
+  extensive.
+- **Sensitivity and validation** — not designed.
+- **Prediction** — none. Nothing has been run.
+- **Decision it informed** — its own scope. The first model was set aside: the
+  upstream gap in the physical characterisation of the NECTAR pathway is a crucial
+  further step in developing the biopesticide, but **there is very little
+  replicable quantitative information** on dsRNA stability in adult haemolymph, or
+  on the dose that enters and is fed from the hypopharyngeal glands, so a model of
+  it would rest on nothing. The plan instead, whatever the mite titre results show,
+  is a **mite-titre curve**: estimate, across a range of ledRNA doses and our best
+  and worst candidate targets, the knockdown of the target gene in mites and the
+  mortality that follows.
+- **Limitations** — setting the upstream models aside is what makes the curve
+  buildable, and it is also its limitation: the curve would say what happens to a
+  mite at a given exposure and **nothing about what exposure our delivery route
+  achieves**. The two must not be conflated.
+
+> **TODO —** The judgement that the upstream pathway is not worth modelling is the
+> team's own note, and the note says to "still check and confirm this in the
+> literature". Do that check and record the outcome, because the whole modelling
+> plan for the next month turns on it. Owner: dry lab.
+
+> **TODO —** Our note for the third model reads "expected mite miRNA knockdown".
+> Everywhere else the project silences a *Varroa* mRNA. Confirm which is meant
+> before the curve is fitted. Owner: dry lab with RNA design.
+
+> **How did this change NECTAR?**
+>
+> **TODO —** Unanswerable today: the write-up records a plan, not an outcome, and
+> the curve has not been built. Fill this box when it is, or drop the model.
+> Owner: dry lab.
+
 ### Fermentation techno-economics
 
 **Status: not yet a model.** Today this is a set of assumptions sitting inside
@@ -176,6 +230,8 @@ transfer model says which lever raises that efficacy most cheaply.
 - Sensitivity analysis for the RNA design score weights.
 - The model-chain figure.
 - A decision on the fermentation techno-economics.
+- The literature check behind setting the upstream pathway models aside, and the
+  mite-titre curve itself.
 
 ## Where this connects
 

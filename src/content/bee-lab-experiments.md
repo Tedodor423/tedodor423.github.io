@@ -17,14 +17,83 @@ deleted.
 > of the patent priority filing date against the 21 October freeze. Restore it
 > once the disclosure moratorium lifts. Owner: team lead.
 
-> **TODO —** Protocols still owed as written documents: PER assay, adult feeding
-> experiment, box assay to PCR-tube adaptation, mite rearing, mite RNA
-> extraction. Owner: bee lab.
+> **TODO —** Protocols still owed as written documents: mite rearing, including
+> the drying step and the baseline post-soak survival estimate; mite RNA
+> extraction; and larval dsRNA storage. The three feeding protocols above are
+> transcribed from the assay write-ups rather than from a bench SOP and need
+> checking against the bench copies. Owner: bee lab.
 
 > **PDF —** Complete bee-lab protocol set, uploaded to `static.igem.wiki` and
 > linked here. Owner: bee lab.
 
 ## Protocols
+
+### Adult honeybee cage-feeding sucrose assay
+
+The version used for the salt-concentration trial: fifteen nutrition assay boxes,
+four feeding tubes each, **15 bees per box**.
+
+1. Make up the 1 M sucrose solutions to be tested, same day where possible —
+   fridge storage causes evaporation. For NaCl, per 175 ml: 0.5145 g gives 50 mM,
+   1.0215 g gives 100 mM, 1.5311 g gives 150 mM.
+2. Weigh each empty 2 ml Eppendorf feeding tube on a lab-grade balance and record.
+3. Fill to the brim with the assigned solution. If a bubble forms, empty the tube
+   and refill from scratch — correcting a bubble in place makes it worse.
+4. Weigh the filled tube, record, and insert four tubes per cage.
+5. Include **one cage with no bees**, on plain solution, as the evaporation
+   control. Without it the weight differences are unreadable.
+6. Hold the cages in the bee-lab incubator and check them daily.
+7. Every 24 h, remove, weigh and replace each tube, recording a clear before and
+   after weight. Never force a fresh tube into a crowded cage — it spills. Discard
+   that cage and move the bees to a fresh one.
+8. Note and remove any dead bees at every check, so that daily sucrose usage can
+   be corrected for mortality.
+9. Hand-wash used feeding tubes outside the lab and return them to the labelled
+   bucket, not to general waste.
+
+**Analysis.** Take the cage, not the bee, as the unit of analysis: bees in a cage
+share one feeding tube and are not independent. Average net consumption
+(g/bee/day) across each cage's days to give one value per cage.
+
+### Adult honeybee cage-feeding adapter pilot
+
+The down-scaled version: a PCR tube in a 3D-printed adaptor in place of the 2 ml
+Eppendorf, to cut the volume of dsRNA needed per cage. Five tube forms were
+compared — horizontal, tilted and vertical, with the 20-gauge hole in the top or
+in the bottom.
+
+1. Run the evaporation pilot first, with **no bees in any cage**, so passive loss
+   is measured on its own: 12 feeders across the five tube forms.
+2. Fill each PCR tube with 250 µl of 1 M sucrose in deionised water.
+3. Then repeat with bees, in mini-cages of 15, across five adaptor combinations
+   with two repeats of four tubes each.
+4. Weigh–fill–incubate–reweigh exactly as in the assay above.
+
+**Limitation.** A number of the printed adaptors showed minor print defects. They
+were judged sufficient for testing, but this was noted as a factor that **may have
+introduced variability** into the evaporation and spillage measurements between
+nominally identical tube replicates.
+
+### Adult honeybee PER feeding
+
+The proboscis-extension response assay, as we ran it for the adult-haemolymph
+stability assay. 18 bees per timepoint: 3 controls plus 5 repeats for each of
+three dsGFP lengths.
+
+1. Strap live bees into tubes with the head and thorax protruding. Gorilla tape
+   alone does not hold them; add a strap over the abdomen.
+2. Dilute the IVT product to 200 ng/µl dsGFP in 1 M sucrose with the appropriate
+   salt buffers, after reading an aliquot on a Nanodrop.
+3. Present the solution on the tip of a **19-gauge syringe**. Feed **2.5 µl twice**
+   to reach the 5 µl, 1 µg dose — a single 5 µl drop forms a large droplet and the
+   dose stops being known.
+4. Stagger the start of each length group by **20 minutes**. A full 18-bee
+   timepoint takes about 15 minutes to set up, so without the offset a 1 h
+   timepoint is not 1 h.
+5. Incubate in a sealed plastic container with a warm, wet towel at the base of
+   the PER tubes, to approximate in-hive temperature and humidity and keep
+   baseline mortality down.
+6. At the timepoint, cull and extract haemolymph by the centrifugal protocol below.
 
 ### Centrifugal haemolymph extraction, adult bees
 
@@ -35,9 +104,11 @@ Established 3–4 July 2026; used for every adult sample afterwards. Typical yie
 2. Pre-cool the empty centrifuge: 4 °C, 10–20 min, 6,000 rpm.
 3. Load open collection vials and open extraction tubes.
 4. Chill the bee cage in a freezer until the bees slow down.
-5. Per bee: cut off the abdomen at the petiole, cut off the antennae (no need to
-   pull them out), leave the wings attached, place the bee head-first into the
-   extraction tube, close the lid.
+5. Per bee: take the bee out of its PER tube and cut it at the thorax–abdomen
+   joint — **the petiole, between segments A1 and A2**. Cut the antennae off at the
+   base or mid-section (no need to pull them out): this is what lets the
+   haemolymph out of the head capsule. Leave the wings attached, place the head
+   and thorax head-first into the extraction tube, close the lid.
 6. When the tubes are full, spin 1 min at speed 6.
 7. Remove and clean each extraction tube: debris to waste, rinse in ethanol, dry.
 8. Repeat until the sample is fully pooled.
@@ -49,7 +120,13 @@ Established 3–4 July 2026; used for every adult sample afterwards. Typical yie
 Notes. Yield varies with how far up the antenna is cut (26–27 August); no firm
 cause was established, and pooling was used to absorb the variance. Lab-standard
 extraction tubes were unavailable, so the tubes are custom — see
-[Hardware](/hardware).
+[Hardware](/hardware). Samples were held in a −80 °C freezer in the Oxford
+University physics department, in the Kavli Institute's DCHB building, so that the
+dsGFP carried in the haemolymph was not degraded by RNase enzymes.
+
+> **FIGURE —** Labelled diagram of adult honeybee body segments, with the petiole
+> between A1 and A2 marked as the cut point, so a reader can find it without
+> having been shown.
 
 ### Adult bee dissection
 
@@ -115,7 +192,9 @@ Nanodrop. Purified RNA is then heated to 95 °C and crash-cooled on ice to
 denature the duplex so primers can anneal, reverse transcribed with random
 hexamers, and the cDNA amplified with construct-specific primers. Amplicons run
 on a 1.5% agarose gel against a no-dsRNA water negative and a known-GFP
-positive.
+positive. The gel is the readout: a band at the anticipated size is **qualitative
+evidence of dsRNA persistence** in the adult haemolymph at that timepoint, and
+nothing more than qualitative.
 
 ### Reverse transcription
 
@@ -164,9 +243,11 @@ place into the housing being tested. Two standing corrections came out of later
 runs — minimise or avoid the pre-soak wash, which appears to raise mortality;
 and soak **three to four times as many** mites as the experiment needs.
 
-> **TODO —** Protocols still owed as written documents: PER assay, adult feeding
-> experiment, box assay to PCR-tube adaptation, mite rearing, mite RNA
-> extraction. Owner: bee lab.
+> **TODO —** Protocols still owed as written documents: mite rearing, including
+> the drying step and the baseline post-soak survival estimate; mite RNA
+> extraction; and larval dsRNA storage. The three feeding protocols above are
+> transcribed from the assay write-ups rather than from a bench SOP and need
+> checking against the bench copies. Owner: bee lab.
 
 > **PDF —** Full protocol set for download, uploaded to `static.igem.wiki`. The
 > page carries the summaries; the PDF carries every step.

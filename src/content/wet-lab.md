@@ -23,6 +23,33 @@ molecule **self-anneals intramolecularly**, so one promoter and no heat-denatura
 step are required. And a closed loop is spare capacity: it can carry a cargo
 without touching the duplex that does the silencing.
 
+Loop ends were not our idea alone. We arrived at them from the literature on dsRNA
+stability, and **Sean Leonard and Jeffrey E. Barrick** both supported the approach
+for a delivery system like ours. Stability matters here more than in most RNAi work
+because our route is two handovers long: into the bee, then into the mite.
+
+**Four genes, one molecule.** The first design silenced a single gene. Published
+multigene concatenation constructs carry several target sequences in one dsRNA, so
+we took the ranked gene pools from [RNA design](/software), chose **four target
+genes**, took one favourable **175 bp** region from each, and concatenated them into
+a **700 bp** multigene stem. Two such constructs were designed and produced, one
+from each candidate pool: a literature-derived pool of genes with previously
+demonstrated direct RNAi effects, and an exploratory pool selected on functional
+network connectivity. Which genes, and how the pools were filtered, is at cycle 1.1.
+
+> **TODO —** The stem length is written two ways on this page: ~500 bp for the Muita
+> geometry above, 700 bp for the four-region concatenate here, and the folding model
+> at cycle 1.1 uses 709 bp. Say which number belongs to which construct. Owner: wet
+> lab.
+
+**An asymmetric bulge every 23 nt.** Muita et al. tested loop-ended dsRNA carrying
+either G–U wobble base pairs or **asymmetric bulges (ASY)** in _Varroa_; both raised
+persistence, and with it RNAi and mite mortality, against conventional dsRNA `[LIT]`.
+We chose ASY. The antisense strand is left intact and **one nucleotide is deleted
+from the sense strand every 23 nt**, leaving one unpaired antisense base per
+deletion and a regular single-nucleotide bulge along the stem. **Our 23 nt register
+is untested**; Muita's validated construct uses 22. See cycle 1.1.
+
 > **FIGURE: construct architecture.** The dumbbell drawn once, annotated: T7
 > promoter, U1 and U2 universal adaptors, the ~500 bp duplex stem, the two
 > ~150 nt loops with the L0 / L1 / L2 cargo slot marked, and the ribozyme-flanked
@@ -84,6 +111,36 @@ We do not describe the chassis as novel anywhere on this wiki. The novel core of
 NECTAR is the RNA design method on [RNA design](/software), and the instrumented
 loop.
 
+## How it gets into the hive
+
+**Status: Proposed.** A pollen patty is an existing honeybee nutrient supplement —
+sugars, protein supplements such as yeasts, and binding agents — administered as a
+slab on top of the hive that worker and nurse bees feed on. Choosing yeast as the
+chassis means **the chassis and the delivery vehicle are the same object**, and the
+argument for that came from literature review plus discussion with **Prof. Geraldine
+Wright**, who has engineered yeast to deliver vital sterols in a pollen patty. Four
+advantages, in her and our terms:
+
+- Engineered yeast can be **heat-inactivated** and put into a supplement bees
+  readily feed on.
+- Yeast can be **significantly enriched in the patty without affecting
+  palatability**, which raises the dose administered.
+- **Heat-inactivated yeast is not considered a GMO.**
+- dsRNA fed to nurse bees, in sucrose, is **transferred to the mite via the
+  glandular secretions of nurse bees**, which is what the mite feeds on.
+
+The problem this addresses is a delivery problem. A key limitation of current
+_Varroa_ dsRNA therapeutics is that they deliver in a sucrose solution, **in which
+dsRNA has a very short half-life**.
+
+> **TODO —** "Stability in sucrose vs stability in pollen patty." The comparison the
+> whole delivery argument rests on, flagged as owed in our own write-up with no data
+> attached. Until it exists the sucrose half-life is cited from the literature and
+> the patty side of it is **unmeasured**, so nothing on this wiki shows that the
+> patty is the better carrier. The formulation itself is owed too; see
+> [experiments and lab book](/wet-lab-experiments#from-culture-to-product).
+> Owner: wet lab.
+
 ## Producing the RNA
 
 **Status: Demonstrated.** All dsRNA used for bee-lab and measurement work to
@@ -111,7 +168,7 @@ and flag those two rather than presenting the set as uniformly clean.
 ## Build errors worth showing
 
 Four documented build failures, each with a diagnosis and a fix, are tabulated at
-cycle 1.3. Two are worth naming here because they are the ones another team is
+cycle 2.1. Two are worth naming here because they are the ones another team is
 most likely to repeat:
 
 - **T7 on both strands gave 0 ng/µL.** A labelling error put the T7 promoter on
@@ -170,6 +227,10 @@ primer stock) are recorded in the same place.
 - Yeast-produced dsRNA of any kind. See [yeast](/wet-lab-experiments#yeast-production).
 - IVT yields for the loop-ended constructs reported side by side with the
   dual-promoter designs.
+- Any test of the multigene loop-ended constructs. They were produced; nothing was
+  read out of them.
+- The pollen patty formulation, and dsRNA stability in it against stability in
+  sucrose.
 
 > **TODO —** Dual-promoter against loop-ended IVT yield. The comparison was run
 > but the paired numbers are not yet written up. Owner: wet lab.

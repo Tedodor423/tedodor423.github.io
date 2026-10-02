@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { beesAvailable, resetBees } from "./BeeScene";
+import { beesAvailable, resetBees } from "../utils/bees";
 import "./BeeReset.css";
 
 /* The reset for the bee minigame's flower tally, placed at the foot of the
  * bee lab page through the `bee-reset` slot. The scene lives outside the
- * routes, so the button only sends word (see resetBees in BeeScene.tsx).
+ * routes, so the button only sends word (see resetBees in utils/bees.ts).
  *
  * Not rendered where the bees never appear, since there is no tally there
  * worth resetting.

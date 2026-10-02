@@ -54,12 +54,16 @@
   order: 2;
 }
 
-.sm-canvas {
+.sm-qpanel {
   order: 3;
 }
 
-.sm-pop {
+.sm-canvas {
   order: 4;
+}
+
+.sm-pop {
+  order: 5;
 }
 
 /* ---------- the question picker ---------- */
@@ -112,6 +116,87 @@
   color: var(--text-muted);
   font-size: 0.73rem;
   line-height: 1.5;
+}
+
+/* ---------- the cycle panel ---------- */
+
+/* The selected question walked through its HONEY stages, beside the list.
+ * Each stage is a row; pointing at one picks its people out on the map. */
+.sm-qpanel {
+  margin: 0 0 0.75rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.sm-qstage {
+  padding: 0.55rem 0.35rem;
+  border-top: 1px solid var(--rule);
+  outline: none;
+}
+
+.sm-qstage:first-child {
+  border-top: 0;
+  padding-top: 0.15rem;
+}
+
+/* The hover state is a fill, matching the pressed question row, and it is
+ * the same signal the map answers with. */
+.sm-qstage.is-hover,
+.sm-qstage:focus-visible {
+  background: var(--surface-muted);
+}
+
+.stakeholder-map .sm-qpanel .sm-qstage-head {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--ink);
+}
+
+/* The stage letter, in the badge pairing the faces wear: honey on navy. */
+.sm-qstage-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: var(--radius);
+  background: var(--oxford-navy);
+  color: var(--honey);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+
+.sm-qstage-count {
+  margin-left: auto;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 400;
+}
+
+.stakeholder-map .sm-qpanel .sm-qstage-body {
+  margin-top: 0.35rem;
+  font-size: 0.75rem;
+  line-height: 1.55;
+  color: var(--text);
+}
+
+.sm-qstage-body p {
+  margin: 0 0 0.45rem;
+}
+
+.sm-qstage-body p:last-child {
+  margin-bottom: 0;
+}
+
+.stakeholder-map .sm-qpanel .sm-qstage-body strong {
+  color: var(--ink);
 }
 
 /* While the fullscreen stage covers the viewport (the attribute is set by
@@ -239,6 +324,20 @@ html[data-map-stage] .site-nav {
 .sm-node.is-withheld.is-face .sm-silhouette,
 .sm-node.is-withheld.is-active .sm-silhouette {
   opacity: 0.4;
+}
+
+/* Pointing at a stage in the cycle panel: that stage's people step forward
+ * a little, the rest of the loop stands back. */
+.sm-node.is-stagelit:not(.is-active) .sm-zoom {
+  transform: scale(4.05);
+}
+
+.sm-node.is-stagelit:not(.is-anchor) .sm-rim {
+  stroke-width: 2.2;
+}
+
+.sm-node.is-face.is-stagefade:not(.is-active) .sm-zoom {
+  opacity: 0.35;
 }
 
 /* The rim sits above the image so a face stays framed; its width scales with
@@ -659,6 +758,23 @@ html[data-map-stage] .site-nav {
 
   .stakeholder-map .sm-filterbox .sm-filter-key {
     margin-top: 0.5rem;
+  }
+
+  /* The cycle panel stands beside the question list, growing upward from
+   * the same baseline; on a short viewport it scrolls. Faces keep out of
+   * both (they are measured into the relax blocks and card avoidance). */
+  .stakeholder-map .sm-qpanel {
+    position: absolute;
+    bottom: 1.25rem;
+    left: calc(1.25rem + min(26rem, 42vw) + 0.75rem);
+    z-index: 4;
+    width: min(27rem, 30vw);
+    /* Kept to the lower half on purpose: the faces treat this panel as a
+     * no-go zone, and a full-height panel would push half the map's people
+     * out of their geography. The longer cycles scroll inside instead. */
+    max-height: min(50vh, 30rem);
+    overflow-y: auto;
+    margin: 0;
   }
 
   /* The card floats beside, below or above the face it describes; the

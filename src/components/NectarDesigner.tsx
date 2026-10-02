@@ -719,13 +719,11 @@ function FoldedStructure({
         );
       })}
       </svg>
-      {/* Set as HTML rather than as SVG text on purpose: text inside the
-          viewBox scales with it, and this line would end up half again larger
-          than the prose around it. */}
+      {/* Only while it is moving, and the space is reserved either way so the
+          figure does not jump when it stops. Set as HTML rather than as SVG
+          text because text inside the viewBox scales with it. */}
       <p className="nd-fold-status" aria-live="polite">
-        {running
-          ? "Settling the structure"
-          : `${pairs.length} base pairs across this stretch`}
+        {running ? "Settling the structure" : ""}
       </p>
     </>
   );
@@ -1235,8 +1233,8 @@ export function NectarDesigner() {
     <div className="nd" id="nectar-designer" ref={root}>
       <div className="nd-toolbar">
         <p className="nd-toolbar-note">
-          Seven decisions, one at a time. Every control re-runs every step after
-          it, so change something here and step forward to see what moved.
+          Seven decisions, one at a time. Every control re-runs the steps after
+          it.
         </p>
         <div className="nd-toolbar-buttons">
           {/* The page opens on this figure, so the full note about where its
@@ -1335,7 +1333,7 @@ export function NectarDesigner() {
             <>
               <Field
                 label="Pest"
-                hint="Varroa is our case study. The other seven are here because the platform claim is that only the input changes."
+                hint="Varroa is our case study. The others are here because only the input changes."
               >
                 <div className="nd-chips">
                   {TARGET_ORGANISMS.map((one) => (
@@ -1397,10 +1395,7 @@ export function NectarDesigner() {
                 <p>{lengthSpec.note}</p>
               </div>
 
-              <Field
-                label={`Candidate genes to rank: ${numCandidates}`}
-                hint="How many genes the ranking returns for you to choose between."
-              >
+              <Field label={`Candidate genes to rank: ${numCandidates}`}>
                 <input
                   type="range"
                   min={3}
@@ -1436,7 +1431,7 @@ export function NectarDesigner() {
 
               <Field
                 label="Species that must not be affected"
-                hint="Marked species share a habitat or a trophic link with the selected pest. Two of them have no reference transcriptome, so they cannot be screened at all, and the matrix says so rather than passing them quietly."
+                hint="Marked species share a habitat or a trophic link with the pest. Two have no reference transcriptome and cannot be screened."
               >
                 <div className="nd-chips">
                   {SCREENABLE_POOL.map((one) => {
@@ -1477,8 +1472,7 @@ export function NectarDesigner() {
                 />
                 <span>
                   <strong>Seed-region filtering.</strong> Rejects windows whose
-                  guide carries a repetitive motif across positions 2 to 8, where
-                  a chance match is most likely to silence the wrong thing.
+                  guide has a repetitive motif at positions 2 to 8.
                 </span>
               </label>
             </>
@@ -1488,10 +1482,8 @@ export function NectarDesigner() {
           {step === 3 ? (
             <>
               <p className="nd-fact">
-                On the real pipeline this ranking combines a protein-interaction
-                centrality percentile with a transcript-abundance percentile, and
-                the page below sets out both and their caveat. Choose a row to
-                carry it into the fold.
+                The real ranking combines protein-interaction centrality with
+                transcript abundance. Choose a row to carry it forward.
               </p>
               <div className="nd-scroll">
                 <table className="nd-table">
@@ -1556,9 +1548,8 @@ export function NectarDesigner() {
               <>
                 <p className="nd-fact">
                   {gene.symbol}, {fold.sequence.length.toLocaleString()} nt. A
-                  window that is perfectly complementary but buried inside a stem
-                  is not a usable window, which is why the fold comes before the
-                  scoring rather than after it.
+                  window buried inside a stem is not a usable window, so the fold
+                  comes before the scoring.
                 </p>
 
                 <figure className="nd-figure">
@@ -1604,20 +1595,16 @@ export function NectarDesigner() {
                     runKey={`${gene.transcriptId}:${foldRange.from}:${foldRange.to}`}
                   />
 
-                  <p className="nd-fold-where">
-                    Nucleotides{" "}
-                    <strong>
-                      {(foldRange.from + 1).toLocaleString()} to{" "}
-                      {foldRange.to.toLocaleString()}
-                    </strong>{" "}
-                    of {fold.sequence.length.toLocaleString()}, which is{" "}
-                    {foldRange.to - foldRange.from} of them. A fold of the whole
-                    transcript would be a hairball; this is the neighbourhood of
-                    the window you picked, and the comb below shows where it
-                    sits.
-                  </p>
-
-                  <div className="nd-caption">
+                  {/* One line under the figure, and one key. The mechanism, the
+                      provenance and the ViennaRNA note all live in the page
+                      prose below, so repeating them here only buried the
+                      figure. */}
+                  <figcaption className="nd-caption">
+                    <span className="nd-key">
+                      Nucleotides {(foldRange.from + 1).toLocaleString()} to{" "}
+                      {foldRange.to.toLocaleString()} of{" "}
+                      {fold.sequence.length.toLocaleString()}
+                    </span>
                     {colourMode === "base" ? (
                       (["A", "U", "G", "C"] as const).map((base) => (
                         <span className="nd-key" key={base}>
@@ -1654,28 +1641,15 @@ export function NectarDesigner() {
                         className="nd-key-swatch nd-key-swatch--wax"
                         aria-hidden="true"
                       />
-                      wax capping, the occluded fraction
+                      capped
                     </span>
-                  </div>
-
-                  <figcaption className="nd-caption nd-caption--block">
-                    <strong>The structure, settling.</strong> The backbone is a
-                    chain of springs, every base pair is one more spring across
-                    it, and every nucleotide pushes its neighbours away. Released
-                    from a straight line, stems zip their partners together and
-                    loops bulge out, and the wax seals over the occluded bases as
-                    it comes to rest. The layout simulation is real and runs in
-                    your browser; which bases pair with which is generated, not
-                    folded. The real pipeline uses ViennaRNA 2.7.2, Turner 2004,
-                    37 &deg;C, partition function.
                   </figcaption>
                 </figure>
 
+                {/* The whole transcript, as a locator. It carries one line of
+                    chrome, because the capping it uses is already keyed under
+                    the fold and a second key for the same idea was noise. */}
                 <figure className="nd-figure">
-                  <figcaption className="nd-comb-title">
-                    The whole transcript, and where the fold above is looking
-                  </figcaption>
-
                   <AccessibilityComb
                     unpaired={fold.unpairedProbability}
                     from={0}
@@ -1684,39 +1658,13 @@ export function NectarDesigner() {
                     markedTo={foldRange.to}
                     clipId={combClip}
                   />
-
-                  <div className="nd-comb-axis" aria-hidden="true">
+                  <figcaption className="nd-comb-axis">
                     <span>1</span>
                     <span>
-                      {fold.sequence.length.toLocaleString()} nt in{" "}
-                      {COMB_BINS} cells
+                      the whole transcript, with the drawn stretch outlined
                     </span>
                     <span>{fold.sequence.length.toLocaleString()}</span>
-                  </div>
-
-                  <div className="nd-caption">
-                    <span className="nd-key">
-                      <span
-                        className="nd-key-swatch nd-key-swatch--open"
-                        aria-hidden="true"
-                      />
-                      open, available to the silencing machinery
-                    </span>
-                    <span className="nd-key">
-                      <span
-                        className="nd-key-swatch nd-key-swatch--capped"
-                        aria-hidden="true"
-                      />
-                      capped, occluded by the fold
-                    </span>
-                    <span className="nd-key">
-                      <span
-                        className="nd-key-swatch nd-key-swatch--marked"
-                        aria-hidden="true"
-                      />
-                      the stretch drawn above
-                    </span>
-                  </div>
+                  </figcaption>
                 </figure>
 
                 <p className="nd-fact">
@@ -1820,9 +1768,8 @@ export function NectarDesigner() {
                   {report.unscreenableSpeciesIds.length === 1
                     ? "One species in this panel has"
                     : `${report.unscreenableSpeciesIds.length} species in this panel have`}{" "}
-                  no reference transcriptome. Their column is hatched, not clear:
-                  absence of a hit there is absence of data, and treating it as a
-                  pass would be the most dangerous mistake this step could make.
+                  no reference transcriptome. Their column is hatched: absence of
+                  a hit there is absence of data, not a pass.
                 </p>
               ) : null}
 
@@ -2071,10 +2018,9 @@ export function NectarDesigner() {
 
               {topology === "dumbbell" ? (
                 <p className="nd-fact">
-                  The dumbbell needs no promoter, no terminator and no marker,
-                  because nothing transcribes it inside a cell. That is the whole
-                  point of the architecture, and it is why those controls are
-                  absent rather than disabled.
+                  The dumbbell needs no promoter, terminator or marker, because
+                  nothing transcribes it inside a cell. That is why those
+                  controls are absent rather than disabled.
                 </p>
               ) : (
                 <div className="nd-pair">
@@ -2116,9 +2062,8 @@ export function NectarDesigner() {
                   <p className="nd-fact">
                     {design.lengthBp.toLocaleString()} bp, carrying{" "}
                     {carried.length} {carried.length === 1 ? "window" : "windows"}
-                    . Only promoters and markers that work in{" "}
-                    {CHASSIS_LABELS[chassis]} are offered, so an incompatible
-                    construct cannot be built by accident.
+                    . Only promoters and markers valid in{" "}
+                    {CHASSIS_LABELS[chassis]} are offered.
                   </p>
 
                   <FeatureMap design={design} />
@@ -2210,9 +2155,8 @@ export function NectarDesigner() {
             design ? (
               <>
                 <p className="nd-fact">
-                  Written in the browser, with no server involved. Each file
-                  carries a line inside it saying the sequence is generated, so a
-                  copy that gets separated from this page still says what it is.
+                  Written in the browser. Each file says inside itself that the
+                  sequence is generated.
                 </p>
                 <div className="nd-downloads">
                   <button

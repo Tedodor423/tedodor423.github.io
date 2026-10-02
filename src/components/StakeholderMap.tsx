@@ -12,14 +12,19 @@ import {
   COL_W,
   ROW_H,
 } from "../utils/worldHexes";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import {
+  QUESTION_CYCLES,
   QUESTION_IDS,
   QUESTION_TITLES,
   STAGE_NAMES,
   STAGE_ORDER,
   STAKEHOLDERS,
+  isKeyTo,
   questionsOf,
   stageOf,
+  type HoneyStage,
   type QuestionId,
   type Stakeholder,
 } from "../data/stakeholders";
@@ -240,6 +245,15 @@ function relax(points: { id: string; x: number; y: number }[], blocks: Block[]) 
         const dy = p[j].y - p[i].y;
         const d = Math.hypot(dx, dy);
         if (d >= FACE_MIN_DIST) continue;
+        if (d < 1) {
+          // Coincident: two faces ejected to the same block edge. A push
+          // along a zero-length vector is NaN, so nudge them apart
+          // vertically and let the next pass separate them properly.
+          p[i].y -= 1;
+          p[j].y += 1;
+          moved = true;
+          continue;
+        }
         const push = (FACE_MIN_DIST - d) / 2 / d;
         p[i].x -= dx * push;
         p[i].y -= dy * push;
@@ -520,6 +534,10 @@ export function StakeholderMap() {
   const canvasRef = useRef<HTMLDivElement>(null);
   const headRef = useRef<HTMLElement>(null);
   const filterboxRef = useRef<HTMLDivElement>(null);
+  const qpanelRef = useRef<HTMLElement>(null);
+  // The HONEY stage under the pointer in the cycle panel, picking that
+  // stage's people out on the map.
+  const [stageHover, setStageHover] = useState<HoneyStage | null>(null);
 
   // Wide screens get the fullscreen stage and the box beside the face;
   // narrow ones keep everything in normal flow with the card under the map.
@@ -559,17 +577,23 @@ export function StakeholderMap() {
       setLayout({
         w: canvas.clientWidth,
         h: canvas.clientHeight,
-        panels: [rect(headRef.current), rect(filterboxRef.current)].filter(
-          (r): r is PanelRect => r !== null,
-        ),
+        panels: [
+          rect(headRef.current),
+          rect(filterboxRef.current),
+          rect(qpanelRef.current),
+        ].filter((r): r is PanelRect => r !== null),
       });
     };
     const ro = new ResizeObserver(measure);
     ro.observe(canvas);
     if (headRef.current) ro.observe(headRef.current);
     if (filterboxRef.current) ro.observe(filterboxRef.current);
+    // The cycle panel exists only while a question is selected, which is
+    // why this effect re-runs on the filter.
+    if (qpanelRef.current) ro.observe(qpanelRef.current);
+    measure();
     return () => ro.disconnect();
-  }, []);
+  }, [filter]);
 
   /* The pin-and-move-on scroll treatment. The stage is position:sticky, so
    * scrolling never stops working; this only eases the stage in while it
@@ -929,6 +953,7 @@ export function StakeholderMap() {
     setFilter(q);
     setPinned(null);
     setHovered(null);
+    setStageHover(null);
   };
 
   // The active cell paints last so its enlarged face is never under a
@@ -1023,6 +1048,8 @@ export function StakeholderMap() {
                   const wantsFace = Boolean(filter) && lit;
                   const hasPhoto =
                     Boolean(s.photo) && !s.consent && !broken.has(s.id);
+                  const nodeStage =
+                    filter && lit ? stageOf(filter, s.id) : null;
                   const cls = [
                     "sm-node",
                     lit ? "" : " is-dim",
@@ -1032,6 +1059,11 @@ export function StakeholderMap() {
                     isAnchor ? " is-anchor" : "",
                     isProvisional ? " is-provisional" : "",
                     s.consent ? " is-withheld" : "",
+                    stageHover && nodeStage
+                      ? nodeStage === stageHover
+                        ? " is-stagelit"
+                        : " is-stagefade"
+                      : "",
                   ].join("");
                   return (
                     <g
@@ -1102,7 +1134,10 @@ export function StakeholderMap() {
                          * a gap. */}
                         {!hasPhoto && <Silhouette />}
                         <polygon className="sm-rim" points={hexPoints(0, 0)} />
-                        {wantsFace && (
+                        {/* Only the conversations the question file marks
+                         * as central wear the stage letter; everyone else
+                         * stays an unbadged face. */}
+                        {wantsFace && isKeyTo(filter!, s.id) && (
                           <g
                             className="sm-stage-badge"
                             aria-hidden
@@ -1183,14 +1218,65 @@ export function StakeholderMap() {
               {filter && (
                 <p className="sm-filter-key">
                   Arrows run this cycle&rsquo;s HONEY loop, Hear to Yield and
-                  back, through everyone who fed it; each face is badged with
-                  the stage the team&rsquo;s write-up places it in, and the
-                  anchor interview carries the heavier rim. A dashed rim is a
-                  tag we assigned provisionally, not one the team&rsquo;s
-                  question table states.
+                  back. Conversations central to the question wear their
+                  stage letter, the anchor interview carries the heavier rim,
+                  and a dashed rim is a tag we assigned provisionally, not
+                  one the team&rsquo;s question table states. Hover a stage
+                  in the panel beside this list to pick its people out.
                 </p>
               )}
             </div>
+
+            {/* The question walked through its HONEY stages, from the
+             * question's own file (src/content/questions). Hovering or
+             * focusing a stage picks its people out on the map. */}
+            {filter && (
+              <aside
+                className="sm-qpanel"
+                ref={qpanelRef}
+                aria-label={`${filter} through the HONEY loop`}
+              >
+                {QUESTION_CYCLES[filter].stages.map((st) => (
+                  <section
+                    key={st.stage}
+                    className={`sm-qstage${
+                      stageHover === st.stage ? " is-hover" : ""
+                    }`}
+                    tabIndex={0}
+                    onPointerEnter={() => setStageHover(st.stage)}
+                    onPointerLeave={() =>
+                      setStageHover((h) => (h === st.stage ? null : h))
+                    }
+                    onFocus={() => setStageHover(st.stage)}
+                    onBlur={() =>
+                      setStageHover((h) => (h === st.stage ? null : h))
+                    }
+                  >
+                    <h4 className="sm-qstage-head">
+                      <span className="sm-qstage-letter" aria-hidden>
+                        {st.stage}
+                      </span>
+                      {STAGE_NAMES[st.stage]}
+                      {st.people.length > 0 && (
+                        <span className="sm-qstage-count">
+                          {st.people.length}{" "}
+                          {st.people.length === 1
+                            ? "conversation"
+                            : "conversations"}
+                        </span>
+                      )}
+                    </h4>
+                    {st.body && (
+                      <div className="sm-qstage-body">
+                        <Markdown remarkPlugins={[remarkGfm]}>
+                          {st.body}
+                        </Markdown>
+                      </div>
+                    )}
+                  </section>
+                ))}
+              </aside>
+            )}
 
             {(activeS || !wide) && (
               <div

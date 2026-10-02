@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { findFlowerSpots, type FlowerSpot } from "../utils/flowerSpots";
+import { RESET_EVENT, beesAvailable } from "../utils/bees";
 import "./BeeScene.css";
 
 /* Artwork, served from static.igem.wiki via the iGEM uploads tool. The source
@@ -72,25 +73,6 @@ const INITIAL_BEES = 1;
  *  no ceiling. The tally persists, so the swarm a visitor comes back to is the
  *  one their collection has paid for. */
 const FIRST_BEE_COST = 3;
-
-/** Sent by the reset button on the bee lab page (BeeReset.tsx). The scene is
- *  mounted outside the routes, so a window event is the way across. */
-const RESET_EVENT = "nectar:bees-reset";
-
-/** Zero the tally and send the swarm back down to what an empty tally has
- *  paid for. */
-export function resetBees() {
-  window.dispatchEvent(new Event(RESET_EVENT));
-}
-
-/** Whether this browser shows the bees at all: they need a cursor to follow,
- *  and they stay away for anyone who has asked for reduced motion. */
-export function beesAvailable(): boolean {
-  return (
-    window.matchMedia("(hover: hover) and (pointer: fine)").matches &&
-    !window.matchMedia("(prefers-reduced-motion: reduce)").matches
-  );
-}
 
 /** How many bees a tally of flowers has paid for. */
 function beesFor(flowers: number): number {
@@ -186,15 +168,14 @@ const FLOWER_HOLD_MS = 420;
 const FLOWER_FADE_MS = 430;
 
 /** Where the running total of pollinated flowers is kept, and whether the
- *  visitor has let the bees out. Renamed from "nectar.bees-on" when the bees
- *  went from on to off by default: the old key was written on every mount, so
- *  an "on" under it records a default, not a choice. */
+ *  visitor has put the bees away. */
 const STORAGE_KEY = "nectar.flowers-pollinated";
-const RUNNING_KEY = "nectar.bees-running";
-/** Whether the bees have had their one unprompted outing, on the bee lab. */
-const INTRODUCED_KEY = "nectar.bees-introduced";
-/** The page where the bees come out by themselves, once. */
-const INTRODUCED_ON = "/bee-lab";
+const RUNNING_KEY = "nectar.bees-on";
+/** Left behind by a short-lived build in which the bees stayed in the hive
+ *  until the bee lab was visited. Neither means anything now, and the first
+ *  recorded "off" for everyone who opened the wiki then, so both are cleared
+ *  rather than read. */
+const STALE_KEYS = ["nectar.bees-running", "nectar.bees-introduced"];
 
 const rand = (min: number, max: number) => min + Math.random() * (max - min);
 const randIn = ([min, max]: [number, number]) => rand(min, max);
@@ -216,34 +197,21 @@ function readCollected(): number {
   }
 }
 
-/** Whether the bees are showing. Off until the visitor lets them out from the
- *  hive; a preference, so it outlives the page. */
+/** Whether the bees are showing. On unless the visitor has put them away; a
+ *  preference, so it outlives the page. */
 function readRunning(): boolean {
   try {
-    return window.localStorage.getItem(RUNNING_KEY) === "on";
+    return window.localStorage.getItem(RUNNING_KEY) !== "off";
   } catch {
-    return false;
+    return true;
   }
 }
 
-/** The bees let themselves out the first time a visitor reaches the bee lab.
- *  After that the switch is theirs: spent once and remembered, so someone who
- *  put the bees away is not overruled on the next visit. */
-function wereIntroduced(): boolean {
+function forgetStaleKeys() {
   try {
-    return window.localStorage.getItem(INTRODUCED_KEY) === "yes";
+    STALE_KEYS.forEach((key) => window.localStorage.removeItem(key));
   } catch {
-    // Without storage it happens once per page load instead, which is the
-    // nearest honest thing to once ever.
-    return false;
-  }
-}
-
-function markIntroduced() {
-  try {
-    window.localStorage.setItem(INTRODUCED_KEY, "yes");
-  } catch {
-    // Nothing to do: see above.
+    // No storage: nothing to clear.
   }
 }
 
@@ -309,7 +277,7 @@ interface Flower {
 /**
  * The wiki's bees.
  *
- * Once let out, bees stream out of the hive and fly to the cursor,
+ * Bees stream out of the hive when the page opens and fly to the cursor,
  * slowing to a hover as they get close. Leave the mouse alone for a few
  * seconds and they drift off about their own business until it moves again.
  * The hive itself is the switch: click it to put the bees away, click it again
@@ -323,9 +291,8 @@ interface Flower {
  * what has been collected. The more bees there are the wider they hold around
  * the cursor, but each one answers it exactly as fast as a lone bee would.
  *
- * The bees start in the hive, which is faint while they are away. They come
- * out by themselves the first time a visitor reaches the bee lab, once ever;
- * after that the switch is the visitor's, and the choice is remembered.
+ * The hive goes faint while they are away, and the choice is remembered, so a
+ * visitor who put the bees away is not overruled on the next visit.
  *
  * Only the two buttons are interactive. Everything else is `aria-hidden`, never
  * takes a pointer event, and is not rendered at all for a coarse pointer (no
@@ -360,13 +327,7 @@ export function BeeScene() {
     dropFlowers.current?.();
   }, [pathname]);
 
-  const [introduced, setIntroduced] = useState(wereIntroduced);
-  useEffect(() => {
-    if (pathname !== INTRODUCED_ON || introduced) return;
-    setIntroduced(true);
-    markIntroduced();
-    setRunning(true);
-  }, [pathname, introduced]);
+  useEffect(forgetStaleKeys, []);
 
   // The loop reads both of these rather than depending on them, so that
   // switching off or bringing in a flower never tears the scene down and
@@ -1111,7 +1072,7 @@ export function BeeScene() {
           {/* Shown on hover and on focus. The hive already carries its name and
               state for assistive tech, so this is decoration of it. */}
           <span className="hive-tip" aria-hidden="true">
-            {running ? "Put bees away" : "Let bees out"}
+            {running ? "Put bees away" : "Bring bees back"}
           </span>
         </div>
       </div>

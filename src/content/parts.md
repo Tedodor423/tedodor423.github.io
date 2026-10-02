@@ -66,7 +66,7 @@ published array structure we found is a hand-drawn cartoon. The field solved a
 different problem, repeat recombination in _E. coli_, and the standard fix for
 that incidentally removed the sequence identity that causes the cross-pairing.
 The folding consequence appears to have gone unnoticed. This finding is not
-encumbered and we publish it here, at cycle 4.1 and as a
+encumbered and we publish it here, at cycle 5.1 and as a
 [Contribution](/contribution).
 
 ## Documentation on the Registry

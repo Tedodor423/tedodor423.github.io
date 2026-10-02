@@ -36,7 +36,9 @@ reportedly best around 100–150 mM `[LIT]`.
 
 Set up 15 nutrition assay boxes, 4 feeding tubes each: 6 × plain 1 M sucrose,
 3 × +50 mM NaCl, 3 × +100 mM, 3 × +150 mM. Boxes needed the fourth hole taped
-over; only three of four were factory-drilled.
+over; only three of four were factory-drilled. The assay write-up splits the six
+plain boxes further: **five with bees, and one with no bees** as the evaporation
+control, which is the split the statistics on [the bee lab](/bee-lab) use.
 
 Air bubbles in filled tubes are very hard to correct once formed. Empty and
 refill from scratch instead.
@@ -130,7 +132,9 @@ some bees may have gone unfed overnight. Bees began escaping enclosures during
 setup, flagged as a technique to improve.
 
 Set up a PCR feeding-tube evaporation assay: 6 adapter combinations × 2 repeats
-× 4 tubes, tracked in a shared spreadsheet.
+× 4 tubes, tracked in a shared spreadsheet. The assay write-up gives **five**
+adaptor combinations for the same comparison, at 250 µl of 1 M sucrose in
+deionised water per PCR tube; the two counts need reconciling.
 
 #### 15 July
 
@@ -203,6 +207,11 @@ adapter-tagged GFP fragments pending oligo arrival, ahead of IVT.
 Second larval spiking pilot: 10 instar-5 larvae spiked with 5 µl of 200 µg/µl
 dsRNA. Larvae 2 and 6 were double-dosed after the first dose missed the cell. A
 second cell was damaged in the process.
+
+> **TODO —** This entry and the 30 July one record the stock as 200 µg/µl. Every
+> other record of this work, including the larval assay design on
+> [the bee lab](/bee-lab), gives 200 ng/µl — which is what makes 5 µl a 1 µg dose.
+> Confirm and correct the journal. Owner: bee lab.
 
 #### 29 July
 
@@ -296,8 +305,9 @@ why that arm is not concurrent with the other three.
 
 **First formal larval assay** started instead: 700 bp GFP with Mango, 1 µg in 20 µl
 per larva, all 5th instar, larvae returned to the hive immediately after dosing.
-Timepoints 24 h, 48 h, 72 h and 168 h. Note logged to check samples during
-processing for burst against intact condition.
+Timepoints 24 h, 48 h, 72 h and 168 h — the assay design as written up adds **96 h**,
+giving five timepoints. Note logged to check samples during processing for burst
+against intact condition.
 
 #### 19–21 August
 
@@ -487,7 +497,9 @@ was difficult.
 
 > **TABLE —** Sucrose consumption per cage for the salt trial and the
 > feeding-vessel comparison: tube mass before and after 24 h, bees alive per
-> cage, consumption per bee. Held in the team spreadsheet. Owner: bee lab.
+> cage, consumption per bee. The salt trial's cage means and variances are now on
+> [the bee lab](/bee-lab); the per-tube daily masses behind them, and every figure
+> for the vessel comparison, are still only in the team spreadsheet. Owner: bee lab.
 
 ## Still missing
 

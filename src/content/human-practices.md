@@ -66,6 +66,15 @@ who did not agree with each other — Q6.
 
 ### Q1 — How and why is Varroa a problem, and what treatments exist?
 
+*Varroa destructor* is one of the most damaging honeybee parasites. It feeds on
+adult and larval bees, weakening their immune system, and it vectors bee viruses
+— mainly deformed wing virus and the acute bee paralysis virus complex (1)
+`[LIT]`. It kills millions of colonies worldwide and costs billions in
+agricultural production (2) `[LIT]`, and most infested colonies collapse within
+**two to three years** without periodic treatment (3) `[LIT]`. Treatments exist;
+every one of them has limits. Which limits actually matter is not a literature
+question, so we asked the people who live with them.
+
 **Anchor interview — Danny Le Feuvre**, CEO, Australian Honey Bee Industry
 Council · 28 May 2026
 
@@ -94,13 +103,16 @@ Council · 28 May 2026
   different figures for how much of Australian agriculture depends on bee
   pollination — 14–15% in the interview narrative and about 50% in the summary.
   We use the narrative figure and flag the conflict rather than picking the
-  larger number `[FLAG]`.
+  larger number `[FLAG]`. It also values that share at about A$14.6 billion,
+  where the economic modelling behind Q5 works from an A$4.6 billion pollination
+  figure; the two have not been reconciled `[FLAG]`.
 
 Supporting: **Chris Hiatt** on resistance at 18,000-colony scale; **Mike
 Allerton** and **Wade Ford** on Australian practice; **Elizabeth Frost** on
-resistance and the Australian season; **Professor Giles Budge** on bee health.
-Dissenting: **Mark Sandham** and the **Oxfordshire Natural Beekeeping Group**,
-who question whether treating is desirable at all.
+resistance and the Australian season; **Professor Giles Budge** on bee health;
+the **Scottish Government Honey Bee Health Team** on pesticide contamination of
+honey. Dissenting: **Mark Sandham** and the **Oxfordshire Natural Beekeeping
+Group**, who question whether treating is desirable at all.
 
 **Observe.** Resistance is present tense. Frost reports dual resistance already
 detected in Australia, which puts essentially every legal synthetic miticide on
@@ -115,17 +127,58 @@ our worst years over the last 10 years, we've had like 60% loss, 50%.”* What
 remains has its own limits: formic acid has a temperature ceiling much of
 Australia exceeds, most of the continent has no brood break, thyme oil taints
 honey, and Frost, Allerton and Ford all report off-label homemade treatments
-filling the gap. The documented failure modes of the whole chemical class, with
-sources, are in Q2's Observe below. The cost is people: *“In New South Wales,
-we've lost 35% of our commercial beekeepers, [they've] deregistered…in
+filling the gap. The cost is people: *“In New South Wales, we've lost 35% of our
+commercial beekeepers, [they've] deregistered…in
 Queensland, 40% of commercial beekeepers are planning to leave the industry in
 the next 12 to 24 months citing profitability and Varroa control as the main
 reason.”*
 
-**Navigate.** The problem stopped being mite mortality and became a system:
-colony survival, repeated labour, the cost of rebuilding, and the pollination
-that depends on all of it. The treatment-free beekeepers narrowed it further.
-Sandham and the Oxfordshire group have lower counts than they had on chemicals,
+**The documented record.** Every class has a failure mode in the literature.
+Pyrethroid-resistant mites — tau-fluvalinate and its relatives — were first
+detected in Italy in 1991 (4) `[LIT]`, spread across Europe to reach the UK in
+August 2001, and were first observed in the US in 1997 (5) `[LIT]`. Coumaphos
+resistance was first recorded in Italy in 2001 (6) `[LIT]` and amitraz
+resistance in the USA in 1998 (7) `[LIT]`; resistance to several treatments at
+once has also been observed (8) `[LIT]`. Synthetics also accumulate where they
+should not — coumaphos has been found in bee brood and in beeswax, where it can
+harm both human and honeybee health (9) `[LIT]`. The alternatives have their own
+ceilings: the organic acids are widely used off label, which can put people or
+the environment at risk, and formic acid is unsuitable in a hot climate (10)
+`[LIT]`, which rules it out across whole regions; thymol can affect the taste of
+the honey (11) `[LIT]`. The mechanical and cultural controls — drone brood
+removal, brood interruption, screened bottom boards — are either very
+labour-intensive, in the case of the first two, or too weak on their own, in the
+case of the last.
+
+1. [Varroa destructor and its viruses — PMC7326341](https://pmc.ncbi.nlm.nih.gov/articles/PMC7326341/)
+2. [Varroa destructor: research avenues towards sustainable control — Trends in Parasitology](<https://www.cell.com/trends/parasitology/abstract/S1471-4922(04)00016-9?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS1471492204000169%3Fshowall%3Dtrue>)
+3. [Colony collapse in untreated infested colonies — Journal of Invertebrate Pathology](https://www.sciencedirect.com/science/article/abs/pii/S0022201109001906?via%3Dihub)
+4. [Acaricide resistance in Varroa destructor — International Journal of Pest Management](https://www.tandfonline.com/doi/full/10.1080/09670874.2022.2094489#d1e606)
+5. [Acaricide pyrethroid resistance in Varroa destructor](https://www.researchgate.net/publication/277616474_Acaricide_pyrethroid_resistance_inVarroa_destructor)
+6. [First detection of strains of Varroa destructor resistant to coumaphos: laboratory tests and field trials](https://www.researchgate.net/publication/45351397_First_detection_of_strains_of_Varroa_destructor_resistant_to_coumaphos_Results_of_laboratory_tests_and_field_trials)
+7. [Amitraz resistance in Varroa, USA 1998 — CABI Digital Library](https://www.cabidigitallibrary.org/doi/full/10.5555/20001106057)
+8. [Simultaneous resistance to multiple acaricides — Systematic and Applied Acarology](https://www.tandfonline.com/doi/abs/10.1080/01647950508684419?casa_token=tYnvlny_j7EAAAAA:KTy5wh4Ks8zUXoFpFIoj4PWrV7J_2PSf47m2BKBtim2XPzK7lnm6BaoOSlQTr3e5T-dYtj0wfHA)
+9. [Coumaphos accumulation in brood and beeswax — Apidologie](https://link.springer.com/article/10.1007/s13592-017-0501-y)
+10. [Treating for mites in high temperatures — Betterbee](https://www.betterbee.com/instructions-and-resources/treating-for-mites-high-temperatures.asp?srsltid=AU7gw4W__HCnQOI0bR9-MrHEiIYyo49wRZBbYdIAViXI22Tvgyosc0dD)
+11. [Thymol and honey sensory quality — Current Research in Food Science](https://www.sciencedirect.com/science/article/pii/S2666765721000569)
+
+> **TODO —** One or two lines are owed here on DBTL 2 of the BEEHAVE model,
+> which revealed the microeconomic impact of Varroa on individual hives in our
+> two case-study regions. Owner: ecological modelling.
+
+**Navigate.** On this evidence, what would help is a treatment that overcomes
+rapidly evolving resistance, keeps residues out of honey, beeswax and brood, and
+cuts the labour some of the current control methods demand. Getting there meant
+treating Varroa as an ecological and economic problem and not only a biological
+one. The problem stopped being mite mortality and became a system: colony
+survival, repeated labour, the cost of rebuilding, and the pollination that
+depends on all of it — about 15% of Australian agriculture, or A$14.6 billion, so
+beekeeper attrition reaches farmers and consumers too. California tells the same
+story from the other end: **Josette Lewis** showed us how completely the almond
+industry and other insect-pollinated crops depend on healthy colonies, which
+makes the beekeepers' losses the growers' problem as well. The treatment-free
+beekeepers narrowed it further. Sandham and the Oxfordshire group have lower
+counts than they had on chemicals,
 and they told us why it works for them and not for everyone: small apiaries with
 varied genetics can adapt; large, genetically uniform commercial operations
 cannot. Our target user **became the commercial beekeeper**, and every interview
@@ -145,6 +198,16 @@ answer at all?
 
 ### Q2 — Why RNAi rather than another chemical?
 
+The chemical acaricides were failing in the field, carrying environmental risk,
+and costing Australia and the US money in both directions. That is what turned us
+towards a fundamentally different mechanism: **RNA interference**. dsRNA specific
+to Varroa exploits the silencing pathway every mite already carries — the pathway
+activates, the matching genes are silenced, and the mite dies. It also gives R&D
+room to work: distinct gene targets, different dsRNA architectures, cell-free
+systems or different chassis for synthesis, and several further routes to higher
+efficacy. Before committing to it we put the question to scientists, beekeepers
+and regulators.
+
 **Anchor interview — Professor Paul Lam**, President and Chair Professor of
 Environmental Chemistry, Hong Kong Metropolitan University · 6 July 2026
 
@@ -156,7 +219,8 @@ Environmental Chemistry, Hong Kong Metropolitan University · 6 July 2026
   are, what the risks of our approach would be, and how to mitigate them.
 - **What we learned.** The standing charges against chemical pesticides are
   toxicity to non-target species, bioaccumulation and biomagnification, and
-  resistance. A sequence-specific, biodegradable RNAi agent avoids most of them.
+  resistance. A sequence-specific, inherently biodegradable RNAi agent overcomes
+  most of the major environmental costs of the current controls.
   Off-target effects remain the key concern, and bioinformatic screening against
   representative species is a legitimate way to address it — provided the choice
   of species is justified rather than convenient. Risk handling is identify,
@@ -182,43 +246,58 @@ Mango-biotin fluorescence assay for quantifying dsRNA, which we completed, and
 the 300/500/700 bp GFP length series. **What changed:** the adult-bee feeding
 route stayed alive, and both assays went into the [bee lab](/bee-lab).
 
-**Danny Le Feuvre** added the field version of the same argument: the synthetics
-have been phased out by resistance, the naturally-derived acids that replaced
-them are not effective in isolation, and no RNAi product is regulated in
-Australia at all. **Chris Hiatt** supplied the counterfactual — chemicals worked
-in isolation once, then stopped, and rotation still costs him half his colonies
-in a bad year, with viruses doing most of the killing. **The EPA, FDA and USDA**
-told us what an RNAi product would be judged on: bee safety, environmental
-impact, safety to the person handling it, and whether anything enters honey or
-another food.
+**Chris Hiatt** supplied the counterfactual. Traditional chemicals worked
+extremely well in isolation once, then lost effectiveness, and he lost 55% of his
+colonies; combining and rotating synthetic and naturally-derived controls with
+brood breaks still ran to 50–60% losses in the worst years, with viruses doing
+most of the killing. His conclusion reset ours: **efficacy has to include
+practicality**.
 
-**Observe.** Australia and the US both approve a range of Varroa chemicals —
-synthetic miticides such as amitraz, coumaphos, flumethrin and fluvalinate, and
-naturally-derived acids and essential oils such as formic acid, oxalic acid and
-thymol (1)(2) `[LIT]`. Their documented problems are health risks to bees or
-humans, residues in honey and hive products, resistance, narrow temperature
-windows, incompatibility with honey supers, and off-label use (1) `[LIT]`.
-Chemical controls therefore sit at the top of the Integrated Pest Management
-pyramid, used only after prevention, cultural, mechanical and biological
-controls have failed (3) `[LIT]`. Resistance is the part that compounds: since
-Varroa arrived in Australia in 2022, resistance to major synthetics has been
-observed in every state with the mite except the Australian Capital Territory
-(4) `[LIT]`, and in the US it has been a running battle since 1997 (5)
-`[LIT]`, with USDA ARS still reporting a mite mutation conferring amitraz
-resistance (6)(7) `[LIT]`.
+**Danny Le Feuvre** gave the field version from Australia. Synthetic pesticides
+have been phased out there by resistance; the naturally-derived treatments that
+replaced them are the most popular ones and are not very effective in isolation.
+A different mode of action, effective on its own and with possibly less potential
+for resistance to develop, is what beekeepers have no access to — and there are
+no regulated RNAi products in Australia at all, which is what sent us to
+regulators next.
 
-RNA interference is a different mechanism rather than a better chemical. It
-exploits the silencing pathway every mite already carries, so it offers a new
-mode of action against populations resistant to conventional treatments; it is
-modular, because a different sequence silences a different gene; and it is
-biodegradable, with sprayed dsRNA reported undetectable in soil within two days
-(8)(9)(10) `[LIT]`. It is also not new: the US EPA has already registered two
-RNAi pesticides, Calantha for Colorado potato beetle and Norroa for Varroa
-(11)(12) `[LIT]`, and in one survey 93% of beekeepers expressed no concern about
-using RNAi against Varroa or said they would adopt it (13) `[LIT]`.
+**The EPA, FDA and USDA** told us what an RNAi product would be judged on: bee
+safety, environmental impact, safety to the person handling it, and whether
+anything enters honey or another food. Read the other way, that encouraged the
+approach — a biodegradable agent carries less environmental impact and
+contamination risk than a chemical pesticide, and screening the sequence for
+off-target matches is how bee and human safety would be evidenced.
 
-That last finding reframed the question. An RNAi treatment for Varroa exists, so
-**ours has to be better than it**, not merely different from a chemical.
+**Observe.** Australia and the US both approve a range of Varroa chemicals,
+synthetic and naturally-derived (1)(2) `[LIT]`, and the problems around using
+them are documented: health risks to bees and humans, residues in honey and other
+hive products, and resistance to the synthetics (1) `[LIT]`. Chemical controls
+therefore sit at the very top of the Integrated Pest Management pyramid, used
+only after prevention, cultural, mechanical and biological controls have failed
+(3) `[LIT]`. Resistance is the part that compounds; the record by chemical,
+country and year is in **Q1's Observe** above rather than repeated here. Its
+current state: every Australian state with the mite except the Australian Capital
+Territory now reports resistance to major synthetics (4) `[LIT]`, the US has been
+fighting miticide resistance since 1997 (5) `[LIT]`, and USDA ARS still reports a
+mite mutation conferring amitraz resistance (6)(7) `[LIT]`.
+
+RNAi is not a new concept either. The US EPA has already registered two RNAi
+treatments — Calantha for Colorado potato beetle and Norroa for Varroa
+(11)(12) `[LIT]` — which settles whether this mode of action can be approved at
+all, and in one survey 93% of beekeepers expressed no concern about using RNAi
+against Varroa or said they would adopt it (13) `[LIT]`. Norroa is also where its
+own shortcomings show. It uses dsRNA against a protein essential for mite
+reproduction, so it acts as birth control and takes weeks to have any effect, and
+it is fed as a sugar syrup to worker bees rather than to the larvae Varroa
+primarily feed on `[FLAG]`.
+
+That reframed the question. An RNAi treatment for Varroa exists, so **ours has to
+be better than it**, not merely different from a chemical — and the improvements
+we could see pointed at a platform for dsRNA design rather than a single product.
+
+> **TODO —** The account of Norroa's shortcomings is unsourced, and our own
+> write-up asks the question against it: is this from our other stakeholders or
+> from online research? Settle the provenance and cite it, or drop it. Owner: HP.
 
 1. [Chemicals for treating Varroa — AHBIC](https://honeybee.org.au/wp-content/uploads/2024/07/AGF575-Chemicals-for-treating-Varroa-S1V2-1.pdf)
 2. [EPA-registered pesticide products approved for use against Varroa mites in bee hives](https://www.epa.gov/pollinator-protection/epa-registered-pesticide-products-approved-use-against-varroa-mites-bee-hives)
@@ -234,15 +313,18 @@ That last finding reframed the question. An RNAi treatment for Varroa exists, so
 12. [GreenLight Biosciences announces EPA registration of Calantha](https://greenlightbiosciences.com/articles/greenlight-biosciences-announces-epa-registration-of-calantha)
 13. [Beekeeper attitudes to RNAi against Varroa — Frontiers in Insect Science](https://www.frontiersin.org/journals/insect-science/articles/10.3389/finsc.2026.1814622/full)
 
-**Navigate.** Two design requirements came out of the comparison with Norroa,
-which targets a protein essential for mite reproduction. It acts as birth
-control, so it takes weeks to show an effect, and it is fed as a sugar syrup to
-adult workers rather than to the larvae Varroa mostly feed on `[FLAG]` — that
-account is from beekeepers who have used it and is not yet sourced to a
-published document. So: target survival genes as well as reproductive ones, and
-find **a route that reaches larvae**. We ranked candidate targets by protein-network
-connectivity and transcript abundance, and added specificity as a third
-criterion on Lam's advice. The delivery candidates were engineered *S. alvi*,
+**Navigate.** Two things had to be navigated. First, the limits of the chemicals:
+Le Feuvre and Hiatt showed the problem was more severe than we had understood,
+since even rotations and combinations left significant losses in both countries,
+and Lam confirmed the environmental side was no smaller. That ruled out another
+conventional acaricide. Second, the treatment itself: Budge established that an
+RNAi approach could be tested and validated in the laboratory, and the US
+agencies set out what we would have to justify for approval. Put against Norroa,
+three areas for improvement fell out — **target genes that kill mites directly**,
+**get the dsRNA to the larvae**, and **make the delivery commercially scalable**
+— all while keeping the environment safe. We ranked candidate targets by
+protein-network connectivity and transcript abundance, and added specificity as a
+third criterion on Lam's advice. The delivery candidates were engineered *S. alvi*,
 which lives in the bee gut and would produce dsRNA continuously, and
 *S. cerevisiae*, which is easy to engineer, lacks an endogenous RNAi system so
 long dsRNA accumulates, and is already fed to bees as a protein supplement. That
@@ -251,15 +333,31 @@ choice is Q3.
 > **IP gate —** the specific Varroa gene target is not named anywhere on this
 > wiki pending a patent-filing decision. Owner: R&D.
 
-**Evaluate.** RNA gave us what no chemical on the list could: a mode of action
-**resistant mites have never met**, and a mechanism whose specificity is a design
-parameter rather than a property we have to accept. The cost is that specificity
-has to be demonstrated, not asserted, which is why Q4 exists as a separate
-question.
+**Evaluate.** Against the chemicals on the approved lists, RNAi offers three
+things. A **new mode of action**, which can kill mite populations resistant to
+conventional treatments and can be incorporated into an IPM programme.
+**Modularity** — a different sequence silences a different gene, so if dsRNA
+resistance arises it may be answerable by switching the target or hitting several
+at once. And **biodegradability**: dsRNA is degraded by UV light and microbial
+systems, and has been shown to be undetectable in soil within two days, leaving
+little or nothing to accumulate in an ecosystem (8)(9)(10) `[LIT]`. Specificity is
+a design parameter here rather than a property we have to accept — which is also
+why it has to be demonstrated rather than asserted, and why Q4 exists as a
+separate question. If it holds, the result is greater protection for honeybee
+populations at limited environmental cost, which protects beekeeper livelihoods,
+the agriculture that depends on them, and food security in the affected regions.
 
-**Yield.** Off-target screening became a step inside [RNA design](/software)
-**rather than a check after it**, and [Safety](/project-safety) is written as a
-risk-benefit case.
+**Yield.** We committed to the RNAi route: feasible from both the scientific and
+the regulatory side, better for beekeepers already losing the resistance race, and
+expected to carry less environmental burden. Three changes followed. Targets are
+chosen for **mite survival rather than reproduction** — the improvement we
+identified over an RNAi miticide aimed at reproduction — ranked by protein-network
+connectivity and transcript abundance. Off-target screening became a step inside
+[RNA design](/software) **rather than a check after it**, screening for exact and
+approximate sequence matches, and [Safety](/project-safety) is written as a
+risk-benefit case. And as the design criteria accumulated we stopped building one
+sequence and started building the thing that chooses sequences: a generalised
+platform for RNAi treatment design.
 
 > **TODO —** Our own write-up says the screen uses BLAST; R&D's note says the
 > tools are Bowtie1 for exact matches and Edlib for approximate ones, and that
@@ -273,8 +371,10 @@ risk-benefit case.
 > Norroa and Bayer were all on the target list and none was reached. It is the
 > single biggest gap in our stakeholder roster. Owner: HP.
 
-**Next question:** RNA has to be made by something and delivered by something.
-Does that something have to be alive in the hive?
+**Next question:** the other improvement we identified was to get the dsRNA to the
+larvae in a commercially practical way, which made the delivery method as decisive
+as the sequence for efficacy, safety and scale. What should it be — and does it
+have to involve a living GMO?
 
 ### Q3 — Should we be making a living GMO at all?
 
@@ -446,8 +546,8 @@ is the method — identify, assess, manage, communicate — and the insistence t
 representative species be chosen with a justification.
 
 **Observe.** The regulatory research done for Q3 produced one result that
-belongs here: **regulators care about off-target effects whether or not a GMO
-produced the dsRNA.** Dropping the living chassis removed a category of
+belongs here: **regulators care about off-target effects even if it is not a live
+GMO supplying the dsRNA.** Dropping the living chassis removed a category of
 questions about the organism; it removed none of the questions about the
 molecule. Whichever route we had taken, we would still have to show where the
 dsRNA goes and what it silences when it gets there.
@@ -490,6 +590,12 @@ results land.
 will buy it. What would a beekeeper actually use?
 
 ### Q5 — What would a beekeeper actually use, and what can they afford?
+
+> **TODO —** Our own note on this question: it should not be framed on cost
+> alone. Cost is without doubt the most important factor, but usability and
+> integration into existing beekeeping practice matter too — the question may be
+> better titled "beekeeper adoption". Decide before the freeze, because the title
+> is also the one the map shows. Owner: HP.
 
 **Anchor interview — Wade Ford**, Beekeeper Services Manager, Hive & Wellness
 Australia · 13 August 2026
@@ -544,6 +650,13 @@ cost is zero. One withheld conversation also bears on this question.
 **Observe.** In our own dataset, NSW beekeepers report about A$22.18 per hive of
 direct Varroa control plus 0.37 hours of labour per hive, and US Varroa control
 runs to about US$9.22 per colony a year `[CALC]`.
+
+> **TODO —** One or two lines are owed in Observe, Navigate or Evaluate on DBTL 3
+> of the BEEHAVE model, which determines the quantity of yeast required and hence
+> the cost — the thing that lets us compare NECTAR to existing treatments on cost.
+> The same cycle determines which treatment protocol we recommend (year-round,
+> winter only, or autumn only), which affects both cost and adoption. Owner: HP
+> with ecological modelling.
 
 **Navigate.** Thurman set the method: the counterfactual is **the best existing
 treatment, not doing nothing**; start at operation level and measure the change in
@@ -735,6 +848,9 @@ probably did not happen.
 - Consent or review resolved for the four withheld conversations.
 - An RNAi-biopesticide practitioner interviewed for Q2.
 - The off-target screening tool and species list confirmed with R&D.
+- A source for the account of Norroa's shortcomings in Q2.
+- The BEEHAVE lines: DBTL 2's per-hive economics in Q1, and DBTL 3's yeast
+  quantity, cost and recommended treatment protocol in Q5.
 - The `[CALC]` numbers in Q5 checked against the spreadsheet, and the yeast
   titre written into the chain.
 - The dsRNA-in-honey result for Q4.

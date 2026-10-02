@@ -246,7 +246,7 @@ const MONTHS = [
  * Roughly when a cycle was worked on, derived rather than written down.
  *
  * src/data/timeline.ts is the dated record, and its entries already point at the
- * cycles they belong to (`/engineering#cycle-2-1`). So the months come from
+ * cycles they belong to (`/engineering#cycle-2-2`). So the months come from
  * there: first and last dated entry that links to this cycle, as a month or a
  * span. That keeps one set of dates in the project instead of two, and a new
  * timeline entry updates the cycle without anyone editing it.

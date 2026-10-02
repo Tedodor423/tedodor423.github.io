@@ -62,7 +62,7 @@ function CycleIcon({ familyId }: { familyId: string }) {
   );
 }
 
-/** The family a `#cycle-3-4` fragment belongs to, and the cycle it named. */
+/** The family a `#cycle-4-1` fragment belongs to, and the cycle it named. */
 function findByHash(hash: string): { family: string; cycle: string } | null {
   const wanted = decodeURIComponent(hash.replace(/^#/, ""));
   if (!wanted) return null;
@@ -111,7 +111,7 @@ export function DbtlGallery() {
   }, []);
 
   /* A link from anywhere else on the wiki, or a search result, names a cycle:
-   * /engineering#cycle-3-4. Open the workstream it belongs to and put it on
+   * /engineering#cycle-4-1. Open the workstream it belongs to and put it on
    * screen; the panel scrolls its own text to the right turn. */
   useEffect(() => {
     const found = findByHash(hash);

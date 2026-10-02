@@ -327,7 +327,7 @@ const LENGTH_BY_ORGANISM: Record<
 > = {
   "org-varroa": {
     length: 24,
-    note: "Our own small RNA analysis puts 24 nt at the top of Varroa's viral small RNA population under both weightings, so windows are scored at 24 rather than at the canonical 21 nt Dicer-2 product.",
+    note: "Our own small RNA analysis puts 24 nt at the top of Varroa's viral population, so windows are scored at 24 rather than the canonical 21.",
   },
   "org-leptinotarsa": {
     length: 21,

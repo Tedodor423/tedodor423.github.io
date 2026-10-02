@@ -2,7 +2,7 @@
 > in a biological sample, with stated limits, and that another lab could do the
 > same.
 > **Where the evidence is:** [Results](/results),
-> [experiments and lab book](/wet-lab-experiments), and cycles 1.4 and 3.1–3.6 on
+> [experiments and lab book](/wet-lab-experiments), and cycles 2.6 and 3.1–3.6 on
 > [Engineering](/engineering).
 
 Measurement is where this project has the strongest claim to having built
@@ -44,11 +44,12 @@ _Construct_ rules out any generic stain used on its own.
 | Approach                       | What it promised                                                 | Where it stands                                                                                       |
 | ------------------------------ | ---------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
 | NanoDrop A260                  | Free, instant, already in the lab                                | **Rejected as a dose.** Counts unincorporated NTPs; disagreed with Qubit by 3.3–18.2×                 |
-| Nuclease digest + Qubit        | Duplex-specific mass, using reagents already in the kit          | **Adopted as the dose.** Cycle 1.4                                                                    |
+| Viral dsRNA-binding domain fused to a fluorescent protein | Fast to build and readily engineerable        | **Rejected before building.** High background from non-construct-specific dsRNA binding in crude haemolymph. Recommended to us by Prof. Jeffrey Barrick |
+| Nuclease digest + Qubit        | Duplex-specific mass, using reagents already in the kit          | **Adopted as the dose.** Cycle 2.6                                                                    |
 | One-step RT-qPCR               | The orthogonal reference method, sequence-specific               | **Built, not yet validated to MIQE.** Cycle 3.3                                                       |
-| Mango aptamer + TO1-Biotin     | The molecule reports its own concentration, no purification step | **Demoted from quantifier to selector.** Cycle 3.4, and the correction below                          |
-| Generic stain (SYBR Gold)      | 25–250× more sensitive for about a seventh of the cost `[FLAG]`  | **Proposed.** Two protocols written, neither run. Cycle 3.5                                           |
-| Toehold switch                 | Extraction-free, amplification-free, cheap for other teams       | **Modelled and rejected** on four independent grounds, saving £1,250 and six weeks. Cycle 3.6         |
+| Mango aptamer + TO1-Biotin     | The molecule reports its own concentration, no purification step | **Demoted from quantifier to selector.** Cycle 4.1, and the correction below                          |
+| Generic stain (SYBR Gold)      | 25–250× more sensitive for about a seventh of the cost `[FLAG]`  | **Proposed.** Two protocols written, neither run. Cycle 4.3                                           |
+| Toehold switch                 | Extraction-free, amplification-free, cheap for other teams       | **Modelled and rejected** on four independent grounds, saving £1,250 and six weeks. Cycle 4.4         |
 
 ## The Mango system, and what it actually measures
 
@@ -157,7 +158,7 @@ nicety,** and failure mechanism 3 above is what happens without it.
 time: **N₁/N₀ = 52.1% ± 4.2%** `[CALC]`. The low scatter across independent
 preparations is itself the repeatability evidence, and it is why the digest, not
 the raw NanoDrop reading, defines every dose in this project. Method and
-rationale in cycle 1.4 on [Engineering](/engineering).
+rationale in cycle 2.6 on [Engineering](/engineering).
 
 > **TABLE —** The eight preparations, one row each: date, construct, N₀
 > (NanoDrop pre-digest), N₁ (post-digest), Q₀ and Q₁ (Qubit), N₁/N₀, and the
@@ -176,7 +177,7 @@ because it depends on how much unincorporated NTP each reaction left behind.
 that still absorb at 260 nm but are invisible to Qubit, so an N₁ read without
 post-digest cleanup is partly counting the debris of what we just destroyed. The
 re-measurement that closes this, with its pre-registered acceptance rule, is
-recorded at cycle 1.4.
+recorded at cycle 2.6.
 
 ### RT-qPCR
 
@@ -196,7 +197,7 @@ option of all. It was **rejected on four independent grounds** before any money 
 spent — the trigger cannot be single-stranded inside a perfect duplex,
 sensitivity falls short by 15–31,000×, crude haemolymph destroys cell-free
 expression, and every standard lysate strain is RNase III-competent. Full
-reasoning at cycle 3.6.
+reasoning at cycle 4.4.
 
 ## Controls
 

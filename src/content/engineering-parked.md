@@ -80,26 +80,26 @@ dbtl-cycles
 | --------------------- | ---------------------------------------------------------- | ------------ | ---------------------------------------------------- |
 | [1.1](#cycle-1-1)     | What shape should the dsRNA be?                            | Modelled     | Loop ends chosen; the molecule became unbuyable      |
 | [1.2](#cycle-1-2)     | How do you build a construct nobody will synthesise?       | Investigated | Modular L0/L1/L2 collection, two-step Gibson         |
-| [1.3](#cycle-1-3)     | Can we transcribe it reliably?                             | Demonstrated | Four build failures, four fixes, a primer checklist  |
-| [1.4](#cycle-1-4)     | How much dsRNA do we actually have?                        | Demonstrated | NanoDrop abandoned; digest-Qubit became the dose     |
-| [2.1](#cycle-2-1)     | Which production and delivery chassis?                     | Investigated | Live symbiont dropped; yeast adopted                 |
-| [2.2](#cycle-2-2)     | How do you express a loop-ended dsRNA in yeast?            | Proposed     | Cassette designed; no yeast transformed              |
-| [2.3](#cycle-2-3)     | Should _E. coli_ be the production host?                   | Investigated | Deprioritised; kept as a cloning host                |
+| [1.3](#cycle-2-1)     | Can we transcribe it reliably?                             | Demonstrated | Four build failures, four fixes, a primer checklist  |
+| [1.4](#cycle-2-6)     | How much dsRNA do we actually have?                        | Demonstrated | NanoDrop abandoned; digest-Qubit became the dose     |
+| [2.1](#cycle-2-2)     | Which production and delivery chassis?                     | Investigated | Live symbiont dropped; yeast adopted                 |
+| [2.2](#cycle-2-4)     | How do you express a loop-ended dsRNA in yeast?            | Proposed     | Cassette designed; no yeast transformed              |
+| [2.3](#cycle-2-5)     | Should _E. coli_ be the production host?                   | Investigated | Deprioritised; kept as a cloning host                |
 | [3.1](#cycle-3-1)     | How do we get RNA out of bee material?                     | Demonstrated | A clean null; column beat TRIzol on variance         |
 | [3.2](#cycle-3-2)     | Can we detect ingested dsRNA at all?                       | Demonstrated | Yes, qualitatively, at 24 h in larval haemolymph     |
 | [3.3](#cycle-3-3)     | Can we quantify it by RT-qPCR?                             | Investigated | Method built; MIQE standard curve outstanding        |
 | [3.3b](#cycle-3-3b)   | Is the band in our water control dimer or contamination?   | Demonstrated | Contamination; a diagnostic worth publishing         |
-| [3.4](#cycle-3-4)     | Can the dsRNA report its own concentration?                | Investigated | No. Mango demoted from quantifier to selector        |
-| [3.4b](#cycle-3-4b)   | Can we wash the matrix away instead of reading through it? | Proposed     | Capture format designed on Unrau's advice            |
-| [3.5](#cycle-3-5)     | Would an ordinary stain do better?                         | Proposed     | SYBR Gold, 25–250× more sensitive, not yet run       |
-| [3.6](#cycle-3-6)     | Could a toehold switch read the dsRNA?                     | Modelled     | Rejected on four independent grounds                 |
-| [4.1](#cycle-4-1)     | Can we put a protein-binding site in the loop?             | Modelled     | Identical hairpins do not fold; stems synonymised    |
-| [4.2](#cycle-4-2)     | Can we make and quantify the adaptor protein?              | Proposed     | Active sites, not mass, defined as the measurement   |
-| [4.3](#cycle-4-3)     | Can we target the dsRNA to the mite?                       | Proposed     | Demonstration moved from the bee to the feeder       |
-| [4.4](#cycle-4-4)     | Does a protein ride the dsRNA across the bee gut?          | Investigated | Assay run; readout not yet in the record             |
+| [3.4](#cycle-4-1)     | Can the dsRNA report its own concentration?                | Investigated | No. Mango demoted from quantifier to selector        |
+| [3.4b](#cycle-4-2)   | Can we wash the matrix away instead of reading through it? | Proposed     | Capture format designed on Unrau's advice            |
+| [3.5](#cycle-4-3)     | Would an ordinary stain do better?                         | Proposed     | SYBR Gold, 25–250× more sensitive, not yet run       |
+| [3.6](#cycle-4-4)     | Could a toehold switch read the dsRNA?                     | Modelled     | Rejected on four independent grounds                 |
+| [4.1](#cycle-5-1)     | Can we put a protein-binding site in the loop?             | Modelled     | Identical hairpins do not fold; stems synonymised    |
+| [4.2](#cycle-5-2)     | Can we make and quantify the adaptor protein?              | Proposed     | Active sites, not mass, defined as the measurement   |
+| [4.3](#cycle-5-3)     | Can we target the dsRNA to the mite?                       | Proposed     | Demonstration moved from the bee to the feeder       |
+| [4.4](#cycle-5-4)     | Does a protein ride the dsRNA across the bee gut?          | Investigated | Assay run; readout not yet in the record             |
 | [B1](#cycle-b1)       | Can we deliver a known dose to a bee?                      | Demonstrated | Newly-emerged bees and PCR-tube feeders standardised |
-| [B2](#cycle-b2)       | Can we get enough haemolymph out of an adult bee?          | Demonstrated | 8–15 µL per bee, centrifugal method standardised     |
-| [B3](#cycle-b3)       | Does it kill the mite?                                     | Investigated | Husbandry: a host is required, the soak is not fatal |
+| [B2](#cycle-b3)       | Can we get enough haemolymph out of an adult bee?          | Demonstrated | 8–15 µL per bee, centrifugal method standardised     |
+| [B3](#cycle-v1)       | Does it kill the mite?                                     | Investigated | Husbandry: a host is required, the soak is not fatal |
 | [D1](#cycle-d1)       | Which sequence silences the mite?                          | Modelled     | NectarDesigner; concatenation tested and set aside   |
 | [M1–M3](#cycle-m1-m3) | What treatment efficacy is worth reaching?                 | Modelled     | Sets the titre the wet lab has to hit                |
 

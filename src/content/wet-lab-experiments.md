@@ -113,10 +113,16 @@ aptamer has to be denatured before the RNA migrates at true size.
 13. Resuspend in 30 µL RNase-free water.
 14. NanoDrop to check concentration and the 260/280 and 260/230 ratios.
 
-**Which method to use.** We compared this phenol-chloroform route against a
-silica-column kit on pooled larval homogenate. Phenol-chloroform gave the higher
-yield and the worse reproducibility; we **chose the column on variance**, because
-qPCR is the downstream application.
+**Which method to use.** We compared this phenol-chloroform route against the
+silica-bead **Vazyme** kit on pooled larval homogenate. Five larvae were
+flash-frozen in liquid nitrogen, crushed with a metal rod to a smooth homogenate at
+roughly 100 µL each, pooled, mixed and split into eight Eppendorf tubes at about
+60 µL per tube, so biological variation is removed and what is left is method
+variation. Concentration, A260/280 and A260/230 were read on the NanoDrop, and the
+mean, SD and coefficient of variation compared. Phenol-chloroform gave the higher
+yield and the worse reproducibility; **the Vazyme kit had the lower coefficient of
+variation, so we chose it despite the lower yield**, because qPCR is the downstream
+application and reliability matters more than mass.
 
 | Method            | Mean concentration (ng/µL) | SD (ng/µL) | CV (%)    |
 | ----------------- | -------------------------- | ---------- | --------- |
@@ -126,6 +132,11 @@ qPCR is the downstream application.
 A separate five-method comparison on 29 July found **no yield difference** between
 any of them, which is a useful null and is written up at cycle 3.1 on
 [Engineering](/engineering).
+
+> **TODO —** "Lisa to writeup." The extraction comparison is owed a full write-up by
+> its author: the Test and Learn beats are marked "Lisa can you fill in" in the
+> write-up, and the reagent list above stops after the chloroform step. Owner: Lisa,
+> wet lab.
 
 ## Quantification and quality control
 
@@ -376,7 +387,7 @@ cheapest defined medium available to us.
 ### Engineering
 
 The cassette design, the Pol III rejection, the copy-number decision and the
-marker decision are written to the seven-beat cycle shape at cycle 2.2 on
+marker decision are written to the seven-beat cycle shape at cycle 2.4 on
 [Engineering](/engineering), with the _E. coli_ comparison at 2.3 and the
 four-route chassis comparison at 2.1.
 
@@ -395,6 +406,17 @@ Three steps: **harvested, inactivated, formulated**. Inactivation is the step
 that carries the regulatory argument, so it gets its own sentence rather than
 passing as processing: the product that leaves the fermenter is not alive, does
 not replicate, and is not released as an organism.
+
+**Formulated as what: the pollen patty.** Sugars, protein supplements such as
+yeasts, and binding agents, administered as a slab on top of the hive that worker and
+nurse bees feed on. The case for it, and the four properties of the route, are on
+[wet lab](/wet-lab#how-it-gets-into-the-hive).
+
+> **TODO —** The patty protocol. Prof. Geraldine Wright recommended a formulation,
+> which we adjusted to maximise the dsRNA dose, and **neither the recommended
+> formulation nor our adjustment is written down** — our write-up records the
+> adjustment as "xxxxx". Without it this is not a protocol and the patty cannot be
+> reproduced. Owner: wet lab.
 
 ### Scale-up
 
@@ -417,6 +439,7 @@ page cannot yet supply.
 - Genetic stability of the cassette over an industrial number of generations.
 - Whether a whole-cell formulation delivers to the larva at the dose the model
   requires.
+- The pollen patty formulation itself, and dsRNA stability in it.
 
 ## Where this connects
 

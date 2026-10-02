@@ -84,7 +84,7 @@ hive's own feeding behaviour.
   200 ng.
 - **23 July** — an interview with a honey company's science and regulatory leads
   retires the engineered gut symbiont and **makes yeast the lead platform**. See
-  [cycle 2.1](/engineering#cycle-2-1).
+  [cycle 2.2](/engineering#cycle-2-2).
 - **28–31 July** — three larval spiking pilots. 5th-instar larvae can be extracted
   without breaking; 6th instars are too soft. Five RNA extraction methods are
   compared on the same larvae (**29 July**) and give the same yield.
@@ -153,7 +153,7 @@ a beekeeper buys, because honey is a low-margin business. Yeast became the lead
 platform on regulation and cost. See
 [What would a beekeeper use, and what can they afford?](/human-practices#q5-what-would-a-beekeeper-actually-use-and-what-can-they-afford)
 and
-[the chassis cycle](/engineering#cycle-2-1).
+[the chassis cycle](/engineering#cycle-2-2).
 
 **Around 4 August — the first real result.** Whole larvae extracted 24 hours
 after a dose gave back the construct intact. Until then, **everything on the

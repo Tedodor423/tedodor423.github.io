@@ -60,7 +60,7 @@ many bees we could dose in a session.
 observation we act on, **not a measured rate**.
 
 **What it changed.** Overnight became the standard IVT. See
-[cycle 1.3](/engineering#cycle-1-3).
+[cycle 2.1](/engineering#cycle-2-1).
 
 ### NanoDrop over-reads dsRNA by about 1.9×
 
@@ -95,7 +95,7 @@ are invisible to Qubit, so an N₁ read without post-digest cleanup partly count
 the debris of what was just destroyed.
 
 **What it changed.** Every µg-per-bee figure is re-derived from digest-Qubit. See
-[cycle 1.4](/engineering#cycle-1-4).
+[cycle 2.6](/engineering#cycle-2-6).
 
 ## Measuring it in bee material
 
@@ -203,7 +203,12 @@ part.
 intercalation **has never been run**, and the whole assay depends on it.
 
 **What it changed.** Mango was demoted from quantifier to selector. See
-[cycle 3.4](/engineering#cycle-3-4).
+[cycle 4.1](/engineering#cycle-4-1).
+
+> **TODO —** Mango validation, which the team flags as **the urgent one**. The
+> blocking experiment is the untagged-dsRNA control: until it is run, no number on
+> this page can distinguish aptamer signal from intercalation, and the LOD and LOQ
+> above stand only as arithmetic on an unvalidated signal. Owner: wet lab.
 
 ### In-gel detection loses 10–30× to the haemolymph matrix
 
@@ -236,16 +241,21 @@ page.
 
 **What it changed.** Method development moved to washing the matrix away before
 reading, rather than reading through it. See
-[cycle 3.4b](/engineering#cycle-3-4b).
+[cycle 4.2](/engineering#cycle-4-2).
 
 > **TODO —** SYBR Gold LOD and LOQ in haemolymph. Two protocols are written and
 > neither has been run, so this wiki carries no SYBR dsRNA detection limit. The
 > widely quoted 25 pg figure is dsDNA and is not ours to cite. Owner: wet lab.
-> See [cycle 3.5](/engineering#cycle-3-5).
+> See [cycle 4.3](/engineering#cycle-4-3).
 
 > **TODO —** Haemolymph matrix characterisation: absorption spectrum across the
 > Mango excitation and emission range, and rate of melanisation with time after
 > extraction. Measured, not yet written up. Owner: measurement.
+
+> **TODO —** RNA measurements in larvae, as a number rather than a band. This is
+> now a stated goal of the measurement workstream alongside adult haemolymph, and
+> nothing on this wiki quantifies dsRNA in larval material — the larval result
+> below is detection only. Owner: wet lab with measurement.
 
 ## Delivering it to bees
 
@@ -413,7 +423,7 @@ and survival was scored by movement, not by feeding.
 **What it changed.** Husbandry was redesigned around larvae in-frame rather than
 capsules, and the efficacy screen's primary endpoint moved from mortality to
 molecular knockdown, which can be measured on the mites we can keep alive. See
-[cycle B3](/engineering#cycle-b3).
+[cycle V1](/engineering#cycle-v1).
 
 > **TODO —** The mite mortality and knockdown screen itself. No efficacy number
 > exists and nothing on this wiki claims one. Owner: bee lab. Blocked on husbandry
@@ -439,13 +449,21 @@ Short and explicit, because every project has this section and most wikis hide i
 - **No construct is sequence-verified.** All QC to date is gel band size plus
   spectrophotometry. No sequence-level claim is made anywhere on this wiki.
 - **No yeast has been transformed and no yeast titre exists.** µg intact dsRNA per
-  mg dry yeast is the single measurement the project most needs.
+  mg dry yeast is the single measurement the project most needs. The production
+  goal is now written as loop-ended dsRNA in **yeast or _E. coli_**, where it
+  previously named yeast alone, and neither host has a measured titre.
 - **No mite mortality or knockdown figure.** See above.
 - **No MIQE-valid RT-qPCR standard curve**, and **spike-recovery has never been
   run** — the largest remaining hole in the measurement workstream.
 - **No untagged-dsRNA control for Mango**, without which the aptamer signal cannot
   be separated from intercalation.
 - **No SYBR Gold detection limit of our own.**
+
+> **TODO —** Say which chassis produces the loop-ended dsRNA and which is only a
+> cloning host. The Gibson assembly and colony lysis work runs through *E. coli*;
+> whether *E. coli* is also a production host is a scope question the results
+> outline leaves open, and no titre may be written up under either heading until it
+> is settled. Owner: wet lab.
 
 ## Where this connects
 

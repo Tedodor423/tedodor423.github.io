@@ -121,7 +121,7 @@ figure in a dietary-RNAi paper is downstream of this one number, and NanoDrop
 over-reads it by about 1.9× in our hands.
 
 **Where to get it.** [Measurement](/measurement) and
-[cycle 1.4](/engineering#cycle-1-4); the eight-preparation result is on
+[cycle 2.6](/engineering#cycle-2-6); the eight-preparation result is on
 [Results](/results).
 
 ### The NanoDrop/Qubit correction note
@@ -135,7 +135,7 @@ the Qubit RNA BR range, not chemistry, and must not be used as a correction curv
 **Why another team would want it.** Both are mistakes that look like results. The
 second one we made ourselves and publish as a retraction.
 
-**Where to get it.** [Cycle 1.4](/engineering#cycle-1-4).
+**Where to get it.** [Cycle 2.6](/engineering#cycle-2-6).
 
 ### A measurement published with its own limits
 
@@ -150,7 +150,7 @@ general lesson transfers past aptamers: a perfect calibration line is a reason t
 ask what else is linear.
 
 **Where to get it.** [Measurement](/measurement) and
-[cycle 3.4](/engineering#cycle-3-4).
+[cycle 4.1](/engineering#cycle-4-1).
 
 ### The standing bench rules for working with Mango
 
@@ -165,7 +165,7 @@ formaldehyde gels to denature the aptamer so the RNA migrates at true size.
 
 > **TODO —** Write up the ~20 standing bench rules as a single list. Owner:
 > measurement. The material exists in the lab journal and in
-> [cycle 3.4](/engineering#cycle-3-4); the collation does not.
+> [cycle 4.1](/engineering#cycle-4-1); the collation does not.
 
 ## Working with honeybees: a handbook for future iGEM teams
 
@@ -240,7 +240,7 @@ mid-project.
 **Why another team would want it.** All three are invisible on paper and expensive
 at the bench, and the third only appears when you re-order part of a series.
 
-**Where to get it.** [Cycle 1.3](/engineering#cycle-1-3).
+**Where to get it.** [Cycle 2.1](/engineering#cycle-2-1).
 
 ## Corrections and findings we owe the literature
 
@@ -258,7 +258,7 @@ find no published folding model of an array larger than two hairpins — every
 published array structure we checked is a hand-drawn cartoon. Anyone building an
 array in a structured RNA context inherits this problem.
 
-**Where to get it.** [Cycle 4.1](/engineering#cycle-4-1), with the enumeration
+**Where to get it.** [Cycle 5.1](/engineering#cycle-5-1), with the enumeration
 method and the constraint set.
 
 ### The MBP-MCP extinction coefficient
@@ -270,7 +270,7 @@ conversion factor. The discrepancy is in ε, not MW.
 **Why another team would want it.** Anyone using that factor over-reports their
 protein **by about a third**.
 
-**Where to get it.** [Cycle 4.2](/engineering#cycle-4-2).
+**Where to get it.** [Cycle 5.2](/engineering#cycle-5-2).
 
 > **TODO —** The Muita Table S1 erratum. Confirm the finding and its
 > documentation before it is published here; a correction must be at least as
@@ -306,7 +306,7 @@ constraint on something already built. Ours **changed the project in July**.
 
 **Where to get it.** [Entrepreneurship](/entrepreneurship#regulatory-path),
 [human practices](/human-practices) and
-[cycle 2.1](/engineering#cycle-2-1).
+[cycle 2.2](/engineering#cycle-2-2).
 
 > **TODO —** Publish the framework separately from our conclusions, so a team
 > working on something else can run it. Owner: human practices.

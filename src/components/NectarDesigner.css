@@ -383,14 +383,16 @@
   color: var(--text-muted);
 }
 
-/* Recommended for the selected pest. A small honey square, and the field's
-   own hint says in words what it means, so the mark is never the only
-   carrier. */
+/* Recommended for the selected pest, and the field's own hint says in words
+   what it means, so the mark is never the only carrier.
+
+   Solid ink, not honey. A honey square sitting on a honey-filled selected
+   chip showed only its own border, which read as an empty checkbox on an item
+   that was in fact selected. Filled, it reads as a marker at either state. */
 .nd-chip-mark {
-  width: 0.45rem;
-  height: 0.45rem;
-  background: var(--honey);
-  border: 1px solid var(--ink);
+  width: 0.4rem;
+  height: 0.4rem;
+  background: var(--ink);
 }
 
 .nd-chip-tag {
@@ -767,8 +769,11 @@
   background: #bfa97c;
 }
 
+/* Shown only while the structure is moving. The height is reserved either way
+   so the figure does not jump when it settles. */
 .nd-fold-status {
   margin: 0.35rem 0 0;
+  min-height: 1rem;
   font-family: var(--font-heading);
   font-weight: 600;
   font-size: 0.72rem;
@@ -779,20 +784,10 @@
 
 /* ---------- the accessibility comb ---------- */
 
-/* Which stretch the fold above is drawing, in words, under the panel. */
-.nd-fold-where {
-  margin: 0.5rem 0 0;
-  font-size: 0.82rem;
-  line-height: 1.55;
-  color: var(--text-muted);
-}
-
-.nd-comb-title {
-  margin-bottom: 0.4rem;
-  font-family: var(--font-heading);
-  font-weight: 600;
-  font-size: 0.8rem;
-  color: var(--text-muted);
+/* The comb's one line of chrome. It doubles as the figure's caption now that
+   the separate title and key are gone. */
+.nd-comb-axis {
+  gap: 0.5rem 1rem;
 }
 
 .nd-comb {

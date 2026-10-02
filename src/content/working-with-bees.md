@@ -8,6 +8,11 @@ did it, got it wrong first, or were taught it by a beekeeper. Each item carries
 the date it was learnt so you can check it against the notebook. It feeds
 [Contribution](/contribution).
 
+Ten words carry most of this page — frame, haemolymph, larva, instar, adult bee,
+capping, pupa, nurse bee, forager bee, colony. If any of them is new, they are all
+defined in [the glossary of bee terms](/education), in our own words, before you
+start here.
+
 ## Before you touch a hive
 
 - **Find your apiarists early and keep them in the loop.** Every good decision
@@ -59,7 +64,9 @@ the date it was learnt so you can check it against the notebook. It feeds
 - **Hold them near hive conditions while they absorb it.** A sealed container
   with a warm, wet towel at the base of the tubes gets you close to 32 °C and
   50–60% humidity, and keeps baseline mortality low enough that mortality means
-  something.
+  something. Our own write-up gives in-hive humidity as 80% in one place and
+  50–60% in another, so check the figure you are aiming at against the literature
+  rather than against us — see [the bee lab](/bee-lab).
 - **Budget the time honestly.** One person strapped and fed 20 bees in an hour;
   two people did 50 in two hours.
 - **Stagger your groups.** A full 18-bee timepoint takes about 15 minutes to set
@@ -178,6 +185,13 @@ tell you**:
 - Freeze woken mites rather than discarding them; they are data we threw away.
 - Run the no-aptamer control concurrently with the treatment series. Ours had to
   be moved to a separate date and is now harder to interpret.
+
+> **TODO —** This guide is the practical half of the planned NECTAR Manual for Bee
+> Research (contents on [the user manual](/user-manual)). Chapters the manual lists
+> and this page does not yet cover: extracting frames in and out of hives; dealing
+> with stings and aggressiveness; dissecting the bee gut, fat bodies and
+> hypopharyngeal glands; quantifying mite death-response by soaking, phoretic mites
+> or rearing on larvae. Owner: bee lab.
 
 ## Where this connects
 
