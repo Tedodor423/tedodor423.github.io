@@ -11,7 +11,9 @@ date: 12 August 2026
 provisional: Q1, Q5, Q6
 ---
 
-## What they told us
+## Why did we choose this stakeholder
+
+## What did we learn from them
 
 - Dual resistance has been detected, which means essentially all legal synthetic miticide options will soon be unusable.
 - Formic acid is hard to use in Australian heat and humidity, and most of the continent has a long brood period with often no brood break at all.
@@ -20,3 +22,5 @@ provisional: Q1, Q5, Q6
 - Commercial beekeepers used to synthetics driving infestation down to undetectable may find a product that leaves a detectable alcohol-wash count a hard sell.
 - A dietary RNA platform could work for other pests and diseases - small hive beetle, American foulbrood, chalkbrood - though she was sceptical of a single patty targeting both Varroa and small hive beetle, which nobody has built.
 - Australian consumers would most likely be against anything genetically modified, even given large economic and welfare benefits, which would make the S. alvi version hard to put in front of beekeepers.
+
+## How did this impact the project

@@ -42,7 +42,7 @@ against _Varroa_ is anticipated by prior patents, and we say so on
 3. **Optimised delivery: the hive insert** — [bee lab](/bee-lab)
 4. **Measurement and validation** — [measurement](/measurement)
 
-> **FIGURE: system diagram.** The four-part stack as one image, each stage
+> **TODO —** Figure: system diagram. The four-part stack as one image, each stage
 > labelled with the barrier it answers.
 
 ## What we actually achieved

@@ -1,10 +1,5 @@
-> **What this page proves:** what we found, how strongly the evidence supports
-> it, and what each finding changed.
-> **Where the evidence is:** on this page, beside every claim.
-
-[Engineering](/engineering) explains how we made decisions. This page is the
-fastest route to the evidence. A judge who reads only this page should come away
-knowing what is solid, what is provisional, and what did not work.
+[Engineering](/engineering) explains how we made decisions. This page sets out
+what is solid, what is provisional, and what did not work.
 
 ## How to read a result on this page
 
@@ -18,8 +13,6 @@ Each result carries one of the wiki's four status labels — **Demonstrated**,
 stated, `[FLAG]` unverified and never stated as fact.
 
 ## Two caveats that apply to every mass figure below
-
-They belong before the results, not in a footnote after them.
 
 > **TODO —** Re-quantify all four annealed stocks by digest-Qubit before any
 > µg-per-bee figure is published anywhere on this wiki. Doses on this page are
@@ -44,7 +37,7 @@ incubation, yield read on the same instrument.
 
 **Evidence.**
 
-> **FIGURE —** Yield per reaction, 2 h against overnight, one point per
+> **TODO —** Figure: Yield per reaction, 2 h against overnight, one point per
 > preparation, constructs distinguished by marker. Axis in ng/µL post-digest, not
 > raw NanoDrop.
 
@@ -64,7 +57,7 @@ observation we act on, **not a measured rate**.
 
 ### NanoDrop over-reads dsRNA by about 1.9×
 
-**Status: Demonstrated. This is the measurement headline.**
+**Status: Demonstrated.**
 
 **Question.** NanoDrop and Qubit disagree about our dsRNA concentration. What
 should we report as a dose?
@@ -74,7 +67,7 @@ duplex survives, and re-read A260.
 
 **Evidence.**
 
-> **FIGURE —** Post-digest over pre-digest A260 for each of the eight
+> **TODO —** Figure: Post-digest over pre-digest A260 for each of the eight
 > preparations, plotted against pre-digest value, with the 52.1% mean drawn as a
 > line. The point of the figure is the flatness, not the mean.
 
@@ -111,7 +104,7 @@ incubation, and a spin-down after Vezol addition.
 
 **Evidence.**
 
-> **FIGURE —** Yield and A260/230 for all five methods, same larvae, same day
+> **TODO —** Figure: Yield and A260/230 for all five methods, same larvae, same day
 > (29 Jul), points not bars, so the overlap is visible.
 
 **Controls + n.** All five arms from the same pooled larval material on one day.
@@ -180,7 +173,7 @@ haemolymph, incubated with folding buffer and TO1-biotin, read on a plate reader
 
 **Evidence.**
 
-> **FIGURE —** Both runs on one axis: run 1 linear fit with its residuals, run 2
+> **TODO —** Figure: Both runs on one axis: run 1 linear fit with its residuals, run 2
 > plotted as measured to show the non-monotonicity. Blanks shown, not subtracted
 > silently.
 
@@ -195,9 +188,7 @@ significant difference between spiked samples and the unspiked control.
 
 **Interpretation.** The calibration is real arithmetic on real fluorescence, but
 run 1 was almost certainly measuring TO1 intercalated along the duplex rather than
-the aptamer — a perfect line is **what pure intercalation produces**. Run 2 is
-published as a failed run with a diagnosis, because the diagnosis is the useful
-part.
+the aptamer — a perfect line is **what pure intercalation produces**.
 
 **Limitation.** The untagged-dsRNA control that would separate aptamer signal from
 intercalation **has never been run**, and the whole assay depends on it.
@@ -205,39 +196,62 @@ intercalation **has never been run**, and the whole assay depends on it.
 **What it changed.** Mango was demoted from quantifier to selector. See
 [cycle 4.1](/engineering#cycle-4-1).
 
-> **TODO —** Mango validation, which the team flags as **the urgent one**. The
-> blocking experiment is the untagged-dsRNA control: until it is run, no number on
-> this page can distinguish aptamer signal from intercalation, and the LOD and LOQ
-> above stand only as arithmetic on an unvalidated signal. Owner: wet lab.
+**The untagged-dsRNA control has since been run, and it is decisive.** Tagged and
+untagged constructs stain indistinguishably, and a commercial ladder carrying no
+aptamer stains as well. No number on this page can be attributed to aptamer signal
+rather than intercalation; the LOD and LOQ stand as **an intercalation calibration**,
+which is still usable, and not as a measurement of the tag. Full working on
+[measurement](/measurement).
 
-### In-gel detection loses 10–30× to the haemolymph matrix
+> **TODO —** The one control still outstanding is the capture-format version: does
+> streptavidin also capture dsRNA carrying intercalated TO1-Biotin? Every claim made
+> for the capture assay at [cycle 4.2](/engineering#cycle-4-2) depends on it.
+> Owner: wet lab.
+
+### In-gel detection loses 6.4× to the haemolymph matrix, and the signal is not the aptamer
 
 **Status: Investigated.**
 
 **Question.** Does resolving the tagged construct on a gel escape the background
 that defeats the plate reader?
 
-**Experiment.** Dilution series in water and in spiked haemolymph, run on an
-unstained native agarose gel, then post-stained and imaged.
+**Experiment.** A 592 bp Mango construct loaded as an eight-point two-fold series
+from 408 ng to 3.19 ng, in parallel in nuclease-free water and in crude haemolymph,
+on one gel, post-stained with TO1-Biotin. Densitometry by fixed-width lane
+integration.
 
 **Evidence.**
 
-> **FIGURE —** The two ladders side by side, water and haemolymph, with the
+> **TODO —** Figure: The two series side by side, water and haemolymph, with the
 > faintest visible band on each marked and the ladder lane included, since the
 > ladder staining is itself part of the result.
 
-**Controls + n.** Unspiked haemolymph lane, water lane, dsDNA ladder on the same
-gel.
+**Controls + n.** Twenty lanes: ladder, unspiked haemolymph, eight water, two
+controls, eight haemolymph. Blank σ taken from two lanes only.
 
-**Result.** The water series was visible to ~3–6 ng per band; in haemolymph the
-limit rose to ~50–100 ng, a **10–30× matrix penalty**. The dsDNA ladder stained
-too, which is non-specific intercalation and not an aptamer signal.
+**Result.** Over the usable 3.19–51 ng window the water series gives **LOD 0.42 ng
+and LOQ 1.27 ng per band (slope 7,273, R² = 0.9983)**. In haemolymph the slope falls
+to 971 against 6,247, a **6.4× matrix penalty**, giving **LOD 3.1 ng and LOQ 9.5 ng**
+`[CALC]`. Above 51 ng the response saturates and bands can be called present but not
+quantified. **The dsDNA ladder stained too**, and it carries no aptamer at any
+position.
 
-**Interpretation.** The matrix, not the detector, sets the sensitivity. Any assay
-that does not remove the haemolymph before reading pays this penalty.
+**Interpretation.** Two things at once. The matrix costs 6.4×, so any assay that does
+not remove the haemolymph before reading pays that penalty. And the detection limit
+of 0.42 ng is **1.10 fmol of this construct, 57× below the published 62.5 fmol in-gel
+limit for Mango-II itself** — a signal cannot be seen fifty-seven-fold below the
+detection limit of the mechanism supposedly producing it. What is being detected is
+intercalation, not the tag.
 
-**Limitation.** Read from an 8-bit JPEG; see the TIFF caveat at the top of this
-page.
+**Limitation.** σ from two blank lanes gives roughly ±70% relative standard error on
+the limits, so these are factor-of-two estimates. Haemolymph signal as a fraction of
+water rises at low mass, indicating an additive pedestal of host nucleic acid; the
+high-mass reading, a 5–8× penalty, is the more conservative one. Read from an 8-bit
+JPEG; see the TIFF caveat at the top of this page.
+
+⚠ These figures **supersede the ~3–6 ng / ~50–100 ng per band and 10–30× matrix
+penalty** this page previously carried, and the ~75 ng/band figure in two of our own
+project documents.
 
 **What it changed.** Method development moved to washing the matrix away before
 reading, rather than reading through it. See
@@ -261,8 +275,7 @@ reading, rather than reading through it. See
 
 ### Intact dsRNA recovered from larvae and larval haemolymph 24 h after a 1 µg dose
 
-**Status: Demonstrated, qualitatively. The strongest single wet-lab result we
-have.**
+**Status: Demonstrated, qualitatively.**
 
 **Question.** After a larva eats our dsRNA, can we get it back intact?
 
@@ -273,7 +286,7 @@ across the 300/500/700 bp series.
 
 **Evidence.**
 
-> **FIGURE —** The 4–5 Aug gel, uncropped, with lane labels: dosed larvae, undosed
+> **TODO —** Figure: The 4–5 Aug gel, uncropped, with lane labels: dosed larvae, undosed
 > larvae from the same frame, water-plus-primer no-template control, ladder. All
 > three expected band sizes visible in the dosed lanes.
 
@@ -307,7 +320,7 @@ centrifugal method at 3 h, RT-PCR and gel.
 
 **Evidence.**
 
-> **FIGURE —** The 12 Aug gel, with the contemporaneous water control lane shown
+> **TODO —** Figure: The 12 Aug gel, with the contemporaneous water control lane shown
 > rather than omitted, because the caveat below is visible in it.
 
 **Controls + n.** Water no-template control on the same gel; n not recorded.
@@ -337,7 +350,7 @@ scoring uptake volume and survival to the end of the day.
 
 **Evidence.**
 
-> **FIGURE —** A harnessed bee taking a droplet from the syringe, and the two
+> **TODO —** Figure: A harnessed bee taking a droplet from the syringe, and the two
 > uptake ranges plotted against survival, so the trade-off is one image.
 
 **Controls + n.** Foragers n = 50. Newly emerged bees: uptake range recorded
@@ -367,7 +380,7 @@ and NaCl tolerance setup, dead bees counted at the solution change.
 
 **Evidence.**
 
-> **TABLE —** Deaths per box against box size and salt concentration, once the
+> **TODO —** Table: Deaths per box against box size and salt concentration, once the
 > per-box assignment is confirmed from the journal.
 
 **Controls + n.** Three boxes, 46 bees total (20 Jul).
@@ -389,7 +402,7 @@ not a salt-tolerance comparison.
 
 ### Mites do not survive in the lab without a host, and the soak is not what kills them
 
-**Status: Investigated. A negative, reported as one.**
+**Status: Investigated. A negative.**
 
 **Question.** Can _Varroa_ be kept alive long enough to dose and score?
 
@@ -400,7 +413,7 @@ Survival scored at the 3-day checkpoint (7–8 Sep).
 
 **Evidence.**
 
-> **FIGURE —** Survival by housing method as a bar of counts, not percentages,
+> **TODO —** Figure: Survival by housing method as a bar of counts, not percentages,
 > with the denominators printed on each bar. Small n is the point, not something
 > to hide.
 
@@ -425,9 +438,78 @@ capsules, and the efficacy screen's primary endpoint moved from mortality to
 molecular knockdown, which can be measured on the mites we can keep alive. See
 [cycle V1](/engineering#cycle-v1).
 
-> **TODO —** The mite mortality and knockdown screen itself. No efficacy number
-> exists and nothing on this wiki claims one. Owner: bee lab. Blocked on husbandry
-> and on dsRNA supply.
+### Soaking mites in dsRNA gives a dose-response in mortality
+
+**Status: Investigated. Our first efficacy signal, on a method we then abandoned.**
+
+**Question.** Does our vdCHIB target increase mite mortality relative to a saline
+control?
+
+**Experiment.** Mites soaked in 0.9% NaCl containing a low or a high concentration of
+our 700 bp vdCHIB dsRNA, or in saline alone, then inserted individually into capped
+larval cells and incubated for 24 h.
+
+**Controls + n.** Saline-only control n = 40; low concentration n = 70; high n = 65.
+Sample sizes were not equalised, because mite survival through each soak varied.
+
+**Result.** Mortality rose with dose: **42.5% control (17/40), 55.7% low (39/70),
+72.3% high (47/65)**. Cochran–Armitage trend test, **Z = 3.08, p = 0.002** `[CALC]`.
+In pairwise Fisher's exact tests with a corrected threshold of 0.0167, **only the
+high-against-control comparison held up**.
+
+**Interpretation.** There is statistically significant evidence of a dose-response,
+and high concentration is confidently distinguishable from control. The difference
+between high and low is consistent with the trend but **not independently confirmed**.
+
+**Limitation.** Only about 20% of mites survived the 6 h soak, and soaked mites
+sometimes reproduced in the cell, leaving unexposed offspring scored alongside the
+treated mother. **The dsRNA concentrations are not recorded as numbers anywhere in
+our own record**, so the dose-response cannot yet be reproduced.
+
+**What it changed.** It justified abandoning the soak and delivering dsRNA through
+the host instead. See [cycle V2](/engineering#cycle-v2).
+
+### Feeding the larval host did not kill mites, and showed why
+
+**Status: Investigated. A clear negative, with the confound identified.**
+
+**Question.** Does dsRNA delivered through a dosed larva kill the mite that feeds on
+it, and does our pipeline's top-ranked target outperform its lowest-ranked one?
+
+**Experiment.** Forty 5th-instar larvae per group, 240 in total, each fed 20 µL.
+Groups: BEST and WORST targets at 50 ng/µL and 5 ng/µL, plus 50 ng/µL dsGFP and 1 M
+sucrose as negative controls. After 24 h, once cells were capped, one mite was
+introduced per cell and left to feed for 96 h, then every cell was uncapped and its
+mites scored.
+
+**Controls + n.** dsGFP at 50 ng/µL and sucrose-only, 40 larvae each. Only **14–27
+mites were scored per group**.
+
+**Result.** **No dsRNA group killed more mites than the controls.** The six groups
+differed overall (chi-square, **p = 0.002**), driven almost entirely by BEST
+50 ng/µL showing _lower_ mortality than dsGFP (**29% against 91%, p = 0.0002**).
+BEST against WORST with doses pooled also differed (p = 0.03), in the opposite
+direction to our hypothesis `[CALC]`.
+
+**Interpretation.** The dominant predictor of mite death was **larval compromise**:
+in compromised larvae, 45 of 47 recovered mites were dead (96%) regardless of
+treatment, and more than half of all larvae were compromised in every group.
+Restricting to healthy larvae did not change the conclusion. **We do not interpret
+the BEST 50 ng/µL result as evidence that dsRNA protects mites**; it is most likely
+noise.
+
+**Limitation.** Roughly **30–50% of cells contained no recoverable mite**, and we
+cannot tell whether those mites died, escaped or were never present. Some cells held
+two or three mites, so counting per mite treats related individuals as independent.
+
+**What it changed.** Future iterations must reduce larval handling and feeding stress
+and score mite mortality only in healthy larvae, before target efficacy or pipeline
+ranking can be meaningfully assessed. **Our computational pipeline's ranking is
+untested by this experiment, not contradicted by it.** See
+[cycle V3](/engineering#cycle-v3).
+
+> **TODO —** Mite knockdown by RT-qPCR, the molecular endpoint the husbandry work
+> redirected us towards. No knockdown number exists. Owner: bee lab.
 
 ## What the models predict
 
@@ -435,16 +517,38 @@ Modelled outputs are results, and they carry the **Modelled** label wherever the
 appear — never **Demonstrated**. Detail on
 [dry lab and modelling](/model) and [ecological modelling](/ecological-modelling).
 
-> **TODO —** Write the modelled outputs into the eight-field shape, with
-> **Modelled** on each: the efficacy threshold a colony actually needs, the
-> required yeast titre that falls out of the cost model, and the transfer-chain
-> sensitivity. Owner: dry lab. Every model on this wiki is currently
-> literature-parameterised; none uses a parameter we measured, and that stays
-> stated.
+Three BEEHAVE cycles have now run, and their headline outputs are:
+
+- **Colony outcome is insensitive to starting conditions.** Across initial
+  infestation levels of 0–100% and 0–100% deformed wing virus, the colony collapses
+  in an average of **4 years** and honey production is affected similarly. One
+  therapy can therefore address a range of starting infestations.
+  [Cycle M1](/engineering#cycle-m1).
+- **The efficacy target is a treatment efficiency of about 0.05**, which prevents
+  collapse and holds losses to 10% of honey and 20% of bee population across the
+  North Dakota, California and Australian hive profiles. Untreated, all profiles
+  collapsed within 3 years with cumulative honey production falling to a third.
+  **Winter treatment matches year-round treatment and beats autumn**, which is a
+  regimen only a cold-tolerant in-hive product can use.
+  [Cycle M2](/engineering#cycle-m2).
+- **The titre the wet lab has to hit.** Replacing the single efficiency parameter
+  with a mechanistic delivery chain, and crossing six dsRNA concentrations with five
+  yeast amounts, gives the trade-off: above **0.01 mg dsRNA per g yeast**, the same
+  collapse is prevented with a hundred times less yeast. Set against the modelled
+  private benefit, **0.005 mg/g makes the therapy economically viable in the US and
+  0.05 mg/g in both the US and Australia** `[CALC]`.
+  [Cycle M3](/engineering#cycle-m3).
+
+> **TODO —** Write these three into the eight-field shape with **Modelled** on each,
+> and bring the plots and heat maps onto the wiki — they exist in the modelling
+> write-up and not here. Owner: dry lab.
+
+> **Every model on this wiki is literature-parameterised or provisionally
+> parameterised; none yet uses a transfer probability we measured.** The five
+> intermediate parameters in the M3 delivery chain were assigned plausible orders of
+> magnitude precisely so they can be replaced when bench data arrive.
 
 ## What we could not establish
-
-Short and explicit, because every project has this section and most wikis hide it.
 
 - **No construct is sequence-verified.** All QC to date is gel band size plus
   spectrophotometry. No sequence-level claim is made anywhere on this wiki.
@@ -452,12 +556,17 @@ Short and explicit, because every project has this section and most wikis hide i
   mg dry yeast is the single measurement the project most needs. The production
   goal is now written as loop-ended dsRNA in **yeast or _E. coli_**, where it
   previously named yeast alone, and neither host has a measured titre.
-- **No mite mortality or knockdown figure.** See above.
+- **No demonstrated mite mortality from our delivery route.** The soak assay gives a
+  dose-response without recorded doses; the larval-feeding assay returned a clear
+  negative confounded by host condition. **No knockdown figure exists at all.**
+- **No validation of the target-ranking pipeline.** The best-against-worst comparison
+  ran and was uninterpretable, so the pipeline's ranking is untested.
 - **No MIQE-valid RT-qPCR standard curve**, and **spike-recovery has never been
   run** — the largest remaining hole in the measurement workstream.
-- **No untagged-dsRNA control for Mango**, without which the aptamer signal cannot
-  be separated from intercalation.
-- **No SYBR Gold detection limit of our own.**
+- **No SYBR Gold detection limit of our own**, and no capture-format control for the
+  streptavidin assay.
+- **No melanin attribution.** The haemolymph absorbance traces cannot be assigned to
+  melanin rather than scatter without a far-red baseline.
 
 > **TODO —** Say which chassis produces the loop-ended dsRNA and which is only a
 > cloning host. The Gibson assembly and colony lysis work runs through *E. coli*;

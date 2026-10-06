@@ -4,11 +4,6 @@ nectar-designer
 
 ## The pipeline, end to end
 
-> **What this page proves:** that choosing the RNA sequence is a designed
-> decision with stated criteria, not a guess that happened to work.
-> **Where the evidence is:** the walkthrough above, [Results](/results),
-> cycle D1 on [Engineering](/engineering), and the NectarDesigner repository.
-
 **Status: Modelled.** NectarDesigner is the part of NECTAR we claim as novel.
 Loop-ended dsRNA against _Varroa_ is published, and yeast delivery of dsRNA is
 patented by others; a reusable method for deciding **which** sequence to make is
@@ -19,8 +14,7 @@ Seven decisions, in order, each one constrained by the one before it. Step
 through them above. Change the pest and the duplex length changes, tighten the
 safety threshold and candidate windows die, and if enough of them die there is
 nothing left for the construct to carry. Change a control, walk forward, and
-watch what moved. That chain is the argument this page makes, and it is the
-thing a static diagram cannot show.
+watch what moved.
 
 Step 4 is worth waiting on. The structure settles out of a straight line under
 a spring simulation running in your browser, so you can watch stems pull their
@@ -107,7 +101,7 @@ corresponding protein entered the ranking. The two percentiles were then summed
 with equal weight, giving a ranked list of targets that are both well connected
 and well expressed: the ones most likely to disable the mite quickly.
 
-**The caveat, in the authors' own terms.** This choice was made without data on
+**The caveat.** This choice was made without data on
 the effect of _partial_ knockdown on any of these targets. A highly transcribed
 gene may also be robust to partial knockdown, which would make it a worse RNAi
 target rather than a better one; equally, a highly central but lowly transcribed
@@ -219,12 +213,6 @@ once for the **guide seed region** within it. Step 4 of the walkthrough draws th
 result as capping: an open cell is a stretch the fold leaves reachable, a cell
 sealed in wax is one it does not.
 
-> **Note on the figure.** The structure that settles in step 4 is laid out by a
-> real spring simulation, but which bases pair with which is generated rather
-> than folded. Shipping a folding engine into the wiki bundle is not possible
-> under the 5 MB build limit, so the drawn structure is illustrative and the
-> real ViennaRNA output goes in with the rest of the team data.
-
 ### Step 2: Learning from _Varroa_'s own RNAi machinery
 
 Windows are scored for how closely they resemble the mite's own abundant viral
@@ -233,8 +221,7 @@ nucleotide identity and regional base composition, fitted against observed
 abundance: a **regression model fitted to the viral sRNAs of the _Varroa_ sRNA
 dataset**, which estimates abundance from sequence features.
 
-The features and their coefficients are held back; see below. The reason to
-score this at all is not held back, and it is the whole point: a window that
+The features and their coefficients are held back; see below. A window that
 looks like something the mite already makes in quantity is a window its own
 machinery is already equipped to process.
 
@@ -287,7 +274,6 @@ result would be the most dangerous mistake available at this step.
 
 ### Step 5: Combining the scores
 
-How the individual metrics become one ranking, and what the combination assumes.
 The weights are the part of the pipeline currently held back; see below.
 
 ### Step 6: An expression-ready construct
@@ -317,7 +303,7 @@ molecule silences four genes. Which four, and from which candidate pool, is on
 
 ### Step 7: Experimental validation
 
-What the bench said. The test set for the first pipeline output was a **mite screen
+The test set for the first pipeline output was a **mite screen
 on the unlooped construct**; it sits at cycle V1 on [Engineering](/engineering), and
 the husbandry cycle closed negative, so the efficacy screen **has not yet run**.
 
@@ -325,9 +311,6 @@ the husbandry cycle closed negative, so the efficacy screen **has not yet run**.
 
 > _The algorithm made a biological design decision, we tested that decision, and
 > the result improves the next design._
-
-That is the sentence this project is trying to earn, and we have not earned it
-yet.
 
 > **TODO —** Step 8 is aspirational as written. The loop is closed on paper and
 > open at the bench: no experimental result has yet been fed back into the
@@ -343,7 +326,7 @@ training corpus are held back pending the IP position**, as is the target gene
 name.
 
 Anything held back is marked as held back on the page where it would otherwise
-appear. Silent omission reads as an oversight.
+appear.
 
 > **TODO —** Agree the final disclosure line and apply it identically here, in the
 > repository README and on [parts](/parts). Owner: dry lab with the IP holder.

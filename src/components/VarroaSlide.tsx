@@ -19,7 +19,7 @@ import "./VarroaSlide.css";
  *
  * Two screens in one. First the mite's footage, coated in ink, with two
  * numbers over it that count up from zero the moment the stage is on
- * screen, as slide two's do. Then, on the next wheel tick, the footage rides
+ * screen, as slide two's do. Then, as the reader scrolls on, the footage rides
  * off to the left and the colony-loss map rides in from the right, while the
  * numbers shrink into a bar across the top. The map is VarroaMap in its
  * "slide" form: the map alone, filling the window under the bar, only the
@@ -28,9 +28,8 @@ import "./VarroaSlide.css";
  * the case-studies page, which the panel points at. The
  * ride is the scroll: the stage pins for one window of travel and --p is
  * how far through it the reader is. Both ends of the ride are rests in the
- * deck (src/utils/deck.ts), like the hero's and slide two's, so a wheel
- * tick rides the whole way and anything that stops part way settles to the
- * nearer end.
+ * deck (src/utils/deck.ts), like the hero's and slide two's, so a reader who
+ * stops part way is eased on to the end they were heading for.
  *
  * TEMPORARY HOSTING, as for the hero. The footage is served from
  * public/local/, which is gitignored, because video never ships from this
@@ -80,11 +79,13 @@ function restsOf(track: HTMLElement): { a: number; b: number } {
 function useRide(track: RefObject<HTMLElement | null>, pinned: boolean): number {
   const [progress, setProgress] = useState(0);
 
+  // Both ends of the ride, and the track's bottom, where the stage has just
+  // left the screen and the page carries on.
   const rests = useCallback(() => {
     const element = track.current;
     if (!pinned || !element) return [];
     const { a, b } = restsOf(element);
-    return [a, b];
+    return [a, b, b + window.innerHeight];
   }, [track, pinned]);
   useDeckRests(rests);
 

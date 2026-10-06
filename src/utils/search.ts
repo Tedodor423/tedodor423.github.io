@@ -192,10 +192,10 @@ function passagesOf(
 
     flush();
     heading = toPlainText(match[2]);
-    // Only h2 and h3 carry ids in the rendered page (see MarkdownPage), so a
+    // Only h2 to h4 carry ids in the rendered page (see MarkdownPage), so a
     // deeper heading links to the section it sits in rather than to a
     // fragment that does not exist.
-    if (match[1].length <= 3) anchor = headingId(heading);
+    if (match[1].length <= 4) anchor = headingId(heading);
   }
   flush();
 
@@ -215,7 +215,7 @@ function passagesOf(
  * profile render and become searchable in the same move.
  *
  * Indexed fields are the ones a reader can see on the card: role, place, date,
- * quote, what we learnt, what it changed. The question tags are deliberately
+ * why we chose them, quote, what we learnt, how it changed the project. The question tags are deliberately
  * not indexed. Their titles show only in a tooltip, and a result whose match
  * cannot be found on the page it points at is worse than no result.
  */
@@ -227,6 +227,7 @@ function stakeholderPassages(path: string, page: PageEntry): Passage[] {
       person.role,
       person.place,
       person.date,
+      person.why,
       person.quote,
       ...person.learnt,
       person.changed,

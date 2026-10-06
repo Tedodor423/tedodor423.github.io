@@ -44,10 +44,19 @@ question files in `../questions/` refer to.
 
 ## Body sections
 
-Three optional sections, these exact headings:
+Four optional sections, these exact headings. Why, learn and impact are
+the three sections of the box that opens when a reader selects someone on
+the map, under the same headings; the quote is shown inside the learn
+section.
+A section left empty is shown with its heading and nothing under it, so
+write nothing rather than a placeholder.
 
 ```markdown
-## What they told us
+## Why did we choose this stakeholder
+
+Why we went to this person, where the team has written it down.
+
+## What did we learn from them
 
 - One point per bullet, transcribed.
 
@@ -55,7 +64,7 @@ Three optional sections, these exact headings:
 
 > Verbatim, exactly as the team transcribed it.
 
-## What it changed
+## How did this impact the project
 
 What it changed in NECTAR, where the source states it.
 ```

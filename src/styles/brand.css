@@ -137,14 +137,6 @@
    * CVD, both clear of the floors --map-land fails (12.3 normal). */
   --wax-deep: #a89868;
 
-  /* Leaf green, for the one thing on the wiki drawn as a plant: the stand of
-   * trees on the home page's second slide, before the pollinated share of it
-   * turns honey. A muted natural green rather than a screen green, and dark
-   * enough to stand on the wax paper: 4.6:1 on --surface-muted. It is not a
-   * data colour; the loss ramp and the two green states below it keep their
-   * own meanings. */
-  --leaf: #4a7c3f;
-
   --text: var(--oxford-navy);
   --text-muted: #4a5a6b;
   --link: var(--violet);
@@ -569,6 +561,186 @@ pre {
   list-style: none;
 }
 
+/* The wrapper round the list and the search field. On a wide screen it steps
+ * out of the layout entirely, so the two sit in the bar as direct flex items;
+ * it only becomes a box of its own as the compact menu's panel. */
+.site-nav-menu {
+  display: contents;
+}
+
+.site-nav-toggle {
+  display: none;
+}
+
+/* ---------- the compact menu ---------- */
+
+/* Below 992px the bar cannot hold the wordmark, five labels and the search
+ * field on one row: it wrapped to three rows on a phone, a quarter of the
+ * screen, with the section title printed over the labels under it. So it
+ * folds into the wordmark and a Menu button, and the button opens the same
+ * list as a panel of its own. The breakpoint is Bootstrap's `lg`, and it is
+ * written out again as COMPACT_MEDIA in Navbar.tsx: change both. */
+@media (max-width: 991.98px) {
+  .site-nav-bar {
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0;
+    padding: 0.6rem 1rem;
+  }
+
+  .site-nav-brand {
+    font-size: 2.1rem;
+  }
+
+  /* Same hard-edged ink box as the search field, so the two controls the bar
+   * ever shows read as one family. 2.75rem is a comfortable thumb target. */
+  .site-nav-toggle {
+    display: block;
+    margin-left: auto;
+    min-height: 2.75rem;
+    min-width: 5.5rem;
+    padding: 0 0.9rem;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--ink);
+    background: transparent;
+    border: 2px solid var(--ink);
+    border-radius: var(--radius);
+  }
+
+  /* Open, it inverts: the one solid ink shape in the bar is the way out. */
+  .site-nav-toggle[aria-expanded="true"] {
+    background: var(--ink);
+    color: var(--honey);
+  }
+
+  .site-nav-menu {
+    display: none;
+  }
+
+  /* A full-width row under the bar. It scrolls on its own when an open group
+   * makes it taller than the screen, and `contain` stops that scroll handing
+   * over to the page underneath when it reaches the end. 5.5rem is the bar,
+   * the gap under it and the nav's ink rule. */
+  .site-nav.is-open .site-nav-menu {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    max-height: calc(100vh - 5.5rem);
+    max-height: calc(100dvh - 5.5rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    margin-top: 0.75rem;
+    padding-bottom: 0.5rem;
+  }
+
+  /* Search first: on a phone it is the quickest way to anything. */
+  .site-nav-menu .site-search {
+    order: -1;
+    align-self: stretch;
+    margin: 0 0 0.5rem;
+    padding: 0.55rem 0.7rem;
+  }
+
+  .site-nav-menu .site-search input {
+    flex: 1;
+    width: auto;
+    /* Under 16px, iOS Safari zooms the page in on focus and leaves it there. */
+    font-size: 1rem;
+  }
+
+  .site-nav-list,
+  .site-nav-section-list {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 0;
+  }
+
+  .site-nav-list {
+    font-size: 1.2rem;
+  }
+
+  .site-nav-section,
+  .site-nav-group,
+  .site-nav-item {
+    display: block;
+  }
+
+  /* Back in the flow: a heading over the three groups it spans, with the same
+   * hairlines reaching out to either side as on the wide bar. */
+  .site-nav-section-title {
+    position: static;
+    padding: 0.85rem 0 0.15rem;
+  }
+
+  /* Each group is a full-width row. Every row but the first gets an ink
+   * hairline above it, the line language of the section title. */
+  .site-nav-group-label,
+  .site-nav-link {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 3rem;
+    text-align: left;
+  }
+
+  .site-nav-list > li + li > .site-nav-group-label,
+  .site-nav-section-list > li + li > .site-nav-group-label {
+    border-top: 1px solid var(--ink);
+  }
+
+  /* The open/shut sign: a chevron drawn from two borders, pointing down when
+   * shut and up when open. It flips without a transition; there is nothing to
+   * learn from watching it turn. */
+  .site-nav-group-label::after {
+    content: "";
+    flex: none;
+    width: 0.55rem;
+    height: 0.55rem;
+    margin: 0 0.35rem 0.3rem auto;
+    border-right: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+    transform: rotate(45deg);
+  }
+
+  .site-nav-group-label[aria-expanded="true"]::after {
+    margin-bottom: -0.3rem;
+    transform: rotate(-135deg);
+  }
+
+  /* The wide bar marks the current section and the open menu with one inset
+   * underline. Here the label spans the row, so that line would too, and the
+   * chevron already says which group is open. The current section keeps its
+   * mark as an underline under the words alone. */
+  .site-nav-group-label[aria-current],
+  .site-nav-group-label[aria-expanded="true"],
+  .site-nav-link[aria-current="page"] {
+    box-shadow: none;
+  }
+
+  .site-nav-group-label[aria-current],
+  .site-nav-link[aria-current="page"] {
+    text-decoration: underline;
+    text-decoration-thickness: 0.2rem;
+    text-underline-offset: 0.3rem;
+    text-decoration-skip-ink: none;
+  }
+
+  /* The dropdown panel, kept as it is on the wide bar (white on a 2px ink
+   * border) but in the flow under its label instead of hanging over the
+   * page. */
+  .site-nav-dropdown {
+    position: static;
+    min-width: 0;
+    margin: 0 0 0.75rem;
+  }
+
+  .site-nav-dropdown a {
+    padding: 0.6rem 1rem;
+  }
+}
+
 /* ---------- sub-pages of the current page ---------- */
 
 /* Rendered by SectionLinks at the top of the page body, not in the header, so
@@ -662,6 +834,23 @@ pre {
   font-size: 1.1rem;
 }
 
+/* On a phone the column is the screen, and three different left edges show:
+ * the menu bar's 16px, Bootstrap's 12px container gutter under the body, and
+ * the header's own 1rem on top of a container (28px). One 16px edge for all
+ * three, and less air round the title, which at this width is spent before a
+ * word of the page shows. Above 576px Bootstrap's containers have fixed
+ * widths and centre themselves, so none of this changes anything there. */
+@media (max-width: 575.98px) {
+  .container {
+    --bs-gutter-x: 2rem;
+  }
+
+  .page-header {
+    padding: 1.75rem 0 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+}
+
 /* The page is one centred column. The head shares the lead's 44rem measure and
  * sits on the same axis as the 36rem body, so the whole page hangs from one
  * centre line instead of the container's left edge. */
@@ -686,6 +875,7 @@ pre {
  * arithmetic at each call site. */
 .markdown-page h2,
 .markdown-page h3,
+.markdown-page h4,
 .sm-profile[id],
 .tl-entry[id],
 .dbtl-cell[id] {
@@ -737,9 +927,23 @@ pre {
   font-weight: 700;
 }
 
+/* Every Markdown table sits in one of these (MarkdownPage.tsx). A table that
+ * fits is untouched by it; one that does not scrolls sideways inside it rather
+ * than widening the page. The margin moved out here from the table so the
+ * scrollbar lands under the last row, not a margin's depth below it. */
+.markdown-page .table-scroll {
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+
+.markdown-page .table-scroll:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
 .markdown-page table {
   width: 100%;
-  margin: 1.5rem 0;
+  margin: 0;
   border-collapse: collapse;
 }
 

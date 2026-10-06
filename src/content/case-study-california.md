@@ -1,10 +1,3 @@
-> **What this page proves —** that scale is a design constraint, not a
-> background fact: at 18,000 colonies on the road, a treatment that needs one
-> extra visit per hive is a different product.
-> **Where the evidence is —** four US conversations, recorded on
-> [human practices](/human-practices), and the cost structure of a modelled
-> commercial operation.
-
 California is the scale case. Migratory commercial beekeeping tied to a
 pollination market changes almost every assumption a treatment designed for a
 small apiary would make — about labour, timing, transport and what a colony is
@@ -33,6 +26,24 @@ throwing everything but the kitchen sink at them. And some of our worst years
 over the last 10 years, we've had like 60% loss, 50%.”* The proximate killer is
 viral: in his worst years viral loads sat in the 80th to 90th percentile of
 national surveillance.
+
+**2024–25 was an exceptionally severe episode for the wider US industry.** A survey
+administered by Project Apis m., with participants accounting for **72% of the
+nation's bees (1.96 million colonies)**, found that approximately **1.6 million
+colonies were lost between June 2024 and March 2025**, with surveyed commercial
+operations reporting average losses of around **62%** and hobbyist beekeepers
+**51%**. The economic impact is estimated at **over US$600 million** in lost honey
+production, pollination income and colony replacement costs.
+
+The scale of the pollination market those colonies serve: in 2024, almond
+pollination generated approximately **US$325.8 million, around 81% of all US
+pollination-service revenue**. Growers paid **US$181 per colony and US$305 per acre
+in 2024**, rising to approximately **US$209 per colony and US$310 per acre in 2025**.
+Pollination fees first rose sharply in the early 2000s, when almond acreage grew
+faster than honeybee supply and beekeepers answered by increasing hive numbers.
+**Now that Varroa-driven colony losses make hive numbers the constraint, the price
+rises instead**, each year, as beekeepers struggle to pay for treatments and replace
+their colonies.
 
 ## Current practice
 
@@ -129,9 +140,9 @@ economics we modelled.
   figures put colony replacement and lost pollination and honey revenue ahead of
   the treatment line item, which is why the model measures change in costs *and*
   revenues.
-- **An honest limit.** A treatment that works per colony and a treatment that
-  works across a migratory operation are not the same product, and the
-  difference is mostly logistics rather than biology. That part is outside what
+- **A treatment that works per colony and a treatment that works across a
+  migratory operation are not the same product**, and the difference is mostly
+  logistics rather than biology. That part is outside what
   a laboratory project can demonstrate, and **we are not claiming it**.
 
 ## Still missing

@@ -1,19 +1,12 @@
-> **What this page proves:** that another team starting an RNA or bee project
-> next year would be meaningfully further ahead for our having done this one.
-> **Where the evidence is:** each entry links to the page, protocol or part it
-> comes from.
-
 The question this page answers is narrow and useful: _what did Oxford 2026 save
 the next team from having to rediscover?_
 
 Every entry is written the same way, in three lines: **what it is**, **why
-another team would want it**, **where to get it**. A list of nouns is not a
-contribution. A thing someone else can pick up and use is.
+another team would want it**, **where to get it**.
 
 ## What is ready and what is still owed
 
-We mark each entry **Available** or **Owed** and we do not blur the two. An
-Owed entry names its owner and what is blocking it.
+We mark each entry **Available** or **Owed**.
 
 | Contribution                                    | State     |
 | ----------------------------------------------- | --------- |
@@ -102,7 +95,7 @@ IVT now and in-cell expression later, **at no marginal cost**.
 material need a blot or a chemically labelled nucleotide, both of which cost money
 per sample and neither of which survives into a production construct.
 
-**Where to get it.** [Parts](/parts). Read it together with the honest account of
+**Where to get it.** [Parts](/parts). Read it together with the account of
 what the tag does and does not report, below.
 
 ## Measurement
@@ -144,13 +137,32 @@ the re-analysis that overturned it: an apparently excellent calibration (R² =
 0.9999) turned out to be **evidence against the aptamer working** rather than for
 it, because pure dye intercalation along a duplex is rigorously linear in mass.
 
-**Why another team would want it.** A method published with an honest account of
-what its signal does not prove is more useful than one published without. The
-general lesson transfers past aptamers: a perfect calibration line is a reason to
+**Why another team would want it.** The general lesson transfers past aptamers: a perfect calibration line is a reason to
 ask what else is linear.
 
 **Where to get it.** [Measurement](/measurement) and
 [cycle 4.1](/engineering#cycle-4-1).
+
+### A dosing method that delivers a known mass to an individual bee
+
+**What it is.** The proboscis-extension assay repurposed from a behavioural test into
+a **dosing instrument**: newly emerged bees, harnessed, fed **2 × 2.5 µL** rather than
+one 5 µL drop, giving a known 1 µg per animal — plus the arithmetic showing why it
+matters. Cage feeding adds dose variance on top of measurement variance, and
+cage-mates are not independent replicates, so for the same statistical power a cage
+design needs **8–20× more animals** than individual dosing. The ratio is independent
+of effect size, arm count and timepoint count, which is why we publish the ratio
+rather than a bee total.
+
+**Why another team would want it.** It is simultaneously the ethics argument and the
+validity argument: **reduction, refinement and replacement are served by the same
+change that makes the measurement interpretable**, and the dsRNA cost falls by three
+orders of magnitude at the same time. Any team feeding anything to insects in cages
+and dividing by the number of animals inherits this problem.
+
+**Where to get it.** [Cycle B3](/engineering#cycle-b3) carries the design effect and
+the worked comparison; the bench steps are on
+[experiments and protocols](/bee-lab-experiments).
 
 ### The standing bench rules for working with Mango
 
@@ -194,7 +206,21 @@ dated entries. Contents, all of which exist as notebook material today:
   column-against-TRIzol variance comparison, so a team can skip the comparison and
   take the answer.
 - **Mite husbandry** — what kept mites alive and what did not, including the
-  negative that a host is required and the soak is not the cause of death.
+  negative that a host is required and the soak is not the cause of death, and the
+  standing rule to soak three to four times as many mites as the experiment needs.
+- **A mite-death assay that does not exist in the literature** — dosing the larval
+  host at the natural pre-capping infestation window rather than soaking the mite,
+  written up with its confound (host condition dominates the outcome) so the next
+  team starts from the version that failed rather than repeating it.
+- **The honeybee biology a synthetic biologist actually needs** — castes, the worker
+  life cycle and instars, the nurse-bee jelly pathway our whole delivery route
+  depends on, haemolymph against fat body, and where _Varroa_ fits into the cycle.
+- **How to find and approach bee researchers**, including what a cold email to an
+  author of a recent paper needs to contain to get a reply.
+- **What honeybee research costs and how to pay for it** — an itemised
+  £35,000–£69,000 budget range, the observation that **over 70% of what we raised
+  came through warm contacts of individual team members**, and the grant categories
+  that exist specifically for bee health and are not widely advertised.
 
 **Why another team would want it.** A team with no apiary access and no
 entomologist on the supervisory staff **loses weeks to exactly this**. Several of
@@ -204,7 +230,7 @@ these are things we were shown by apiarists and could not have read anywhere.
 record is [the bee lab notebook](/bee-lab-labbook) and the hardware is on
 [hardware](/hardware).
 
-> **PDF —** _Working with honeybees: a handbook for future iGEM teams._ Not
+> **TODO —** PDF: _Working with honeybees: a handbook for future iGEM teams._ Not
 > written. Upload to `static.igem.wiki` and link here. Include the failed
 > approaches; they are half the value. Owner: bee lab.
 
@@ -243,6 +269,44 @@ at the bench, and the third only appears when you re-order part of a series.
 **Where to get it.** [Cycle 2.1](/engineering#cycle-2-1).
 
 ## Corrections and findings we owe the literature
+
+### Published _Varroa_ dsRNA doses are not reproducible quantities
+
+**What it is.** An analysis of every per-mite dose in the _Varroa_ RNAi literature,
+showing that the numbers cannot be used as doses for three independent reasons. Most
+are **bath concentrations rather than per-mite doses** — dividing bath mass by mite
+count gives an upper bound on exposure, not a delivered dose, and one paper does not
+state mites per tube at all, so no per-mite figure can be recovered. Every figure is
+**an A260 number read with the ssRNA conversion factor of 40 ng/µL per A260 unit**,
+where two orthogonal published measurements of the duplex factor agree within 1.3% at
+45.9 and 46.52 µg/mL/A260, so **using 40 under-reads a duplex by 13–14%**. And **no
+paper states its purification state**, which matters because the opposite error is
+unbounded: in a crude T7 reaction most of the A260 is unincorporated nucleotides,
+over-reading duplex by up to 7.7× at realistic yields.
+
+**The two errors point in opposite directions**, so a reader cannot even sign the
+error on a published dose. On our own material the gap is measurable: a 500 bp duplex
+read 182 ng/µL by NanoDrop, 55 by Qubit, and **29.2 after nuclease digestion**.
+
+**Why another team would want it.** Anyone reproducing a published RNAi dose in any
+invertebrate inherits this. The fix is the digest-Qubit protocol above, and it uses
+reagents already in a standard IVT kit.
+
+**Where to get it.** [Measurement](/measurement), with the arithmetic and the
+sources.
+
+### No detection limit exists for SYBR Gold on dsRNA
+
+**What it is.** A negative literature finding. The widely quoted **25 pg figure for
+SYBR Gold is a dsDNA value**, the manufacturer recommends against the stain for
+dsRNA, and we could find **no published or vendor dsRNA detection limit at all**
+`[FLAG]`. Teams quote the dsDNA number for dsRNA work routinely.
+
+**Why another team would want it.** It stops a number being cited for a molecule it
+was never measured on.
+
+**Where to get it.** [Measurement](/measurement) and
+[cycle 4.3](/engineering#cycle-4-3).
 
 ### MS2 hairpin arrays larger than two do not fold as drawn
 

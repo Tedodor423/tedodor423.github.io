@@ -1,0 +1,89 @@
+/* The view switch on a switcher page (ViewSwitch.tsx).
+ *
+ * One bar of tiles inside a 2px ink frame, the tiles divided by the frame's
+ * own ink (the list's background showing through a 2px gap), so it reads as
+ * one control with positions rather than a row of cards. The open view is
+ * honey with ink type, the pairing the letter cells and the map's picked
+ * question use; the other is paper, and darkens a step on hover. Nothing
+ * moves. Side by side wherever two tiles fit, stacked on a phone.
+ */
+
+.view-switch {
+  max-width: 52rem;
+  margin: 0 auto 2.5rem;
+}
+
+.view-switch ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--ink);
+  overflow: hidden;
+}
+
+.view-switch a {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.4rem;
+  height: 100%;
+  min-height: 6.5rem;
+  padding: 1.1rem 1.5rem;
+  background: var(--surface);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.view-switch a:hover {
+  background: var(--surface-muted);
+}
+
+.view-switch a.is-on {
+  background: var(--honey);
+}
+
+.view-switch a:focus-visible {
+  outline: 3px solid var(--oxford-navy);
+  outline-offset: -6px;
+}
+
+.vs-name {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3.5vw, 2.1rem);
+  line-height: 1.1;
+}
+
+.vs-hex {
+  flex: none;
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+.vs-hex polygon {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+
+.view-switch a.is-on .vs-hex polygon {
+  fill: var(--ink);
+}
+
+.vs-lead {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+.view-switch a.is-on .vs-lead {
+  color: var(--ink);
+}

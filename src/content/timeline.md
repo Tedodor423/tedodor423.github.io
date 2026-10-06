@@ -1,17 +1,8 @@
-> **What this page proves:** that the project's turns are dated, sourced and in
-> order, and that the record includes the months where nothing worked.
-> **Where the evidence is:** the working channels, the lab journals and the
-> calendars, with each entry pointing at the page where the argument is made.
-
 Eight months, from a room of fourteen students with no project to a wiki with
 a deadline. The short version is that the team's first project was rejected by
 its own supervisor in March, the replacement was chosen by a vote in April, and
 the delivery platform at the centre of it was changed in July by a conversation
 about the price of honey **rather than by an experiment**.
-
-This page is the dated spine of the wiki. Every other page takes its dates from
-here, and every entry in the record below says where the argument behind it is
-written up properly.
 
 ## The eight months
 
@@ -31,8 +22,7 @@ project-timeline
 
 ## Month by month
 
-The same record as the grid, in order, with one line per milestone. Undated
-months are shown as undated rather than filled in.
+The same record as the grid, in order, with one line per milestone.
 
 ### February 2026
 
@@ -188,18 +178,12 @@ and how much work a single number represents.
 Every entry is reconstructed from material the team produced at the time: the
 working channels it ran between 12 February and 23 September 2026, the lab
 journals, and the calendars. Nothing here is inferred or reconstructed from
-memory, and where a source is ambiguous the entry **says less rather than more**.
+memory.
 
-Three things were deliberately left out and should not be added: access
-credentials and facility details, internal conduct matters, and individuals'
-personal circumstances. Interviewees are described by role and organisation
-rather than by name unless their profile is already published on
+Interviewees are described by role and organisation rather than by name unless
+their profile is already published on
 [Human Practices](/human-practices#who-we-spoke-to); the conversations still under
-review are counted here but not named, which is the same rule the search index
-follows.
-
-Where this page and a workstream page disagree about a result, the workstream
-page is the team's reviewed position and this one defers to it.
+review are counted here but not named.
 
 > **TODO —** Reconcile the entries marked in the written record against the lab
 > journals. A number that was posted in a working channel is a note, not a
@@ -212,7 +196,7 @@ page is the team's reviewed position and this one defers to it.
 > approval, and the second schools session, which was cancelled. Owner: human
 > practices.
 
-> **FIGURE —** One photograph per act, chosen for what it shows rather than how
+> **TODO —** Figure: One photograph per act, chosen for what it shows rather than how
 > it looks: the pitch meeting, the first bee lab induction, a harnessed bee
 > being fed, and a gel with the contaminated water control on it. Upload via the
 > uploads tool, with alt text describing the contents.

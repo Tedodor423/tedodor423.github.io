@@ -1,8 +1,3 @@
-> **What this page proves:** that we left behind a set of parts another team
-> can actually build with, documented well enough to be worth using.
-> **Where the evidence is:** [Results](/results), cycles 1.2 and 4.1 on
-> [Engineering](/engineering), and each part's Registry page.
-
 ## The problem these parts solve
 
 Loop-ended, repeat-heavy constructs are difficult to obtain: every synthesis
@@ -15,7 +10,7 @@ That modularity is what makes the platform argument on
 [the description page](/project-description) true: **swap the targeting sequence**,
 keep everything else.
 
-> **FIGURE: part hierarchy.** The collection and how the levels combine, drawn
+> **TODO —** Figure: part hierarchy. The collection and how the levels combine, drawn
 > on the same construct diagram as [wet lab](/wet-lab): the U1–U2 backbone with
 > the loop slot highlighted, and L0, L1 and L2 shown as three cartridges that drop
 > into it.
@@ -82,9 +77,6 @@ Registry rather than from this wiki still gets the full picture:
 | **Application**      | How it was used in a system, including proof-of-concept work    |
 | **Discussion**       | Limitations, comparisons, future directions                     |
 
-Write the design-build-test-learn story **onto the part page itself**, not only here.
-A judge may never see this wiki page.
-
 ## Characterisation
 
 | Part                     | Characterised?                                                                       |
@@ -102,13 +94,15 @@ A judge may never see this wiki page.
 
 ## Housekeeping before deposit
 
-- Add the required prefix and suffix conventions in SnapGene.
-- Remove or check for illegal restriction sites; loop spacers already exclude
-  BsaI, BsmBI and BbsI sites, homopolymer runs longer than 3, and yeast poly(A)
-  elements.
-- Confirm deposited sequences match the sequencing reads, once those exist.
-- Check licensing constraints on upstream sequence sources, including the Mango
-  aptamer and the MS2 C-variant.
+> **TODO —** Before deposit:
+>
+> - Add the required prefix and suffix conventions in SnapGene.
+> - Remove or check for illegal restriction sites; loop spacers already exclude
+>   BsaI, BsmBI and BbsI sites, homopolymer runs longer than 3, and yeast poly(A)
+>   elements.
+> - Confirm deposited sequences match the sequencing reads, once those exist.
+> - Check licensing constraints on upstream sequence sources, including the Mango
+>   aptamer and the MS2 C-variant.
 
 ## Still missing
 

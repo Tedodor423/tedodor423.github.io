@@ -1,8 +1,3 @@
-> **What this page proves:** that we can put a known dose of dsRNA into a bee
-> and find out what happened to it afterwards.
-> **Where the evidence is:** [the bee lab notebook](/bee-lab-labbook),
-> [Hardware](/hardware) and [Results](/results).
-
 Delivery is where **most field RNAi work comes apart**. This page is the biological
 chain that has to hold — from a dose in a cell to a mite feeding on a bee — and
 the assays we built because they did not already exist.
@@ -26,7 +21,7 @@ Timing matters because mites enter a cell roughly two days before pupation. The
 dose has to still be there when the mite arrives, which is why **persistence, not
 just uptake**, is what we measured.
 
-> **FIGURE —** Delivery chain schematic: formulation → nurse bee → larva →
+> **TODO —** Figure: Delivery chain schematic: formulation → nurse bee → larva →
 > haemolymph → mite, with the links we measured (adult haemolymph, larval
 > haemolymph) marked differently from the links we did not (nurse-bee transfer
 > in a live colony, mite ingestion). The second category is the honest half of
@@ -77,7 +72,7 @@ Dead bees were noted and removed at every check so that daily sucrose usage coul
 be corrected for mortality rather than confounded by it. Full method:
 [the cage-feeding protocol](/bee-lab-experiments).
 
-> **FIGURE —** The NaCl/sucrose-filled feeding tubes used for the initial feeding
+> **TODO —** Figure: The NaCl/sucrose-filled feeding tubes used for the initial feeding
 > assay, with the four tubes of one cage visible.
 
 **Result.** **No significant dose response** between sucrose intake and NaCl
@@ -106,11 +101,11 @@ Mortality, by chi-square test of independence across 210 bees. Deaths were
 expected counts of 1.071 at 0 mM and 0.643 at each of the other three,
 **chi-square = 4.85 on 3 df, p = 0.18** `[CALC]`.
 
-**Our own caveat.** Three of the four expected cell counts are below 5, the usual
+Three of the four expected cell counts are below 5, the usual
 threshold for the chi-square approximation to be reliable, so **the mortality
 result should be treated as approximate.**
 
-> **FIGURE —** The write-up marks an unlabelled image at this point. What it has
+> **TODO —** Figure: The write-up marks an unlabelled image at this point. What it has
 > to show: net sucrose consumption per bee per day for each of the four NaCl
 > concentrations, one point per cage, so that the spread of the 150 mM group the
 > ANOVA reports as non-significant is visible rather than hidden in a mean.
@@ -156,7 +151,7 @@ mini-cages of 15 bees, across five adaptor combinations with two repeats of four
 tubes each. Each PCR tube held 250 µl of 1 M sucrose in deionised water. Results
 were recorded separately from the salt trial.
 
-> **FIGURE —** A cage with an angled PCR tube seated in its 3D-printed adaptor,
+> **TODO —** Figure: A cage with an angled PCR tube seated in its 3D-printed adaptor,
 > shot so the hole position and the bee's access to the solution are both visible.
 
 **Result.** **The first pilot produced no usable feeding data.** Two of the four
@@ -228,11 +223,11 @@ standardised volume carrying a **known mass of dsRNA** went into each bee.
 > was actually set to, and give Becchimanzi et al., 2024 and Garbian et al., 2012
 > full resolvable references. Owner: bee lab.
 
-> **FIGURE —** Two bees strapped into the proboscis-extension feeding assay, with
+> **TODO —** Figure: Two bees strapped into the proboscis-extension feeding assay, with
 > the syringe tip presenting a droplet, so the restraint and the feeding position
 > are both legible.
 
-> **FIGURE —** The layout of one timepoint: 18 bees — 3 controls plus 5 repeats
+> **TODO —** Figure: The layout of one timepoint: 18 bees — 3 controls plus 5 repeats
 > for each of the three dsGFP lengths.
 
 The first attempt (14 July) **failed on restraint** — bees slipped out of gorilla
@@ -263,7 +258,7 @@ attempt on 18 August was lost when the wrong tape let the bees escape and
 individuals became untraceable, and the delays that followed meant it was never
 brought back concurrently with the other three.
 
-> **FIGURE —** The dsGFP fragments fed to the bees: 300, 500 and 700 bp with the
+> **TODO —** Figure: The dsGFP fragments fed to the bees: 300, 500 and 700 bp with the
 > Mango aptamer and 500 bp without, drawn to scale with the flanking adapters
 > marked.
 
@@ -347,10 +342,13 @@ double-dose correction on two larvae whose first dose missed the cell.
 
 ### Pilot result — **Demonstrated**
 
-A whole larva extracted 24 h after a 1 µg dose of 700 bp dsRNA gave **intact
-RT-PCR signal** in good quantity at 24 h.
+**Intact dsRNA was recovered from larvae and larval haemolymph 24 h after a 1 µg
+dose.** The gel showed visible bands, with undosed and water controls present on the
+same gel. During processing the dsRNA was extracted using a Vezol tissue-RNA
+procedure and the resulting solution run on a gel to determine dsRNA presence
+qualitatively.
 
-> **FIGURE —** RT-PCR of whole larvae dosed in-hive with 1 µg and processed at
+> **TODO —** Figure: RT-PCR of whole larvae dosed in-hive with 1 µg and processed at
 > 24 h, with the water negative and GFP positive lanes, showing bands at the
 > expected sizes. Needs uploading to `static.igem.wiki`.
 
@@ -362,13 +360,20 @@ RT-PCR signal** in good quantity at 24 h.
 > 96 h and 7 days), started 18 August. The write-up carries "details to be
 > inserted here". Owner: bee lab.
 
-### What the larval DBTL tables still owe
+### How the larval dose and the frame map were settled
 
-> **TODO —** The larval-assay design–build–test–learn tables are blank in the
-> team write-up: dosage pilot (5 µl vs. larger volume at constant mass), frame
-> marking method (ruled columns vs. digital drawing), and time-to-dose. The frame
-> layout that was adopted is described above; which of the two marking methods it
-> came from is still not recorded. Owner: bee lab.
+The dosage pilot is now written up as [cycle L1](/engineering#cycle-l1): a 5 µL
+droplet was too small, falling onto the surface of the larva rather than covering it
+or reaching the mouth region, and haemolymph extraction by needle burst larvae and
+contaminated the sample with intestinal fluid. [Cycle L2](/engineering#cycle-l2)
+diluted the same 1 µg into **20 µL**, at which the larvae were fully covered and the
+solution visibly disappeared, and replaced pen marks on the frame with **photographs
+and a coloured digital overlay** of individual sampled cones.
+
+> **TODO —** The frame-marking comparison is recorded as two options, ruled columns
+> and rows against digital drawing, and the overlay is the one described as adopted.
+> **Which comparison was actually run, and what decided it, is still not recorded.**
+> Owner: bee lab.
 
 ## Varroa work
 
@@ -411,34 +416,166 @@ three to four times as many mites as the experiment needs. Mites also took over
 five hours to wake after soaking, which is what makes a large single-day screen
 impractical.
 
-### Mite mortality titre — **Investigated**
+### The mite death assays — **Investigated**
 
-A **concentration titre**: the effect of varying concentrations of our target
-dsRNA construct on mite mortality. The design is a titre rather than a single dose
-because the literature and the concentration-dependent effect we are trying to
-resolve both demand a curve. Mites were soaked in plain water and at two
-concentrations of the target dsRNA (~120 in water, ~70 in each treatment; 6 h
-incubation, 11 September), and a larger in-frame assay was set up on
-24–25 September with 30–35 larvae per treatment batch and 20 for the sucrose
-control.
+For our main assay we set out to test an active concentration of the targets chosen
+by our computational pipeline on live mites, to prove both that we could kill mites
+with them and that the pipeline produced significantly more lethal targets than
+controls. Before that could run, a series of pilots served as DBTL cycles telling us
+how best to test target solutions on live mites. The route runs through three
+assays, and the third is the one the whole delivery argument was built towards.
 
-The route into the assay is four steps: mite extraction from hives by sugar shake,
-soaking in 0.9% NaCl solution, drying, and a baseline survival estimate for the
-post-soak animals. The soak is where the losses are, which is why the husbandry
-result above governs this assay rather than the other way round.
+#### Pilot 1: pupal mite-soaking test
 
-> **TODO —** Mite mortality titre results. Owner: bee lab. Two known problems
-> to state alongside them: the Qubit-validated dsRNA concentration came back
-> far below the intended 1000 ng/µl soak dose, and only 35 of 40 larval hosts
-> were prepared on 24 September because GFP ran short.
+Following Becchimanzi et al. (2020), we compared the baseline mortality of mites
+reared on recently extracted white-eyed pupae in incubated conditions against mites
+reared without a host. We set up three groups: **14 mites each on a separate
+white-eyed pupa in a gelatin capsule, 10 mites in separate capsules with no larva,
+and 10 unsoaked mites in Eppendorf tubes** as the negative control. All mites in the
+first two groups were soaked in 0.9% NaCl, given time to recuperate, and placed in
+experimental conditions for 24 h.
 
-A revised design (11 September, from a suggestion by the apiary) **drops the soak
-entirely**: dose larvae as in the 5th-instar pilot, confirm signal on a gel, leave
-them in-hive for a day to reach capping, then uncap, introduce a freshly
-shaken mite and reseal. It removes the soak bottleneck and would give a
-dose–response between larval dsRNA dose and mite mortality. **Proposed** — it
-needs more target dsRNA than we have, and nurse bees remove visibly damaged
-cells if the frame is out too long.
+We soaked an excess of mites because of the inherently high mortality during the 6 h
+submersion: **only about 20% of mites survived that initial process**, and only
+survivors went forward.
+
+**Result.** Mortality was **64% on pupae (9/14), 90% in capsules without a host
+(9/10) and 100% in unsoaked mites in Eppendorf tubes (10/10)**, which fits the
+hypothesis that a host gives sustenance and improves survival.
+
+**Statistics.** Fisher's exact test, one-sided because we had hypothesised in advance
+that pupal rearing would lower mortality, with the threshold lowered from 0.05 to
+0.025 to correct for two comparisons. **Neither comparison reached significance**:
+group 1 against group 2 gave **p = 0.17**, group 1 against group 3 gave **p = 0.047**
+`[CALC]`. The overlapping 95% confidence intervals say the same: with only 10–14
+mites per group, the true mortality rates could plausibly be similar.
+
+We therefore treat this as **directional rather than conclusive**. It was enough to
+guide the next design cycle. The comparison with group 3 is also confounded, because
+those mites differed in both soaking and container type, so their higher mortality
+cannot be attributed to the absence of a host alone.
+
+#### Assay 2: brood-frame mite-soaking rearing test, 24 h
+
+Following the lower mortality seen with soaked mites reared on pupae, we spoke to one
+of our bee lab mentors and settled on a new method: **soaking mites in dsRNA
+solution, letting them acclimatise, and inserting the live soaked mites into honeybee
+larval cones**. Given limited resources we chose to hedge our bets on this new assay:
+rather than running a comparison against other methods, we used it directly to
+compare our target dsRNA against a saline control, maximising sample size in each
+arm. Sample sizes were again not equalised, because of the stochasticity of mite
+survival in each soaking group.
+
+Three dosage groups: 0.9% NaCl saline with a **low** concentration of our 700 bp
+vdCHIB target, saline with a **high** concentration, and saline alone.
+
+| Group              | Alive | Dead | Total | Mortality |
+| ------------------ | ----- | ---- | ----- | --------- |
+| Control            | 23    | 17   | 40    | **42.5%** |
+| Low concentration  | 31    | 39   | 70    | **55.7%** |
+| High concentration | 18    | 47   | 65    | **72.3%** |
+
+**Statistics.** Mortality rose with concentration across the three groups. We used
+the **Cochran–Armitage trend test** as the primary analysis, since the results came
+as an ordered dose series with a binary outcome, using all three groups in one test
+rather than splitting into pairwise comparisons: **Z = 3.08, p = 0.002** `[CALC]`.
+Its strength is power from pooling the full dataset into one hypothesis test; its
+limitation is that three dose points cannot distinguish a linear dose-response from a
+threshold effect.
+
+We supplemented this with Fisher's exact tests on each pair of groups. Running the
+test three times on the same data stacks the chance of a false positive, so we used a
+stricter threshold of 0.0167 instead of 0.05. Against that, **only the
+high-against-control comparison held up**.
+
+**The inference** is that there is some statistically significant evidence of a
+dose-response, and high concentration is confidently distinguishable from control.
+The apparent difference between high and low is consistent with the trend but not
+independently confirmed at a corrected significance level.
+
+**A key next step** would be to repeat this in a more favourable mite season (early
+August) and run the 72 h mite titre with significantly larger, equalised sample sizes
+for controls and doses, with a dsRNA concentration titre to show a linear effect.
+
+> **TODO —** The low and high dsRNA concentrations are not stated as numbers anywhere
+> in our record, and the Qubit-validated concentration came back far below the
+> intended 1000 ng/µL soak dose. A dose-response without its doses cannot be
+> reproduced. Owner: bee lab.
+
+#### Assay 3: brood-frame larval-feeding rearing test
+
+For our third and final mite-death assay we constructed **six testing groups**. Since
+part of the assay was to determine whether our computational pipeline increased mite
+lethality, we tested our most optimal chosen target sequence (**BEST**) against our
+least optimal (**WORST**), each at **50 ng/µL and 5 ng/µL**, with two negative
+controls: 50 ng/µL of 700 bp dsGFP, and plain 1 M sucrose.
+
+5th instar larvae were chosen because _Varroa_ preferentially enters the larval cone
+around that time, so any mite mortality difference resolved at this timepoint would
+most aptly mirror how the therapeutic would operate in the field.
+
+**This sort of mite-death assay has not been performed in primary honeybee
+literature.** While mite soaking (Campbell et al., 2010) and mite-on-pupa rearing
+(Muita et al., 2026) are established techniques, no published study has exposed mites
+to dsRNA via a dosed larval host at the natural pre-capping infestation window, nor
+validated a computationally-ranked target-selection pipeline by direct
+best-against-worst comparison. Our design combines both.
+
+Our reasoning was that mites feed extensively on larval haemolymph from the 5th
+instar onwards until they emerge as phoretic mites. By spiking the 5th instar larva,
+which we have shown retains dsRNA, the mite gains exposure in a dynamic that mimics
+the natural infestation pathway. It also removes the problem we hit in assay 2, where
+a soaked foundress sometimes reproduced in the cone, leaving 2–3 mites of which only
+one had been exposed.
+
+**Method.** For each of the four target groups and two negative controls we fed
+**40 5th instar larvae**, 20 µL each — a 1 µg dose at 50 ng/µL, 100 ng at 5 ng/µL.
+The larvae were given 24 h without mite introduction to become capped and to digest
+the solution into the haemolymph. **A single mite was then introduced to each of the
+240 cells** and left to feed for **96 hours**, after which every cell was uncapped
+and its mites scored as dead or alive. Cells containing more than one mite, where the
+mite had reproduced, were still counted for dead and live mites present.
+
+**Result and statistics.** The six groups differed significantly overall
+(chi-square, **p = 0.002**), but the difference was driven almost entirely by the
+**BEST 50 ng/µL group showing _lower_ mortality than the dsGFP control — 29% against
+91%, p = 0.0002**. **No dsRNA group killed significantly more mites than either
+negative control.** Comparing BEST and WORST with doses pooled also gave a
+significant difference (p = 0.03), but in the opposite direction to our hypothesis.
+
+Splitting by larval condition showed what had happened. **In larvae compromised by
+the end of the assay, 45 of 47 recovered mites were dead (96%), regardless of
+treatment**, and more than half of all larvae were compromised in every group. Mite
+death in this assay therefore largely reflects whether the host larva failed, not
+whether it had been fed dsRNA. Restricting the analysis to healthy larvae did not
+change the conclusion: BEST 50 ng/µL (0 of 10 mites dead) still differed from dsGFP
+(7 of 9 dead, p = 0.0007), and no other group differed from the control.
+
+**Three reasons to read this cautiously.** Roughly **30–50% of cells contained no
+recoverable mite**, and we cannot tell whether those mites died, escaped or were
+never present. Some cells contained two or three mites, so counting per mite treats
+related individuals as independent. And only **14–27 mites were scored per group**.
+Given these limitations and the strong confounding effect of larval compromise, **we
+do not interpret the low mortality in the BEST 50 ng/µL group as evidence that the
+dsRNA protects mites**; it is most likely noise.
+
+**In summary, this assay did not demonstrate a dsRNA-mediated increase in mite
+mortality.** The dominant predictor of mite death was larval compromise, which
+suggests the larval-feeding protocol itself, not target efficacy, drove the outcome.
+Future iterations should reduce larval handling and feeding stress and score mite
+mortality only in healthy larvae, before target efficacy can be meaningfully
+assessed. The cycles are at [V1](/engineering#cycle-v1),
+[V2](/engineering#cycle-v2) and [V3](/engineering#cycle-v3).
+
+> **TODO —** Figure: The digitally-coloured overlay of the frame layout, showing where each
+> dosage group sat. Our write-up marks the place. Owner: bee lab.
+
+> **TODO —** Figure: Mite mortality by group for assay 3, as counts with denominators
+> printed, split by larval condition. The split is the result.
+
+> **TODO —** Only 35 of 40 larval hosts were prepared on 24 September because GFP ran
+> short, leaving 240 larvae ready. State the final per-group denominators. Owner:
+> bee lab.
 
 > **TODO —** The specific _Varroa_ gene target is withheld pending confirmation
 > of the patent priority filing date against the 21 October freeze. The mite

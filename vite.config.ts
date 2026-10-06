@@ -64,7 +64,11 @@ function imagesDevServer(): Plugin {
   } as const;
   const middleware: Connect.NextHandleFunction = (req, res, next) => {
     const url = (req.url ?? "").split("?")[0];
-    const match = url.match(/\/images-dev\/([a-z0-9-]+)\.(png|svg|jpg)$/);
+    // One sub-folder deep at most (images-dev/sdg/sdg15.png). The character
+    // class has no dot, so a request cannot climb out of the folder.
+    const match = url.match(
+      /\/images-dev\/((?:[a-z0-9_-]+\/)?[a-z0-9_-]+)\.(png|svg|jpg)$/,
+    );
     if (!match) return next();
     const file = join(dir, `${match[1]}.${match[2]}`);
     if (!existsSync(file)) return next();

@@ -17,7 +17,8 @@
  * From 48rem up the map becomes a full-viewport stage that pins briefly
  * while the reader scrolls (position: sticky inside the tall .sm-pin), with
  * the heading, the question picker and the person card floating over it as
- * solid panels.
+ * solid panels. A picked question's write-up takes a pane down the right
+ * instead, and the map shrinks left to make room for it.
  */
 
 .stakeholder-map {
@@ -29,6 +30,13 @@
 .sm-heading {
   margin: 0 0 0.35rem;
   font-size: 1.15rem;
+}
+
+/* The page's h2 rule (.markdown-page h2) out-ranks the one above and would
+ * push the heading 2.75rem down from the panel's top edge, so the top margin
+ * is restated at component depth. Its size and honey rule are kept. */
+.stakeholder-map .sm-head .sm-heading {
+  margin-top: 0;
 }
 
 .sm-standfirst {
@@ -120,8 +128,12 @@
 
 /* ---------- the cycle panel ---------- */
 
-/* The selected question walked through its HONEY stages, beside the list.
- * Each stage is a row; pointing at one picks its people out on the map. */
+/* The selected question's write-up, walked through its HONEY stages. Each
+ * stage is a row; pointing at one picks its people out on the map.
+ *
+ * Everything inside is sized in em off the panel's own font-size, because
+ * on wide screens that one number is fitted to the room (StakeholderMap.tsx,
+ * the fit effect) and the whole panel has to scale with it. */
 .sm-qpanel {
   margin: 0 0 0.75rem;
   padding: 0.7rem 0.85rem;
@@ -129,17 +141,33 @@
   border-radius: var(--radius);
   background: var(--surface);
   color: var(--text);
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+.sm-qpanel-head {
+  margin-bottom: 0.4em;
+}
+
+.sm-qpanel-id {
+  margin: 0;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+.stakeholder-map .sm-qpanel .sm-qpanel-title {
+  margin: 0.15em 0 0;
+  font-family: var(--font-heading);
+  font-size: 1.3em;
+  line-height: 1.3;
+  color: var(--ink);
 }
 
 .sm-qstage {
-  padding: 0.55rem 0.35rem;
+  padding: 0.4em 0.35em;
   border-top: 1px solid var(--rule);
   outline: none;
-}
-
-.sm-qstage:first-child {
-  border-top: 0;
-  padding-top: 0.15rem;
 }
 
 /* The hover state is a fill, matching the pressed question row, and it is
@@ -152,9 +180,9 @@
 .stakeholder-map .sm-qpanel .sm-qstage-head {
   display: flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.45em;
   margin: 0;
-  font-size: 0.85rem;
+  font-size: 1.13em;
   color: var(--ink);
 }
 
@@ -163,32 +191,30 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 1.75em;
+  height: 1.75em;
   border-radius: var(--radius);
   background: var(--oxford-navy);
   color: var(--honey);
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.85em;
 }
 
 .sm-qstage-count {
   margin-left: auto;
   color: var(--text-muted);
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.8em;
   font-weight: 400;
 }
 
 .stakeholder-map .sm-qpanel .sm-qstage-body {
-  margin-top: 0.35rem;
-  font-size: 0.75rem;
-  line-height: 1.55;
+  margin-top: 0.2em;
   color: var(--text);
 }
 
 .sm-qstage-body p {
-  margin: 0 0 0.45rem;
+  margin: 0 0 0.35em;
 }
 
 .sm-qstage-body p:last-child {
@@ -397,9 +423,7 @@ html[data-map-stage] .site-nav {
 
 /* Anchored to the face it describes, not to the pointer. On mobile it is a
  * plain block under the map instead; the inline left/top only exist on wide
- * screens. Hover previews are pointer-inert so the card never blocks the
- * face it points at; a selected card takes the pointer for its own
- * scrollbar and Close. */
+ * screens. */
 .sm-pop {
   padding: 0.7rem 0.85rem;
   border: 1px solid var(--oxford-navy);
@@ -411,7 +435,6 @@ html[data-map-stage] .site-nav {
   font-size: 0.78rem;
   line-height: 1.5;
   margin-top: 0.75rem;
-  min-height: 7.5rem;
 }
 
 .sm-pop-hint {
@@ -420,79 +443,57 @@ html[data-map-stage] .site-nav {
 }
 
 .sm-pop-profile {
-  display: grid;
-  grid-template-columns: 5.5rem minmax(0, 1fr);
-  gap: 0.85rem;
-  align-items: start;
+  position: relative;
 }
 
-.sm-pop-media img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 1;
-  object-fit: cover;
-  border: 1px solid var(--ink);
-  border-radius: var(--radius);
+/* Inside the card the small type is sized off the card, in em, so the one
+ * font-size the card fit sets (StakeholderMap.tsx) scales all of it. */
+.sm-pop .sm-meta,
+.stakeholder-map .sm-pop .sm-sec .sm-sec-head {
+  font-size: 0.92em;
 }
 
-.sm-pop-media svg {
-  display: block;
-  width: 100%;
+.sm-pop .sm-tag {
+  font-size: 0.87em;
 }
 
-.sm-pop-media .sm-silhouette {
-  opacity: 1;
+/* Room for the close button beside the name. */
+.sm-pop.is-pinned .sm-name {
+  padding-right: 2rem;
 }
 
-.sm-pop-hex {
-  fill: var(--honey);
-  stroke: var(--ink);
-  stroke-width: 0.6;
-}
-
-/* Names who is actually in the photograph when that is not simply the
- * entry's name, so a face is never silently misattributed. */
-.sm-pop-photonote {
-  margin: 0.25rem 0 0;
-  color: var(--text-muted);
-  font-size: 0.68rem;
-}
-
-/* A hover is a preview: one quote or one point, clamped, and an invitation
- * to select. Selecting drops the clamp and shows everything. */
-.sm-pop-teaser {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  margin: 0.45rem 0 0;
-}
-
-.sm-stageline {
-  font-family: var(--font-mono);
-  color: var(--ink);
-}
-
+/* A drawn cross in the corner, in the ink of the rules around it. */
 .sm-close {
-  float: right;
-  margin-left: 0.6rem;
-  padding: 0.1rem 0.45rem;
+  position: absolute;
+  top: -0.2rem;
+  right: -0.25rem;
+  display: grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  padding: 0;
   border: 1px solid var(--rule);
   border-radius: var(--radius);
-  background: var(--surface-muted);
-  color: var(--text);
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.sm-close svg {
+  width: 0.65rem;
+  height: 0.65rem;
+}
+
+.sm-close path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
 }
 
 .sm-close:hover {
+  border-color: var(--ink);
   background: var(--honey);
-}
-
-.sm-hint {
-  margin: 0.5rem 0 0;
-  color: var(--text-muted);
-  font-size: 0.7rem;
 }
 
 /* ---------- one profile ---------- */
@@ -542,30 +543,32 @@ html[data-map-stage] .site-nav {
   margin: 0.35rem 0 0;
 }
 
-/* Three states, because a tag that we assigned ourselves should not look like
- * one the team's own question table states. */
 .sm-tag {
   padding: 0.05rem 0.3rem;
   border: 1px solid var(--rule);
   border-radius: var(--radius);
   background: var(--surface-muted);
-  color: var(--text-muted);
+  color: var(--text);
+  font-family: var(--font-mono);
   font-size: 0.68rem;
+  line-height: 1.5;
   white-space: nowrap;
 }
 
-.sm-tag--anchor {
+/* On the map each tag opens its question, and reads like the picker's
+ * rows: rule border, ink on hover, honey for the question already open. */
+button.sm-tag {
+  cursor: pointer;
+}
+
+button.sm-tag:hover {
+  border-color: var(--ink);
+}
+
+.sm-tag.is-on {
   border-color: var(--ink);
   background: var(--honey);
   color: var(--ink);
-}
-
-.sm-tag--listed {
-  color: var(--text);
-}
-
-.sm-tag--provisional {
-  border-style: dashed;
 }
 
 /* Verbatim, as the team transcribed it. Set in italic with the quotation marks
@@ -577,7 +580,7 @@ html[data-map-stage] .site-nav {
 }
 
 .sm-learnt {
-  margin: 0.4rem 0 0;
+  margin: 0.3rem 0 0;
   padding-left: 1rem;
 }
 
@@ -585,21 +588,26 @@ html[data-map-stage] .site-nav {
   margin-bottom: 0.25rem;
 }
 
-.sm-changed {
-  margin: 0.45rem 0 0;
-  padding: 0.4rem 0.5rem;
-  background: var(--surface-muted);
-  border-radius: var(--radius);
+/* The record's three sections, under the team's headings, separated by a
+ * rule. A heading with nothing under it is a section not yet written. */
+.sm-sec {
+  margin-top: 0.6rem;
+  padding-top: 0.45rem;
+  border-top: 1px solid var(--rule);
 }
 
-.sm-changed-label {
-  display: block;
+.stakeholder-map .sm-sec .sm-sec-head {
+  margin: 0;
   font-family: var(--font-heading);
+  font-size: 0.72rem;
   font-weight: 600;
-  color: var(--ink);
-  font-size: 0.7rem;
-  text-transform: uppercase;
   letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.sm-sec p {
+  margin: 0.3rem 0 0;
 }
 
 /* ---------- the text record ---------- */
@@ -630,17 +638,21 @@ html[data-map-stage] .site-nav {
 /* ---------- the fullscreen stage, from 48rem ---------- */
 
 @media (min-width: 48rem) {
-  /* Full bleed: the section leaves the reading column entirely. */
+  /* Full bleed: the section leaves the reading column entirely.
+   * --sm-pane-w is the write-up pane's width while a question is open; the
+   * fit effect in StakeholderMap.tsx overrides it on the frame when a long
+   * question needs more room. */
   .stakeholder-map {
+    --sm-pane-w: clamp(22rem, 30vw, 34rem);
     width: 100vw;
     margin-inline: calc(50% - 50vw);
     margin-block: 3rem;
   }
 
   /* The pin: the stage is sticky inside a taller wrapper, so the whole map
-   * holds briefly and then releases. The hold is short because wheel
-   * scrolling snaps to the map and past it (StakeholderMap.tsx); the extra
-   * 35vh is what a scrollbar drag feels as the hold, and what the glide
+   * holds briefly and then releases. The hold is short because a reader
+   * who stops near the map is settled onto it or past it (StakeholderMap.tsx);
+   * the extra 35vh is what scrolling feels as the hold, and what the move
    * past the map spends fading the stage out. The nav bar hides itself on
    * the way down, so the stage gets the full viewport. */
   .sm-pin {
@@ -671,6 +683,14 @@ html[data-map-stage] .site-nav {
     position: absolute;
     inset: 0;
     border: 0;
+    transition: right 380ms ease;
+  }
+
+  /* A question open: the map gives the write-up the right-hand side and
+   * shrinks left into what remains, rather than being covered by it. The
+   * svg letterboxes, so the whole world stays in view, only smaller. */
+  .sm-frame.has-pane .sm-canvas {
+    right: calc(var(--sm-pane-w) + 2rem);
   }
 
   .sm-svg {
@@ -760,44 +780,70 @@ html[data-map-stage] .site-nav {
     margin-top: 0.5rem;
   }
 
-  /* The cycle panel stands beside the question list, growing upward from
-   * the same baseline; on a short viewport it scrolls. Faces keep out of
-   * both (they are measured into the relax blocks and card avoidance). */
+  /* The write-up pane, down the right-hand side, beside the shrunken map
+   * rather than over it. As tall as its text, up to the room between the
+   * top of the stage and the comb switch (CombBands.css: fixed 1.25rem off
+   * the bottom-right corner, about 2.1rem tall). It does not scroll: the
+   * fit effect sizes its type (--sm-qfit) so every stage fits, and only a
+   * viewport too short even at the smallest size gets data-overflow and a
+   * scrollbar. */
   .stakeholder-map .sm-qpanel {
     position: absolute;
-    bottom: 1.25rem;
-    left: calc(1.25rem + min(26rem, 42vw) + 0.75rem);
+    top: 1rem;
+    right: 1.25rem;
     z-index: 4;
-    width: min(27rem, 30vw);
-    /* Kept to the lower half on purpose: the faces treat this panel as a
-     * no-go zone, and a full-height panel would push half the map's people
-     * out of their geography. The longer cycles scroll inside instead. */
-    max-height: min(50vh, 30rem);
-    overflow-y: auto;
+    width: var(--sm-pane-w);
+    max-height: calc(100% - 1rem - 4.1rem);
+    overflow: hidden;
     margin: 0;
+    font-size: var(--sm-qfit, 0.75rem);
+    animation: sm-pane-in 380ms ease both;
+  }
+
+  .stakeholder-map .sm-qpanel[data-overflow] {
+    overflow-y: auto;
+  }
+
+  /* The hive (BeeScene.css: 112px wide, 2rem in from the window's right
+   * edge, hung 18px below the menu, which is hidden while the stage is up)
+   * sits over this corner of the pane and keeps its own clicks. The title
+   * keeps to its left, and the stages start below it. In rem, not em, so
+   * the clearance holds whatever size the type is fitted to. */
+  .stakeholder-map .sm-qpanel-head {
+    min-height: 4.3rem;
+    padding-right: 7.5rem;
+  }
+
+  /* The pane slides in from the side it lives on, the map making way for it
+   * at the same pace. */
+  @keyframes sm-pane-in {
+    from {
+      opacity: 0;
+      transform: translateX(1.5rem);
+    }
   }
 
   /* The card floats beside, below or above the face it describes; the
    * component picks the spot that covers nothing else (see cardPos) and
-   * sets left/top inline as the box's own corner. */
+   * sets left/top inline as the box's own corner. It takes the pointer, so
+   * the questions in it can be pressed; cardPos keeps it off the faces. */
   .sm-pop {
     position: absolute;
     z-index: 5;
-    width: 23rem;
-    max-width: 26rem;
+    width: 18rem;
     margin-top: 0;
-    pointer-events: none;
   }
 
+  /* The selected record starts a little wider and widens further, inline,
+   * until it fits without scrolling (the card fit in StakeholderMap.tsx).
+   * data-overflow is the last resort for a canvas too short even then. */
   .sm-pop.is-pinned {
-    width: 24rem;
-    /* Kept modest so a clean spot for it exists even in a dense question
-     * view; the record scrolls inside. Mirrored by the estimate in
-     * cardPos. */
-    max-height: min(52vh, 30rem);
-    overflow-y: auto;
+    width: 26rem;
     border-width: 2px;
-    pointer-events: auto;
+  }
+
+  .sm-pop[data-overflow] {
+    overflow-y: auto;
   }
 }
 
@@ -808,7 +854,12 @@ html[data-map-stage] .site-nav {
   .sm-zoom,
   .sm-face,
   .sm-silhouette,
-  .sm-frame {
+  .sm-frame,
+  .sm-canvas {
     transition: none;
+  }
+
+  .stakeholder-map .sm-qpanel {
+    animation: none;
   }
 }

@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Children, isValidElement, useMemo } from "react";
+import { Children, isValidElement, useContext, useMemo } from "react";
 import Markdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Link } from "react-router-dom";
@@ -18,6 +18,7 @@ import { BeeReset } from "./BeeReset";
 import { NectarDesigner } from "./NectarDesigner";
 import { BeeImportance } from "./BeeImportance";
 import { VarroaSlide } from "./VarroaSlide";
+import { SdgOverview } from "./SdgOverview";
 
 /* Components a content file may place in the page.
  *
@@ -46,6 +47,7 @@ const SLOTS: Record<string, () => ReactNode> = {
   "nectar-designer": () => <NectarDesigner />,
   "bee-importance": () => <BeeImportance />,
   "varroa-slide": () => <VarroaSlide />,
+  "sdg-overview": () => <SdgOverview />,
 };
 
 /** One array, so a page with no marks does not rerender its consumers. */
@@ -137,6 +139,15 @@ const COMPONENTS: Components = {
     }
     return <pre {...props}>{children}</pre>;
   },
+  // A table cannot wrap its columns the way prose wraps its words, so on a
+  // phone a wide one would push the whole page sideways. It scrolls inside
+  // a box of its own instead; the box takes focus so a keyboard can scroll
+  // it too.
+  table: ({ children, ...props }) => (
+    <div className="table-scroll" tabIndex={0} role="region" aria-label="Table">
+      <table {...props}>{children}</table>
+    </div>
+  ),
   h2: ({ children, ...props }) => (
     <h2 id={idOf(children)} {...props}>
       {children}
@@ -146,6 +157,11 @@ const COMPONENTS: Components = {
     <h3 id={idOf(children)} {...props}>
       {children}
     </h3>
+  ),
+  h4: ({ children, ...props }) => (
+    <h4 id={idOf(children)} {...props}>
+      {children}
+    </h4>
   ),
   a: ({ href, children, ...props }) => {
     if (href?.startsWith("/") && !href.startsWith("//")) {
@@ -214,5 +230,31 @@ export function MarkdownPage({ content, marks }: MarkdownPageProps) {
         </section>
       ))}
     </MarksContext.Provider>
+  );
+}
+
+/**
+ * One run of Markdown, rendered exactly as a band of MarkdownPage renders it:
+ * same slots, same tables, same internal links, and the searched words marked
+ * from the context. For pages that lay their content out themselves (see
+ * ExperimentsPage) and feed it here a piece at a time.
+ */
+export function MarkdownChunk({ source }: { source: string }) {
+  const marks = useContext(MarksContext);
+  const rehypePlugins = useMemo(
+    () => (marks.length ? [rehypeMark(marks)] : []),
+    [marks],
+  );
+
+  if (!source.trim()) return null;
+
+  return (
+    <Markdown
+      remarkPlugins={[remarkGfm]}
+      rehypePlugins={rehypePlugins}
+      components={COMPONENTS}
+    >
+      {source}
+    </Markdown>
   );
 }

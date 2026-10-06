@@ -1,11 +1,3 @@
-> **Skeleton: structure only. No results, numbers or quotes yet.**
-
-> **What this page proves:** who did what, what was done by students, and what
-> help came from whom.
-
-This is **a judging requirement** and is treated as one. It is also the page where
-being scrupulous costs nothing and being vague costs a great deal.
-
 > **TODO —** iGEM specifies a format for this page: there is a template and a
 > required presentation (the white-rectangle layout), and this page does not
 > follow it yet. Retrieve the current template from the competition site, apply
@@ -14,13 +6,13 @@ being scrupulous costs nothing and being vague costs a great deal.
 
 ## Student work
 
-What the team did itself, by workstream. Specific enough to be checkable.
+> **TODO —** Write what the team did itself, by workstream, specifically enough
+> to be checkable.
 
 ## Supervision and advice
 
-Supervisors, advisors and mentors, with what each advised on. Distinguish
-between **advice, training and hands-on work**; they are different kinds of help
-and conflating them is the mistake this page exists to prevent.
+> **TODO —** List supervisors, advisors and mentors, with what each advised on,
+> distinguishing between advice, training and hands-on work.
 
 > **TODO —** The jamboree deck credits **Prof. Geraldine Wright** and **Dr.
 > Hafez El-Sayyed**. Confirm each person's actual role and what they advised on
@@ -30,14 +22,14 @@ and conflating them is the mistake this page exists to prevent.
 
 ## Technical help
 
-Anyone who ran something for us, trained us on equipment, provided a protocol,
-or gave us a strain, plasmid or sample. Named individually.
+> **TODO —** Name individually anyone who ran something for us, trained us on
+> equipment, provided a protocol, or gave us a strain, plasmid or sample.
 
 ## External input
 
-People outside the team who contributed through conversation, review or
-expertise, including everyone whose input shaped
-[the human practices work](/human-practices).
+> **TODO —** List the people outside the team who contributed through
+> conversation, review or expertise, including everyone whose input shaped
+> [the human practices work](/human-practices).
 
 > **TODO —** Cross-check this section against the human practices interview
 > record so that nobody who influenced the project is missing, and so that
@@ -56,14 +48,13 @@ expertise, including everyone whose input shaped
 ## Third-party materials
 
 Any asset on this wiki that we did not make: source and licence, credited beside
-the asset itself as well as listed here. Anything without a licence permitting
-reuse and modification **does not go on the site**.
+the asset itself as well as listed here.
 
 ### Typefaces
 
 - **Cubao Free**: Aaron Amar, SIL Open Font License 1.1. Used for page titles
-  and section headings. The OFL requires the copyright notice travel with the
-  font, so keep this credit even if the face changes role.
+  and section headings. The OFL requires the copyright notice to travel with the
+  font.
 
 > **TODO —** Basenji (Ray Larabie / Typodermic) is used for headings and
 > navigation and is a commercial face carrying an embedding restriction.
@@ -84,24 +75,13 @@ each interviewee who can be published.
 
 ## Use of AI assistants
 
-iGEM requires a disclosure of AI use. **This wiki does not have one yet** —
-not on this page and not anywhere else in `src/content/` — so the requirement
-is recorded here as owed rather than answered. Nobody but the team can write
-it: only the people who used the tools know what they used them for.
-
-One line per use, and each line needs all three of:
-
-- **Which model**, by name and version.
-- **What it was used for**: the specific task, not a general description.
-- **How the output was reviewed**: who checked the facts, verified the
-  citations, validated the code, and signed it off, by name.
-
-The line that matters is **between assistance and authorship**. Structure, wording,
-build and infrastructure code, alt text and translation are assistance. The
-reasoning, the experimental design, the interpretation of results and the
-human-practices work are ours, and this section has to make clear that they are.
-AI-generated scientific claims, data figures or citations are not a wiki
-violation but **research misconduct**, and there are none on this wiki.
+> **TODO —** One line per use, each giving the model by name and version, the
+> specific task it was used for, and who checked the facts, verified the
+> citations, validated the code and signed it off, by name. Make the line
+> between assistance and authorship clear: structure, wording, build and
+> infrastructure code, alt text and translation are assistance; the reasoning,
+> the experimental design, the interpretation of results and the
+> human-practices work are the team's. Owner: team lead.
 
 > **TODO —** Write the disclosure. Collect, per workstream, every assistant used
 > (model and version), what each was used for, and who reviewed the output. This

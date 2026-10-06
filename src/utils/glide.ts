@@ -1,11 +1,10 @@
 /* The one way this wiki moves the window: a ride between two rests.
  *
  * Driven by hand rather than by scrollTo({ behavior: "smooth" }) because the
- * browser's own curve is quick and uneven across engines, and the home page's
- * slides should feel the same everywhere. Ease in and out, 700 ms. One ride
- * at a time: a new call cancels the ride in flight, so reversing the wheel
- * mid-glide turns it around from wherever it is, and two slides that both
- * glide can never fight over the window.
+ * browser's own curve is quick and uneven across engines, and the slides
+ * should feel the same everywhere. Ease in and out, 700 ms unless the caller
+ * asks for longer. One ride at a time: a new call cancels the ride in
+ * flight, so two things that both glide can never fight over the window.
  *
  * Under prefers-reduced-motion the window jumps instead.
  */
@@ -26,11 +25,14 @@ export function cancelGlide(): void {
   frame = 0;
 }
 
-/** Ride the window to `top`, in document coordinates. */
-export function glideTo(top: number): void {
+/** Ride the window to `top`, in document coordinates, over `duration` ms. */
+export function glideTo(top: number, duration = 700): void {
   cancelGlide();
+  // "instant", explicitly: Bootstrap's reboot sets scroll-behavior: smooth
+  // on :root, which would turn every frame of the ride into its own
+  // competing native animation.
   if (REDUCED_MOTION) {
-    window.scrollTo(0, top);
+    window.scrollTo({ top, behavior: "instant" });
     return;
   }
   const from = window.scrollY;
@@ -38,9 +40,9 @@ export function glideTo(top: number): void {
   if (Math.abs(distance) < 1) return;
   const started = performance.now();
   const step = (now: number) => {
-    const t = Math.min((now - started) / 700, 1);
-    window.scrollTo(0, from + distance * easeInOut(t));
-    if (t < 1) frame = requestAnimationFrame(step);
+    const t = Math.min((now - started) / duration, 1);
+    window.scrollTo({ top: from + distance * easeInOut(t), behavior: "instant" });
+    frame = t < 1 ? requestAnimationFrame(step) : 0;
   };
   frame = requestAnimationFrame(step);
 }

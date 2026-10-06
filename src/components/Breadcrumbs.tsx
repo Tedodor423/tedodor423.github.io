@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import Pages, { isGroup, type MenuEntry } from "../pages.ts";
+import { getPathMapping } from "../utils/getPathMapping";
 
 interface Crumb {
   name: string;
@@ -52,6 +53,11 @@ export function Breadcrumbs() {
   // crumb would point back at the page itself. Drop it.
   const ancestors = rest.slice(0, -1);
   if (ancestors[ancestors.length - 1]?.path === pathname) ancestors.pop();
+
+  // A switcher view is shown as its parent page, title and all, so the
+  // parent is the page you are on rather than an ancestor.
+  const host = getPathMapping()[pathname]?.switcher?.path;
+  if (host && ancestors[ancestors.length - 1]?.path === host) ancestors.pop();
 
   // "Home" on its own says nothing the logo does not already.
   if (ancestors.length === 0) return null;

@@ -100,7 +100,7 @@ Four known tensions, all open decisions rather than settled ones. Do not silentl
 - **Item 3, pure white background.** `--surface` is `#ffffff`. The tinted
   `--surface-muted` (`#fbf7ec`) exists and could take over as the page surface.
 - **Item 11, coloured left stripe.** `.markdown-page blockquote` uses a 5px honey
-  left border, and blockquotes are how every TODO / FIGURE / RESULT placeholder is
+  left border, and blockquotes are how every TODO block is
   written. If the stripe goes, those blocks need another consistent treatment.
 - **Item 9, em dashes.** About 300 of them across `src/content/`, plus the house
   docs. It is currently the team's voice, and the brand's mono face cannot draw the

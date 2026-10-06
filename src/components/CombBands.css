@@ -36,6 +36,15 @@
   --comb-band-space: 3.5rem;
 }
 
+/* A phone shows a band a screen or two long, so the alternation reads with
+   less air, and 3.5rem either side of every section is most of a screen of
+   nothing between two of them. */
+@media (max-width: 575.98px) {
+  [data-comb="on"] {
+    --comb-band-space: 2.25rem;
+  }
+}
+
 /* ---------- the bands ---------- */
 
 /* MarkdownPage wraps every `##` section in one of these, alternating wax and

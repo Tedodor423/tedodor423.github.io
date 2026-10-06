@@ -98,7 +98,7 @@ dbtl-cycles
 | [4.3](#cycle-5-3)     | Can we target the dsRNA to the mite?                       | Proposed     | Demonstration moved from the bee to the feeder       |
 | [4.4](#cycle-5-4)     | Does a protein ride the dsRNA across the bee gut?          | Investigated | Assay run; readout not yet in the record             |
 | [B1](#cycle-b1)       | Can we deliver a known dose to a bee?                      | Demonstrated | Newly-emerged bees and PCR-tube feeders standardised |
-| [B2](#cycle-b3)       | Can we get enough haemolymph out of an adult bee?          | Demonstrated | 8–15 µL per bee, centrifugal method standardised     |
+| [B2](#cycle-b4)       | Can we get enough haemolymph out of an adult bee?          | Demonstrated | 8–15 µL per bee, centrifugal method standardised     |
 | [B3](#cycle-v1)       | Does it kill the mite?                                     | Investigated | Husbandry: a host is required, the soak is not fatal |
 | [D1](#cycle-d1)       | Which sequence silences the mite?                          | Modelled     | NectarDesigner; concatenation tested and set aside   |
 | [M1–M3](#cycle-m1-m3) | What treatment efficacy is worth reaching?                 | Modelled     | Sets the titre the wet lab has to hit                |

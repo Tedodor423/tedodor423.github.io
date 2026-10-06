@@ -1,11 +1,11 @@
-/* The stakeholder record and the six HONEY questions, loaded from Markdown.
+/* The stakeholder record and the seven HONEY questions, loaded from Markdown.
  *
  * The content lives where the team can edit it without touching code:
  *
  *   - one file per conversation in `src/content/stakeholders/*.md`
- *     (frontmatter for the fields, sections for what they told us, the
- *     verbatim quote and what it changed);
- *   - one file per question in `src/content/questions/q1.md` … `q6.md`
+ *     (frontmatter for the fields, sections for why we chose them, what
+ *     we learnt, the verbatim quote and how it changed the project);
+ *   - one file per question in `src/content/questions/q1.md` … `q7.md`
  *     (frontmatter for the title and the per-stage people, sections for the
  *     cycle panel's text).
  *
@@ -21,10 +21,18 @@
  * ignored on purpose.
  */
 
-/** The six HONEY questions the page is organised around. */
-export type QuestionId = "Q1" | "Q2" | "Q3" | "Q4" | "Q5" | "Q6";
+/** The HONEY questions the page is organised around. */
+export type QuestionId = "Q1" | "Q2" | "Q3" | "Q4" | "Q5" | "Q6" | "Q7";
 
-export const QUESTION_IDS: QuestionId[] = ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6"];
+export const QUESTION_IDS: QuestionId[] = [
+  "Q1",
+  "Q2",
+  "Q3",
+  "Q4",
+  "Q5",
+  "Q6",
+  "Q7",
+];
 
 /** The five stages of the team's HONEY loop, in cycle order. */
 export type HoneyStage = "H" | "O" | "N" | "E" | "Y";
@@ -68,11 +76,13 @@ export interface Stakeholder {
   anchors?: QuestionId[];
   /** Tags not stated in the table, inferred from profile content. */
   provisional?: QuestionId[];
-  /** What they told us. Transcribed, one point per bullet. */
+  /** Why the team chose this conversation, where the write-up says. */
+  why?: string;
+  /** What we learnt from them. Transcribed, one point per bullet. */
   learnt: string[];
   /** A verbatim quote, exactly as the team transcribed it. */
   quote?: string;
-  /** What it changed, where the source states it. */
+  /** How it changed the project, where the source states it. */
   changed?: string;
   /** Profile photograph URL. Never set for a withheld entry. */
   photo?: string;
@@ -248,9 +258,16 @@ export const STAKEHOLDERS: Stakeholder[] = Object.entries(stakeholderFiles)
       provisional: f.provisional ? qids(f.provisional, file) : undefined,
       // The body of a withheld file is ignored on purpose: nothing from
       // that conversation may render until consent is resolved.
-      learnt: withheld ? [] : bullets(parsed.sections["What they told us"]),
+      why: withheld
+        ? undefined
+        : flow(parsed.sections["Why did we choose this stakeholder"]),
+      learnt: withheld
+        ? []
+        : bullets(parsed.sections["What did we learn from them"]),
       quote: withheld ? undefined : flow(parsed.sections["Quote"]),
-      changed: withheld ? undefined : flow(parsed.sections["What it changed"]),
+      changed: withheld
+        ? undefined
+        : flow(parsed.sections["How did this impact the project"]),
       photo: !withheld && f.photo ? photoUrl(f.photo) : undefined,
       photoShows: f["photo-shows"] || undefined,
       consent: withheld

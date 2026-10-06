@@ -1,10 +1,3 @@
-> **Skeleton: structure only. No results, numbers or quotes yet.**
-
-> **What this page proves:** that the wet lab kept a dated record, including
-> the runs that failed.
-> **Where the evidence is:** [Engineering](/engineering) for the failures and
-> their diagnoses, [the timeline](/timeline) for the chronology.
-
 The dated record of the wet lab. The protocols are on
 [experiments and protocols](/wet-lab-experiments); this page is what happened,
 in order, with the dates intact.

@@ -44,7 +44,20 @@ export function ScrollToHash() {
       box.open = true;
     }
 
-    target.scrollIntoView();
+    // On a fresh load the brand faces arrive after the first paint (they are
+    // font-display: swap), and swapping them in re-wraps every display
+    // heading above the target. Scrolling before that lands the reader short
+    // or past it by however much the page above changed height: 135px on the
+    // experiments page. So the first scroll waits for the fonts. After that
+    // they are cached and `ready` is already settled, so in-app navigation
+    // does not wait at all.
+    let cancelled = false;
+    document.fonts.ready.then(() => {
+      if (!cancelled) target.scrollIntoView();
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [pathname, hash]);
 
   return null;

@@ -1,26 +1,24 @@
-> **Skeleton: structure only. No results, numbers or quotes yet.**
-
 Nothing on this wiki happened without funding, bench space and people who gave
 their time. This page records **who supported the project and how**.
 
 ## Sponsors and funders
 
-One entry per supporter: who they are, what they gave (money, materials,
-reagents, equipment or access), and how it was used. Specific beats generic.
+> **TODO —** Write one entry per supporter: who they are, what they gave (money,
+> materials, reagents, equipment or access), and how it was used.
 
-> **FIGURE: sponsor logos.** Uploaded to `static.igem.wiki`. Each logo needs
+> **TODO —** Figure: sponsor logos. Uploaded to `static.igem.wiki`. Each logo needs
 > written permission to use it, and permission to appear on a wiki is not the
 > same as a logo being publicly available. Confirm before uploading.
 
 ## Institutional support
 
-Departments, laboratories and facilities that hosted or enabled the work.
+> **TODO —** List the departments, laboratories and facilities that hosted or
+> enabled the work.
 
 ## Collaborations
 
-Work done with other iGEM teams or outside groups: who, what, when, and what
-came out of it for both sides. A collaboration that produced nothing for either
-party **is not worth a section**.
+> **TODO —** Record work done with other iGEM teams or outside groups: who,
+> what, when, and what came out of it for both sides.
 
 > **TODO —** Decide whether the Brussels social-media collaboration is recorded
 > here or dropped; the team's own open-questions list has not settled it, and
@@ -29,8 +27,7 @@ party **is not worth a section**.
 
 ## How we fundraised
 
-Briefly: what we did to raise money and what worked. Genuinely useful to next
-year's team, and **almost never written down**.
+> **TODO —** Write briefly what we did to raise money and what worked.
 
 ## Still missing
 

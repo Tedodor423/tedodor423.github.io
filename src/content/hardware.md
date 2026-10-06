@@ -1,9 +1,3 @@
-> **What this page proves:** that the physical parts of NECTAR were designed,
-> printed and used in a working bee lab, and that each design choice traces to a
-> measurement problem it solved.
-> **Where the evidence is:** [the bee lab](/bee-lab) and
-> [the bee lab notebook](/bee-lab-labbook).
-
 Everything on this page was **built rather than pipetted**. Most of it exists
 because a measurement was otherwise impossible: we could not afford the dsRNA a
 standard feeder consumes, we could not tell consumption from evaporation, and the
@@ -60,10 +54,10 @@ differences.
 was costed at about £150 (11 July) and held off pending the first sucrose trial
 results. It was never ordered. **Proposed.**
 
-> **FIGURE —** The batch of 3D-printed PCR-tube feeding adaptors, laid out so
+> **TODO —** Figure: The batch of 3D-printed PCR-tube feeding adaptors, laid out so
 > the count and the print quality are both visible.
 
-> **FIGURE —** An adaptor holding a PCR tube in the wall of a feeding cage, with
+> **TODO —** Figure: An adaptor holding a PCR tube in the wall of a feeding cage, with
 > the tube angled down, showing how a bee reaches the solution.
 
 > **TODO —** Print file, material and printer model for the adaptor, so another
@@ -78,7 +72,7 @@ modified: only three of the four tube holes were factory-drilled, so the fourth
 was taped over. One box was run **without bees** in every session, as the
 evaporation control.
 
-> **FIGURE —** The honeybee cage feeder setup as it ran: a box with its four
+> **TODO —** Figure: The honeybee cage feeder setup as it ran: a box with its four
 > tubes in place, so the hole spacing and the taped fourth hole are visible.
 
 **Two failure modes** worth passing on. Air bubbles form while filling a tube and
@@ -106,10 +100,10 @@ A **triagonal yeast-feeding insert**, designed by Theo, printed, and used in our
 bee lab hives. It is the delivery end of the platform: the part that would
 present a yeast-produced formulation to a colony rather than to a caged group.
 
-> **FIGURE —** CAD render of the triagonal hive insert, with its dimensions and
+> **TODO —** Figure: CAD render of the triagonal hive insert, with its dimensions and
 > the frame position it occupies.
 
-> **FIGURE —** The printed insert in place in a bee lab hive, photographed so
+> **TODO —** Figure: The printed insert in place in a bee lab hive, photographed so
 > the fit to a standard frame is visible.
 
 > **TODO —** The design brief, dimensions, material, iteration dates and what
@@ -128,7 +122,7 @@ It works. The centrifugal extraction protocol built on it returns **8–15 µl o
 haemolymph** per adult bee, and every adult sample in the project came through it.
 Full protocol on [the bee lab notebook](/bee-lab-labbook).
 
-> **FIGURE —** Labelled diagram of the custom centrifuge tube: PCR tube inside
+> **TODO —** Figure: Labelled diagram of the custom centrifuge tube: PCR tube inside
 > Eppendorf, with the bee's orientation and where the haemolymph collects.
 
 ## Where this connects

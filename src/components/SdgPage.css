@@ -1,0 +1,190 @@
+/* The sustainability page: the overview figure and the three goal cards.
+ * See SdgPage.tsx. */
+
+/* ---------- the overview of all seventeen goals ---------- */
+
+.sdg-overview {
+  margin: 1.75rem 0;
+}
+
+.sdg-overview img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.sdg-overview figcaption {
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ---------- the hero ---------- */
+
+/* The opening text beside the overview. Stacked until there is room for the
+ * text to keep a reading width with the figure next to it. */
+.sdg-hero {
+  margin-bottom: 1.75rem;
+}
+
+@media (min-width: 992px) {
+  .sdg-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 3rem;
+  }
+
+  .sdg-hero > .markdown-page {
+    margin-inline: 0;
+  }
+
+  .sdg-hero > .markdown-page > :last-child {
+    margin-bottom: 0;
+  }
+
+  .sdg-hero .sdg-overview {
+    margin: 0;
+  }
+}
+
+/* ---------- the goal cards ---------- */
+
+.sdg-cards {
+  display: grid;
+  gap: 1rem;
+}
+
+.sdg-card {
+  border: 2px solid currentColor;
+  border-radius: var(--radius);
+}
+
+/* Closed: tile, summary, face, and the open/fold sign. Short by design, so
+ * three of them read as one list. */
+.sdg-card > summary {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  list-style: none;
+  cursor: pointer;
+}
+
+.sdg-card > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* The same sign as the experiments page: "more here" and "fold this". */
+.sdg-card > summary::after {
+  content: "+";
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.sdg-card[open] > summary::after {
+  content: "\2212";
+}
+
+.sdg-card > summary:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.sdg-tile {
+  display: block;
+  width: 4.5rem;
+  height: 4.5rem;
+  object-fit: cover;
+}
+
+/* No tile to load (published, before the upload): the number stands in. */
+.sdg-tile--text {
+  display: grid;
+  place-items: center;
+  background: var(--oxford-navy);
+  color: var(--surface);
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+}
+
+.sdg-card-tldr {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* The face, cut to a pointy-top hexagon like the stakeholder map's cells. A
+ * clip-path cannot take a border, so the honey rim is a second hexagon
+ * behind the first, showing round its edge. */
+.sdg-face,
+.sdg-face-inner {
+  display: block;
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+}
+
+.sdg-face {
+  width: 4.5rem;
+  /* 2 / sqrt(3): a regular hexagon, not a squashed one. */
+  aspect-ratio: 1 / 1.1547;
+  padding: 3px;
+  background: var(--honey);
+}
+
+.sdg-face-inner {
+  width: 100%;
+  height: 100%;
+  background: var(--rule);
+}
+
+.sdg-face img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sdg-silhouette {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: var(--wax-deep);
+}
+
+/* Open: the section as written. */
+.sdg-card-body {
+  padding: 0 1rem 1.25rem;
+  border-top: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+}
+
+.sdg-card-body > :first-child {
+  margin-top: 1rem;
+}
+
+@media (max-width: 575.98px) {
+  .sdg-card > summary {
+    gap: 0.65rem;
+    padding: 0.6rem;
+  }
+
+  .sdg-tile,
+  .sdg-face {
+    width: 3.25rem;
+  }
+
+  .sdg-tile {
+    height: 3.25rem;
+  }
+
+  .sdg-tile--text {
+    font-size: 1.25rem;
+  }
+
+  .sdg-card-body {
+    padding-inline: 0.65rem;
+  }
+}

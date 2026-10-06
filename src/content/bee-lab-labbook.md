@@ -1,11 +1,5 @@
-> **What this page proves:** that the bee lab kept a dated record, including
-> the days when nothing worked.
-> **Where the evidence is:** the entries below, and
-> [the bee lab](/bee-lab) for what they add up to.
-
 The dated record of the bee lab, 29 June to 25 September 2026. Entries keep
-their original dates, and where one records something that did not work,
-**it stays**. The protocols are on
+their original dates. The protocols are on
 [bee lab experiments and protocols](/bee-lab-experiments); the advice distilled
 out of these entries is on [the bee research guide](/working-with-bees).
 
@@ -491,11 +485,11 @@ was difficult.
 
 ## Counts and raw observations
 
-> **TABLE —** Mite-tray counts for all hives, 1, 2 and 3 September, one column
+> **TODO —** Table: Mite-tray counts for all hives, 1, 2 and 3 September, one column
 > per date and one row per hive. The full tables are in the journal; only the
 > highest-count hives are summarised above.
 
-> **TABLE —** Sucrose consumption per cage for the salt trial and the
+> **TODO —** Table: Sucrose consumption per cage for the salt trial and the
 > feeding-vessel comparison: tube mass before and after 24 h, bees alive per
 > cage, consumption per bee. The salt trial's cage means and variances are now on
 > [the bee lab](/bee-lab); the per-tube daily masses behind them, and every figure

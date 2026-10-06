@@ -1,17 +1,7 @@
-> **What this page proves:** that there is a coherent route from a laboratory
-> result to something a beekeeper could buy, and that we know what stands in the
-> way.
-> **Where the evidence is:** [economic modelling](/economic-modelling) for the
-> numbers, [human practices](/human-practices) for the stakeholder constraints,
-> and [the case studies](/case-studies) for the jurisdictions.
-
 This page answers "what would happen after iGEM?", with numbers where we have
 them and marked clearly where we do not.
 
-## Lead with the chain
-
-Most entrepreneurship pages start from a product and work toward a price. Ours
-**runs the other way**, and that is the most interesting thing about it:
+## The chain
 
 **What a beekeeper can afford → allowable cost per dose → allowable
 manufacturing cost → required mass of intact active dsRNA per gram of dry yeast.**
@@ -64,8 +54,6 @@ whether or not the biology works.
 
 ## Current alternatives
 
-Fair to the alternatives; an unfair comparison discredits everything around it.
-
 - **Synthetic acaricides** (amitraz, historically coumaphos): effective until they
   are not. Chris Hiatt lost 55% of his colonies in the third year of CheckMite+
   use as resistance took hold.
@@ -96,8 +84,6 @@ Each traceable to the conversation it came from, on
 | No residue problem in honey                    | Wade Ford; Melanie Teece   |
 
 ## Value proposition
-
-Quantified where we can, and explicitly unquantified where we cannot.
 
 What we can say now: the treatment is delivered inside a feeding visit that
 already happens, so the labour component of Varroa management — roughly 40% of
@@ -130,8 +116,6 @@ costs.
 
 ## Techno-economic analysis
 
-The cost structure, and its sensitivity to production titre.
-
 The demand-side grounding is on [economic modelling](/economic-modelling):
 Brittney Goodrich's modelled commercial operation — 8,500 colonies, 27% of costs
 in capital recovery and equipment, 21% labour, 9% in Varroa treatment products
@@ -140,12 +124,11 @@ alone, about $195 per colony from almond pollination — and Wade Ford's Austral
 
 Everything on the supply side of that comparison is a `[CALC]` resting on an
 assumed titre, including the figure of about £2 per gram that appears in our
-sustainability draft. Show the range, not the point.
+sustainability draft.
 
 ## Regulatory path
 
-The answer differs materially by jurisdiction, which is why this is a section and
-not a sentence. Detail on [the case studies](/case-studies) and
+The answer differs materially by jurisdiction. Detail on [the case studies](/case-studies) and
 [safety and security](/project-safety).
 
 - **United Kingdom and EU.** Heat-killed yeast is not a living modified organism
@@ -192,13 +175,11 @@ Five stages, in order. We are **inside the first**.
 | 4. Regulatory submission | Classification and dossier, per jurisdiction                                  | The regulatory work above; residue and environmental-fate data     |
 | 5. Commercial deployment | Distribution through existing feed channels                                   | A commercial partner; none identified                              |
 
-> **FIGURE —** The roadmap as stages, dependencies and decision points, drawn so
+> **TODO —** Figure: The roadmap as stages, dependencies and decision points, drawn so
 > it is obvious how early in the sequence the project sits: stage 1 is not
 > complete.
 
 ## Risks
-
-A risk register with nothing serious in it is not a risk register.
 
 | Category      | Risk                                                                            | Mitigation                                                                            |
 | ------------- | --------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
@@ -211,14 +192,12 @@ A risk register with nothing serious in it is not a risk register.
 | Ecological    | *Varroa* evolves resistance at the target site                                    | Modular construct allows a sequence swap; annual resequencing **Proposed**            |
 | Ecological    | Off-target silencing in non-target organisms                                      | Homology screening inside the design pipeline; see [safety](/project-safety)          |
 
-> **PDF —** SWOT, business model canvas, roadmap and risk register are owed as
+> **TODO —** PDF: SWOT, business model canvas, roadmap and risk register are owed as
 > documents, uploaded to `static.igem.wiki` and linked here. The table above is
 > the risk register in draft; the other three do not exist yet and have **not**
 > been invented for this page. Owner: entrepreneurship.
 
 ## Capabilities we would need and do not have
-
-Naming the gaps is more credible than implying a student team could do all of it.
 
 - Fermentation process development at pilot scale, and access to a pilot plant.
 - Regulatory affairs expertise for a veterinary or crop-protection dossier.

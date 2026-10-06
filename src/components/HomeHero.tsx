@@ -18,10 +18,9 @@ import "./HomeHero.css";
  *
  * The scroll has two rests here: the hero filling the screen, or the page
  * body with the hero entirely above the fold. They are registered with the
- * deck in src/utils/deck.ts, as the slides below register theirs, so one
- * wheel tick rides from rest to rest all the way down the page and any
- * other input (touch, keyboard, scrollbar) that stops between two rests
- * settles to the nearer one. Muted autoplay is the only autoplay browsers permit, and a silent
+ * deck in src/utils/deck.ts, as the slides below register theirs: scrolling
+ * stays free, and a reader who stops between two rests is eased on to one
+ * of them. Muted autoplay is the only autoplay browsers permit, and a silent
  * ambient loop is what this clip is; under prefers-reduced-motion it
  * holds its first frame, scrolling jumps instead of gliding, and the
  * arrow appears without the fade.

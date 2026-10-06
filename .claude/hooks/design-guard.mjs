@@ -53,6 +53,18 @@ const TELLS = [
   ],
 ];
 
+/* Page notes. A page holds reader-facing content and `> **TODO —**` blocks,
+ * nothing else (WIKI_PAGE_RULES.md §5, "No notes on the page"). These are the
+ * labels earlier drafts used for notes about the page; the user had every one
+ * of them stripped from the site. */
+const NOTE_TELLS = [
+  [/what this page proves|where the evidence is/i, '"What this page proves" / "Where the evidence is" box'],
+  [/\*\*Skeleton\b/i, "skeleton banner"],
+  [/^> \*\*(FIGURE|TABLE|PDF|RESULT BLOCK|CYCLE BLOCK)\b/m, 'placeholder block (write it as "> **TODO —** Figure: …")'],
+  [/\*\*(Note on\b|An honest note|Compliance note)|\bstated plainly\b/i, "labelled aside"],
+  [/\b(leaving|leave) a judge\b|\bjudging requirement\b|\bmost wikis\b|\bthis section carries\b/i, "commentary aimed at judges or editors"],
+];
+
 const REMINDER = [
   "The anti-vibecoded-design skill governs this file.",
   "Rules: .claude/skills/anti-vibecoded-design/SKILL.md",
@@ -120,6 +132,18 @@ if (hits.length) {
     'Apply the "Do instead" column, or state why it stays.';
 }
 
+/* Content files only: code comments legitimately talk about TODO blocks. */
+const noteHits = /\.md$/i.test(String(input.file_path || ""))
+  ? NOTE_TELLS.filter(([pattern]) => pattern.test(text)).map(([, label]) => `  - ${label}`)
+  : [];
+if (noteHits.length) {
+  body +=
+    `\n\nThis edit adds a note to a page, which the user has ruled out:\n${noteHits.join("\n")}\n` +
+    "A page holds reader-facing content and `> **TODO —**` blocks only " +
+    '(WIKI_PAGE_RULES.md §5, "No notes on the page"). Write the substance as ' +
+    "content, make it a TODO, or drop it.";
+}
+
 const out = {
   suppressOutput: true,
   hookSpecificOutput: {
@@ -128,7 +152,7 @@ const out = {
   },
 };
 
-if (hits.length && BLOCK) {
+if ((hits.length || noteHits.length) && BLOCK) {
   out.hookSpecificOutput.permissionDecision = "ask";
   out.hookSpecificOutput.permissionDecisionReason = `anti-vibecoded-design tells in this edit:\n${hits.join("\n")}`;
 }

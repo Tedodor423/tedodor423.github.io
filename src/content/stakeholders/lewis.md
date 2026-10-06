@@ -12,7 +12,9 @@ questions: Q5
 anchors: Q6
 ---
 
-## What they told us
+## Why did we choose this stakeholder
+
+## What did we learn from them
 
 - Almonds bloom early and require insect pollination. Around 80% of US honeybee colonies are transported to California for the February to March bloom, and after it move on to cherries, apples, melons and sunflowers.
 - Almond growers and commercial beekeepers are economically codependent: growers need the bees, and almond pollination is the main income for many commercial beekeepers.
@@ -25,6 +27,6 @@ anchors: Q6
 
 > codependency between the tree and the bee and between the almond grower and the beekeeper
 
-## What it changed
+## How did this impact the project
 
 Widened the problem from bees and mites to the burden a treatment places on the beekeeper. A solution has to be manageable, not only effective.

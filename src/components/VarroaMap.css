@@ -557,6 +557,7 @@
  * inside itself rather than pushing the page sideways. */
 .vm-table-wrap {
   max-width: none;
+  overflow-x: auto;
 }
 
 .vm-table {
@@ -847,6 +848,10 @@
 @media (max-width: 45rem) {
   .varroa-map {
     width: 100%;
+    /* The breakout margin centres a plate wider than the column. Here the
+     * plate is the column, and that margin would only push it off the right
+     * edge of the screen. */
+    margin-inline: 0;
   }
 
   /* The panel goes under the map, so it no longer needs a fixed height to keep

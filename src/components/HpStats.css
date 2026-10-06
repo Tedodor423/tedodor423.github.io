@@ -25,6 +25,16 @@
   padding-left: 0;
 }
 
+/* At 8rem a piece, three numbers do not fit a phone and the last drops to a
+ * row of its own, still carrying the hairline that was meant to sit between
+ * it and a neighbour. Here they share the row equally and the labels wrap. */
+@media (max-width: 575.98px) {
+  .hp-stats li {
+    flex-basis: 0;
+    padding-inline: 0.75rem;
+  }
+}
+
 /* A separator between neighbours, not a highlight on each item. */
 .hp-stats li + li {
   border-left: 1px solid var(--rule);

@@ -1,13 +1,5 @@
-> **What this page proves:** that we identified the plausible ways this system
-> could cause harm and changed the design in response, rather than writing a risk
-> assessment after the fact.
-> **Where the evidence is:** [RNA design](/software) for the off-target screen,
-> [engineering](/engineering) for the chassis decision,
-> [human practices](/human-practices) for the expert input.
-
 **Safety drove the chassis decision** on this project and put off-target screening
-inside the design pipeline rather than after it. That makes this page a record of
-engineering choices, not a compliance document.
+inside the design pipeline rather than after it.
 
 ## How we frame risk
 
@@ -29,9 +21,9 @@ rather than default, is built into the design pipeline.
 
 ## Risks specific to this system
 
-Generic biosafety text scores nothing. This is about *our* system: an engineered
-organism producing a double-stranded RNA, heat-inactivated, formulated into feed,
-and given to a managed pollinator that forages in the open.
+Our system is an engineered organism producing a double-stranded RNA,
+heat-inactivated, formulated into feed, and given to a managed pollinator that
+forages in the open.
 
 ### Risk to the bees
 
@@ -65,9 +57,10 @@ cover.
 
 ### Laboratory safety
 
-Containment, waste handling and the local rules the work was done under.
+> **TODO —** Write up containment, waste handling and the local rules the work
+> was done under.
 
-> **PDF —** Risk assessments and approvals as filed, uploaded to
+> **TODO —** PDF: Risk assessments and approvals as filed, uploaded to
 > `static.igem.wiki` and linked here.
 
 ## Why inactivated, and what that argument does not cover
@@ -80,7 +73,7 @@ Cartagena Protocol it is not a living modified organism. It is a genuine safety
 property and a genuine design decision, and it is **the reason the chassis is yeast**
 rather than a live gut symbiont — see [engineering](/engineering).
 
-**It is not a complete answer, and this is the part most easily glossed over.**
+**It is not a complete answer.**
 
 Removing the living organism does not remove the biological activity of what it
 made. An unused pollen patty contains functional, sequence-specific
@@ -120,7 +113,7 @@ representative species including humans and *Apis mellifera*, with the species
 selection justified on Lam's advice rather than taken as a default set. Method on
 [RNA design](/software).
 
-What the screen cannot rule out, stated plainly: a screen against the species we
+What the screen cannot rule out: a screen against the species we
 thought to check is **not a screen against everything**. Sequence databases are
 incomplete for most arthropods, and homology at the sequence level is a proxy for
 silencing, not a measurement of it.
@@ -155,11 +148,13 @@ would require.
 
 ## Regulatory position
 
-How the product would be classified, by jurisdiction, and where the answer is
-genuinely unresolved — including Laura Bowden's account of the Scottish grey area
-for heat-killed yeast. Detail on [the case studies](/case-studies) and
+Detail is on [the case studies](/case-studies) and
 [entrepreneurship](/entrepreneurship), which also carries the live EMA
 consultation on RNAi veterinary medicines.
+
+> **TODO —** Write how the product would be classified, by jurisdiction, and
+> where the answer is genuinely unresolved — including Laura Bowden's account of
+> the Scottish grey area for heat-killed yeast.
 
 ## Animal welfare
 

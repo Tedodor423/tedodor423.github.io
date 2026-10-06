@@ -7,7 +7,10 @@ import { getPathMapping, formsOf } from "../../utils";
 import { Navbar } from "../../components/Navbar";
 import { Header } from "../../components/Header";
 import { MarkdownPage } from "../../components/MarkdownPage";
+import { ExperimentsPage } from "../../components/ExperimentsPage";
+import { SdgPage } from "../../components/SdgPage";
 import { SectionLinks } from "../../components/SectionLinks";
+import { ViewSwitch } from "../../components/ViewSwitch";
 import { NotFound } from "../../components/NotFound";
 import { SearchPage } from "../../components/SearchPage";
 import { ScrollToHash } from "../../components/ScrollToHash";
@@ -62,7 +65,7 @@ const App = () => {
             }
           />
           {Object.entries(pathMapping).map(
-            ([path, { title, lead, content }]) => (
+            ([path, { title, lead, content, layout, switcher }]) => (
               <Route
                 key={path}
                 path={path}
@@ -74,15 +77,36 @@ const App = () => {
                     {path === "/" ? (
                       <HomeHero />
                     ) : (
-                      <Header title={title} lead={lead} />
+                      <Header
+                        title={switcher ? switcher.title : title}
+                        lead={switcher ? switcher.lead : lead}
+                      />
                     )}
                     <div className="container">
-                      <SectionLinks />
+                      {/* A switcher page reads as one page whichever view
+                          is open: its own title, and the switch in place of
+                          the sub-page links. */}
+                      {switcher ? <ViewSwitch info={switcher} /> : <SectionLinks />}
                     </div>
                     {/* Outside the container: a page body is a run of bands,
                         and a band runs the full width of the window with a
                         container of its own inside it. */}
-                    <MarkdownPage content={content} marks={marks} />
+                    {layout === "experiments" ? (
+                      <ExperimentsPage content={content} marks={marks} />
+                    ) : layout === "sdg" ? (
+                      <SdgPage content={content} marks={marks} />
+                    ) : (
+                      <MarkdownPage
+                        content={
+                          switcher
+                            ? `${switcher.views[switcher.active].content}
+
+${switcher.shared}`
+                            : content
+                        }
+                        marks={marks}
+                      />
+                    )}
                   </>
                 }
               />

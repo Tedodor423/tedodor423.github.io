@@ -56,3 +56,9 @@ proposed text. It reports, it does not block. Turn it off for a session with
 - Every scientific claim, number, figure and citation must trace to something in
   `references/` or to a real published source. Anything else is a clearly
   labelled TODO, never an invention.
+- **A page holds reader-facing content and `> **TODO —**` blocks, nothing else.**
+  No "What this page proves" / "Where the evidence is" boxes, no skeleton
+  banners, no guidance to the next author, no commentary aimed at judges, no
+  "Note on…" asides. A missing figure, table or PDF is a TODO (`> **TODO —**
+  Figure: …`). Full rule: "No notes on the page" in WIKI_PAGE_RULES.md §5. The
+  design-guard hook flags these labels on any edit under `src/`.

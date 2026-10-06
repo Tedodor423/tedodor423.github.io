@@ -46,7 +46,7 @@ interface LineBox {
 }
 
 /** Blocks whose lines can carry a flower. Deliberately prose only: the
- *  blockquote callouts hold every TODO and FIGURE placeholder and are busy
+ *  blockquote callouts hold every TODO block and are busy
  *  enough already. */
 const BLOCKS = "p, li, td";
 

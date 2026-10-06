@@ -89,6 +89,22 @@ export interface Page {
   children?: Page[];
   /** Routed and searchable, but absent from the menu. Top level only. */
   hidden?: boolean;
+  /**
+   * How the Markdown is laid out. Omitted, it is the ordinary run of bands.
+   * "experiments" is the menu-and-write-up layout of ExperimentsPage, which
+   * reads the file's headings as blocks, parts and expandable experiments.
+   * "sdg" is SdgPage: the ordinary bands, with each `## Goal N` section
+   * folded into a card.
+   */
+  layout?: "experiments" | "sdg";
+  /**
+   * The children are views of this one page rather than pages of their own.
+   * The page opens with a switch between them (ViewSwitch) and shows the
+   * selected child's Markdown, then this page's own. Its URL opens the first
+   * child; each child's URL opens the same page with that child selected, so
+   * links and search results that point at a child still land on it.
+   */
+  switcher?: boolean;
 }
 
 /** A top-level menu label that opens a dropdown and has no page of its own. */
@@ -204,6 +220,7 @@ const Pages: MenuEntry[] = [
         path: "/wet-lab-experiments",
         content: wetLabExperiments,
         lead: "Protocols in enough detail for another team to repeat them, and why yeast is the chassis.",
+        layout: "experiments",
       },
       {
         name: "Lab book",
@@ -288,40 +305,11 @@ const Pages: MenuEntry[] = [
         lead: "What we taught, to whom, and what we learned back.",
       },
       {
-        name: "Case studies",
-        title: "Case Studies",
-        path: "/case-studies",
-        content: caseStudies,
-        lead: "The same technology meets very different realities.",
-        children: [
-          {
-            name: "Australia",
-            title: "Case Study: Australia",
-            path: "/case-studies/australia",
-            content: caseStudyAustralia,
-            lead: "Recent establishment, reinvasion pressure and an industry under strain.",
-          },
-          {
-            name: "California",
-            title: "Case Study: California",
-            path: "/case-studies/california",
-            content: caseStudyCalifornia,
-            lead: "Migratory beekeeping at enormous scale, and the almond pollination market.",
-          },
-        ],
-      },
-      {
-        name: "Economical modelling",
-        title: "Economic Modelling",
-        path: "/economic-modelling",
-        content: economicModelling,
-        lead: "Allowable cost, manufacturing cost, and the yeast titre they imply.",
-      },
-      {
         name: "Sustainable development",
         title: "Sustainable Development",
         path: "/sustainability", // iGEM standard URL
         content: sustainability,
+        layout: "sdg",
         lead: "Which SDGs we affect, including where we affect them negatively.",
       },
     ],
@@ -363,9 +351,43 @@ const Pages: MenuEntry[] = [
   },
 
   // --- Routed, but not in the agreed header. Reached by URL and by links
-  // inside other pages. Each is either awaiting a decision (fold in, or drop)
-  // or lives at an iGEM standard URL that must keep resolving regardless of
-  // the menu.
+  // inside other pages. Each is either awaiting a decision (fold in, or drop),
+  // reached well enough through the pages that link to it (the case studies
+  // and the economic model), or lives at an iGEM standard URL that must keep
+  // resolving regardless of the menu.
+  {
+    name: "Case studies",
+    title: "Case Studies",
+    path: "/case-studies",
+    content: caseStudies,
+    lead: "The same technology meets very different realities.",
+    switcher: true,
+    hidden: true,
+    children: [
+      {
+        name: "Australia",
+        title: "Case Study: Australia",
+        path: "/case-studies/australia",
+        content: caseStudyAustralia,
+        lead: "Recent establishment, reinvasion pressure and an industry under strain.",
+      },
+      {
+        name: "California",
+        title: "Case Study: California",
+        path: "/case-studies/california",
+        content: caseStudyCalifornia,
+        lead: "Migratory beekeeping at enormous scale, and the almond pollination market.",
+      },
+    ],
+  },
+  {
+    name: "Economical modelling",
+    title: "Economic Modelling",
+    path: "/economic-modelling",
+    content: economicModelling,
+    lead: "Allowable cost, manufacturing cost, and the yeast titre they imply.",
+    hidden: true,
+  },
   {
     name: "NECTAR for the future",
     title: "NECTAR for the Future",

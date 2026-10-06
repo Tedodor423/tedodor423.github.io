@@ -10,13 +10,15 @@ date: 27 July 2026
 questions: Q3, Q4, Q6
 ---
 
-## What they told us
+## Why did we choose this stakeholder
+
+## What did we learn from them
 
 - GMOs are fundamentally incompatible with organic production standards, and that extends to products made using GMOs: a GMO anywhere in the production pathway can cost a product its organic status.
 - Organic compatibility therefore depends on more than whether the final treatment contains a living GMO. The production process and method of use matter too.
 - A product could satisfy conventional regulatory requirements and still be incompatible with organic certification.
-- The S. alvi pathway could cost beekeepers their certified organic status. He was hopeful that the heat-killed yeast pathway was more likely to stand up.
+- The S. alvi pathway could cost beekeepers their certified organic status. He was hopeful that the heat-killed yeast pathway was more likely to stand up, although the acceptability of a future product would still depend on its final design and on a certification assessment.
 
-## What it changed
+## How did this impact the project
 
 Legal approval and organic acceptability are not the same thing. Keeping honey organic was non-negotiable for the beekeepers we spoke to, and this ruled the living system out for them.

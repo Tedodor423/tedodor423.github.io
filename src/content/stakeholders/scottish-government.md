@@ -11,12 +11,14 @@ photo-shows: Luis Molero
 provisional: Q1, Q3, Q4, Q6
 ---
 
-## What they told us
+## Why did we choose this stakeholder
+
+## What did we learn from them
 
 - Varroa is recognised as one of the top three threats to bees in Scotland, which puts the problem beyond our two main case studies.
 - Raised concern over pesticide contamination in honey.
 - Supported a biocontrol therapeutic, but described the regulation around it as complex.
 
-## What it changed
+## How did this impact the project
 
 Led us to Laura Bowden for regulatory advice.

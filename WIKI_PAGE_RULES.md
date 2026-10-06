@@ -64,7 +64,7 @@ Four things follow for how you write:
   withholding. Delete a `consent` field when the review lands and that profile
   renders and becomes searchable in the same move; add one and it disappears
   from both.
-- **Placeholders are searchable too.** `> **TODO —** ...` blocks show up in
+- **TODOs are searchable too.** `> **TODO —** ...` blocks show up in
   results like any other text. That is deliberate: it is the same honesty as
   showing them on the page. It is also a second reason to delete them as they
   are filled.
@@ -140,6 +140,10 @@ anything else:
 
 If a page cannot answer those five in its first screen, it is not finished,
 however long it is.
+
+Answer them **in the page's own prose**. Never as a labelled summary box
+("What this page proves", "Where the evidence is") or any other note about the
+page; see "No notes on the page" in section 5.
 
 ### Write tight
 
@@ -239,26 +243,44 @@ Where we don't have something yet, say so in the page, visibly:
 A visible TODO is honest and costs nothing. Invented filler is misconduct. Never
 choose the second to avoid the first.
 
-### Placeholder blocks
+### TODO is the only placeholder
 
-The skeletons use five block types, all written as blockquotes so they stand out
-in the rendered page and are trivial to grep for:
+A missing figure, table or document is a TODO too, named in its first word:
 
-| Block                                          | For                                                            |
-| ---------------------------------------------- | -------------------------------------------------------------- |
-| `> **TODO —**`                                 | Something missing, with an owner and a blocker                 |
-| `> **FIGURE —**`                               | Where an image goes, and what it must show                     |
-| `> **TABLE —**`                                | Where a table goes, and what its columns are                   |
-| `> **PDF —**`                                  | A document to upload to `static.igem.wiki` and link            |
-| `> **RESULT BLOCK —**` / `> **CYCLE BLOCK —**` | Where the eight-field result or seven-beat cycle shape repeats |
+```markdown
+> **TODO —** Figure: RT-PCR of whole larvae dosed in-hive at 24 h, uncropped,
+> with lane labels and the water control. Owner: bee lab.
+```
 
-Describe what the figure has to _show_, not that a figure goes there. "Gel
-image" tells the person writing the page nothing; the description is half the
-work of making the figure.
+Use `Figure:`, `Table:` or `PDF:`. Describe what the figure has to _show_, not
+that a figure goes there. "Gel image" tells the person writing the page nothing;
+the description is half the work of making the figure.
 
-Delete a placeholder when you replace it. A page is finished when it has none
-left — and `grep -rn "TODO —" src/content/` is the fastest read on where the
-wiki actually stands.
+Delete a TODO when you replace it. A page is finished when it has none left, and
+`grep -rn "TODO" src/content/` is the fastest read on where the wiki actually
+stands.
+
+### No notes on the page
+
+A page holds two things: **content written for the reader**, and **`> **TODO —**`
+blocks**. Nothing else. In particular, never write:
+
+- **Summary or meta boxes** about the page: "What this page proves", "Where the
+  evidence is", "Skeleton: structure only", "How to read this page".
+- **Guidance to whoever writes the page next**: "One entry per member…", "A short
+  paragraph on…", "Keep the three arguments separate", "Specific beats generic".
+  If a section is unwritten, its body is one TODO saying what it needs.
+- **Commentary aimed at judges or editors**: "This is a judging requirement and
+  is treated as one", "rather than leaving a judge to find it", "this section
+  carries the weight of…", "most wikis hide it", "should not be added".
+- **Labelled asides**: "Note on the figure", "An honest note we keep on the
+  page", "…, stated plainly", "Compliance note, to be carried into…". If the
+  aside carries substance, write the substance as an ordinary paragraph; if it is
+  work still to do, it is a TODO.
+
+Scientific caveats are content, not notes: "untested", "not sequence-verified",
+"provisionally parameterised", a disclaimer that an interactive demo shows
+generated data. Keep those, written to the reader.
 
 ---
 
@@ -285,18 +307,10 @@ skimming judge must not be able to miss evidence.
 
 ## 7. Current state
 
-Every page in `src/content/` is a **skeleton**: section structure, a note on
-what each section has to do, and placeholder blocks where the evidence goes.
-None of them contains a result, a number, a quote or a citation, and each opens
-with a line saying so. They exist so that:
-
-- every URL resolves from day one and the CI pipeline is proven early,
-- the argument of each page is agreed before anyone writes prose into it, and
-- content can be written page by page without anyone waiting on the scaffolding.
-
-Writing a page means replacing the guidance text with the real thing and
-deleting the placeholders as you satisfy them. Remove the skeleton line at the
-top when the page no longer needs it.
+Every URL in `src/pages.ts` resolves, and most pages carry written content.
+What is still missing is recorded as TODO blocks, per section, where the content
+will go. Writing a page means replacing those TODOs with the real thing; it never
+means adding notes about the page (section 5).
 
 Styling is deliberately minimal — project colours and readable type, nothing else.
 Per iGEM's own recommendation: get the content right first, then style it.

@@ -1,8 +1,9 @@
-# The six HONEY questions — one file per question
+# The HONEY questions — one file per question
 
-`q1.md` … `q6.md` drive the map's question list and the cycle panel that
+`q1.md` … `q7.md` drive the map's question list and the cycle panel that
 opens when a question is selected. Edit a file, save, done: no code
-changes.
+changes — except adding a question, which also needs its id in
+`QUESTION_IDS` in `src/data/stakeholders.ts`.
 
 ## Frontmatter
 
@@ -29,8 +30,10 @@ people out on the map. A stage with neither text nor people is skipped.
 
 Keep each section to a short paragraph — the panel sits over the map. Plain
 Markdown; avoid internal links here for now (the panel does not route them
-through the site's base path). The current texts are condensed from the
-Human Practices page, which is itself transcribed from the write-ups in
-`references/`; the full argument stays on the page, this panel is the
-digest. Same integrity rules as everywhere: no invented numbers, quotes or
-claims.
+through the site's base path). `q2.md`, `q3.md` and `q7.md` carry the
+team's own shortened write-ups, the one-paragraph-per-stage tables in the
+7 October write-up, lightly trimmed to fit the panel. The rest are
+condensed from the Human Practices page, which is itself transcribed from
+the same write-ups. Where the team has written a short version, use theirs.
+The full argument stays on the page, this panel is the digest. Same
+integrity rules as everywhere: no invented numbers, quotes or claims.

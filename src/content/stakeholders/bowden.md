@@ -10,11 +10,13 @@ photo: bowden
 provisional: Q3
 ---
 
-## What they told us
+## Why did we choose this stakeholder
+
+## What did we learn from them
 
 - Set out the regulatory protocol in Scotland.
 - Our product sits in a grey area, which confirms that heat-killed yeast does help to potentially bypass GM regulation.
 
-## What it changed
+## How did this impact the project
 
 We contacted the HSE and explored documentation on containment and active release. Reinforced how much model output it is worth giving a regulator when asking for permissions.

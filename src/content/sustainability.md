@@ -1,37 +1,19 @@
-> **What this page proves:** that we decomposed each goal into concrete
-> problems, mapped our work onto them one by one, and accounted honestly for
-> where NECTAR pulls against other goals.
-> **Where the evidence is:** [human practices](/human-practices), the
-> [modelling pages](/model), and [safety and security](/project-safety).
-
 The UN defines sustainable development as "meeting the needs of the present
 without compromising the ability of future generations to meet their own needs",
 balancing economic, social and environmental action across seventeen goals and
-their subtargets.
+their subtargets, to be met by 2030.
 
-Asserting relevance to a goal is easy and worth nothing. This page does the
-harder thing: it breaks each goal into specific problems, says what our work does
-about each, and says **where our work makes something else worse**. That last part is
-the substance, not a caveat at the end.
+```component
+sdg-overview
+```
 
-This page only works because the stakeholder engagement behind it is real. It is
-continuous with [human practices](/human-practices), not a standalone exercise.
+> **TODO —** The goal artwork on this page (the overview above and the three
+> goal tiles) is the UN's. Confirm its terms allow reuse on a CC-BY wiki and
+> write the exact source and licence under the figure. Owner: wiki.
 
-## How each goal is treated
-
-Five blocks, the same five every time:
-
-1. **The goal and its targets** — the UN target text, by number.
-2. **Problem identification** — two or three discrete, concrete problems. Not a
-   general claim about importance.
-3. **Positive long-term impacts** — mapped one-to-one onto those problems.
-4. **Negative long-term impacts and interactions with other goals** — cited by
-   target number.
-5. **Stakeholder feedback** — a named person who works on this, and what they
-   said.
-
-Three goals carry the main argument. Others appear in the interactions analysis
-rather than being claimed outright.
+We set out to build sustainability into both our
+[human practices](/human-practices) and the design of the technology, and kept
+finding that the two were the same work.
 
 > **TODO —** The specific *Varroa* gene our construct targets is named in the
 > team's sustainability draft. It is **not** published here, pending the
@@ -40,6 +22,8 @@ rather than being claimed outright.
 > the filing decision.
 
 ## Goal 15 — Life on land
+
+**TLDR:** SDG15 TLDR
 
 ### The targets
 
@@ -70,23 +54,22 @@ rather than being claimed outright.
 
 Mapped to the problems above, in order.
 
-1. A sequence-specific RNAi biopesticide against the selected *Varroa* target
-   attacks the invasive species directly rather than treating the colony.
+1. **A sequence-specific RNAi biopesticide** against the selected *Varroa* target
+   **attacks the invasive species directly** rather than treating the colony.
    **Proposed.**
-2. Replacing an acaricide with a sequence-specific agent removes a broad-spectrum
-   chemical from the hive. Off-target homology screening, research into
+2. Replacing an acaricide with a sequence-specific agent **removes a broad-spectrum
+   chemical from the hive**. Off-target homology screening, research into
    environmental fate, and a heat-killed yeast carrier are the three design
-   choices that make that claim **defensible rather than rhetorical**.
+   choices that make that claim **defensible**.
    **Investigated** for the screening, **Proposed** for the environmental fate
    work.
-3. A modular construct means a resistance mutation is answered by swapping a
+3. **A modular construct** means a resistance mutation is answered by swapping a
    sequence rather than restarting a discovery programme, so the tool's useful
    life is not one resistance cycle long. **Proposed.**
 
 Varroa control also lays groundwork for managing other pests with the same
-method. That is a platform claim and belongs on
-[entrepreneurship](/entrepreneurship), marked as a prospect rather than an
-outcome.
+method. That is a platform claim, made on
+[entrepreneurship](/entrepreneurship) as a prospect rather than an outcome.
 
 ### Negative long-term impacts and interactions
 
@@ -107,15 +90,20 @@ outcome.
 
 ### Stakeholder feedback
 
-**Austein McLoughlin**, Secretariat of the Convention on Biological Diversity.
-He told us that under the Cartagena Protocol our product is not a living modified
-organism; that comparisons to conventional practice are essential; and that the
-major barrier to sustainable development is **the gap between claim and reality**,
-and the absence of baseline evidence to compare against.
+In our interview with **Austein McLoughlin** on behalf of the Secretariat of the
+Convention on Biological Diversity, we focused on how we can advance SDG 15 (Life
+on Land), through targets defined under the Kunming–Montreal framework. As a
+biosafety and synbio specialist, Austein works at the interface of science and
+policy at the UN, while having personal experience with RNAi work. As a result,
+our discussion was largely centred around **critically evaluating the definition
+of 'sustainable' biotechnology**.
 
-That last point is why this page carries flags on its own numbers and why the
-modelling work builds in a counterfactual: see
-[economic modelling](/economic-modelling).
+A key outcome of our discussion was diverting focus to targets 7, 10, 11 and 17
+of the GBF. However, Austein pushed us to move beyond demonstrating alignment
+with these goals to ask whether NECTAR produces **measurable improvement** to
+sustainable development. Following this discussion we've expanded our work to
+consider **the entire lifecycle of NECTAR**, and to critically evaluate our
+project rather than justify it.
 
 > **TODO —** No verbatim quote from this conversation is recorded in our notes,
 > only our summary of it. The rubric asks for a named stakeholder **with a
@@ -123,6 +111,8 @@ modelling work builds in a counterfactual: see
 > none exists. Owner: HP.
 
 ## Goal 2 — Zero hunger
+
+**TLDR:** SDG2 TLDR
 
 ### The targets
 
@@ -147,13 +137,15 @@ modelling work builds in a counterfactual: see
 
 ### Positive long-term impacts
 
-1. Heat-killed engineered yeast as a dsRNA production platform, delivered inside
+1. **Heat-killed engineered yeast as a dsRNA production platform**, delivered inside
    a pollen patty — a supplement beekeepers already feed — so treatment does not
    require an extra visit to every hive. **Proposed.**
-2. Fermentation is mature, widespread infrastructure, which is the mechanism by
-   which the product could be cheap rather than an assertion that it will be.
-   **Proposed**, and see the cost flag below.
-3. The hive insert is 3D printable, so hardware is not a bottleneck on
+2. **Fermentation is mature, widespread infrastructure**, which is the mechanism by
+   which the product could be cheap rather than an assertion that it will be. The
+   aim is a treatment that works for every kind of beekeeper, from well-resourced
+   producers to small beekeepers and farmers. **Proposed**, and see the cost flag
+   below.
+3. **The hive insert is 3D printable**, so hardware is not a bottleneck on
    deployment. See [hardware](/hardware).
 
 ### Negative long-term impacts and interactions
@@ -172,13 +164,45 @@ modelling work builds in a counterfactual: see
 
 ### Stakeholder feedback
 
-> **TODO —** This goal has no named stakeholder with a verbatim quote attached,
-> which is a direct rubric requirement. Candidates already on our roster and
-> cleared for publication: Wade Ford (Hive & Wellness Australia) on cost
-> priority and patty delivery, and Professor Brittney Goodrich on operation
-> economics. Attach one, with a quote. Owner: HP.
+Speaking with **Melanie Teece**, the head of technical at Hilltop Honey, helped us
+understand NECTAR's realistic contribution to SDG 2: Zero Hunger. Hilltop Honey
+sources honey from various countries, connecting thousands of beekeepers
+`[FLAG]` to global supply chains and food markets.
+
+This interview **challenged our assumption** that a more environmentally
+sustainable treatment necessarily becomes more attractive to producers. Melanie
+underscored that **cost is one of the strongest pressures within the food
+industry**; particularly for small scale producers, expensive treatments may
+likely see little adoption regardless of environmental advantages. Melanie
+moreover highlighted the importance of treatments being **simple to use and
+administer**.
+
+This has directly shaped our approach to SDG targets 2.3 and 2.4: if NECTAR is
+to make agricultural systems more resilient, **efficacy alone is insufficient**.
+It must also be affordable, scalable and practical for those expected to use it.
+Her feedback thus reinforced our decision to prioritise the usage of inexpensive
+yeast fermentation, simple delivery and modelling of costs as fundamental
+criteria of our therapeutic.
+
+Lastly, this discussion helped us consider NECTAR as only one component of a
+much larger food system. Weather, consumer expectations, transports, testing
+requirements and much more can all have extensive impacts on honey production.
+This encouraged us to avoid overstating NECTAR's contribution to food security
+and thus more precisely define our aim: **to address one key biological pressure
+on pollinator dependent agricultural systems**, while remaining economically
+workable for those who will use it.
+
+> **TODO —** "Thousands of beekeepers" is not in our interview record for
+> Hilltop Honey. Source it (the interview notes or Hilltop's own published
+> figure) or cut the number. Owner: HP.
+
+> **TODO —** The rubric asks for a named stakeholder **with a quote**. Our notes
+> hold only a summary of this conversation. Lift a verbatim line from the
+> recording or notes, or record that none exists. Owner: HP.
 
 ## Goal 17 — Partnerships for the goals
+
+**TLDR:** SDG17 TLDR
 
 Goals 2 and 15 are about NECTAR's impact. Goal 17 is about how we are working to
 achieve it.
@@ -205,20 +229,17 @@ achieve it.
 ### Positive long-term impacts
 
 1. Beekeepers, environmental scientists, industry and UN-linked bodies were
-   consulted from the start, and the chassis decision came out of that rather
+   **consulted from the start**, and the chassis decision came out of that rather
    than out of the lab. See [engineering](/engineering).
 2. Our podcast, **Buzz In**, puts stakeholders' views into contact with each
    other rather than collecting them separately: episode 1 put a bee researcher
    and a commercial beekeeper on opposite sides of whether treatment-free
    beekeeping is realistic. **Demonstrated** for the conversations held;
    publication is tracked on [public outreach](/education).
-3. The HONEY engagement loop is intended to be published as a reusable method so
+3. The **HONEY engagement loop** is intended to be published as a reusable method so
    another team can run it. **Proposed.**
 
 ### Negative long-term impacts and interactions
-
-**The honest version** of a partnerships claim includes the partners who disagreed
-with us.
 
 - **We pivoted against two beekeepers' stated preference.** Mike Allerton and
   Danny Le Feuvre both preferred the live *S. alvi* system on labour and
@@ -237,16 +258,30 @@ with us.
 
 ### Stakeholder feedback
 
-> **TODO —** Named stakeholder and verbatim quote owed for this goal, as for
-> goal 2. Owner: HP.
+> **TODO —** The team's write-up of 7 October names the stakeholder for this goal
+> and drafts the section in full (`references/updates/sdg-writeup-10-07.md`).
+> It is **withheld** here because that interviewee's consent review is still
+> outstanding (`consent-status: review-pending` in their stakeholder record),
+> and this file ships in a public repository. When the review lands, paste the
+> draft in as reviewed, with a verbatim quote, and use the photo only if the
+> interviewee agreed to it. Owner: HP. Blocked on the review.
 
 ## The Kunming–Montreal Global Biodiversity Framework
 
-Goal 15 is the most directly relevant goal to NECTAR, so we went further on it.
-Through the Secretariat of the Convention on Biological Diversity we came to the
-Kunming–Montreal Global Biodiversity Framework, which sets 23 targets rooted in
-Goals 14 and 15 and is where the UN balances biotechnology tools against
-conservation goals. Four of those targets bear on NECTAR directly.
+Beyond this analysis, we diverted additional focus to SDG 15 - Life on Land: the
+most directly relevant goal. This is because NECTAR's primary purpose is
+environmental, aiming to use synthetic biology to address a biological threat
+while ensuring we do not create additional pressures on biodiversity in the
+process.
+
+This is why we contacted the UN-linked Secretariat of the Convention on
+Biological Diversity and learnt about the Kunming–Montreal Biodiversity
+Framework. This framework establishes 23 Targets rooted in achieving SDGs 15 and
+14 - life on land and life below water respectively. Within this framework, the
+UN aims to balance biotechnology tools with global conservation goals, thereby
+directly relating to NECTAR's synbio approach. To critically assess our
+contribution to SDG 15 therefore, we've selected 4 Targets and evaluated how
+NECTAR relates to their objectives.
 
 ### Target 7 — reduce pollution, including pesticide risk
 
@@ -294,10 +329,9 @@ says why synthetic biology can be the replacement.
 Target 11 covers maintaining and improving ecosystem services, pollination among
 them.
 
-The honest complication is the one already stated under goal 15: honeybee health
+The complication is the one already stated under goal 15: honeybee health
 is **not automatically biodiversity**, because managed honeybees can interact with
-and compete with wild pollinators. Target 11 is where that tension is explicit
-rather than parenthetical.
+and compete with wild pollinators.
 
 Our position is that synthetic biology should support ecosystem functions rather
 than substitute for them. NECTAR does not attempt to change pollination; it
@@ -323,21 +357,22 @@ Four design decisions map onto it:
   by which benefits could be distributed rather than concentrated, subject to the
   cost flag above.
 
-> **TODO —** The team's draft closes this target with a sentence that is garbled
-> and does not resolve: it begins "these design decisions allow us to construct a
-> Target 17 framework centred around both of its parts" and then breaks. The
-> intended argument — presumably that biosafety and equitable benefit are the two
-> halves of this target and NECTAR addresses both — has not been written out, and
-> we have not invented an ending for it. Owner: HP.
+By acknowledging that biotechnology creates opportunities but also requires
+regulation and risk management, we can deploy our technology safely and
+equitably.
+
+> **TODO —** The draft's sentence before this one is garbled and is left out:
+> "These design decisions allow us to construct a Target 17 framework centred
+> around both of its parts appeals to social sustainability of our
+> biotechnology." Rewrite it, or drop it. Owner: HP.
 
 ## Negative interactions, and what we would do about them
 
-The section that **earns this page its marks**. Each row is a question we could not
-answer comfortably.
+Each row is a question we could not answer comfortably.
 
 | Question                                                                          | Relevant subtargets                                              | What we would do about it                                                                                                                                                                                                                                                                                                                                                                                                                             | Status                                                                                    |
 | --------------------------------------------------------------------------------- | ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| Can NECTAR be accessible regardless of economic status or country of residence?   | 10.2 · 9.5 · 16.6 · 17.16                                        | **Affordability:** a yeast carrier avoids the manufacturing cost that makes existing RNAi pesticides expensive. Our draft puts this at about £2 per gram `[CALC]`, which is not yet supported. **Scalability:** fermentation infrastructure exists worldwide and the hive insert is 3D printable. **Regulation:** heat-killed yeast is not a living modified organism under the Convention on Biological Diversity, but grey areas remain — Scotland, per Laura Bowden (SASA). | Affordability **Proposed** and flagged · scalability **Proposed** · regulation **Investigated** |
+| Can NECTAR be accessible regardless of economic status or country of residence?   | 10.2 · 16.7 · 9.5 · 16.6                                         | **Affordability:** a yeast carrier avoids the manufacturing cost that makes existing RNAi pesticides expensive. Our draft puts this at about £2 per gram `[CALC]`, which is not yet supported. **Scalability:** fermentation infrastructure exists worldwide and the hive insert is 3D printable. **Regulation:** heat-killed yeast is not a living modified organism under the Convention on Biological Diversity, but grey areas remain — Scotland, per Laura Bowden (SASA). | Affordability **Proposed** and flagged · scalability **Proposed** · regulation **Investigated** |
 | How do we minimise pollution and deal with waste?                                 | 6.3 · 12.4 · 12.5                                                | **Waste management:** GMO-contaminated waste must be inactivated before disposal; our yeast is heat-killed already, and we aim to minimise the volume of biomass generated in line with Environment Agency guidance. **dsRNA disposal:** unused patties cannot replicate, but they still contain biologically active dsRNA. The OECD anticipates low environmental exposure given rapid degradation of environmental RNA `[FLAG]`.                        | Waste route **Proposed** · degradation evidence **Proposed**                              |
 | Could NECTAR present an ecological threat while trying to prevent one?            | 15.5 · 15.8                                                      | **Off-target homology screening** across representative species, with the species choice justified. **Resistance:** *Varroa* could mutate at the target site. The plan is annual resequencing of *Varroa*, and of bees and other non-target organisms, with the modular construct allowing a sequence swap rather than a restart: the plasmid is built so that individual sequences can be exchanged while the rest of the toolkit stays intact.                                                                                                                       | Screening **Investigated** · resequencing programme **Proposed**                          |
 | Does protecting a managed pollinator have costs for wild ones?                     | 15.5 · 11 (GBF)                                                  | No mitigation designed. Stated as an open tension under goal 15 and GBF target 11, and not claimed as resolved.                                                                                                                                                                                                                                                                                                                                        | **Unresolved**                                                                            |
@@ -355,13 +390,14 @@ Two of those rows contain commitments we have not yet met:
 
 ## Still missing
 
-- A named stakeholder with a verbatim quote for goals 2 and 17, and a quote for
-  goal 15.
+- Verbatim quotes for the goal 15 and goal 2 stakeholders.
+- The goal 17 stakeholder section, blocked on the interviewee's consent review.
 - Primary sources for the colony-loss trend, the pollination share of food
   production, the Nairobi convention reference, the Convention article numbers
   and the OECD exposure claim.
 - The supported version of the £2 per gram figure, or its withdrawal.
-- The intended argument closing GBF target 17.
+- A source for "thousands of beekeepers" (Hilltop Honey), or the number cut.
+- A rewrite of the garbled opening sentence of the target 17 conclusion.
 - Resolution of the IP gate on naming the target gene.
 
 ## Where this connects

@@ -1,17 +1,11 @@
-> **What this page proves:** that each model asked a distinct question, informed
-> a decision, and has a stated boundary.
-> **Where the evidence is:** each model's own page, linked below.
-
-This is an index, not a gallery of unrelated graphs. Each model has its own
-question and its own page. This page says how they fit together, and which of
+Each model has its own question and its own page. This page says how they fit together, and which of
 them is not yet a model at all.
 
-## An honest statement, up front
+## Where the parameters come from
 
 No model on this wiki currently uses **a parameter we measured ourselves**. Every
-one is parameterised from the literature or from stakeholder evidence. Saying so
-here is better than leaving a judge to discover it three pages in, and it names
-the most valuable thing the next iteration could do: close the loop between
+one is parameterised from the literature or from stakeholder evidence. This
+names the most valuable thing the next iteration could do: close the loop between
 bench and model.
 
 ## How every model here is written
@@ -21,11 +15,7 @@ The same eight beats, every time:
 **Question → Inputs → Assumptions → Model → Sensitivity and validation →
 Prediction → Decision it informed → Limitations**
 
-And every model carries one visible box:
-
-> **How did this change NECTAR?**
->
-> If the honest answer is "it didn't", the model does not deserve the space.
+And every model carries one visible box: **How did this change NECTAR?**
 
 Modelled outputs carry the status label **Modelled**. They are predictions, never
 results.
@@ -103,19 +93,31 @@ the transfer chain and the full parameter sweep list.
 - **Assumptions** — BEEHAVE's own, plus a forage landscape left unconstrained in
   the second cycle.
 - **The model** — BEEHAVE with an added treatment and dsRNA-transfer layer.
-- **Sensitivity and validation** — planned as parameter sweeps; the test list is
-  on the owner page.
-- **Prediction** — the first cycle's results exist in the team's working
-  document and are owed here.
-- **Decision it informed** — it sets the efficacy target the wet lab aims at.
+- **Sensitivity and validation** — the parameter sweeps are the sensitivity
+  analysis and have been run; the test list is on the owner page. **Validation
+  against an independent dataset has not been done**, and we do not claim it.
+- **Prediction** — colony outcome is insensitive to starting infestation, with
+  collapse at an average of 4 years; the efficacy target is a treatment efficiency
+  of about **0.05**; a **winter-only regimen matches year-round treatment**; and
+  the titre the therapy needs to be affordable is **0.005–0.05 mg dsRNA per g
+  yeast**.
+- **Decision it informed** — it sets the efficacy target the wet lab aims at, and
+  converts it into a titre the fermentation has to reach.
 - **Limitations** — reinfestation from neighbouring colonies, beekeeper
   behaviour, and a landscape not yet reconstrained for climate or land-use
   change.
 
 > **How did this change NECTAR?**
 >
-> Owed, and honestly so. The first cycle is written up elsewhere and has not been
-> brought onto the wiki; until it is, **this box cannot be filled**. Owner: dry lab.
+> It produced the two numbers the rest of the project is built around. The
+> **0.05 treatment-efficiency target** is what a colony actually needs, and
+> decomposing that into a delivery chain turned it into **a titre target of
+> 0.005–0.05 mg dsRNA per g yeast** — the specification the
+> [yeast work](/wet-lab-experiments#yeast-production) is measured against. It also
+> found that **winter-only treatment is as effective as year-round**, which is a
+> regimen current acaricides cannot use and a cold-tolerant in-hive patty can, and
+> that argument went back into the beekeeper interviews on
+> [human practices](/human-practices).
 
 ### Economic model
 
@@ -175,7 +177,12 @@ and larval stability assays, and if those assays do not give the results we want
   it would rest on nothing. The plan instead, whatever the mite titre results show,
   is a **mite-titre curve**: estimate, across a range of ledRNA doses and our best
   and worst candidate targets, the knockdown of the target gene in mites and the
-  mortality that follows.
+  mortality that follows. The mite assays have since run, and the case for the
+  curve is stronger rather than weaker: the brood-frame assay returned a clear
+  negative confounded by host condition
+  ([cycle V3](/engineering#cycle-v3)), so the curve would be the project's
+  quantitative frame around a qualitative and partly uninterpretable result, and it
+  must be labelled as literature-derived throughout.
 - **Limitations** — setting the upstream models aside is what makes the curve
   buildable, and it is also its limitation: the curve would say what happens to a
   mite at a given exposure and **nothing about what exposure our delivery route
@@ -207,8 +214,7 @@ independent model with its own inputs and its own sensitivity.
 > illustrative calculation inside the economic model. Both are acceptable;
 > presenting the second as the first is not. Owner: entrepreneurship.
 
-That answers the question this page used to leave open. The dosing and transfer
-work **is** a model, with its own parameters and its own sweep. The fermentation
+The dosing and transfer work **is** a model, with its own parameters and its own sweep. The fermentation
 economics are **not**, yet.
 
 ## How the models connect
@@ -219,7 +225,7 @@ design requirement for [yeast](/wet-lab-experiments#yeast-production). Running t
 model sets what efficacy has to reach before any of it is worth doing, and the
 transfer model says which lever raises that efficacy most cheaply.
 
-> **FIGURE —** The model chain: affordability → allowable cost → manufacturing
+> **TODO —** Figure: The model chain: affordability → allowable cost → manufacturing
 > cost → required titre, alongside efficacy → colony outcome. Each arrow marked
 > as stakeholder evidence, literature or our own assumption, so a reader can see
 > where the chain is load-bearing and where it is hopeful.

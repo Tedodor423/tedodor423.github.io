@@ -1,9 +1,3 @@
-> **What this page proves —** that Australia changes the requirements for
-> NECTAR, in ways we can name: the season, the regulator and the buyer all set
-> limits a design written in Oxford would miss.
-> **Where the evidence is —** six Australian conversations, recorded on
-> [human practices](/human-practices), and the OGTR's own answer on the chassis.
-
 Australia is the recent arrival of our two regions. An industry that had to
 build a response to Varroa inside four years has unusually visible constraints,
 which is what makes it useful. The question this page answers is the one all
@@ -12,10 +6,30 @@ change here?**
 
 ## The pest situation
 
-Varroa was detected in Australia in 2022. An eradication programme costing
-**A$100 million** failed and the mite was declared endemic. Difficulty moving bees
-from east to west has so far held the spread to New South Wales, Victoria and
-Queensland (Danny Le Feuvre, Australian Honey Bee Industry Council).
+Varroa was **first detected in June 2022 at the Port of Newcastle, New South
+Wales**, and an eradication campaign followed: destruction of bees and hives,
+strict quarantine and movement controls, and fipronil baiting. Approximately
+**30,000 hives were destroyed** and the operation cost around **A$101 million**.
+After 14 months, in **September 2023**, eradication was judged no longer possible
+and the mite was declared endemic.
+
+The focus then shifted from eradication to slowing the spread and improving
+detection and long-term management. In **February 2024 a 24-month Transition to
+Management plan** was approved by the National Management Group, its primary focus
+being to train beekeepers and give them the skills to manage Varroa and maintain
+healthy hives.
+
+Varroa is now established across **New South Wales, Queensland, Victoria, the
+Australian Capital Territory and South Australia**, while **Western Australia and
+the Northern Territory remain free** of the parasite — difficulty moving bees from
+east to west has held the spread (Danny Le Feuvre, Australian Honey Bee Industry
+Council). **In early 2026 synthetic miticide resistance was first observed, and
+every state with Varroa except the ACT is now experiencing resistance to major
+synthetic treatments.**
+
+> **TODO —** The eradication cost is recorded as A$100 million in the Le Feuvre
+> interview and A$101 million in the case study's own sourcing. Pick one and cite
+> it. Owner: HP.
 
 Feral colonies made the arrival worse rather than better. Because forage is
 available year-round, Australia's feral population was dense, and under Varroa

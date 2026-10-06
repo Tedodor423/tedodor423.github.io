@@ -32,7 +32,7 @@ function Glass() {
   );
 }
 
-export function SearchField() {
+export function SearchField({ onSubmit }: { onSubmit?: () => void } = {}) {
   const navigate = useNavigate();
   const { pathname, search, hash, state } = useLocation();
   const input = useRef<HTMLInputElement>(null);
@@ -89,6 +89,7 @@ export function SearchField() {
         // real submit would reload the page out of the router.
         event.preventDefault();
         input.current?.blur();
+        onSubmit?.();
       }}
     >
       <Glass />

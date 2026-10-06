@@ -1,4 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   HEXES,
   HEX_R,
@@ -28,6 +35,7 @@ import {
   type QuestionId,
   type Stakeholder,
 } from "../data/stakeholders";
+import { useDeckRests } from "../utils/deck";
 import { HpStats } from "./HpStats";
 import { Marked } from "./Marked";
 import "./StakeholderMap.css";
@@ -46,28 +54,32 @@ import "./StakeholderMap.css";
  *
  *   - On a wide screen the map takes the whole viewport and pins briefly,
  *     so the world is seen at once, easing in on the way in and out on the
- *     way past. Wheel scrolling snaps around it in both directions: a
- *     downward wheel from above glides straight to the pinned map and one
- *     more glides past it; an upward wheel that brings the map back into
- *     view glides it back to fullscreen and one more glides back above it.
- *     Beyond those zones scrolling is untouched, so the page never feels
- *     held. The pin is position:sticky and only wheels are intercepted -
- *     the scrollbar, touch and keyboard stay native - and both the easing
- *     and the snapping are dropped under prefers-reduced-motion. While the
+ *     way past. Scrolling is never intercepted: the pin is position:sticky,
+ *     and only once the reader stops with the map part on screen does the
+ *     window ease on, to the map whole or to the page either side of it,
+ *     whichever way they were going (src/utils/deck.ts). Both the easing
+ *     and the settling are dropped under prefers-reduced-motion. While the
  *     stage covers the viewport the site menu keeps out of the way (the
  *     html[data-map-stage] rule), because it re-shows itself on any upward
  *     scroll and would sit over the map's top edge.
  *   - Every conversation is one cell. Pointing at a cell grows it into the
- *     person's photograph, with their record in a box beside the face (fixed
- *     per face, never chasing the pointer). Selecting keeps the box until a
- *     click away, Escape, or another selection.
- *   - Picking a question (the panel in the top corner) turns everyone who
+ *     person's photograph, with a small box beside the face (fixed per face,
+ *     never chasing the pointer): name, place, date and the questions they
+ *     fed, each of which opens that question. Selecting opens the full
+ *     record in the same place, in the team's three sections, sized so it
+ *     never scrolls, until a click away, Escape, or another selection.
+ *   - Picking a question (the list in the bottom corner) turns everyone who
  *     fed it into large faces and draws that question's HONEY loop through
  *     them: curved arrows run Hear > Observe > Navigate > Evaluate > Yield
  *     and close back to Hear, and each face is badged with its stage. Stages
  *     come from src/data/stakeholders.ts (stageOf), which records only what
  *     the team's write-up states and defaults the rest to Hear - the
  *     write-up's own definition of the stage.
+ *   - The same pick opens the question's write-up, stage by stage, in a pane
+ *     down the right-hand side, and the map shrinks left to make room for
+ *     it rather than being covered. The pane never scrolls: its type is
+ *     fitted to the room (see the fit effect), so the whole question reads
+ *     at once beside the loop it describes.
  *
  * PHOTOS. A face renders only for entries carrying `photo` in
  * src/data/stakeholders.ts. The four withheld interviews never do - a face
@@ -127,6 +139,35 @@ const FACE_MIN_DIST = 92;
  * unless the honest position is genuinely offshore of every land hexagon.
  */
 const SEA_PENALTY = 30;
+
+/**
+ * The write-up pane's type, in px: the largest size it is set at, the size
+ * the panel was designed at (below which the pane widens instead of
+ * shrinking its type further), and the floor, under which it scrolls after
+ * all. PANE_MAX_VW caps the widening, so the map always keeps most of the
+ * screen.
+ */
+const FIT_MAX = 13;
+const FIT_COMFORT = 12;
+const FIT_MIN = 10.5;
+const PANE_MAX_VW = 0.4;
+
+/**
+ * The person card. CARD_M is its margin from the canvas edge, in px.
+ * A selected card starts at the width its CSS gives it and widens, up to
+ * CARD_MAX_REM or the room beside its face, until the whole record fits
+ * the height without scrolling; past that its type shrinks, down to
+ * FIT_MIN, the pane's floor. HOVER_GRACE is how long, in ms, the small card
+ * outlives the pointer leaving its face: long enough to cross the gap to
+ * the card and press one of its questions. HOVER_SWITCH is how long the
+ * pointer has to rest on another cell, while a card is up, before that
+ * cell takes the card over, so a path to the card that grazes a
+ * neighbour does not swap the card out from under it.
+ */
+const CARD_M = 12;
+const CARD_MAX_REM = 46;
+const HOVER_GRACE = 260;
+const HOVER_SWITCH = 140;
 
 const cellKey = (col: number, row: number) => `${col}:${row}`;
 const LAND = new Set(HEXES.map((h) => cellKey(h.col, h.row)));
@@ -213,27 +254,40 @@ function relax(points: { id: string; x: number; y: number }[], blocks: Block[]) 
   // one, so a cluster pushed against an edge or a panel spreads sideways
   // instead of being clamped back into overlap.
   let moved = false;
-  const clamp = (o: { x: number; y: number }) => {
+  const bound = (o: XY) => {
     o.x = Math.min(Math.max(o.x, m), VIEW.w - m);
     o.y = Math.min(Math.max(o.y, m), VIEW.h - m);
-    for (const b of blocks) {
-      if (o.x > b.left && o.x < b.right && o.y > b.top && o.y < b.bottom) {
-        // Leave through the nearest edge. A panel flush with a map edge
-        // makes that exit unreachable, but its distance is then the
-        // largest, so another edge wins.
-        const dl = o.x - b.left;
-        const dr = b.right - o.x;
-        const dt = o.y - b.top;
-        const db = b.bottom - o.y;
-        const min = Math.min(dl, dr, dt, db);
-        if (min === dl) o.x = b.left;
-        else if (min === dr) o.x = b.right;
-        else if (min === dt) o.y = b.top;
-        else o.y = b.bottom;
-        o.x = Math.min(Math.max(o.x, m), VIEW.w - m);
-        o.y = Math.min(Math.max(o.y, m), VIEW.h - m);
-        moved = true;
-      }
+  };
+  const inside = (o: XY, b: Block) =>
+    o.x > b.left && o.x < b.right && o.y > b.top && o.y < b.bottom;
+  const clamp = (o: XY) => {
+    bound(o);
+    // Leave a panel through the nearest edge that lands somewhere free:
+    // inside the map and outside every panel. The heading and the question
+    // list stack down the left and, on a shorter screen or with the map
+    // shrunk for the write-up pane, wall off that whole side between them,
+    // so the plain nearest edge would drop a face from one straight into
+    // the other. Only when no edge is free does the nearest one win, for
+    // the next round to move the face on; a round per panel settles it.
+    for (let round = 0; round <= blocks.length; round++) {
+      const b = blocks.find((k) => inside(o, k));
+      if (!b) return;
+      const exits = [
+        { x: b.left, y: o.y },
+        { x: b.right, y: o.y },
+        { x: o.x, y: b.top },
+        { x: o.x, y: b.bottom },
+      ]
+        .map((e) => {
+          const d = dist(e, o);
+          bound(e);
+          return { ...e, d, free: !blocks.some((k) => inside(e, k)) };
+        })
+        .sort((p, q) => p.d - q.d);
+      const exit = exits.find((e) => e.free) ?? exits[0];
+      o.x = exit.x;
+      o.y = exit.y;
+      moved = true;
     }
   };
   for (const o of p) clamp(o);
@@ -302,27 +356,109 @@ function Silhouette() {
   );
 }
 
-function QuestionTags({ s }: { s: Stakeholder }) {
-  const tags = [
-    ...(s.anchors ?? []).map((q) => ({ q, kind: "anchor" })),
-    ...s.questions.map((q) => ({ q, kind: "listed" })),
-    ...(s.provisional ?? []).map((q) => ({ q, kind: "provisional" })),
-  ];
+/** Every question a conversation fed, in question order. Stated and
+ * provisional tags read the same here: a reader is shown the questions, not
+ * our confidence in the tagging (the map's dashed rim still carries that). */
+const tagsOf = (s: Stakeholder) =>
+  QUESTION_IDS.filter((q) => questionsOf(s).includes(q));
+
+/* The questions a person fed. On the map each one is a button that opens
+ * that question in the picker; in the roster they are plain labels. */
+function QuestionTags({
+  s,
+  filter,
+  onPick,
+}: {
+  s: Stakeholder;
+  filter?: QuestionId | null;
+  onPick?: (q: QuestionId) => void;
+}) {
+  const tags = tagsOf(s);
   if (!tags.length) return null;
   return (
     <p className="sm-tags">
-      {tags.map(({ q, kind }) => (
-        <span
-          key={q}
-          className={`sm-tag sm-tag--${kind}`}
-          title={QUESTION_TITLES[q]}
-        >
-          {q}
-          {kind === "anchor" ? " anchor" : ""}
-          {kind === "provisional" ? "?" : ""}
-        </span>
-      ))}
+      {tags.map((q) =>
+        onPick ? (
+          <button
+            key={q}
+            type="button"
+            className={`sm-tag${filter === q ? " is-on" : ""}`}
+            title={QUESTION_TITLES[q]}
+            aria-label={`${q}: ${QUESTION_TITLES[q]}`}
+            aria-pressed={filter === q}
+            onClick={() => onPick(q)}
+          >
+            {q}
+          </button>
+        ) : (
+          <span key={q} className="sm-tag" title={QUESTION_TITLES[q]}>
+            {q}
+          </span>
+        ),
+      )}
     </p>
+  );
+}
+
+/** Place and interview date, the date left out where none is recorded. */
+function Meta({ s }: { s: Stakeholder }) {
+  return (
+    <p className="sm-meta">
+      <Marked text={s.consent ? s.region : s.place} />
+      {!s.consent && s.date && (
+        <>
+          {" · "}
+          <Marked text={s.date} />
+        </>
+      )}
+    </p>
+  );
+}
+
+/* The three sections of a record, under the team's own headings. Each
+ * heading shows even when its section is still empty: the write-up is not
+ * finished, and nothing is put in its place. The quote is part of what we
+ * learnt. `level` keeps the heading order right wherever the record sits. */
+function RecordSections({ s, level }: { s: Stakeholder; level: 3 | 5 }) {
+  const H = `h${level}` as "h3" | "h5";
+  return (
+    <>
+      <section className="sm-sec">
+        <H className="sm-sec-head">Why did we choose this stakeholder</H>
+        {s.why && (
+          <p>
+            <Marked text={s.why} />
+          </p>
+        )}
+      </section>
+      <section className="sm-sec">
+        <H className="sm-sec-head">What did we learn from them</H>
+        {s.quote && (
+          <p className="sm-quote">
+            &ldquo;
+            <Marked text={s.quote} />
+            &rdquo;
+          </p>
+        )}
+        {s.learnt.length > 0 && (
+          <ul className="sm-learnt">
+            {s.learnt.map((l) => (
+              <li key={l}>
+                <Marked text={l} />
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+      <section className="sm-sec">
+        <H className="sm-sec-head">How did this impact the project</H>
+        {s.changed && (
+          <p>
+            <Marked text={s.changed} />
+          </p>
+        )}
+      </section>
+    </>
   );
 }
 
@@ -332,17 +468,9 @@ function QuestionTags({ s }: { s: Stakeholder }) {
  *
  * <Marked> is what puts a honey background on the words a reader searched for
  * when they arrive here from a result. It renders plain text otherwise. */
-function Profile({
-  s,
-  detail,
-  anchor,
-}: {
-  s: Stakeholder;
-  detail: boolean;
-  anchor?: boolean;
-}) {
+function Profile({ s }: { s: Stakeholder }) {
   return (
-    <li className="sm-profile" id={anchor ? `sm-${s.id}` : undefined}>
+    <li className="sm-profile" id={`sm-${s.id}`}>
       {s.consent ? (
         <>
           <p className="sm-name sm-name--withheld">Interview withheld</p>
@@ -356,157 +484,67 @@ function Profile({
           <p className="sm-role">
             <Marked text={s.role} />
           </p>
-          <p className="sm-meta">
-            <Marked text={s.place} />
-            {s.date ? ` · ${s.date}` : " · date not recorded"}
-          </p>
+          <Meta s={s} />
           <QuestionTags s={s} />
-          {detail && s.quote && (
-            <p className="sm-quote">
-              &ldquo;
-              <Marked text={s.quote} />
-              &rdquo;
-            </p>
-          )}
-          {detail && s.learnt.length > 0 && (
-            <ul className="sm-learnt">
-              {s.learnt.map((l) => (
-                <li key={l}>
-                  <Marked text={l} />
-                </li>
-              ))}
-            </ul>
-          )}
-          {detail && s.changed && (
-            <p className="sm-changed">
-              <span className="sm-changed-label">What it changed</span>
-              <Marked text={s.changed} />
-            </p>
-          )}
+          <RecordSections s={s} level={5} />
         </>
       )}
     </li>
   );
 }
 
-/* The box beside the face. Anchored to the face, never to the pointer, so it
- * can be read while the pointer rests; a hover previews, a selection shows
- * everything and stays until the reader clicks away. Withheld entries show
- * the withholding note and an anonymous silhouette, nothing else. */
+/* The box beside the face. Anchored to the face, never to the pointer.
+ *
+ * Pointing at a face opens the small version: who, where, when, and the
+ * questions they fed, each of which opens that question. Selecting opens the
+ * full record in the same place, sized so it never scrolls (see the fit
+ * effect). The photograph is not repeated: the selected face is already
+ * showing it. Withheld entries show the withholding note and nothing else. */
 function PersonCard({
   s,
   filter,
   pinned,
-  broken,
-  onBroken,
+  photoNote,
+  onPick,
   onClose,
 }: {
   s: Stakeholder;
   filter: QuestionId | null;
   pinned: boolean;
-  broken: Set<string>;
-  onBroken: (id: string) => void;
+  /** Who the face on the map shows, when that is not simply the name. */
+  photoNote?: string;
+  onPick: (q: QuestionId) => void;
   onClose: () => void;
 }) {
   const withheld = Boolean(s.consent);
-  const hasPhoto = Boolean(s.photo) && !withheld && !broken.has(s.id);
-  const teaser = s.quote ?? s.learnt[0];
-  const inCycle = filter && questionsOf(s).includes(filter);
   return (
     <div className="sm-pop-profile">
-      <div className="sm-pop-media">
-        {hasPhoto ? (
-          <img
-            src={s.photo}
-            alt={`Portrait of ${s.photoShows ?? s.name}`}
-            onError={() => onBroken(s.id)}
-          />
-        ) : (
-          <svg viewBox="-12 -12.5 24 25" aria-hidden>
-            <polygon className="sm-pop-hex" points={hexPoints(0, 0)} />
-            <Silhouette />
+      {pinned && (
+        <button
+          type="button"
+          className="sm-close"
+          onClick={onClose}
+          aria-label="Close"
+        >
+          <svg viewBox="0 0 10 10" aria-hidden>
+            <path d="M 1.5 1.5 L 8.5 8.5 M 8.5 1.5 L 1.5 8.5" />
           </svg>
-        )}
-        {hasPhoto && s.photoShows && (
-          <p className="sm-pop-photonote">Photo: {s.photoShows}</p>
-        )}
-      </div>
-      <div className="sm-pop-body">
-        {pinned && (
-          <button
-            type="button"
-            className="sm-close"
-            onClick={onClose}
-            aria-label="Close"
-          >
-            Close
-          </button>
-        )}
-        {withheld ? (
-          <>
-            <p className="sm-name sm-name--withheld">Interview withheld</p>
-            <p className="sm-role">{s.consent!.note}</p>
-            <p className="sm-meta">{s.region}</p>
-          </>
-        ) : (
-          <>
-            <p className="sm-name">
-              <Marked text={s.name} />
-            </p>
-            <p className="sm-role">
-              <Marked text={s.role} />
-            </p>
-            <p className="sm-meta">
-              <Marked text={s.place} />
-              {s.date ? ` · ${s.date}` : " · date not recorded"}
-            </p>
-          </>
-        )}
-        {inCycle && (
-          <p className="sm-meta sm-stageline">
-            {filter} cycle · {STAGE_NAMES[stageOf(filter, s.id)]}
-          </p>
-        )}
-        <QuestionTags s={s} />
-        {!withheld && !pinned && teaser && (
-          <p className={`sm-pop-teaser${s.quote ? " sm-quote" : ""}`}>
-            {s.quote ? (
-              <>
-                &ldquo;
-                <Marked text={s.quote} />
-                &rdquo;
-              </>
-            ) : (
-              <Marked text={teaser} />
-            )}
-          </p>
-        )}
-        {!withheld && !pinned && (
-          <p className="sm-hint">Select to read everything they told us.</p>
-        )}
-        {!withheld && pinned && s.quote && (
-          <p className="sm-quote">
-            &ldquo;
-            <Marked text={s.quote} />
-            &rdquo;
-          </p>
-        )}
-        {!withheld && pinned && s.learnt.length > 0 && (
-          <ul className="sm-learnt">
-            {s.learnt.map((l) => (
-              <li key={l}>
-                <Marked text={l} />
-              </li>
-            ))}
-          </ul>
-        )}
-        {!withheld && pinned && s.changed && (
-          <p className="sm-changed">
-            <span className="sm-changed-label">What it changed</span>
-            <Marked text={s.changed} />
-          </p>
-        )}
-      </div>
+        </button>
+      )}
+      <p className={`sm-name${withheld ? " sm-name--withheld" : ""}`}>
+        {withheld ? "Interview withheld" : <Marked text={s.name} />}
+      </p>
+      {pinned && (
+        <p className="sm-role">
+          {withheld ? s.consent!.note : <Marked text={s.role} />}
+        </p>
+      )}
+      <Meta s={s} />
+      <QuestionTags s={s} filter={filter} onPick={onPick} />
+      {pinned && !withheld && photoNote && (
+        <p className="sm-meta">Photo: {photoNote}</p>
+      )}
+      {pinned && !withheld && <RecordSections s={s} level={3} />}
     </div>
   );
 }
@@ -520,7 +558,6 @@ export function StakeholderMap() {
     }
     return [...byRegion.entries()].map(([name, people]) => ({ name, people }));
   }, []);
-  const withheld = STAKEHOLDERS.filter((s) => s.consent).length;
 
   const [filter, setFilter] = useState<QuestionId | null>(null);
   const [hovered, setHovered] = useState<string | null>(null);
@@ -535,6 +572,34 @@ export function StakeholderMap() {
   const headRef = useRef<HTMLElement>(null);
   const filterboxRef = useRef<HTMLDivElement>(null);
   const qpanelRef = useRef<HTMLElement>(null);
+  const popRef = useRef<HTMLDivElement>(null);
+  // The small card stays up while the pointer crosses from the face to it,
+  // and for as long as the pointer is on it. See HOVER_GRACE and
+  // HOVER_SWITCH.
+  const leaveTimer = useRef(0);
+  const enterTimer = useRef(0);
+  const holdHover = () => {
+    window.clearTimeout(leaveTimer.current);
+    window.clearTimeout(enterTimer.current);
+  };
+  const enterHover = (id: string) => {
+    holdHover();
+    if (hovered === null) setHovered(id);
+    else if (hovered !== id) {
+      enterTimer.current = window.setTimeout(
+        () => setHovered(id),
+        HOVER_SWITCH,
+      );
+    }
+  };
+  const releaseHover = () => {
+    holdHover();
+    leaveTimer.current = window.setTimeout(
+      () => setHovered(null),
+      HOVER_GRACE,
+    );
+  };
+  useEffect(() => holdHover, []);
   // The HONEY stage under the pointer in the cycle panel, picking that
   // stage's people out on the map.
   const [stageHover, setStageHover] = useState<HoneyStage | null>(null);
@@ -555,7 +620,9 @@ export function StakeholderMap() {
 
   // The canvas size and the corner panels' rectangles, in CSS pixels: what
   // the card placement needs to anchor beside a face and to keep off the
-  // panels. The panels share the frame's origin with the canvas.
+  // panels. The panels share the frame's origin with the canvas. The
+  // write-up pane is not one of them: it sits beside the canvas, not over
+  // it, so no face ever has to dodge it.
   const [layout, setLayout] = useState<{
     w: number;
     h: number;
@@ -577,22 +644,99 @@ export function StakeholderMap() {
       setLayout({
         w: canvas.clientWidth,
         h: canvas.clientHeight,
-        panels: [
-          rect(headRef.current),
-          rect(filterboxRef.current),
-          rect(qpanelRef.current),
-        ].filter((r): r is PanelRect => r !== null),
+        panels: [rect(headRef.current), rect(filterboxRef.current)].filter(
+          (r): r is PanelRect => r !== null,
+        ),
       });
     };
+    // The canvas narrows while the write-up pane opens, and the question
+    // list grows its key when a question is picked; both are sizes, so the
+    // observer catches them.
     const ro = new ResizeObserver(measure);
     ro.observe(canvas);
     if (headRef.current) ro.observe(headRef.current);
     if (filterboxRef.current) ro.observe(filterboxRef.current);
-    // The cycle panel exists only while a question is selected, which is
-    // why this effect re-runs on the filter.
-    if (qpanelRef.current) ro.observe(qpanelRef.current);
     measure();
     return () => ro.disconnect();
+  }, []);
+
+  /* The write-up pane does not scroll: the whole question has to be readable
+   * at once, beside the loop it describes. So its type is fitted to the
+   * room - the largest size up to FIT_MAX at which every stage fits. If that
+   * would drop below FIT_COMFORT, the pane widens instead (up to
+   * PANE_MAX_VW, the map giving up the width) just far enough to hold
+   * FIT_COMFORT. Only a viewport too short even then falls back to a
+   * scrolling pane at FIT_MIN. Measured, not estimated, because the stage
+   * texts are the team's to edit (src/content/questions) and their length
+   * moves.
+   *
+   * The pane's height is its content's, capped by the room, so "fits" is
+   * simply scrollHeight within clientHeight. Trial widths go on the pane
+   * alone, so only the pane relays out per trial; the chosen width goes on
+   * the frame, where the canvas reads it too. Narrow screens keep the pane
+   * in flow and are left alone. */
+  useLayoutEffect(() => {
+    const pane = qpanelRef.current;
+    const frame = frameRef.current;
+    if (!filter || !pane || !frame) return;
+    const wideMq = window.matchMedia("(min-width: 48rem)");
+    const fit = () => {
+      frame.style.removeProperty("--sm-pane-w");
+      pane.style.removeProperty("--sm-pane-w");
+      pane.style.removeProperty("--sm-qfit");
+      pane.removeAttribute("data-overflow");
+      if (!wideMq.matches) return;
+      const fits = (px: number) => {
+        pane.style.setProperty("--sm-qfit", `${px}px`);
+        return pane.scrollHeight <= pane.clientHeight;
+      };
+      const largest = () => {
+        if (fits(FIT_MAX)) return FIT_MAX;
+        if (!fits(FIT_MIN)) return 0;
+        let lo = FIT_MIN;
+        let hi = FIT_MAX;
+        while (hi - lo > 0.125) {
+          const mid = (lo + hi) / 2;
+          if (fits(mid)) lo = mid;
+          else hi = mid;
+        }
+        return lo;
+      };
+      const widthTo = (px: number) =>
+        pane.style.setProperty("--sm-pane-w", `${px}px`);
+      let size = largest();
+      if (size < FIT_COMFORT) {
+        let lo = pane.offsetWidth;
+        let hi = Math.max(lo, Math.round(window.innerWidth * PANE_MAX_VW));
+        widthTo(hi);
+        if (fits(FIT_COMFORT)) {
+          while (hi - lo > 8) {
+            const mid = Math.round((lo + hi) / 2);
+            widthTo(mid);
+            if (fits(FIT_COMFORT)) hi = mid;
+            else lo = mid;
+          }
+          widthTo(hi);
+        }
+        size = largest();
+        frame.style.setProperty("--sm-pane-w", `${hi}px`);
+        pane.style.removeProperty("--sm-pane-w");
+      }
+      pane.style.setProperty("--sm-qfit", `${size || FIT_MIN}px`);
+      pane.toggleAttribute("data-overflow", size === 0);
+    };
+    fit();
+    // Only the viewport changes the room; the frame is the viewport here.
+    const ro = new ResizeObserver(fit);
+    ro.observe(frame);
+    // The brand faces load from static.igem.wiki, possibly after this first
+    // fit, and a swapped face re-wraps every line.
+    document.fonts.addEventListener("loadingdone", fit);
+    return () => {
+      ro.disconnect();
+      document.fonts.removeEventListener("loadingdone", fit);
+      frame.style.removeProperty("--sm-pane-w");
+    };
   }, [filter]);
 
   /* The pin-and-move-on scroll treatment. The stage is position:sticky, so
@@ -644,114 +788,22 @@ export function StakeholderMap() {
     };
   }, []);
 
-  /* Snap scrolling around the stage, wheel only, both directions.
-   *
-   * Going down: from above (the page opens with about one screen of hero
-   * above this section), any downward wheel glides the reader straight to
-   * the pinned map; one more glides past it, to where the map has just
-   * left the screen. Going up, the mirror: an upward wheel while the map
-   * peeks back in from above the viewport glides it back to fullscreen,
-   * and one more glides back above it, map just below the screen. Outside
-   * those zones nothing is intercepted, so scrolling on through the rest
-   * of the page never drags - and the post-landing cooldown only swallows
-   * wheels that would fire the next snap, for the same reason.
-   *
-   * Scrollbar drags, touch, keyboard, narrow screens and
-   * prefers-reduced-motion stay native, a wheel over the open record
-   * scrolls the record, and a wheel against the current glide's direction
-   * cancels it and hands control back. If content ever grows above this
-   * section, revisit the "any downward wheel from above" rule. */
-  useEffect(() => {
+  /* Settling around the stage. The map's rests go to the deck
+   * (src/utils/deck.ts), the same one the home page's slides use: the screen
+   * just above the map, the map filling the screen, and the screen just
+   * after it. Scrolling stays native the whole way; a reader who stops
+   * while the map is part on screen is eased on to whichever of those they
+   * were heading for. Narrow screens sit it out, and the deck itself stands
+   * still under prefers-reduced-motion. If content ever grows directly
+   * above this section, the first rest still reads it whole. */
+  const rests = useCallback(() => {
     const wrap = pinRef.current;
-    if (!wrap) return;
-    const wideMq = window.matchMedia("(min-width: 48rem)");
-    const stillMq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let raf = 0;
-    let animating = false;
-    let animDown = true;
-    // Trackpads keep firing momentum events after a flick; a short silence
-    // after each landing keeps one flick to one stop.
-    let coolUntil = 0;
-
-    const glide = (target: number) => {
-      cancelAnimationFrame(raf);
-      animating = true;
-      const from = window.scrollY;
-      animDown = target >= from;
-      const t0 = performance.now();
-      // Short enough that a deliberate follow-up wheel is never eaten: the
-      // glide plus the cooldown stay under a second.
-      const D = 520;
-      const ease = (t: number) =>
-        t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2;
-      const step = (now: number) => {
-        const t = Math.min((now - t0) / D, 1);
-        // "instant", explicitly: Bootstrap's reboot sets scroll-behavior:
-        // smooth on :root, which would turn every frame of this glide into
-        // its own competing native animation.
-        window.scrollTo({
-          top: from + (target - from) * ease(t),
-          behavior: "instant",
-        });
-        if (t < 1) {
-          raf = requestAnimationFrame(step);
-        } else {
-          animating = false;
-          coolUntil = performance.now() + 350;
-        }
-      };
-      raf = requestAnimationFrame(step);
-    };
-
-    const onWheel = (e: WheelEvent) => {
-      if (!wideMq.matches || stillMq.matches || e.deltaY === 0) return;
-      const t = e.target as Element | null;
-      // The open record scrolls itself.
-      if (t && t.closest(".sm-pop")) return;
-      const down = e.deltaY > 0;
-      if (animating) {
-        if (down === animDown) {
-          e.preventDefault();
-        } else {
-          cancelAnimationFrame(raf);
-          animating = false;
-        }
-        return;
-      }
-      const r = wrap.getBoundingClientRect();
-      const vh = window.innerHeight;
-      let target: number | null = null;
-      if (down) {
-        if (r.top > 1) {
-          target = window.scrollY + r.top;
-        } else if (r.bottom > vh - 1) {
-          // Past the map: the wrapper's bottom reaches the viewport's top,
-          // the map has just left the screen and the page continues.
-          target = window.scrollY + r.bottom;
-        }
-      } else {
-        if (r.top <= 1 && r.bottom >= vh - 1) {
-          // On the map: back above it, map just below the screen.
-          target = Math.max(0, window.scrollY + r.top - vh);
-        } else if (r.bottom > 1 && r.bottom < vh - 1) {
-          // The map is peeking back in from the top: bring it back whole,
-          // to the same pinned position the downward snap lands on - the
-          // one place both fade ramps read as fully present.
-          target = window.scrollY + r.top;
-        }
-      }
-      if (target === null) return;
-      e.preventDefault();
-      if (performance.now() < coolUntil) return;
-      glide(target);
-    };
-
-    window.addEventListener("wheel", onWheel, { passive: false });
-    return () => {
-      window.removeEventListener("wheel", onWheel);
-      cancelAnimationFrame(raf);
-    };
-  }, []);
+    if (!wide || !wrap) return [];
+    const r = wrap.getBoundingClientRect();
+    const top = r.top + window.scrollY;
+    return [Math.max(0, top - window.innerHeight), top, r.bottom + window.scrollY];
+  }, [wide]);
+  useDeckRests(rests);
 
   const shows = (s: Stakeholder) => !filter || questionsOf(s).includes(filter);
 
@@ -832,6 +884,96 @@ export function StakeholderMap() {
 
   const activeId = pinned ?? hovered;
   const activeS = STAKEHOLDERS.find((s) => s.id === activeId) ?? null;
+  const activePinned = Boolean(activeS) && pinned === activeId;
+
+  /* The active face in canvas pixels, and how far the card keeps from its
+   * centre. The svg letterboxes with `meet`, so viewBox units are mapped
+   * through the same fit here. */
+  const faceGeom = useMemo(() => {
+    if (!activeS || !layout.w || !layout.h) return null;
+    const pos = positions.get(activeS.id);
+    if (!pos) return null;
+    const scale = Math.min(layout.w / MAP_W, layout.h / MAP_H);
+    const ox = (layout.w - MAP_W * scale) / 2;
+    const oy = (layout.h - MAP_H * scale) / 2;
+    const toPx = (p: XY) => ({ x: ox + p.x * scale, y: oy + p.y * scale });
+    return {
+      toPx,
+      scale,
+      face: toPx(pos),
+      gap: HEX_R * ACTIVE_SCALE * scale + 16,
+    };
+  }, [activeS, layout, positions]);
+
+  /* The card's real size, measured, for cardPos. A selected card never
+   * scrolls: if the record is taller than the canvas allows, the card widens
+   * (narrowest width that fits, up to CARD_MAX_REM or the room beside the
+   * face, so it can still sit next to it) and its lines get longer and the
+   * record shorter. If that is not enough the type shrinks, to FIT_MIN at
+   * the smallest; only a canvas too short even then gets a scrolling card. The measurement runs before paint, so the card
+   * is never seen at the wrong size or place. */
+  const popKey = activeS
+    ? `${activeS.id}:${activePinned ? "pin" : "hover"}:${filter ?? ""}`
+    : "";
+  const [popSize, setPopSize] = useState<{
+    key: string;
+    w: number;
+    h: number;
+  } | null>(null);
+  useLayoutEffect(() => {
+    const el = popRef.current;
+    if (!el || !wide || !popKey) return;
+    el.style.removeProperty("width");
+    el.style.removeProperty("max-height");
+    el.style.removeProperty("font-size");
+    el.removeAttribute("data-overflow");
+    if (activePinned && faceGeom) {
+      const room = layout.h - 2 * CARD_M;
+      const fits = () => el.offsetHeight <= room;
+      if (!fits()) {
+        const rem =
+          parseFloat(getComputedStyle(document.documentElement).fontSize) ||
+          16;
+        const { face, gap } = faceGeom;
+        const beside = Math.max(
+          face.x - gap - CARD_M,
+          layout.w - face.x - gap - CARD_M,
+        );
+        let lo = el.offsetWidth;
+        let hi = Math.max(lo, Math.min(CARD_MAX_REM * rem, beside));
+        el.style.width = `${hi}px`;
+        if (fits()) {
+          while (hi - lo > 8) {
+            const mid = Math.round((lo + hi) / 2);
+            el.style.width = `${mid}px`;
+            if (fits()) hi = mid;
+            else lo = mid;
+          }
+          el.style.width = `${hi}px`;
+        } else {
+          let big = parseFloat(getComputedStyle(el).fontSize);
+          let small = FIT_MIN;
+          el.style.fontSize = `${small}px`;
+          if (fits()) {
+            while (big - small > 0.125) {
+              const mid = (big + small) / 2;
+              el.style.fontSize = `${mid}px`;
+              if (fits()) small = mid;
+              else big = mid;
+            }
+            el.style.fontSize = `${small}px`;
+          } else {
+            el.style.maxHeight = `${room}px`;
+            el.setAttribute("data-overflow", "");
+          }
+        }
+      }
+    }
+    const next = { key: popKey, w: el.offsetWidth, h: el.offsetHeight };
+    setPopSize((p) =>
+      p && p.key === next.key && p.w === next.w && p.h === next.h ? p : next,
+    );
+  }, [popKey, activePinned, wide, layout.w, layout.h, faceGeom]);
 
   /* Where the card sits: the spot nearest the active face that covers
    * nothing the reader could otherwise use. Every candidate position - the
@@ -845,19 +987,14 @@ export function StakeholderMap() {
    * estimates - real cards are usually shorter - which is fine for keeping
    * clear of things. */
   const cardPos = useMemo(() => {
-    if (!activeS || !wide || !layout.w || !layout.h) return null;
-    const pos = positions.get(activeS.id);
-    if (!pos) return null;
-    const scale = Math.min(layout.w / MAP_W, layout.h / MAP_H);
-    const ox = (layout.w - MAP_W * scale) / 2;
-    const oy = (layout.h - MAP_H * scale) / 2;
-    const toPx = (p: XY) => ({ x: ox + p.x * scale, y: oy + p.y * scale });
-    const f = toPx(pos);
-    const isPinned = pinned === activeS.id;
-    const w = (isPinned ? 24 : 23) * 16;
-    const h = isPinned ? Math.min(layout.h * 0.52, 30 * 16) : 300;
-    const gap = HEX_R * ACTIVE_SCALE * scale + 16;
-    const M = 12;
+    if (!activeS || !wide || !faceGeom) return null;
+    const { toPx, scale, face: f, gap } = faceGeom;
+    // The measured size once there is one for this card; until then (the
+    // first render of a new card, before the measuring effect) an estimate.
+    const measured = popSize && popSize.key === popKey ? popSize : null;
+    const w = measured ? measured.w : (activePinned ? 26 : 18) * 16;
+    const h = measured ? measured.h : activePinned ? layout.h * 0.6 : 120;
+    const M = CARD_M;
 
     const q = filter;
     const spots = nodes
@@ -868,7 +1005,7 @@ export function StakeholderMap() {
         const r =
           (own ? HEX_R * ACTIVE_SCALE + 6 : (q ? FACE_R : HEX_R * 1.3) + 4) *
           scale;
-        return { ...c, r };
+        return { ...c, r, own };
       });
 
     const clampX = (x: number) => Math.min(Math.max(x, M), layout.w - w - M);
@@ -890,7 +1027,9 @@ export function StakeholderMap() {
       for (const s of spots) {
         const cx = Math.min(Math.max(s.x, c.left), c.left + w);
         const cy = Math.min(Math.max(s.y, c.top), c.top + h);
-        if ((cx - s.x) ** 2 + (cy - s.y) ** 2 < s.r * s.r) n++;
+        // Covering the face the card describes defeats the card, so it
+        // outweighs anything else it could cover.
+        if ((cx - s.x) ** 2 + (cy - s.y) ** 2 < s.r * s.r) n += s.own ? 100 : 1;
       }
       for (const r of layout.panels) {
         if (
@@ -923,7 +1062,18 @@ export function StakeholderMap() {
       }
     }
     return best;
-  }, [activeS, wide, layout, positions, pinned, filter, nodes]);
+  }, [
+    activeS,
+    activePinned,
+    wide,
+    layout,
+    positions,
+    filter,
+    nodes,
+    popSize,
+    popKey,
+    faceGeom,
+  ]);
 
   // Escape lets go of a selection, which is the only way out for a keyboard
   // user who selected a record and does not want to tab back to it.
@@ -956,6 +1106,19 @@ export function StakeholderMap() {
     setStageHover(null);
   };
 
+  // Land never changes, and the stage re-renders on every frame of the
+  // canvas narrowing for the write-up pane, so the lattice is built once.
+  const land = useMemo(
+    () => (
+      <g className="sm-land" aria-hidden>
+        {HEXES.map((h) => (
+          <polygon key={`${h.col}-${h.row}`} points={hexPoints(h.x, h.y)} />
+        ))}
+      </g>
+    ),
+    [],
+  );
+
   // The active cell paints last so its enlarged face is never under a
   // neighbour. The sort is stable, so nothing else changes order.
   const drawOrder = useMemo(
@@ -971,9 +1134,12 @@ export function StakeholderMap() {
       <div className="sm-pin" ref={pinRef}>
         <div className="sm-stage">
           <div
-            className="sm-frame"
+            className={`sm-frame${filter ? " has-pane" : ""}`}
             ref={frameRef}
-            onPointerLeave={() => setHovered(null)}
+            onPointerLeave={() => {
+              holdHover();
+              setHovered(null);
+            }}
           >
             <div className="sm-canvas" ref={canvasRef}>
               <svg
@@ -1007,14 +1173,7 @@ export function StakeholderMap() {
 
                 {/* Land. Inert: the ground the faces sit on, nothing more.
                  * Drawn complete, because a face may drift off its cell. */}
-                <g className="sm-land" aria-hidden>
-                  {HEXES.map((h) => (
-                    <polygon
-                      key={`${h.col}-${h.row}`}
-                      points={hexPoints(h.x, h.y)}
-                    />
-                  ))}
-                </g>
+                {land}
 
                 {filter && (
                   <g className="sm-links" aria-hidden>
@@ -1080,13 +1239,8 @@ export function StakeholderMap() {
                             : `${s.name}, ${s.role}`
                           : undefined
                       }
-                      onPointerEnter={lit ? () => setHovered(s.id) : undefined}
-                      onPointerLeave={
-                        lit
-                          ? () =>
-                              setHovered((h) => (h === s.id ? null : h))
-                          : undefined
-                      }
+                      onPointerEnter={lit ? () => enterHover(s.id) : undefined}
+                      onPointerLeave={lit ? releaseHover : undefined}
                       onFocus={lit ? () => setHovered(s.id) : undefined}
                       onBlur={lit ? () => setHovered(null) : undefined}
                       /* pointerup, not click: hovering re-orders this element
@@ -1171,19 +1325,15 @@ export function StakeholderMap() {
              * heading above it would only be glimpsed mid-glide. */}
             <header className="sm-head" ref={headRef}>
               <h2 id="sm-heading" className="sm-heading">
-                Who we spoke to
+                Our human practices mapped
               </h2>
               {/* The record's headline numbers, the team's own count. The
                * map plots the conversations written up so far, which is
-               * fewer, and the standfirst says so. */}
+               * fewer; the full record below the map lists them. */}
               <HpStats />
               <p className="sm-standfirst">
-                The map plots the {STAKEHOLDERS.length} conversations written
-                up so far, {withheld} of them withheld pending consent. Point
-                at a marked hexagon and it grows into the person, with their
-                record beside it; select it to keep the record open until you
-                click away. Pick a question to lay its HONEY loop over the
-                map. The full record is below the map as text.
+                Click on stakeholders or select a question to explore our
+                project.
               </p>
             </header>
 
@@ -1222,20 +1372,27 @@ export function StakeholderMap() {
                   stage letter, the anchor interview carries the heavier rim,
                   and a dashed rim is a tag we assigned provisionally, not
                   one the team&rsquo;s question table states. Hover a stage
-                  in the panel beside this list to pick its people out.
+                  in the write-up to pick its people out.
                 </p>
               )}
             </div>
 
             {/* The question walked through its HONEY stages, from the
-             * question's own file (src/content/questions). Hovering or
-             * focusing a stage picks its people out on the map. */}
+             * question's own file (src/content/questions), in the pane down
+             * the right-hand side. Hovering or focusing a stage picks its
+             * people out on the map. */}
             {filter && (
               <aside
                 className="sm-qpanel"
                 ref={qpanelRef}
-                aria-label={`${filter} through the HONEY loop`}
+                aria-labelledby="sm-qpanel-title"
               >
+                <header className="sm-qpanel-head">
+                  <p className="sm-qpanel-id">{filter} through the HONEY loop</p>
+                  <h3 id="sm-qpanel-title" className="sm-qpanel-title">
+                    {QUESTION_TITLES[filter]}
+                  </h3>
+                </header>
                 {QUESTION_CYCLES[filter].stages.map((st) => (
                   <section
                     key={st.stage}
@@ -1280,7 +1437,10 @@ export function StakeholderMap() {
 
             {(activeS || !wide) && (
               <div
-                className={`sm-pop${pinned && pinned === activeId ? " is-pinned" : ""}`}
+                ref={popRef}
+                className={`sm-pop${activePinned ? " is-pinned" : ""}`}
+                onPointerEnter={activePinned ? undefined : holdHover}
+                onPointerLeave={activePinned ? undefined : releaseHover}
                 style={
                   cardPos
                     ? { left: `${cardPos.left}px`, top: `${cardPos.top}px` }
@@ -1293,11 +1453,13 @@ export function StakeholderMap() {
                   <PersonCard
                     s={activeS}
                     filter={filter}
-                    pinned={Boolean(pinned) && pinned === activeId}
-                    broken={broken}
-                    onBroken={(id) =>
-                      setBroken((prev) => new Set(prev).add(id))
+                    pinned={activePinned}
+                    photoNote={
+                      activeS.photo && !broken.has(activeS.id)
+                        ? activeS.photoShows
+                        : undefined
                     }
+                    onPick={pick}
                     onClose={() => setPinned(null)}
                   />
                 ) : (
@@ -1320,7 +1482,7 @@ export function StakeholderMap() {
             <h4>{r.name}</h4>
             <ul className="sm-list">
               {r.people.map((s) => (
-                <Profile key={s.id} s={s} detail anchor />
+                <Profile key={s.id} s={s} />
               ))}
             </ul>
           </div>

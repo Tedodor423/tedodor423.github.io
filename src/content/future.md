@@ -1,9 +1,3 @@
-> **What this page proves:** that we know exactly where this project stopped,
-> what has to be solved before it can go further, and in what order.
-> **Where the evidence is:** [results](/results) for where the work reached,
-> [yeast](/wet-lab-experiments#yeast-production) for the unsolved problem, and
-> [entrepreneurship](/entrepreneurship) for the route beyond the lab.
-
 A laboratory result is not a product, and iGEM is not the end of a project that
 would need years to reach a hive. This page is written as **a plan, not a promise**.
 
@@ -44,8 +38,7 @@ Three things, in this order, because each unblocks the one after it.
    there is a working assay to rank them with.
 
 A fourth is a design ambition rather than a next step: a **multimeric
-therapeutic** hitting several targets at once, as resistance management. It
-belongs under what would have to be true, not under what we would do next.
+therapeutic** hitting several targets at once, as resistance management.
 
 > **TODO —** Re-check this ordering against [results](/results) once that page is
 > written, so the list starts from where the work actually stopped rather than
@@ -53,7 +46,7 @@ belongs under what would have to be true, not under what we would do next.
 
 ## What would have to be true
 
-The assumptions the whole idea rests on, marked honestly.
+The assumptions the whole idea rests on.
 
 | Assumption                                                          | Standing        |
 | ------------------------------------------------------------------- | --------------- |
@@ -83,9 +76,7 @@ after the science is finished.
 ### Sustainable development
 
 Whether this project makes anything measurably better, and where it creates new
-problems in doing so. The honest accounting of tensions is the substance of that
-page, **not a caveat at the end** of it. See
-[sustainable development](/sustainability).
+problems in doing so. See [sustainable development](/sustainability).
 
 ### Entrepreneurship
 

@@ -13,6 +13,19 @@ stakeholder-map
 > is a public repository; decide whether even that much should wait for
 > consent. Owner: HP.
 
+> **TODO — three naming and consent questions the 7 October write-up raises and
+> does not answer.** First, **Geraldine Lester's name has gone**: the earlier
+> write-up's question table read "Geraldine Lester / OGTR" and the new one reads
+> "OGTR", with her name nowhere in the document. We still publish it. If that
+> removal was deliberate, the name has to come off this page too. Second,
+> **Sarah Coy's "review needed before publication" marker has gone** from her
+> entry while the new write-up puts her into the Q3 narrative by name. A note
+> disappearing is not the same as a review happening, so her profile stays
+> withheld until someone confirms. Third, **Michael Morrison** still wants to
+> review text before publication, yet the SDG write-up in the same batch contains
+> a finished, publication-ready profile of him. Confirm his review landed before
+> any of that ships. Owner: HP.
+
 > **TODO —** The stakeholder photographs are not uploaded yet: the dev server
 > shows them from the local `wiki-assets-source/stakeholder-photos/` folder,
 > but the published site shows drawn silhouettes until they go through the
@@ -22,15 +35,47 @@ stakeholder-map
 > photo's source and licence in [Attributions](/attributions) and confirm the
 > person is happy to have their face shown. Owner: HP.
 
-> **TODO —** The 25 September write-up lists interviews with Professor Nancy
-> Moran and Professor Peter Unrau as done but not written up. They are absent
-> from the map and the roster until a write-up exists to transcribe. Owner:
-> HP.
+> **TODO —** The 7 October write-up still lists interviews with Professor Nancy
+> Moran and Professor Peter Unrau as done but not written up, and Professor Giles
+> Budge alongside them although his profile now exists. Moran and Unrau are
+> absent from the map and the roster until a write-up exists to transcribe, and
+> both changed something: Moran, with Jeff Barrick and Sean Leonard, on the
+> genetic toolkit for *S. alvi*; Unrau, who discovered the Mango aptamer, on the
+> streptavidin capture step and on Mango III, which is a documented piece of
+> advice that altered an assay. Sean Leonard has no entry either. Owner: HP.
+
+## Why this page exists
+
+**Every time we thought we had an answer, the world outside the lab gave us another
+question.**
+
+To create NECTAR we came up with an idea to solve a problem. But designing it raised
+challenges that could not be answered at the lab bench alone. Would beekeepers
+actually use it? Could it harm other organisms? Would a living GMO ever make it out
+of the laboratory? Would the same treatment make sense all around the world? Each
+answer challenged an assumption, introduced a new constraint, or changed the
+direction of our project.
+
+We realised that **human practices is not something to conduct after designing
+NECTAR, but before**: we needed the evidence, the environments and the people to
+shape what we built. So we settled on a set of questions to work towards answering
+in order to design NECTAR, and ran each through the HONEY loop below, combining
+stakeholder perspectives, background research, modelling and experimental work before
+asking how what we learned should change the design.
+
+These cycles take us from understanding why Varroa requires new solutions,
+through our choices of RNAi, chassis, safety and delivery, to whether beekeepers
+could realistically adopt NECTAR, how its implementation would differ around the
+world, and what it would be worth if it worked. **Importantly, we did not expect
+every stakeholder to agree**: disagreements and trade-offs are what identified where
+NECTAR needed to adapt. The goal was not to answer seven questions, but to use each
+answer to make NECTAR more responsible, more useful, and better grounded in the
+world it would operate in.
 
 ## HONEY as a method, not a label
 
 The loop is the transferable part of this work, so we are publishing it as a
-method rather than as a heading structure. It has three rules:
+method. It has three rules:
 
 1. **A question earns a place only if it passes three tests:** at least three
    stakeholders, at least one documentable design change, and at least one link
@@ -49,20 +94,22 @@ The write-up of HONEY for another team to pick up is part of
 > question list, the discussion by topic, and a reflection on what we would ask
 > differently. The six fields below are the second layer. Owner: HP.
 
-## The six questions
+## The seven questions
 
 Our engagement is organised by question, not by person, because the same person
 often matters to three questions for three different reasons.
 
-**The loop closes.** Every Yield hands a new question back to Hear, and the six
+**The loop closes.** Every Yield hands a new question back to Hear, and the
 questions below are in the order the loop produced them. Q1 established that
 resistance and reinfestation, not mite mortality, were the problem, which asked
 whether a chemical could fix it at all — Q2. Deciding on RNA made the delivery
 organism the open question — Q3. Answering that by removing the living organism
 did not remove the RNA, so the harm question had to be asked separately — Q4.
 The chassis we chose no longer persists, so someone has to reapply and pay for
-it — Q5. And every answer so far was given to us by people in three countries
-who did not agree with each other — Q6.
+it — Q5. Every answer so far was given to us by people in three countries
+who did not agree with each other — Q6. And a treatment a beekeeper can afford
+is a claim about money, which has to be worked out at the scale of an industry
+rather than a hive — Q7.
 
 ### Q1 — How and why is Varroa a problem, and what treatments exist?
 
@@ -103,9 +150,12 @@ Council · 28 May 2026
   different figures for how much of Australian agriculture depends on bee
   pollination — 14–15% in the interview narrative and about 50% in the summary.
   We use the narrative figure and flag the conflict rather than picking the
-  larger number `[FLAG]`. It also values that share at about A$14.6 billion,
-  where the economic modelling behind Q5 works from an A$4.6 billion pollination
-  figure; the two have not been reconciled `[FLAG]`.
+  larger number `[FLAG]`. What that share is worth now has **three** irreconcilable
+  answers across our own documents: about A$14.6 billion in the earlier write-up,
+  "an estimated $5 billion impact" from losing the bees in the 7 October one, and
+  the A$4.6 billion pollination contribution the economic modelling behind Q5 and
+  Q7 actually runs on. We publish none of the first two until the team picks one
+  `[FLAG]`.
 
 Supporting: **Chris Hiatt** on resistance at 18,000-colony scale; **Mike
 Allerton** and **Wade Ford** on Australian practice; **Elizabeth Frost** on
@@ -172,8 +222,8 @@ cuts the labour some of the current control methods demand. Getting there meant
 treating Varroa as an ecological and economic problem and not only a biological
 one. The problem stopped being mite mortality and became a system: colony
 survival, repeated labour, the cost of rebuilding, and the pollination that
-depends on all of it — about 15% of Australian agriculture, or A$14.6 billion, so
-beekeeper attrition reaches farmers and consumers too. California tells the same
+depends on all of it — about 15% of Australian agriculture, so beekeeper
+attrition reaches farmers and consumers too. California tells the same
 story from the other end: **Josette Lewis** showed us how completely the almond
 industry and other insect-pollinated crops depend on healthy colonies, which
 makes the beekeepers' losses the growers' problem as well. The treatment-free
@@ -330,9 +380,6 @@ which lives in the bee gut and would produce dsRNA continuously, and
 long dsRNA accumulates, and is already fed to bees as a protein supplement. That
 choice is Q3.
 
-> **IP gate —** the specific Varroa gene target is not named anywhere on this
-> wiki pending a patent-filing decision. Owner: R&D.
-
 **Evaluate.** Against the chemicals on the approved lists, RNAi offers three
 things. A **new mode of action**, which can kill mite populations resistant to
 conventional treatments and can be incorporated into an IPM programme.
@@ -441,7 +488,7 @@ biology, but a product that fits into a job the beekeeper already does.
   beeswax or pollen through the Food Standards Agency.
 - **Scotland.** **Laura Bowden** (SASA) placed heat-killed yeast in a grey area
   — it may avoid some GM release requirements, but a grey area is not an
-  exemption, and it is **a weaker claim than the OGTR's**, recorded as such.
+  exemption, and it is **a weaker claim than the OGTR's**.
 - **United States.** The **EPA, FDA and USDA** cautioned that living versus
   non-living does not by itself make the path easier or harder. Jurisdiction
   follows what the product does; our treatment might be assessed as an animal
@@ -481,7 +528,7 @@ accumulate. It may also let us formulate whole or inactivated biomass rather
 than purifying the RNA out of it, which removes the most expensive downstream
 steps.
 
-The cost is real and we are not hiding it: an inactivated product cannot
+The cost is real: an inactivated product cannot
 reproduce, so once its RNA is consumed or degraded, **more has to be administered**.
 
 **Evaluate.**
@@ -510,8 +557,7 @@ work. It shows up in [Engineering](/engineering), [Yeast](/wet-lab-experiments#y
 
 **The dissent stands.** Dunwell told us that *“the delivery method is secondary
 to the endpoint”*. If he is right, the containment argument we gained is smaller
-than we claim. **We have not resolved this**, and we say so here rather than in a
-footnote.
+than we claim. **We have not resolved this.**
 
 **Next question:** we removed the living organism, but not the RNA. So what can
 the RNA still harm?
@@ -568,8 +614,7 @@ uses for purity, and Ford asked us to test it after processing, since honey is
 heated to 65 °C for eight hours to be sent into Western Australia.
 
 **Evaluate.** We can state the design intent and the screening method. We cannot
-yet state a result. An honest reading of where we are: no off-target effects
-would mean substantially less ecological impact at comparable efficacy and cost,
+yet state a result. No off-target effects would mean substantially less ecological impact at comparable efficacy and cost,
 and that is the claim the work is aimed at — but it is **a target, not a finding**.
 
 > **TODO —** The dsRNA-in-honey result is not on the wiki. Report it here with
@@ -583,8 +628,7 @@ and that is the claim the work is aimed at — but it is **a target, not a findi
 
 **Yield.** Input from the academic and regulatory side — **not from the market** —
 reoriented target design towards ecological safety alongside efficacy. That is
-the whole of the change, and the page should not claim more than that until the
-results land.
+the whole of the change until the results land.
 
 **Next question:** a product safe enough to approve is still no use if nobody
 will buy it. What would a beekeeper actually use?
@@ -649,14 +693,22 @@ cost is zero. One withheld conversation also bears on this question.
 
 **Observe.** In our own dataset, NSW beekeepers report about A$22.18 per hive of
 direct Varroa control plus 0.37 hours of labour per hive, and US Varroa control
-runs to about US$9.22 per colony a year `[CALC]`.
+runs to about US$9.22 per colony a year `[CALC]`. In the US the revenue at risk
+is concentrated: almond pollination generated about **US$325.8 million in 2024,
+roughly 81% of all US pollination-service revenue** `[CALC]`. Goodrich's
+modelled operation shows why purchase price is the wrong measure — capital
+recovery and equipment are about 27% of total costs and labour 21%, while
+purchased Varroa-control products alone are about 9%, a figure that excludes both
+the labour to administer them and the cost of rebuilding what Varroa kills.
 
-> **TODO —** One or two lines are owed in Observe, Navigate or Evaluate on DBTL 3
-> of the BEEHAVE model, which determines the quantity of yeast required and hence
-> the cost — the thing that lets us compare NECTAR to existing treatments on cost.
-> The same cycle determines which treatment protocol we recommend (year-round,
-> winter only, or autumn only), which affects both cost and adoption. Owner: HP
-> with ecological modelling.
+**The cost question is also a modelling question.** DBTL 3 of the BEEHAVE model
+follows dsRNA from pollen patty to bee to mite, so varying dsRNA concentration,
+yeast consumption and patty quantity gives **the quantity of yeast a working dose
+needs** — and therefore what NECTAR costs against the treatments it would
+replace. The same cycle compares year-round, autumn and winter schedules, which
+decides when treatment is most effective for the least product and the least
+beekeeper intervention. It is written up at [ecological
+modelling](/ecological-modelling).
 
 **Navigate.** Thurman set the method: the counterfactual is **the best existing
 treatment, not doing nothing**; start at operation level and measure the change in
@@ -728,15 +780,29 @@ syrup needs an absence of nectar flow the Australian season rarely provides,
 while pollen is limiting, which makes a patty more attractive there than it
 would be elsewhere. Honey shipped into Western Australia is heated to 65 °C for
 eight hours, so residue and degradation behaviour has to be tested under
-processing, not only in the hive. In California the constraint is not climate
-but logistics: about 80% of US commercial colonies converge on one bloom, and a
-treatment that needs a separate visit to each colony is a different product from
-one that does not. And the regulatory answer is **genuinely different in each
-jurisdiction** — the OGTR's remit test, the UK's three regimes, the US
-function-based split, Switzerland's three-permit route for a living organism.
-The **Scottish Government Honey Bee Health Team** put Varroa in Scotland's top
-three bee threats, which places the problem **outside our two case studies
-entirely**.
+processing, not only in the hive. Australia also holds an internal border: strict
+movement control between regions has kept the western half of the country largely
+Varroa-free while the eastern seaboard is close to fully infested, so one country
+needs two answers. In California the constraint is not climate but logistics:
+every February roughly **1.5 to 2 million colonies** are trucked in from across
+the US to pollinate over a million acres of almonds, about 80% of US commercial
+colonies converging on one bloom, and a treatment that needs a separate visit to
+each colony is a different product from one that does not.
+
+And the regulatory answer is **genuinely different in each jurisdiction**. Our
+mapping across Australia, Europe, Switzerland, Singapore and the US found the
+same technology meeting different classifications and approval routes depending
+on where it lands: the OGTR's remit test, the UK's three regimes, the US
+function-based split, Switzerland's three-permit route for a living organism, and
+New Zealand, where the rules are strict enough that no GM crops are grown or sold
+at all. A living engineered microorganism can face environmental-release and
+containment requirements that a non-living dsRNA formulation avoids — though the
+formulation still needs product-specific approval. The **Scottish Government
+Honey Bee Health Team** put Varroa in Scotland's top three bee threats, which
+places the problem **outside our two case studies entirely**.
+
+The biological problem is global; the conditions for an acceptable solution are
+local.
 
 **Navigate and Evaluate.** We rejected the assumption that there is **one
 deployment context**, and built the regions out as separate studies along five
@@ -744,6 +810,14 @@ axes: pest pressure, current practice, economics, regulation and stakeholder
 attitudes. They are at [case studies](/case-studies) —
 [Australia](/case-studies/australia) and
 [California](/case-studies/california).
+
+Two of NECTAR's defining choices were made here rather than in Q3 or Q5 alone.
+The regulatory spread is a second, independent argument for **the non-GMO route**:
+it is the version that can be deployed in the most places. And the pollen patty
+turned out to be the one practice our stakeholders had in common across all three
+countries, which makes it the **delivery format that travels**. Australia shows
+the tension in the open: the persistence that made *S. alvi* attractive to
+Australian beekeepers is exactly what would have put it inside the OGTR's remit.
 
 **Yield.** Region-specific hive profiles and country-specific economic analyses
 in [economic modelling](/economic-modelling), regional efficacy and
@@ -753,11 +827,139 @@ honey-processing tests in the [wet lab](/wet-lab), and a deployment argument in
 > **TODO —** Decide whether the UK gets its own case study or folds into Q1.
 > Either is defensible; leaving it half-written is not. Owner: HP.
 
+**Next question:** the regions differ, but every one of them judged NECTAR on
+what it would cost and what it would be worth. Those are claims about money, and
+they are not settled at the scale of a hive.
+
+### Q7 — How would NECTAR impact wider economies?
+
+> **TODO — this cycle is newer than the rest of the page.** It is transcribed
+> from the HONEY cycle written for it in the 7 October write-up, which names one
+> interview: Thurman's. By our own three tests at the top of this page a cycle
+> needs at least three stakeholders, and the write-up credits the rest only as
+> "beekeepers and industry stakeholders". Name them, or merge this cycle into Q5
+> where their evidence already sits. Until then the map shows Q7 with a single
+> conversation on it, which is the honest picture and not a good one. Owner: HP.
+
+**Hear.** The first job was to decide what economic benefit should even mean for
+NECTAR.
+
+**Anchor interview — Professor Wally Thurman**, William Neal Reynolds Professor
+of Agricultural and Resource Economics, North Carolina State University ·
+29 July 2026
+
+- **Why we spoke to them.** He works on pollination markets, which is the
+  machinery our product would have to pay for itself inside.
+- **What we learned.** Begin at the level of an average commercial beekeeping
+  operation rather than assigning NECTAR a share of the total value of
+  pollination-dependent agriculture. Compare against realistic existing
+  treatments and calculate the change in costs and revenues before expanding to
+  the wider market. For industry-level effects use a simple partial-equilibrium
+  model with supply and demand elasticities, and in the US pay particular
+  attention to paid pollination markets such as almonds. Demand for pollination
+  derives from demand for food, so changes in the cost and availability of
+  managed pollination pass down the supply chain.
+- **What changed.** It set the whole method, and it ruled out the number we
+  might otherwise have reached for. See the warning under Navigate.
+
+That advice met what the beekeepers had already told us. Varroa management is not
+only the cost of buying a treatment: colony losses create replacement costs,
+treatments require labour and repeated hive visits, and resistance or treatment
+failure forces more spending on top. For a commercial beekeeper whose colonies
+also earn pollination revenue, a lost hive removes **both a honey-producing asset
+and a pollination-capable colony**. So colony survival, treatment expenditure and
+labour became economic variables rather than only biological ones.
+
+**Observe.** Australia and the US are two different economies for the same
+product. Our Australian dataset uses about **530,000 commercial managed hives**,
+roughly 37 million kg of honey a year at about A$4.80/kg, about 630,000 colonies
+available for pollination at an indicative A$160 a hive, and an estimated A$4.6
+billion contribution of honeybee pollination to Australian agriculture. Varroa
+adds about **A$22.18 per hive** in direct control costs and 0.37 additional labour
+hours. The US dataset records about **2.412 million honey-producing colonies**,
+57.1 lb of honey per colony and about US$146 of honey revenue per colony a year,
+a national supply near 116 million lb at about US$3.05/lb, and roughly 1.63
+million colonies used for almond pollination in 2025 at about US$209 each. Against
+that, a **39.9% managed-colony loss rate for 2025–26** and about **US$9.22 per
+colony a year** of Varroa-control spending `[CALC]`.
+
+High losses do not translate into an equivalent fall in national colony numbers,
+because beekeepers replace what they lose — and that distinction is the economic
+point. **Holding the stock of productive colonies steady is itself an expense**:
+replacement bees, requeening, labour and treatment.
+
+**Navigate.** We structured the analysis around NECTAR's **incremental** value
+against realistic alternatives. At operation level the model asks what changes
+when a colony is treated: replacement expenditure avoided, existing treatment
+spending displaced, labour saved, and the cost NECTAR itself imposes. The US
+model also counts avoided requeening and a possible honey-revenue effect, which
+stays conditional on experimental evidence we do not have. That gives a chain
+which can then leave the apiary: treated colonies → fewer losses → more surviving
+productive colonies → more honey and pollination capacity → changes in prices and
+surplus.
+
+For the wider market we used a simple partial-equilibrium model rather than
+attempting the whole agricultural economy, with almonds as the US pollination
+market because colonies are openly traded there for a clearly defined service.
+Australia was modelled separately rather than by transferring US assumptions,
+because colony numbers, Varroa exposure, treatment costs, honey production and
+pollination-market structure all differ.
+
+> **The number we did not use.** Multiplying an industry's value by a treatment's
+> efficacy is the error Thurman warned us off. A$4.6 billion is the scale of what
+> depends on pollination, **not** the value of NECTAR, and it does not appear in
+> any of our estimates.
+
+**Evaluate.** Under the scenarios tested, the current workbook gives a net
+private benefit of about **US$47.9 per treated colony per year** in the US, from
+fewer replacement colonies, reduced spending on existing treatments, labour
+savings and smaller savings on requeening and honey productivity. For Australia
+it gives about **A$18.9 per treated hive per year** after an assumed A$20 annual
+NECTAR cost: an assumed eight-percentage-point reduction in annual colony loss
+produces about A$20/hive/year in avoided replacement, displaced Varroa spending
+contributes about A$13.31, and reduced treatment labour about A$5.55 `[CALC]`.
+
+These matter because they show NECTAR's economic value **need not depend on
+raising honey yield at all**. Keeping productive colonies alive while cutting
+replacement, treatment and labour costs is enough.
+
+At market level, improved colony survival produces about **8.8 million lb of
+additional honey and 123,000 additional pollination-capable colonies** in the US,
+an estimated **US$4.57 million a year** of combined honey and pollination
+surplus; for Australia, about **4.5 million kg and 29,000 colonies**, about
+**A$4.61 million a year** `[CALC]`. Those gains are distributed, not captured:
+more supply pushes prices down, so part of the benefit reaches honey buyers,
+growers buying pollination and consumers downstream, while beekeepers gain
+through lower costs. That is why we report **market surplus** rather than
+beekeeper revenue.
+
+**Yield.** Protecting a colony is worth more than one hive staying alive: a
+surviving colony keeps producing, can be hired out for pollination, and does not
+have to be rebuilt. Across thousands of commercial hives that changes the supply
+of both honey and managed pollination.
+
+These values are **not predictions, and not the total social value of NECTAR**.
+They demonstrate how a colony-level intervention could propagate into wider
+markets *if* NECTAR achieves the assumed reductions. And the chain runs back the
+other way, which is the part that matters here: annual treatment cost, duration
+of protection, labour requirement and effect on colony survival decide whether
+the beekeeper-level benefit is positive at all, and those feed into manufacturing
+cost, yeast titre, dosing frequency and formulation. The economic cycle does not
+end at a market-surplus figure; it **returns to the design of NECTAR**. The
+workings are in [economic modelling](/economic-modelling) and the product case in
+[Entrepreneurship](/entrepreneurship).
+
+> **TODO —** Every `[CALC]` figure in this cycle comes from the team's economic
+> workbook and has not been independently checked, and the US net benefit is
+> quoted without the NECTAR cost assumption that the Australian figure states.
+> Verify against the spreadsheet and state both assumptions inline before the
+> freeze. Owner: economic modelling.
+
 **Back to Hear.** The open loop is the one we cannot close from Oxford: none of
 the beekeepers who would use NECTAR has seen it work, because **we do not yet have
 efficacy data** to show them. The next turn of the loop is taking results back to
 Le Feuvre, Ford and Hiatt and asking whether the thing we built is the thing
-they described.
+they described — and whether the money we say it saves is money they recognise.
 
 ## Before and after
 
@@ -772,11 +974,7 @@ summary of what moved and why.
 
 ## The decision that changed the project
 
-The clearest piece of integrated human practices we have, and it deserves more
-than a row in a table.
-
-Stakeholder evidence → constraint identified → alternative considered →
-technical change → consequence. We began with a continuously-producing living
+We began with a continuously-producing living
 engineered organism in the bee gut. The OGTR made the comparison concrete on
 24 July: the yeast route **sits outside its remit**, the living route requires
 environmental-release assessment, and making the bacterium inducible changes the
@@ -784,8 +982,6 @@ risk assessment but not the route. Regulators in three more jurisdictions, an
 organic certifier and the scientist who has engineered *S. alvi* himself each
 added a reason. We moved to an engineered yeast that is inactivated before it
 ever reaches a colony.
-
-Two things make this worth reading rather than just reporting.
 
 **It went against what beekeepers told us they wanted.** Mike Allerton was drawn
 to the *S. alvi* route because it would cut labour, the biggest problem with any
@@ -801,7 +997,7 @@ developing both.
 committee that would assess a UK release, told us *“the delivery method is
 secondary to the endpoint.”* If he is right, part of our justification for the
 switch does not hold, and the containment argument we gained is smaller than we
-claim. We have not resolved this, and we are not going to pretend we have.
+claim. We have not resolved this.
 
 ## The smaller loops
 
@@ -822,9 +1018,6 @@ lands on a page:
 | Baseline comparison is the evidence (McLoughlin)                | Conventional practice as the counterfactual in every model          |
 | Treatment-free works for us, not for you (Sandham, OxNatBees)   | The target user narrowed to commercial beekeepers                   |
 
-If a row cannot be linked to the page where the change shows up, the change
-probably did not happen.
-
 ## What we got wrong
 
 - **We assumed regulators would care how the RNA got in.** Dunwell corrected us:
@@ -833,7 +1026,7 @@ probably did not happen.
 - **Q2 is thin and we left it thin.** We identified the gap — no one who has
   taken an RNAi biopesticide to market — early enough to fix it, and did not.
 - **We asked beekeepers what they wanted, then chose otherwise.** Defensible on
-  regulatory grounds, and still a cost, recorded above rather than smoothed over.
+  regulatory grounds, and still a cost.
 - **We never got the two sides of Q4 in the same room.** Regulators and
   academics raised off-target harm; beekeepers raised cost. We noticed the
   mismatch at write-up, not while we could still ask about it.

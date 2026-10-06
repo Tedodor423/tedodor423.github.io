@@ -40,8 +40,8 @@ it from raw haemolymph at 5 h, but published no concentration `[LIT]`. Muita et 
 published _Varroa_ RNAi papers, three quantify "spectrophotometrically", three state
 no method at all, and none reports a Qubit value, an A260/A280 or mass-ladder
 densitometry. We could not cite an expected working range because none exists. That
-absence is why this workstream exists, and why [measurement](/measurement) is where
-we make our strongest claim.
+absence is why this workstream exists; the detail is on
+[measurement](/measurement).
 
 ## Wet lab: Mango
 
@@ -51,6 +51,16 @@ step?
 ## Wet lab: Functionalising the dsRNA
 
 **Question.** Can we attach protein to the dsRNA to change where it goes?
+
+To increase the efficacy of our dsRNA, we explored functionalising it by conjugating
+it to a protein that could improve uptake across the bee gut and transmission between
+mites. After consulting leading bee researchers and reviewing the literature, **it
+was evident that the mechanism of dsRNA uptake across the bee gut and into mite cells
+is still poorly understood**, which is why this workstream is modelled and proposed
+rather than demonstrated. Vitellogenin was suggested as the ideal cargo because it is
+enriched in mite eggs, so attaching it would enrich our dsRNA in mites by leveraging
+the natural vertical transmission of vitellogenin. The protein has to cross the bee
+gut and avoid degradation to get there, which is the question these cycles test.
 
 ## Bee lab: Adult bee assays
 
@@ -68,6 +78,13 @@ back out?
 once the cell is capped?
 
 ## Bee lab: Varroa mite testing
+
+**Question.** Can we keep a mite alive long enough to dose it, and does our dsRNA
+kill it?
+
+These three turns move the dose from the outside of the mite to the inside of its
+host. The first asks how to rear a mite at all, the second soaks the mite directly,
+and the third abandons soaking and feeds the larva the mite will feed on.
 
 ## Dry lab: Designing the RNA to kill mites
 

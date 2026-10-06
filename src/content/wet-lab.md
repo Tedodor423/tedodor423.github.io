@@ -1,9 +1,3 @@
-> **What this page proves:** that we could design, build and verify the
-> molecule the rest of the project depends on.
-> **Where the evidence is:** [Results](/results),
-> [experiments and lab book](/wet-lab-experiments), and Workstream 1 on
-> [Engineering](/engineering).
-
 Why, what, and what happened. Exactly how is in
 [experiments and lab book](/wet-lab-experiments), and the cycle-by-cycle record, with
 every failure and its diagnosis, is on [Engineering](/engineering).
@@ -50,7 +44,7 @@ from the sense strand every 23 nt**, leaving one unpaired antisense base per
 deletion and a regular single-nucleotide bulge along the stem. **Our 23 nt register
 is untested**; Muita's validated construct uses 22. See cycle 1.1.
 
-> **FIGURE: construct architecture.** The dumbbell drawn once, annotated: T7
+> **TODO —** Figure: construct architecture. The dumbbell drawn once, annotated: T7
 > promoter, U1 and U2 universal adaptors, the ~500 bp duplex stem, the two
 > ~150 nt loops with the L0 / L1 / L2 cargo slot marked, and the ribozyme-flanked
 > yeast variant shown underneath as a second row. This figure is reused on
@@ -104,12 +98,10 @@ design exists to create. _S. cerevisiae_ was adopted, for **the absence of a
 machine** rather than the presence of one. The argument is on [yeast](/wet-lab-experiments#yeast-production) and
 the comparison at cycle 2.1.
 
-**An honest framing point we repeat wherever it is relevant.** Engineered
-inactivated yeast as an oral dsRNA delivery vehicle against _Varroa_ is **not
-novel**: it is anticipated by US 11,252,965 B2 and adjacent to US 9,540,642 B2.
-We do not describe the chassis as novel anywhere on this wiki. The novel core of
-NECTAR is the RNA design method on [RNA design](/software), and the instrumented
-loop.
+Engineered inactivated yeast as an oral dsRNA delivery vehicle against _Varroa_
+is **not novel**: it is anticipated by US 11,252,965 B2 and adjacent to
+US 9,540,642 B2. The novel core of NECTAR is the RNA design method on
+[RNA design](/software), and the instrumented loop.
 
 ## How it gets into the hive
 
@@ -160,10 +152,9 @@ The 6 Sep annealing run gave four stocks at 589–623 ng/µL, stored at −80 °
 Mango-bearing constructs need **1% formaldehyde gels**, because the aptamer has to be
 denatured before the RNA migrates at its true size.
 
-**Limitation, stated with the result.** Two of those four stocks (300 bp, and
-500 bp without Mango) have 260/280 and 260/230 ratios far outside spec
-(4.69/4.93 and 4.97/3.08) against 2.3–2.7 for the other two. We report all four
-and flag those two rather than presenting the set as uniformly clean.
+Two of those four stocks (300 bp, and 500 bp without Mango) have 260/280 and
+260/230 ratios far outside spec (4.69/4.93 and 4.97/3.08) against 2.3–2.7 for the
+other two.
 
 ## Build errors worth showing
 

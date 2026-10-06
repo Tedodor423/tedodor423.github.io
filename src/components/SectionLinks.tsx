@@ -23,13 +23,15 @@ function findPage(entries: MenuEntry[], pathname: string): Page | undefined {
  * open Dry Lab and RNA design, economical and ecological modelling appear at
  * the top of it; open Case studies and Australia and California appear there.
  *
- * Renders nothing on a page with no children.
+ * Renders nothing on a page with no children, or whose children are views
+ * behind a switch (Page.switcher).
  */
 export function SectionLinks() {
   const { pathname } = useLocation();
   const page = findPage(Pages, pathname);
 
-  if (!page?.children?.length) return null;
+  // A switcher page shows its children as views instead (ViewSwitch).
+  if (!page?.children?.length || page.switcher) return null;
 
   return (
     <nav className="section-links" aria-label={`Inside ${page.name}`}>

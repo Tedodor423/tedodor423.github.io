@@ -1,0 +1,262 @@
+/* The experiments-and-protocols layout. See ExperimentsPage.tsx.
+ *
+ * Two columns from Bootstrap's `lg` up: the menu, held in place, and the
+ * write-up beside it. Below that the menu sits above the write-up as a plain
+ * list of blocks. No new tokens: type and colour come from brand.css, and the
+ * one rule that has to read on both the wax and the comb bands is drawn from
+ * the text colour of whichever band it is on. */
+
+.xp {
+  padding-block: 2rem 3rem;
+}
+
+@media (min-width: 992px) {
+  .xp {
+    display: grid;
+    grid-template-columns: 15rem minmax(0, 1fr);
+    gap: 3rem;
+    /* Without this the menu stretches to the height of the page, and a
+       sticky element as tall as its container never sticks. */
+    align-items: start;
+  }
+}
+
+/* ---------- the menu ---------- */
+
+.xp-menu {
+  margin-bottom: 2rem;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+@media (min-width: 992px) {
+  .xp-menu {
+    position: sticky;
+    /* Clear of the window edge while the site menu is tucked away... */
+    top: 1.5rem;
+    max-height: calc(100vh - 3rem);
+    overflow-y: auto;
+    margin-bottom: 0;
+    transition:
+      top 0.25s ease,
+      max-height 0.25s ease;
+  }
+
+  /* ...and clear of the site menu while it is showing. Navbar toggles
+     .is-hidden on scroll; this follows it, with the same timing, so the two
+     never overlap. 7rem is the clearance brand.css already gives every
+     heading for the same reason (scroll-margin-top). */
+  body:has(.site-nav:not(.is-hidden)) .xp-menu {
+    top: 7rem;
+    max-height: calc(100vh - 8.5rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xp-menu {
+    transition: none;
+  }
+}
+
+.xp-menu-title {
+  margin: 0 0 0.75rem;
+  padding-bottom: 0.25rem;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.15rem;
+  color: var(--ink);
+  border-bottom: 3px solid var(--honey);
+}
+
+.xp-menu ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.xp-menu a {
+  display: block;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.xp-menu a:hover,
+.xp-menu a:focus-visible {
+  color: var(--ink);
+  text-decoration: underline;
+}
+
+.xp-menu-list > li + li {
+  margin-top: 0.85rem;
+}
+
+.xp-menu-block {
+  font-size: 0.95rem;
+}
+
+.xp-menu-label {
+  /* A label, so it always starts its own line above the block name. */
+  display: block;
+  width: fit-content;
+  margin-bottom: 0.15rem;
+  padding: 0 0.3rem;
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* The block being read. Honey as a fill behind its label, which is the one
+   way the palette note in brand.css allows honey near text. */
+.xp-menu-block[aria-current] {
+  color: var(--ink);
+}
+
+.xp-menu-block[aria-current] .xp-menu-label {
+  background: var(--honey);
+}
+
+/* Experiments under their block: the body face, smaller and quieter, so the
+   two levels read apart without a second colour. */
+.xp-menu-list ol {
+  margin-top: 0.35rem;
+  padding-left: 0.75rem;
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 0.8rem;
+}
+
+.xp-menu-list ol li + li {
+  margin-top: 0.3rem;
+}
+
+.xp-menu-list ol a {
+  color: var(--text-muted);
+}
+
+/* A phone gets the blocks only. The experiments are one tap away inside each
+   block, and the full list would push the write-up a screen down. */
+@media (max-width: 991.98px) {
+  .xp-menu-list ol {
+    display: none;
+  }
+}
+
+/* ---------- the write-up ---------- */
+
+/* Each block is a band, as on every other page, but inside the column rather
+   than across the window. The comb treatment sets the padding top and bottom;
+   the sides are ours, because a band in a column has edges to keep off. */
+[data-comb="on"] .xp-block {
+  padding-inline: clamp(1rem, 4vw, 2.5rem);
+}
+
+/* Without the comb, blocks are bare wrappers, so they need their own air. */
+[data-comb="off"] .xp-block + .xp-block {
+  margin-top: 3rem;
+}
+
+.xp-block h2 {
+  margin-top: 0;
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  line-height: 1.05;
+}
+
+.xp-block-label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+/* Aim, Experiments, Discussion: the template's three parts, each under a
+   honey rule the way every section heading on the wiki is. */
+.xp-part > h3 {
+  margin-top: 2.25rem;
+  padding-bottom: 0.25rem;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.3rem;
+  border-bottom: 3px solid var(--honey);
+}
+
+/* ---------- experiments ---------- */
+
+.xp-experiments {
+  /* Drawn from the band's own text colour, so the rows read on wax and on
+     the comb alike without a token per surface. */
+  --xp-rule: color-mix(in srgb, currentColor 30%, transparent);
+  margin-top: 1rem;
+  border-top: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+}
+
+.xp-experiment + .xp-experiment {
+  border-top: 1px solid var(--xp-rule);
+}
+
+.xp-experiment > summary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 0;
+  list-style: none;
+  cursor: pointer;
+}
+
+.xp-experiment > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* The open state, as a sign rather than an arrow: it says "more here" and
+   "fold this", and it does not move. */
+.xp-experiment > summary::after {
+  content: "+";
+  flex: none;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.xp-experiment[open] > summary::after {
+  content: "\2212";
+}
+
+.xp-experiment > summary:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.xp-experiment > summary h4 {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: inherit;
+}
+
+.xp-experiment-body {
+  padding-bottom: 1.5rem;
+}
+
+.xp-experiment-body > :first-child {
+  margin-top: 0;
+}
+
+/* The full protocols inside an experiment. */
+.xp-experiment-body h5 {
+  margin-top: 1.75rem;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}

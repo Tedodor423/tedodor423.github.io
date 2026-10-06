@@ -1,7 +1,4 @@
-> **What this page proves —** that "would it work?" has a different answer in
-> different places, and that we designed against that rather than around it.
-> **Where the evidence is —** the two regional studies below, and
-> [Q6 of human practices](/human-practices#q6-would-the-same-solution-work-everywhere).
+## Across both regions
 
 The same technology meets very different realities. A treatment that is
 affordable in one beekeeping economy is not in another; a regulatory route that
@@ -9,7 +6,7 @@ is open in one country is closed in the next; and the pest pressure itself
 differs enough to change what a useful treatment would even look like.
 
 Rejecting the idea of a single universal deployment context is one of the
-conclusions of [our human practices work](/human-practices), and these pages are
+conclusions of [our human practices work](/human-practices), and this page is
 where that conclusion is worked out.
 
 ## Where the losses are
@@ -56,9 +53,6 @@ Seven parts, the same order every time, so the two regions can be read against
 each other: **pest situation · current practice · costs and constraints ·
 regulation · stakeholder attitudes · what an acceptable treatment would need to
 do · implication for NECTAR.**
-
-Kept to that shape, each case study is a page. Left unshaped, each becomes a
-dissertation nobody reads, which is the failure mode to avoid here.
 
 ## What differs between regions
 

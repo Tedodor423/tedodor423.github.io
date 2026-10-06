@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { hexPoints } from "../utils/worldHexes";
 import "./HoneyHex.css";
 
@@ -14,9 +15,19 @@ import "./HoneyHex.css";
  *
  * This is the opening section of the integrated human practices page: the
  * team's account of how the work was done on the left, the framework it
- * follows on the right. The evidence the framework produced is the record
- * below it on that page.
+ * follows in the middle, and on the right the way on to the other human
+ * practices pages. The evidence the framework produced is the record below
+ * it on that page.
  */
+
+/** The work done for human practices, each with its own page. Hive
+ * modelling is the ecological model, whose page sits under the hidden dry
+ * lab group in src/pages.ts rather than under Human practices. */
+const ONWARD = [
+  { label: "Case Studies", to: "/case-studies" },
+  { label: "Economical Modelling", to: "/economic-modelling" },
+  { label: "Hive Modelling", to: "/ecological-modelling" },
+];
 
 interface Cell {
   letter: string;
@@ -189,6 +200,24 @@ export function HoneyHex() {
         <div className="hh-centre" aria-hidden="true">
           <p className="hh-emoji">🍯</p>
         </div>
+      </div>
+
+      <div className="hh-onward">
+        <p id="hh-onward-lead" className="hh-onward-lead">
+          What we researched and developed for our human practices:
+        </p>
+        <nav className="hh-links" aria-labelledby="hh-onward-lead">
+          {ONWARD.map((l) => (
+            <Link key={l.to} to={l.to}>
+              <span>{l.label}</span>
+              {/* Drawn here rather than taken from an icon set: a plain
+                  shaft and head in the text colour, static. */}
+              <svg className="hh-arrow" viewBox="0 0 16 16" aria-hidden>
+                <path d="M 2 8 H 13 M 8.5 3.5 L 13 8 L 8.5 12.5" />
+              </svg>
+            </Link>
+          ))}
+        </nav>
       </div>
     </figure>
   );

@@ -504,6 +504,10 @@
 @media (max-width: 62rem) {
   .project-timeline {
     width: 100%;
+    /* The breakout margin centres a plate wider than the column. Here the
+     * plate is the column, and that margin would only push it off the right
+     * edge of the screen. */
+    margin-inline: 0;
   }
 
   .tl-lanehead,

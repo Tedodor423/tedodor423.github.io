@@ -1,21 +1,22 @@
-> **Skeleton: structure only. No results, numbers or quotes yet.**
-
 The people who built NECTAR.
 
 ## The team
 
-One entry per member: name, course or department, and the part of the project
-they worked on. Short, a line or two each. What each person actually
-contributed is recorded formally on [attributions](/attributions).
+> **TODO —** Write one entry per member, a line or two each: name, course or
+> department, and the part of the project they worked on.
 
-> **FIGURE: member portraits.** One image per person, uploaded to
+What each person actually contributed is recorded formally on
+[attributions](/attributions).
+
+> **TODO —** Figure: member portraits. One image per person, uploaded to
 > `static.igem.wiki` under a consistent treatment. Anyone who prefers not to
 > appear is listed without an image, and that is a normal choice rather than an
 > omission.
 
 ## Supervisors and advisors
 
-Named, with their role and institution, and what they advised on.
+> **TODO —** Name the supervisors and advisors, with their role and institution,
+> and what they advised on.
 
 ## Still missing
 

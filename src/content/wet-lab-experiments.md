@@ -1,22 +1,17 @@
-Protocols in enough detail for another team to repeat them, and the dated record
-of what we actually did. [Wet lab](/wet-lab) is the argument; this is **the method
-and the evidence** behind it. Bee-handling protocols live on
-[bee lab](/bee-lab) and in
-[how to work with bees as an iGEM team](/working-with-bees).
+## Block 1: Deliver known desirable dose to Adult bees for feeding assays
 
-## How this page is organised
+### Aim
 
-**Protocols** first, written to be followed. **The dated record** second, with
-its dates intact. Protocols here are the versions we ended up using; where an
-earlier version failed, the failure is in the dated entries and in
-[Engineering](/engineering) rather than quietly deleted.
+To test NECTAR’s RNA design pipeline we needed to use a fast and reliable method for dsRNA production. To do this we used Vazyme’s In vitro transcription kit. For dual promoter dsRNA T7 promoters were added to the sense and antisense strand, and to avoid a non-functional T7 flap two separate PCR reactions were run, providing two separate IVT templates that are annealed after the IVT reaction. For loop-ended dsRNA constructs, we designed parts to include T7, so preparation for IVT required only a colony lysis PCR/PCR of the miniprep product that amplified between the gibson homology arms on the plasmid. To determine the concentration of dsRNA post-annealing we used a qubit assay to measure the concentration of dsRNA after a DNAse I and RNase T1 cleanup.
 
-> **PDF —** Complete protocol set plus the quantification spreadsheet, uploaded
-> to `static.igem.wiki` and linked here. Owner: wet lab.
+### Experiments
 
-## Template preparation
+#### dsRNA synthesis and annealing
 
-### Colony lysis and colony PCR
+> **TODO —** Figure: Gels showing agarose gels w dsRNA (300, 500, 700) + annotation.
+> Owner: wet lab.
+
+##### Colony lysis and colony PCR
 
 Adapted from a CASPR protocol. General rules: add reagents to a chilled 200 µL
 PCR tube, **largest volume first**, so smaller volumes can be pipetted under the
@@ -43,7 +38,7 @@ the T7 promoter is followed by **GGG and not a single G**, and that adaptor pari
 holds across every member of a construct series. Each line of that checklist
 exists because of a documented failure; see [wet lab](/wet-lab).
 
-### DNA purification
+##### DNA purification
 
 1. Make the PCR reaction up to 100 µL with nuclease-free water.
 2. Add 5 volumes (500 µL) of GDP buffer.
@@ -58,9 +53,7 @@ exists because of a documented failure; see [wet lab](/wet-lab).
    stand for 2 min.
 8. Centrifuge for 1 min at 12,000 rpm and keep the eluate.
 
-## RNA production
-
-### In vitro transcription
+##### In vitro transcription
 
 1. Prepare one PCR tube per strand. To each add 2 µL 10× reaction buffer and
    8 µL rNTP mix (ATP, GTP, UTP, CTP).
@@ -73,7 +66,7 @@ exists because of a documented failure; see [wet lab](/wet-lab).
 > T7 polymerase volume and final reaction volume are missing, and the protocol
 > cannot be repeated without them. Owner: wet lab.
 
-### dsRNA annealing
+##### dsRNA annealing
 
 1. Mix the complementary strands in equimolar ratios in a PCR tube.
 2. Make up to the desired concentration with RNase-free water.
@@ -90,9 +83,177 @@ aptamer has to be denatured before the RNA migrates at true size.
 > **TODO —** The annealing ramp itself (temperatures, hold times, ramp rate) is
 > blank in the record. Owner: wet lab. Without it steps 1 to 3 are not a protocol.
 
-## Extraction from bee material
+> **TODO —** PDF: Full protocol for dsRNA synthesis and annealing, uploaded to
+> `static.igem.wiki` and linked here. Owner: wet lab.
 
-### Larval RNA extraction
+#### Quantifying dsRNA with qubit assay
+
+> **TODO —** Results/qubit assay description, qubit assay results. Owner: wet
+> lab.
+
+##### Nuclease digest before quantification
+
+The protocol that turns an A260 reading into a duplex-specific mass, and the
+NanoDrop-to-Qubit correction note that goes with it, are described on
+[measurement](/measurement); the short version is DNase I to remove template,
+RNase T1 (not RNase A, at normal ionic strength) to remove single-stranded RNA,
+then re-read on Qubit.
+
+> **TODO —** Write this up as a standalone, downloadable protocol with its
+> spreadsheet. It is the Measurement deliverable and currently exists only as
+> prose. Owner: measurement.
+
+> **TODO —** PDF: Full protocol for quantifying dsRNA with the qubit assay, uploaded
+> to `static.igem.wiki` and linked here. Owner: wet lab.
+
+#### Preparing bee-lab ready doses
+
+> **TODO —** Combine with ‘quantifying dsRNA with qubit assay’ if relevant.
+> Owner: wet lab.
+
+> **TODO —** PDF: Full protocol for preparing bee-lab ready doses, uploaded to
+> `static.igem.wiki` and linked here. Owner: wet lab.
+
+### Discussion
+
+> **TODO —** Discuss the results, and the next steps. Owner: wet lab.
+
+## Block 2: Loop ended dsRNA production in yeast/E.coli - Cloning
+
+### Aim
+
+Establishing a dsRNA expression titre for yeast and e.coli, making a pollen patty and investigating the stability of loop-ended dsRNA required assembly of the loop-ended dsRNA construct and transformation of e.coli and yeast. We used a plasmid that had both yeast (WHAT STRAINS) and e.coli (WHAT STRAINS) compatible origins of replication (WHAT PLASMID).
+
+### Experiments
+
+#### dsRNA expression titre in yeast and e.coli
+
+> **TODO —** Brief protocol summary for culturing yeast and measuring dsRNA
+> titre, then results. Owner: wet lab.
+
+> **TODO —** PDF: Full protocol for the dsRNA expression titre in yeast and e.coli,
+> uploaded to `static.igem.wiki` and linked here. Owner: wet lab.
+
+#### dsRNA stability in pollen patty vs sucrose solution
+
+> **TODO —** Brief protocol for culturing yeast, brief protocol for making the
+> pollen patty, brief protocol for assaying sucrose stability, then results.
+> Owner: wet lab.
+
+> **TODO —** PDF: Full protocol for dsRNA stability in pollen patty vs sucrose
+> solution, uploaded to `static.igem.wiki` and linked here. Owner: wet lab.
+
+#### Stability of different loop structures
+
+> **TODO —** Protocol, then assay results. Owner: wet lab.
+
+> **TODO —** PDF: Full protocol for the stability of different loop structures,
+> uploaded to `static.igem.wiki` and linked here. Owner: wet lab.
+
+### Discussion
+
+> **TODO —** Wait for results. Owner: wet lab.
+
+## Block 3: RNA measurements in adult hemolymph with qPCR
+
+### Aim
+
+> **TODO —** Discuss adult feeding experiment (brief outline of what we trying
+> to understand). Owner: Lisa, Michael, Aria.
+
+### Experiments
+
+#### One step qPCR
+
+> **TODO —** Standard curve protocol, then results. Owner: Lisa, Michael, Aria.
+
+##### Reverse transcription
+
+1. Add 5 µL Vazyme 4× All-in-One Ultra qRT SuperMix to a PCR tube.
+2. Add the template RNA and make up to 20 µL with RNase-free water.
+3. Mix gently by pipetting.
+4. Run: 50 °C for 10 min, then 85 °C for 5 s, then hold at 4–16 °C.
+
+Flash-denature duplex RNA before reverse transcription (95 °C for 3.5 min, then
+straight onto ice). Skipping this is **the main cause of false negatives** on dsRNA.
+
+##### qPCR
+
+1. Store the Vazyme 2× Taq Pro Universal SYBR qPCR master mix at 2–8 °C, away
+   from light.
+2. Per 20 µL reaction, in a tube or plate well, in technical triplicate:
+   - 10 µL master mix
+   - 0.4 µL of each primer at 10 µM
+   - template cDNA: 2 µL for relative qPCR; for absolute qPCR on haemolymph, use
+     the standard curve below
+   - ddH₂O to 20 µL
+3. Run housekeeping-gene primers in parallel on the same samples for relative
+   qPCR.
+4. Cycle: 95 °C for 30 s once; then 40 cycles of 95 °C for 10 s and ~60 °C for
+   30 s; then a melt step at the machine's default settings.
+
+**Standard curve for absolute quantification in haemolymph.** Spike haemolymph
+with a known RNA concentration, serially dilute 1:10, reverse-transcribe each
+dilution by the protocol above, and run every point in triplicate.
+
+**Two constraints specific to dsRNA work.** Primers must sit **outside** the
+dsRNA fragment, because residual input dsRNA carries into the RNA prep and, in a
+dose-response, the carryover scales with dose and mimics the opposite of
+knockdown. And our dumbbell cannot be denatured by heat-then-dilute, because the
+arms are covalently tethered and re-annealing is intramolecular.
+
+> **TODO —** This protocol does not yet meet MIQE reporting minimums: no
+> validated efficiency, slope, R², LOD or dynamic range has been recorded. The
+> standard curve that fixes it is specified on [measurement](/measurement).
+> Owner: wet lab.
+
+##### Contaminated negative controls in qPCR
+
+Reusable independently of what you are building. Our run **took two weeks**
+(29 July to 11 August); the route below is what we would do again in two days.
+
+1. **Separate the two hypotheses before repeating anything.** Primer-dimer and
+   template contamination both give a band in a water control, so repeating the
+   reaction cannot distinguish them.
+2. **Design the discriminating reaction.** Pick two primers from different pairs
+   that flank a longer amplicon. Dimer predicts the short product; contaminating
+   template predicts the long one. Ours gave 200 bp, which ruled out dimer.
+3. **Test whether it is one bad pair.** Run several further pairs in water with
+   no template. If all amplify, the problem is a shared reagent.
+4. **Resolve the shared reagent factorially, not serially.** We ran a 2×2×2
+   matrix of polymerase (Phanta / Q5) × water (old / new) × primers (old / new)
+   in one plate. Only Phanta with new primers and new water was clean.
+5. **Replace and re-baseline.** Primers reordered, water replaced, Tris identified
+   as the probable original source, and every earlier result reported with the
+   caveat attached.
+
+**Standing acceptance rule.** If the negative-control Ct differs from the sample
+by more than 4–5 cycles (5 Ct is about 32-fold in template) the run may stand
+with the caveat recorded; below that, the run is discarded.
+
+> **TODO —** PDF: Full protocol for one step qPCR, uploaded to `static.igem.wiki`
+> and linked here. Owner: wet lab.
+
+### Discussion
+
+> **TODO —** Discuss the results, and the next steps. Owner: Lisa, Michael,
+> Aria.
+
+## Block 4: RNA measurements in larvae
+
+### Aim
+
+> **TODO —** Discuss larval feeding experiments (brief outline of what we trying
+> to understand). Owner: wet lab.
+
+### Experiments
+
+#### RNA extractions
+
+> **TODO —** Discuss column vs phenol-chloroform briefly + show results. Owner:
+> wet lab.
+
+##### Larval RNA extraction
 
 1. Place Eppendorf tubes containing larvae on dry ice.
 2. Dip the tube and a metal rod in liquid nitrogen.
@@ -138,89 +299,67 @@ any of them, which is a useful null and is written up at cycle 3.1 on
 > write-up, and the reagent list above stops after the chloroform step. Owner: Lisa,
 > wet lab.
 
-## Quantification and quality control
+> **TODO —** PDF: Full protocol for the RNA extractions, uploaded to
+> `static.igem.wiki` and linked here. Owner: wet lab.
 
-### Reverse transcription
+#### qPCR
 
-1. Add 5 µL Vazyme 4× All-in-One Ultra qRT SuperMix to a PCR tube.
-2. Add the template RNA and make up to 20 µL with RNase-free water.
-3. Mix gently by pipetting.
-4. Run: 50 °C for 10 min, then 85 °C for 5 s, then hold at 4–16 °C.
+> **TODO —** Standard curve + discuss protocol, then results. Owner: wet lab.
 
-Flash-denature duplex RNA before reverse transcription (95 °C for 3.5 min, then
-straight onto ice). Skipping this is **the main cause of false negatives** on dsRNA.
+The reverse transcription and qPCR protocols are under
+[one step qPCR](#one-step-qpcr) in block 3.
 
-### qPCR
+> **TODO —** PDF: Full protocol for qPCR in larvae, uploaded to `static.igem.wiki`
+> and linked here. Owner: wet lab.
 
-1. Store the Vazyme 2× Taq Pro Universal SYBR qPCR master mix at 2–8 °C, away
-   from light.
-2. Per 20 µL reaction, in a tube or plate well, in technical triplicate:
-   - 10 µL master mix
-   - 0.4 µL of each primer at 10 µM
-   - template cDNA: 2 µL for relative qPCR; for absolute qPCR on haemolymph, use
-     the standard curve below
-   - ddH₂O to 20 µL
-3. Run housekeeping-gene primers in parallel on the same samples for relative
-   qPCR.
-4. Cycle: 95 °C for 30 s once; then 40 cycles of 95 °C for 10 s and ~60 °C for
-   30 s; then a melt step at the machine's default settings.
+### Discussion
 
-**Standard curve for absolute quantification in haemolymph.** Spike haemolymph
-with a known RNA concentration, serially dilute 1:10, reverse-transcribe each
-dilution by the protocol above, and run every point in triplicate.
+> **TODO —** Discuss the results, and the next steps. Owner: wet lab.
 
-**Two constraints specific to dsRNA work.** Primers must sit **outside** the
-dsRNA fragment, because residual input dsRNA carries into the RNA prep and, in a
-dose-response, the carryover scales with dose and mimics the opposite of
-knockdown. And our dumbbell cannot be denatured by heat-then-dilute, because the
-arms are covalently tethered and re-annealing is intramolecular.
+## Block 5: Mango validation
 
-> **TODO —** This protocol does not yet meet MIQE reporting minimums: no
-> validated efficiency, slope, R², LOD or dynamic range has been recorded. The
-> standard curve that fixes it is specified on [measurement](/measurement).
-> Owner: wet lab.
+### Aim
 
-### Nuclease digest before quantification
+> **TODO —** Outline why mango, difficulties, how we overcome them (also
+> include brief description of what mango is). Outline why three iterations.
+> Owner: measurement.
 
-The protocol that turns an A260 reading into a duplex-specific mass, and the
-NanoDrop-to-Qubit correction note that goes with it, are described on
-[measurement](/measurement); the short version is DNase I to remove template,
-RNase T1 (not RNase A, at normal ionic strength) to remove single-stranded RNA,
-then re-read on Qubit.
+### Experiments
 
-> **TODO —** Write this up as a standalone, downloadable protocol with its
-> spreadsheet. It is the Measurement deliverable and currently exists only as
-> prose. Owner: measurement.
+#### Iteration 1: Plate reader
 
-## Diagnostics
+> **TODO —** Brief protocol, then results. Owner: measurement.
 
-### Contaminated negative controls in qPCR
+Written up so far on
+[measurement](/measurement#plate-reader-performance-four-runs-all-four-reported).
 
-Reusable independently of what you are building. Our run **took two weeks**
-(29 July to 11 August); the route below is what we would do again in two days.
+> **TODO —** PDF: Full protocol for Mango on the plate reader, uploaded to
+> `static.igem.wiki` and linked here. Owner: measurement.
 
-1. **Separate the two hypotheses before repeating anything.** Primer-dimer and
-   template contamination both give a band in a water control, so repeating the
-   reaction cannot distinguish them.
-2. **Design the discriminating reaction.** Pick two primers from different pairs
-   that flank a longer amplicon. Dimer predicts the short product; contaminating
-   template predicts the long one. Ours gave 200 bp, which ruled out dimer.
-3. **Test whether it is one bad pair.** Run several further pairs in water with
-   no template. If all amplify, the problem is a shared reagent.
-4. **Resolve the shared reagent factorially, not serially.** We ran a 2×2×2
-   matrix of polymerase (Phanta / Q5) × water (old / new) × primers (old / new)
-   in one plate. Only Phanta with new primers and new water was clean.
-5. **Replace and re-baseline.** Primers reordered, water replaced, Tris identified
-   as the probable original source, and every earlier result reported with the
-   caveat attached.
+#### Iteration 2: Gel electrophoresis
 
-**Standing acceptance rule.** If the negative-control Ct differs from the sample
-by more than 4–5 cycles (5 Ct is about 32-fold in template) the run may stand
-with the caveat recorded; below that, the run is discarded.
+> **TODO —** Brief protocol, then results. Owner: measurement.
+
+Written up so far on [measurement](/measurement#in-gel-performance).
+
+> **TODO —** PDF: Full protocol for Mango in a gel, uploaded to `static.igem.wiki`
+> and linked here. Owner: measurement.
+
+#### Iteration 3: Streptavidin fixation
+
+> **TODO —** Brief protocol, then results. Owner: measurement.
+
+Written up so far on
+[measurement](/measurement#what-remains-feasible-by-21-october).
+
+> **TODO —** PDF: Full protocol for Mango with streptavidin fixation, uploaded to
+> `static.igem.wiki` and linked here. Owner: measurement.
+
+### Discussion
+
+> **TODO —** Discuss the results, and the next steps. Owner: measurement.
 
 ## Protocols still owed
-
-Each one is a real gap, with an owner.
 
 > **TODO —** Production and cloning: PCR to add T7 and adaptors, RNA purification,
 > making bee-lab-ready solutions, Gibson assembly, _E. coli_ transformation,
@@ -244,33 +383,16 @@ Each one is a real gap, with an owner.
 > and rejected. The modelling method belongs on [dry lab and modelling](/model)
 > instead. Owner: dry lab.
 
-## The dated record
-
-> **TODO —** Transcribe the wet lab journal chronologically, keeping the dates and
-> keeping the entries where nothing worked. Journal images need uploading to
-> `static.igem.wiki` before they can appear here. Owner: wet lab.
-
-Until that lands, the dated material on this project lives in three places: the
-failures and their diagnoses on [Engineering](/engineering), the chronology on
-[the timeline](/timeline), and the bee-lab entries on
-[bee lab](/bee-lab-labbook).
-
 ## Yeast production
-
-Folded in from the former standalone yeast page, because the chassis argument
-and the protocols that follow from it belong together.
 
 > **Status: Proposed.** The cassette is designed; **no yeast has been
 > transformed** and no yeast-produced dsRNA exists. Everything in this section
-> is a design argument and a plan, and it says so wherever a number would
-> otherwise be implied.
+> is a design argument and a plan.
 
 ### Why yeast
 
-Five arguments, kept separate because they are separate.
-
-**1 · The molecule survives.** This is the strongest of the five and the most
-specific. Full-length hairpin RNA accumulates predominantly **intact** in
+**1 · The molecule survives.** This is the strongest of the five arguments.
+Full-length hairpin RNA accumulates predominantly **intact** in
 _S. cerevisiae_ (~2 ng per µg total yeast RNA), is degraded in _E. coli_ HT115,
 and is processed in _N. benthamiana_ (Zhong et al. 2019, _Genes_ 10:458)
 `[LIT]`. Yeast has no Dicer, so nothing in the cell recognises and cleaves the
@@ -304,15 +426,14 @@ on [human practices](/human-practices), and it **overrode a stated preference** 
 two of the beekeepers we spoke to. That is the clearest case of integrated human
 practices in this project.
 
-**What we do not claim.** Engineered inactivated yeast as an oral dsRNA delivery
-vehicle against _Varroa_ is **not novel**. It is anticipated by US 11,252,965 B2
-(priority 2016, in force to 2037) and adjacent to US 9,540,642 B2. NECTAR's novel
-core is the RNA design method on [RNA design](/software) and the instrumented
-loop, and this page is written to that framing.
+Engineered inactivated yeast as an oral dsRNA delivery vehicle against _Varroa_
+is **not novel**. It is anticipated by US 11,252,965 B2 (priority 2016, in force
+to 2037) and adjacent to US 9,540,642 B2. NECTAR's novel core is the RNA design
+method on [RNA design](/software) and the instrumented loop.
 
 ### Design requirements
 
-Stated as **requirements rather than hopes**: high biomass; sufficient intact dsRNA
+High biomass; sufficient intact dsRNA
 per gram of dry cell mass; genetic stability through an industrial number of
 generations; tolerable metabolic burden; induction that scales on existing
 fermentation infrastructure; and survival of drying and processing.
@@ -354,7 +475,7 @@ natural yeast Pol III transcript is SCR1 at ~519 nt `[LIT]`, against our
 polyadenylated, which this molecule must not be. A 5′ hammerhead and a 3′ HDV
 ribozyme let it self-cleave to defined ends _in vivo_ `[LIT]`.
 
-**And a caveat we state rather than hide: the ribozymes may be unnecessary.** Two
+**A caveat: the ribozymes may be unnecessary.** Two
 published yeast RNAi-pesticide papers used bare Pol II and worked (Murphy et al.
 2016, TEF1; Hapairai et al. 2017, GAL1 with a CYC1 terminator) `[LIT]`. This is a
 testable design question, not a settled one, and the ± ribozyme comparison is the
@@ -376,13 +497,13 @@ free either, since the markers themselves perturb growth `[LIT]`; δ-integration
 is the route out of both. We chose a leucine dropout because leu⁻ plates are the
 cheapest defined medium available to us.
 
-> **Compliance note, to be carried into the strain documentation.** Do **not**
-> delete or downregulate RRP6, SKI2/3/7/8, XRN1, LRP1, MAK3/10/31, MPP6, NMD2,
-> TRF5, UPF3, TAF1, CCR4 or THP1 in any NECTAR production strain. Each of those
-> modifications walks into granted claims held by Renaissance BioScience
-> (CN 112384610 B, AU 2019264879 B2). Improving dsRNA accumulation by removing
-> RNA-degradation machinery is the obvious engineering move, and it is exactly the
-> space that is already taken. Design around it, or license.
+**No RNA-degradation knockouts.** Do **not** delete or downregulate RRP6,
+SKI2/3/7/8, XRN1, LRP1, MAK3/10/31, MPP6, NMD2, TRF5, UPF3, TAF1, CCR4 or THP1 in
+any NECTAR production strain. Each of those modifications walks into granted
+claims held by Renaissance BioScience (CN 112384610 B, AU 2019264879 B2).
+Improving dsRNA accumulation by removing RNA-degradation machinery is the obvious
+engineering move, and it is exactly the space that is already taken. Design around
+it, or license.
 
 ### Engineering
 
@@ -391,7 +512,7 @@ marker decision are written to the seven-beat cycle shape at cycle 2.4 on
 [Engineering](/engineering), with the _E. coli_ comparison at 2.3 and the
 four-route chassis comparison at 2.1.
 
-### Results, stated honestly
+### Results
 
 **No yeast has been transformed. No yeast-produced dsRNA exists. No yeast titre
 has been measured.** As of 20 September the yeast plasmid has been linearised and
@@ -403,9 +524,8 @@ project**.
 ### From culture to product
 
 Three steps: **harvested, inactivated, formulated**. Inactivation is the step
-that carries the regulatory argument, so it gets its own sentence rather than
-passing as processing: the product that leaves the fermenter is not alive, does
-not replicate, and is not released as an organism.
+that carries the regulatory argument: the product that leaves the fermenter is
+not alive, does not replicate, and is not released as an organism.
 
 **Formulated as what: the pollen patty.** Sugars, protein supplements such as
 yeasts, and binding agents, administered as a slab on top of the hive that worker and
@@ -426,8 +546,7 @@ and the cost structure that falls out of it are on
 [entrepreneurship](/entrepreneurship). The chain that matters runs one way:
 required treatment efficacy, allowable cost per hive, manufacturing cost, and
 from those a **required mass of intact dsRNA per gram of dry yeast**. That last
-term is the design target the wet lab has to hit, and it is the one number this
-page cannot yet supply.
+term is the design target the wet lab has to hit.
 
 ### What remains unsolved
 

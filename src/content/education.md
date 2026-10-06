@@ -1,35 +1,67 @@
-> **What this page proves —** what we made for people outside the field, and how
-> little of it we recorded as we went.
-> **Where the evidence is —** nothing is published yet. The podcast episode below
-> is recorded and unreleased; everything else is marked unrecorded or planned.
-
 We wanted to pass on what we were learning, from our own lab work and from our
 stakeholder research, to people outside the project. That took three forms:
 street interviews with the public, accessible material on social media, and a
 podcast that beekeepers and the general public can use to educate themselves on
 honey bee health.
 
-The bar we set for this page is whether anything went **in both directions**:
-whether we changed how someone thought about synthetic biology, and whether
-they changed anything about how we work. We cannot currently clear that bar,
-because we did not record the activities as we ran them.
-
-**Undocumented outreach scores nothing, and reconstructing attendance after the
-fact is not acceptable.** So this page lists what genuinely happened, marks what
-is unrecorded, and says what is planned. It will be rewritten as the record is
-recovered and the planned work lands.
-
 ## What we did
 
-### A talk at St Clare's
+### Synthetic biology talk, St Clare's summer course — 15 July 2026
 
-We gave a talk at St Clare's. The date, the size of the audience and the
-materials we used were **not recorded at the time**.
+Following our collaboration with St Clare's, Oxford last year, we delivered an
+**interactive session for 11 teenage students** joining their Science & Experiments
+summer course. We designed a talk to promote mutual dialogue about synthetic biology
+and our project, to spotlight **responsible design**, followed by a survey to close
+the loop and gain insight into how a well-informed audience perceives our project.
 
-> **TODO —** Recover the date, audience size, year group and materials for the
-> St Clare's talk from whoever delivered it, along with anything that came back
-> from the audience. If the details cannot be established, this section says so
-> and the activity is not counted. Owner: outreach.
+We **contextualised synthetic biology with diverse real-world examples**,
+deliberately including responsible design to prompt critical thinking early. Then we
+went into our own project as an example of synthetic biology and responsible design
+in action: the journey from problem identification to solution ideation, the science
+behind RNAi and how we are exploiting this natural defence mechanism, and —
+transparently — **our hesitations between our two project directions**. We invited
+students to discuss the risks of our project and which direction they would prefer
+based on the risk assessment, cultivating understanding of how safety and ethics
+guide decision-making, before following up with how we aimed to manage those risks.
+
+**What came back.** Students assessed the biggest negatives of our project as the
+potential release of GMOs, if _S. alvi_ were used to deliver the dsRNA, and the
+off-target effects of our dsRNA; and the most significant positives as the reduction
+in chemical pesticide use and the protection of honeybee colonies and biodiversity.
+
+- **64%** felt that the potential environmental release of GMOs was a major risk of
+  the _S. alvi_ approach.
+- Asked which delivery method they would be most comfortable with, **46% opted for
+  the heat-killed yeast approach and 54% had no preference** — nobody preferred
+  _S. alvi_.
+- After the session, **more students felt comfortable with GMOs** used in products
+  and contexts like the delivery of our biopesticide.
+
+**Both the students' risk concerns and their delivery-method preferences favoured
+the heat-killed yeast approach over _S. alvi_, supporting our decision to pivot.**
+It also taught us that **empowering people with the knowledge to evaluate synthetic
+biology is key to building trust** and public acceptance of synthetic-biology
+solutions.
+
+> **TODO —** Our write-up states the 46% figure against two different questions:
+> preference for honey from colonies treated with the yeast method, and comfort with
+> the delivery method itself. Confirm which question each percentage answers, give
+> the denominator for each, and publish the survey questions alongside the results.
+> Owner: outreach.
+
+> **TODO —** PDF: The St Clare's talk slides, and the survey questions with their response
+> charts, uploaded to `static.igem.wiki` and linked here under CC-BY-4.0. They
+> currently exist only as a Google Slides deck and a Google Form, which cannot be
+> embedded on an iGEM wiki. Owner: outreach.
+
+### GMO 101, with NYU Abu Dhabi iGEM — 15 September 2026
+
+A joint talk with the NYU Abu Dhabi iGEM team.
+
+> **TODO —** The GMO 101 session is recorded in our write-up with a date and a link
+> to the slides, and nothing else: no audience, no size, no account of what was
+> covered or what came back. Write it up or the activity is not counted, and upload
+> the slides as a PDF. Owner: outreach.
 
 ### Street interviews with the public
 
@@ -96,13 +128,17 @@ recorded. **Nothing is published yet**, on iGEM infrastructure or anywhere else.
 
 ## What came back
 
-This is the section that distinguishes education from publicity: what our
-audiences asked, what they disagreed with, what worried them, and what we did
-differently afterwards.
+**The St Clare's survey is the one place an audience changed our confidence in a
+decision we had already made.** Students independently identified environmental
+release of a living GMO as the dominant risk of the _S. alvi_ route (64%), and not
+one of them preferred it to heat-killed yeast. That did not cause the pivot — the
+regulatory evidence on [human practices](/human-practices) did — but it is the only
+evidence we have that a lay audience, given the risk assessment, reaches the same
+conclusion our regulators did. The same survey showed comfort with GMOs **rising**
+after the session, which is an argument for transparency rather than reassurance.
 
-Nothing from the St Clare's talk was written down, and nothing from the street
-interviews was either, so we have no **honest account** of what came back from
-them. An invented insight here would be worth less than an admission.
+Nothing from the street interviews was written down, so we have no account of
+what came back from those.
 
 One exchange is on the record, and it is a disagreement between two guests rather
 than a reaction to us: on episode 1 of the podcast a bee researcher and a
@@ -118,14 +154,14 @@ Nothing has been released yet. When the talk materials are recovered, the social
 media material is collected and the podcast is published, all three go here under
 CC-BY-4.0 so that another team can use them.
 
-> **PDF —** Outreach materials, uploaded to `static.igem.wiki` and linked here
+> **TODO —** PDF: Outreach materials, uploaded to `static.igem.wiki` and linked here
 > under CC-BY-4.0.
 
 ## A glossary of bee terms
 
 A plain-language glossary of the terms used across this wiki, for someone with no
 background in it. Ten beekeeping terms are written up, in the bee lab's own
-words; the molecular terms are not, and the gap is recorded at the end.
+words; the molecular terms are not yet.
 
 **Frame** — A removable wooden or plastic panel that fits inside a hive, holding
 a sheet of wax or plastic foundation on which bees build hexagonal cells. Frames
@@ -209,8 +245,7 @@ on every informational image, and nothing important reachable only by hovering.
 ## How we evaluated it
 
 We did not. Attendance is **an input, not an outcome**, and we did not record even
-that. Any evaluation designed after the fact would be a description of what we
-wish we had measured.
+that.
 
 > **TODO —** Before the podcast is released, decide what would count as
 > evidence that it worked, and collect it at the time. Owner: outreach.

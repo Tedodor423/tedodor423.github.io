@@ -3,23 +3,24 @@
  * Same tokens as everything else: honey letter cells on ink strokes, the comb
  * edge in burnt honey, violet for the cell you are pointing at — the same
  * lit-cell convention the engineering comb and the old loop figure use. The
- * written column sits left of the comb at reading width and stacks above it
- * on a narrow screen. The only motion is the fill change on the lit cell,
+ * written column sits left of the comb at reading width, the links to the
+ * other human practices pages right of it, and both stack around it on a
+ * narrow screen. The only motion is the fill change on the lit cell,
  * mirrored in the list.
  */
 
 .honey-hex {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(18rem, 26rem);
-  gap: 1.5rem 3rem;
+  grid-template-columns: minmax(0, 1fr) minmax(16rem, 24rem) minmax(15rem, 17rem);
+  gap: 1.5rem 2.5rem;
   align-items: center;
   /* Breaks the 36rem measure the same way the map and the loop before it do:
    * prose beside a figure needs the room. Breaks out of the centred column
    * symmetrically. */
-  width: min(64rem, calc(100vw - 4rem));
+  width: min(74rem, calc(100vw - 4rem));
   max-width: none;
   margin-block: 1rem 2rem;
-  margin-inline: calc((100% - min(64rem, calc(100vw - 4rem))) / 2);
+  margin-inline: calc((100% - min(74rem, calc(100vw - 4rem))) / 2);
 }
 
 /* The copy opens the band, so its first paragraph does not need the usual
@@ -34,11 +35,9 @@
 
 /* ---------- the comb ---------- */
 
+/* No panel behind the comb: it sits straight on the page. */
 .hh-frame {
   position: relative;
-  border: 1px solid var(--rule);
-  background: var(--surface-muted);
-  padding: 0.5rem;
 }
 
 .hh-svg {
@@ -154,6 +153,87 @@
 .hh-emoji {
   font-size: clamp(2.5rem, 6vw, 3.5rem);
   line-height: 1;
+}
+
+/* ---------- the onward links ---------- */
+
+/* Three buttons, one per row: honey on an ink rule with an arrow, the
+ * pairing the letter cells beside them use, so they read as the next step
+ * from the figure. Hover turns the button navy with honey type, the comb
+ * band's pairing; nothing moves, and the arrow is static. Restated at .honey-hex depth so the page's link colour and
+ * underline do not reach them. */
+/* At .honey-hex depth so the page's paragraph rule does not restyle it. */
+.honey-hex .hh-onward-lead {
+  margin: 0 0 0.75rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.hh-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.honey-hex .hh-links a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 3.4rem;
+  padding: 0.8rem 1rem;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--honey);
+  color: var(--ink);
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.3;
+  text-decoration: none;
+}
+
+.honey-hex .hh-links a:hover,
+.honey-hex .hh-links a:focus-visible {
+  background: var(--oxford-navy);
+  border-color: var(--oxford-navy);
+  color: var(--honey);
+}
+
+.hh-arrow {
+  flex: none;
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.hh-arrow path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Three columns need the room; below it the links drop under the copy and
+ * the comb, still side by side with each other where they fit. */
+@media (max-width: 68rem) {
+  .honey-hex {
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 26rem);
+  }
+
+  .hh-onward {
+    grid-column: 1 / -1;
+  }
+
+  .hh-links {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .honey-hex .hh-links a {
+    flex: 1 1 12rem;
+  }
 }
 
 @media (max-width: 52rem) {
