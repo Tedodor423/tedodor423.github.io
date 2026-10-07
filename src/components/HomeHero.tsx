@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { REDUCED_MOTION, glideTo } from "../utils/glide";
 import { useDeckRests } from "../utils/deck";
 import "./HomeHero.css";
@@ -8,23 +8,35 @@ import "./HomeHero.css";
  * It stands in for the standard <Header> on the home route, so its <h1> is
  * the page's one <h1> and the heading order below it stays semantic.
  *
- * TEMPORARY HOSTING. The clip is served from public/local/, which is
- * gitignored (see .gitignore) because video never ships from this repo:
- * the 5 MB build ceiling and the iGEM asset rules both forbid it. Before
- * the freeze this must switch to the iGEM Video Universe embed for the
- * same clip, uploaded at least 2 days early for moderation. Until then it
- * only plays on a machine that has the file; anywhere else the hero keeps
- * its solid surface and says so under the title.
+ * The clip is the iGEM Video Universe copy, embedded as the competition
+ * requires, and plays as a background: muted, looped, no controls, and inert
+ * to the pointer so a wheel over it still scrolls the page rather than the
+ * player. A frame cannot crop its picture the way object-fit does, so the
+ * stylesheet sizes it to cover the hero instead (see HomeHero.css).
  *
  * The scroll has two rests here: the hero filling the screen, or the page
  * body with the hero entirely above the fold. They are registered with the
  * deck in src/utils/deck.ts, as the slides below register theirs: scrolling
  * stays free, and a reader who stops between two rests is eased on to one
  * of them. Muted autoplay is the only autoplay browsers permit, and a silent
- * ambient loop is what this clip is; under prefers-reduced-motion it
- * holds its first frame, scrolling jumps instead of gliding, and the
- * arrow appears without the fade.
+ * ambient loop is what this clip is; under prefers-reduced-motion it does
+ * not start, scrolling jumps instead of gliding, and the arrow appears
+ * without the fade.
  */
+
+/** The clip on the iGEM Video Universe, with the player's chrome turned off. */
+const VIDEO = `https://video.igem.org/videos/embed/djaUJNKXf7f2ec1QvRv74T?${new URLSearchParams(
+  {
+    autoplay: REDUCED_MOTION ? "0" : "1",
+    muted: "1",
+    loop: "1",
+    controls: "0",
+    title: "0",
+    warningTitle: "0",
+    peertubeLink: "0",
+    p2p: "0",
+  },
+)}`;
 
 /** Where the page body starts, in document coordinates. */
 function bottomOf(hero: HTMLElement): number {
@@ -36,7 +48,6 @@ function bottomOf(hero: HTMLElement): number {
 
 export function HomeHero() {
   const heroRef = useRef<HTMLElement>(null);
-  const [missing, setMissing] = useState(false);
 
   // The menu bar is sticky and its height depends on how the wordmark and
   // links wrap, so the hero measures it and fills exactly the rest of the
@@ -64,29 +75,18 @@ export function HomeHero() {
 
   return (
     <header className="home-hero" ref={heroRef}>
-      {!missing && (
-        <video
-          className="home-hero-video"
-          src={`${import.meta.env.BASE_URL}local/bees_entering_hive_short.mp4`}
-          autoPlay={!REDUCED_MOTION}
-          loop
-          muted
-          playsInline
-          aria-label="Honeybees walking through the entrance of a hive"
-          onError={() => setMissing(true)}
-        />
-      )}
+      <iframe
+        className="home-hero-video"
+        src={VIDEO}
+        title="Honeybees walking through the entrance of a hive"
+        allow="autoplay; fullscreen"
+        sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+        tabIndex={-1}
+      />
 
       <div className="home-hero-title">
         <h1>Introducing: Project NECTAR</h1>
         <p>RNA-based pesticides</p>
-        {missing && (
-          <p className="home-hero-missing">
-            <strong>VIDEO —</strong> bees entering the hive. Hosted locally
-            during development; to appear here it must be uploaded to the iGEM
-            Video Universe and this component pointed at the embed.
-          </p>
-        )}
       </div>
 
       <button
