@@ -20,10 +20,15 @@ import "./CombBands.css";
  */
 const COMB_SRC = "https://static.igem.wiki/teams/6391/wiki/assets/comb-bg.avif";
 
+/** Put away: no switch, and the treatment is off for everyone. Set to true to
+ *  bring the switch back with each browser's remembered choice. */
+const SHOW_SWITCH = false;
+
 /** Remembered per browser so the choice survives a reload. */
 const STORAGE_KEY = "nectar:comb";
 
 function readStored(): boolean {
+  if (!SHOW_SWITCH) return false;
   try {
     return localStorage.getItem(STORAGE_KEY) !== "off";
   } catch {
@@ -44,12 +49,17 @@ export function CombBands() {
     // A url() in the stylesheet would make Vite bundle the photograph into
     // dist/, and images must never enter the build.
     root.style.setProperty("--comb-src", `url("${COMB_SRC}")`);
+    // With the switch put away, leave each browser's stored choice alone so
+    // it comes back as it was.
+    if (!SHOW_SWITCH) return;
     try {
       localStorage.setItem(STORAGE_KEY, on ? "on" : "off");
     } catch {
       // Not being able to remember the choice is not a reason to break it.
     }
   }, [on]);
+
+  if (!SHOW_SWITCH) return null;
 
   return (
     // A real switch, so it announces its state and answers to Space and Enter

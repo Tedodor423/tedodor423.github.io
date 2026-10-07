@@ -1,5 +1,5 @@
 ```component
-honey-hex
+hive-corners
 ```
 
 ```component
@@ -59,7 +59,7 @@ direction of our project.
 We realised that **human practices is not something to conduct after designing
 NECTAR, but before**: we needed the evidence, the environments and the people to
 shape what we built. So we settled on a set of questions to work towards answering
-in order to design NECTAR, and ran each through the HONEY loop below, combining
+in order to design NECTAR, and ran each through the HIVE loop above, combining
 stakeholder perspectives, background research, modelling and experimental work before
 asking how what we learned should change the design.
 
@@ -72,23 +72,27 @@ NECTAR needed to adapt. The goal was not to answer seven questions, but to use e
 answer to make NECTAR more responsible, more useful, and better grounded in the
 world it would operate in.
 
-## HONEY as a method, not a label
+## HIVE as a method, not a label
 
 The loop is the transferable part of this work, so we are publishing it as a
 method. It has three rules:
 
 1. **A question earns a place only if it passes three tests:** at least three
    stakeholders, at least one documentable design change, and at least one link
-   to a lab or dry-lab cycle. If nothing changed, it is not a HONEY cycle.
+   to a lab or dry-lab cycle. If nothing changed, it is not a HIVE cycle.
 2. **Every interaction is recorded in the same six fields:** who · why we spoke
    to them · what we asked · what we learned · what changed · remaining
    disagreement or uncertainty. The last field is the one that makes the record
    worth reading.
-3. **Yield must name the next question.** A cycle that ends in a conclusion has
+3. **Evaluate must name the next question.** A cycle that ends in a conclusion has
    stopped; a cycle that ends in a question has turned.
 
-The write-up of HONEY for another team to pick up is part of
+The write-up of HIVE for another team to pick up is part of
 [Contribution](/contribution).
+
+> **TODO —** One line per HIVE stage saying what it asks: Hear, Investigate,
+> Verdict, Evaluate. Nothing in `references/` defines the four stages yet, so the
+> figure above shows the words only. Owner: HP.
 
 > **TODO —** The third layer is not written: for each interview, the real
 > question list, the discussion by topic, and a reflection on what we would ask

@@ -86,6 +86,8 @@ export interface Stakeholder {
   changed?: string;
   /** Profile photograph URL. Never set for a withheld entry. */
   photo?: string;
+  /** Where to try next if `photo` does not load. See localPhotos. */
+  photoFallbacks?: string[];
   /** Who the photograph actually shows, when that is not simply `name`. */
   photoShows?: string;
   /** Set if this interview may not be published yet. */
@@ -205,6 +207,21 @@ function photoUrl(basename: string): string {
   return `${PHOTO_BASE}${basename}.avif`;
 }
 
+/**
+ * TEMPORARY FALLBACK, as for the comb icons and the hive badge. Until the
+ * upload is done, a published build that cannot load the static.igem.wiki
+ * photo tries the original in the gitignored public/local/, which the
+ * GitHub Pages preview fills from wiki-assets-source/stakeholder-photos/ and
+ * the wiki's own CI never has. The originals are jpg or png and nothing here
+ * knows which, so both are tried. Once the static.igem.wiki URLs answer,
+ * drop this and photoFallbacks.
+ */
+function localPhotos(basename: string): string[] {
+  if (import.meta.env.DEV) return [];
+  const base = `${import.meta.env.BASE_URL}local/stakeholder-photos/${basename}`;
+  return [`${base}.jpg`, `${base}.png`];
+}
+
 /* ---------- the stakeholders ---------- */
 
 const stakeholderFiles = import.meta.glob("../content/stakeholders/*.md", {
@@ -269,6 +286,7 @@ export const STAKEHOLDERS: Stakeholder[] = Object.entries(stakeholderFiles)
         ? undefined
         : flow(parsed.sections["How did this impact the project"]),
       photo: !withheld && f.photo ? photoUrl(f.photo) : undefined,
+      photoFallbacks: !withheld && f.photo ? localPhotos(f.photo) : undefined,
       photoShows: f["photo-shows"] || undefined,
       consent: withheld
         ? {

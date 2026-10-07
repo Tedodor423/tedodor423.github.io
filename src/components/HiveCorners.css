@@ -1,17 +1,17 @@
-/* The HONEY framework figure that opens the human practices page.
+/* The HIVE framework figure that opens the human practices page.
  *
- * Same tokens as everything else: honey letter cells on ink strokes, the comb
- * edge in burnt honey, violet for the cell you are pointing at — the same
- * lit-cell convention the engineering comb and the old loop figure use. The
- * written column sits left of the comb at reading width, the links to the
- * other human practices pages right of it, and both stack around it on a
- * narrow screen. The only motion is the fill change on the lit cell,
- * mirrored in the list.
+ * Same tokens as everything else: honey letter cells on ink strokes on the
+ * corners of the bee scene's hive drawing, violet for the cell you are
+ * pointing at — the same lit-cell convention the engineering comb and the old
+ * loop figure use. The written column sits left of the hive at reading width,
+ * the links to the other human practices pages right of it, and both stack
+ * around it on a narrow screen. The only motion is the lit cell growing to
+ * hold its word.
  */
 
-.honey-hex {
+.hive-corners {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(16rem, 24rem) minmax(15rem, 17rem);
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 28rem) minmax(15rem, 17rem);
   gap: 1.5rem 2.5rem;
   align-items: center;
   /* Breaks the 36rem measure the same way the map and the loop before it do:
@@ -25,53 +25,52 @@
 
 /* The copy opens the band, so its first paragraph does not need the usual
  * clearance from a previous section. */
-.hh-copy {
+.hc-copy {
   min-width: 0;
 }
 
-.hh-copy > p:first-child {
+.hc-copy > p:first-child {
   margin-top: 0;
 }
 
-/* ---------- the comb ---------- */
+/* ---------- the hive ---------- */
 
-/* No panel behind the comb: it sits straight on the page. */
-.hh-frame {
+/* No panel behind the hive: it sits straight on the page. */
+.hc-frame {
   position: relative;
 }
 
-.hh-svg {
+.hc-svg {
   display: block;
   width: 100%;
   height: auto;
+  /* The lit cells overhang the drawing; let them. */
+  overflow: visible;
 }
 
-.hh-comb {
-  fill: var(--surface);
-  stroke: var(--comb-edge);
-  stroke-width: 2.5;
-}
-
-/* The sixth corner: the team badge on a honey disc. The disc takes the letter
- * cells' honey-on-ink so the corner reads as part of the comb, and it backs
- * the badge's slightly transparent navy so the comb edge cannot show through
- * it. Inert, unlike the five cells. */
-.hh-logo {
+.hc-hive {
   pointer-events: none;
 }
 
-.hh-logo-disc {
+/* The team badge inside the hive, on a honey disc. The disc takes the letter
+ * cells' honey-on-ink so it reads as part of the same figure, and it backs
+ * the badge's slightly transparent navy. Inert, unlike the four cells. */
+.hc-logo {
+  pointer-events: none;
+}
+
+.hc-logo-disc {
   fill: var(--honey);
   stroke: var(--ink);
   stroke-width: 2;
 }
 
-.hh-cell {
+.hc-cell {
   cursor: pointer;
   outline: none;
 }
 
-.hh-hex {
+.hc-hex {
   fill: var(--honey);
   stroke: var(--ink);
   stroke-width: 2;
@@ -84,75 +83,50 @@
     transform 160ms ease;
 }
 
-.hh-cell.is-lit .hh-hex,
-.hh-cell:focus-visible .hh-hex {
+.hc-cell.is-lit .hc-hex,
+.hc-cell:focus-visible .hc-hex {
   fill: var(--violet);
-  transform: scale(1.25);
+  transform: scale(1.4);
 }
 
-.hh-cell:focus-visible .hh-hex {
+.hc-cell:focus-visible .hc-hex {
   stroke-width: 4;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hh-hex {
+  .hc-hex {
     transition: fill 120ms linear;
   }
 }
 
 /* At rest the cell shows the letter; lit, the letter gives way to the word
  * it is short for. Both are painted, opacity does the swap. */
-.hh-letter {
+.hc-letter {
   font-family: var(--font-display);
-  font-size: 44px;
+  font-size: 40px;
   fill: var(--ink);
   pointer-events: none;
   transition: opacity 120ms linear;
 }
 
-.hh-word {
+.hc-word {
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 19px;
+  font-size: 15px;
   fill: var(--surface);
   pointer-events: none;
   opacity: 0;
   transition: opacity 120ms linear;
 }
 
-.hh-cell.is-lit .hh-letter,
-.hh-cell:focus-visible .hh-letter {
+.hc-cell.is-lit .hc-letter,
+.hc-cell:focus-visible .hc-letter {
   opacity: 0;
 }
 
-.hh-cell.is-lit .hh-word,
-.hh-cell:focus-visible .hh-word {
+.hc-cell.is-lit .hc-word,
+.hc-cell:focus-visible .hc-word {
   opacity: 1;
-}
-
-/* ---------- the centre panel ---------- */
-
-/* Overlaid on the comb's interior, so appearing and disappearing moves no
- * layout. It only repeats what the list already says. */
-.hh-centre {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 52%;
-  text-align: center;
-  pointer-events: none;
-}
-
-.hh-centre p {
-  margin: 0;
-}
-
-/* The resting honey pot. A placeholder at the team's request, to be replaced
- * by a proper drawing; sized against the frame so it scales with the comb. */
-.hh-emoji {
-  font-size: clamp(2.5rem, 6vw, 3.5rem);
-  line-height: 1;
 }
 
 /* ---------- the onward links ---------- */
@@ -160,23 +134,23 @@
 /* Three buttons, one per row: honey on an ink rule with an arrow, the
  * pairing the letter cells beside them use, so they read as the next step
  * from the figure. Hover turns the button navy with honey type, the comb
- * band's pairing; nothing moves, and the arrow is static. Restated at .honey-hex depth so the page's link colour and
+ * band's pairing; nothing moves, and the arrow is static. Restated at .hive-corners depth so the page's link colour and
  * underline do not reach them. */
-/* At .honey-hex depth so the page's paragraph rule does not restyle it. */
-.honey-hex .hh-onward-lead {
+/* At .hive-corners depth so the page's paragraph rule does not restyle it. */
+.hive-corners .hc-onward-lead {
   margin: 0 0 0.75rem;
   color: var(--text-muted);
   font-size: 0.85rem;
   line-height: 1.5;
 }
 
-.hh-links {
+.hc-links {
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
 }
 
-.honey-hex .hh-links a {
+.hive-corners .hc-links a {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -194,20 +168,20 @@
   text-decoration: none;
 }
 
-.honey-hex .hh-links a:hover,
-.honey-hex .hh-links a:focus-visible {
+.hive-corners .hc-links a:hover,
+.hive-corners .hc-links a:focus-visible {
   background: var(--oxford-navy);
   border-color: var(--oxford-navy);
   color: var(--honey);
 }
 
-.hh-arrow {
+.hc-arrow {
   flex: none;
   width: 1.15rem;
   height: 1.15rem;
 }
 
-.hh-arrow path {
+.hc-arrow path {
   fill: none;
   stroke: currentColor;
   stroke-width: 2;
@@ -216,33 +190,33 @@
 }
 
 /* Three columns need the room; below it the links drop under the copy and
- * the comb, still side by side with each other where they fit. */
+ * the hive, still side by side with each other where they fit. */
 @media (max-width: 68rem) {
-  .honey-hex {
+  .hive-corners {
     grid-template-columns: minmax(0, 1fr) minmax(18rem, 26rem);
   }
 
-  .hh-onward {
+  .hc-onward {
     grid-column: 1 / -1;
   }
 
-  .hh-links {
+  .hc-links {
     flex-direction: row;
     flex-wrap: wrap;
   }
 
-  .honey-hex .hh-links a {
+  .hive-corners .hc-links a {
     flex: 1 1 12rem;
   }
 }
 
 @media (max-width: 52rem) {
-  .honey-hex {
+  .hive-corners {
     grid-template-columns: 1fr;
   }
 
-  .hh-frame {
-    max-width: 24rem;
+  .hc-frame {
+    max-width: 28rem;
     margin-inline: auto;
   }
 }

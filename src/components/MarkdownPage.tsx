@@ -8,7 +8,7 @@ import { rehypeMark } from "../utils/markTree";
 import { MarksContext } from "../utils/marksContext";
 import { StakeholderMap } from "./StakeholderMap";
 import { HoneyLoop } from "./HoneyLoop";
-import { HoneyHex } from "./HoneyHex";
+import { HiveCorners } from "./HiveCorners";
 import { HpStats } from "./HpStats";
 import { VarroaMap } from "./VarroaMap";
 import { ProjectTimeline } from "./ProjectTimeline";
@@ -37,7 +37,7 @@ import { SdgOverview } from "./SdgOverview";
 const SLOTS: Record<string, () => ReactNode> = {
   "stakeholder-map": () => <StakeholderMap />,
   "honey-loop": () => <HoneyLoop />,
-  "honey-hex": () => <HoneyHex />,
+  "hive-corners": () => <HiveCorners />,
   "hp-stats": () => <HpStats />,
   "varroa-map": () => <VarroaMap />,
   "project-timeline": () => <ProjectTimeline />,

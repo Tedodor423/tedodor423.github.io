@@ -295,7 +295,7 @@ const Pages: MenuEntry[] = [
         title: "NECTAR in the Real World",
         path: "/human-practices", // iGEM standard URL
         content: humanPractices,
-        // No lead: the page opens straight onto the approach + HONEY figure.
+        // No lead: the page opens straight onto the approach + HIVE figure.
       },
       {
         name: "Outreach and Education",

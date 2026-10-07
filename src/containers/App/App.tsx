@@ -39,8 +39,8 @@ const App = () => {
     <>
       <ScrollToHash />
 
-      {/* Temporary: the comb treatment on the page bands, and the switch
-          that turns it off. See CombBands.tsx. */}
+      {/* Temporary: the comb treatment on the page bands, currently held off
+          with its switch put away. See CombBands.tsx. */}
       <CombBands />
 
       {/* Decorative, every page. Kept outside <Routes> so that navigating does

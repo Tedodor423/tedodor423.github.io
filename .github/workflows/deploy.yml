@@ -55,24 +55,26 @@ jobs:
       # --- Dev-only media ---------------------------------------------------
       # The Varroa slide loads its clip from /local/ (the hero's clip is the
       # Video Universe embed already), and
-      # the engineering comb, the HONEY badge and the trees on the home page's
+      # the engineering comb, the HIVE badge and the trees on the home page's
       # second slide fall back to /local/ while their icons, logo and tree
-      # drawings are not yet on static.igem.wiki (the bee scene artwork and
+      # drawings are not yet on static.igem.wiki, and so do the stakeholder
+      # photos on the human practices map (the bee scene artwork and
       # the comb photo already are). That is public/local/ in the source
       # tree, gitignored so nothing heavy can reach the iGEM build (5 MB
       # ceiling; video must come from the Video Universe). The sources are
       # tracked under wiki-assets-source/images_dev/ for the moment, so this
       # preview puts them where the components look. Copy only what the
       # components reference. Remove this step once the mite clip is embedded
-      # from the Video Universe and the icons, logo and trees answer from
-      # static.igem.wiki.
+      # from the Video Universe and the icons, logo, trees and photos answer
+      # from static.igem.wiki.
       - name: Add dev-only media
         run: |
-          mkdir -p dist/local/eng-icons
+          mkdir -p dist/local/eng-icons dist/local/stakeholder-photos
           cp wiki-assets-source/images_dev/mite_back.mp4 dist/local/
           cp wiki-assets-source/images_dev/oxford-igem-logo.png dist/local/
           cp wiki-assets-source/images_dev/tree.svg wiki-assets-source/images_dev/tree_yellow.svg dist/local/
           cp wiki-assets-source/images_dev/eng-icons-upload/*.svg dist/local/eng-icons/
+          cp wiki-assets-source/stakeholder-photos/*.jpg wiki-assets-source/stakeholder-photos/*.png dist/local/stakeholder-photos/
 
       - uses: actions/upload-pages-artifact@v3
         with:

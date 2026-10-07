@@ -82,7 +82,7 @@ import "./StakeholderMap.css";
  *     at once beside the loop it describes.
  *
  * PHOTOS. A face renders only for entries carrying `photo` in
- * src/data/stakeholders.ts. The four withheld interviews never do - a face
+ * src/data/stakeholders.ts. A withheld interview never does - a face
  * identifies a person as surely as a name - and an entry whose photograph is
  * missing or not yet uploaded falls back to a drawn silhouette, so the map
  * degrades honestly rather than breaking while the uploads tool is empty.
@@ -562,9 +562,15 @@ export function StakeholderMap() {
   const [filter, setFilter] = useState<QuestionId | null>(null);
   const [hovered, setHovered] = useState<string | null>(null);
   const [pinned, setPinned] = useState<string | null>(null);
-  // Photograph URLs that failed to load - not uploaded yet, or gone. Those
-  // entries render the silhouette instead, in the map and in the card.
-  const [broken, setBroken] = useState<Set<string>>(new Set());
+  // How many of each entry's photograph URLs have failed to load: the
+  // static.igem.wiki copy first, then the preview's local fallbacks. Once
+  // they are all spent the entry renders the silhouette, in the map and in
+  // the card.
+  const [misses, setMisses] = useState<Record<string, number>>({});
+  const photoOf = (s: Stakeholder): string | undefined =>
+    s.photo
+      ? [s.photo, ...(s.photoFallbacks ?? [])][misses[s.id] ?? 0]
+      : undefined;
 
   const pinRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<HTMLDivElement>(null);
@@ -1206,7 +1212,7 @@ export function StakeholderMap() {
                   );
                   const wantsFace = Boolean(filter) && lit;
                   const hasPhoto =
-                    Boolean(s.photo) && !s.consent && !broken.has(s.id);
+                    Boolean(photoOf(s)) && !s.consent;
                   const nodeStage =
                     filter && lit ? stageOf(filter, s.id) : null;
                   const cls = [
@@ -1270,7 +1276,7 @@ export function StakeholderMap() {
                         {hasPhoto && (
                           <image
                             className="sm-face"
-                            href={s.photo}
+                            href={photoOf(s)}
                             x={-HEX_R}
                             y={-HEX_R}
                             width={HEX_R * 2}
@@ -1279,7 +1285,10 @@ export function StakeholderMap() {
                             clipPath="url(#sm-hexclip)"
                             aria-hidden
                             onError={() =>
-                              setBroken((prev) => new Set(prev).add(s.id))
+                              setMisses((prev) => ({
+                                ...prev,
+                                [s.id]: (prev[s.id] ?? 0) + 1,
+                              }))
                             }
                           />
                         )}
@@ -1455,7 +1464,7 @@ export function StakeholderMap() {
                     filter={filter}
                     pinned={activePinned}
                     photoNote={
-                      activeS.photo && !broken.has(activeS.id)
+                      photoOf(activeS)
                         ? activeS.photoShows
                         : undefined
                     }

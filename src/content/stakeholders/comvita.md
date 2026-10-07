@@ -6,17 +6,13 @@ place: New Zealand
 region: New Zealand
 lat: -37.79
 lon: 176.32
+photo: comvita--evans
+photo-shows: Dr Jackie Evans
 date: 23 July 2026
 questions: Q5
 provisional: Q3
-consent-status: not-given
-consent-note: Consent and review by Comvita are needed before publication. The conversation is recorded here so the count of interviews is honest; nothing from it is published.
 ---
 
-<!-- Interview withheld: consent or review is outstanding (see
-     consent-status above). Nothing from this conversation may be
-     written into this file until that is resolved. This file ships
-     in a public repository, so unpublishable text does not belong
-     here even as a draft. When consent lands: delete consent-status
-     and consent-note, add the sections (see the README), and add a
-     photo line only with the person's agreement. -->
+<!-- Consent confirmed by the team on 7 October 2026. The sections
+     (see the README) are still to be transcribed from this conversation's
+     write-up in references/. -->
