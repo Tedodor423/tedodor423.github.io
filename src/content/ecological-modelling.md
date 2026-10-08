@@ -75,6 +75,17 @@ used everywhere else on this wiki, and each is written out in full at
 | Australia commercial    | 0.05       | 0.05   | 0.05 |
 | Australia amateur       | 0.05       | 0.05   | 0.5  |
 
+```component
+beehave-efficiency
+```
+
+> **TODO —** Figure: the two Australian profiles in the figure above. Their
+> cycle 2 runs (columns BB and BT of `BEEHAVE_DBTL2_results.xlsx`) are
+> unlabelled, and the two tables on this page assign them opposite ways: by the
+> efficiency table, the block in which fall treatment at 0.05 still collapses
+> (BT) is the amateur profile; by the untreated-baseline table (297%) it is the
+> commercial one. Say which is which. Owner: dry lab.
+
 **The untreated baseline, per hive profile.** Before treatment is applied at all, the
 model gives the direct microeconomic impact of Varroa on an individual hive — a thing
 surveys cannot isolate, because real colony collapse always has several contributing
@@ -90,7 +101,9 @@ causes at once:
 > **TODO —** Those honey figures are recorded as percentage *reductions* above 100%,
 > which cannot be read literally. The accompanying text says cumulative honey
 > production falls **to about a third** of the uninfested level, so these look like
-> ratios of uninfested to infested rather than reductions. Restate them with the
+> ratios of uninfested to infested rather than reductions. The sheets bear this
+> out: the infested North Dakota hive harvests 264.6 kg over the run against
+> 602.8 kg uninfested, and 602.8 / 264.6 = 2.28. Restate them with the
 > direction and the denominator explicit, and add the reduction in bee population,
 > which our write-up marks as "to be added". Owner: dry lab.
 
@@ -135,13 +148,29 @@ treatment effect** before landscape realism is added in cycle 4.
 - **What it changed** — converts a colony-level efficacy target into **a titre
   target for the wet lab**.
 
-> **TODO —** Figure: The two heat maps for the Australian commercial profile — collapse
-> prevented, and honey production restored — over dsRNA concentration against yeast
-> supplied, for each regimen. Owner: dry lab.
+```component
+beehave-heatmaps
+```
+
+> **TODO —** Figure: the Australian amateur profile in the heat maps. In
+> `AUS_A_3-table.xlsx` its colonies collapse even where the treatment clears
+> every mite (3,500 × 0.1 mg/g, winter: no mites at any year end, collapse at the
+> end of year 4), so something in the profile, not Varroa, ends them; and its
+> honey grid divides by the Australian commercial reference (268.9 kg).
+> Re-parametrise or rerun it. Owner: dry lab.
+
+```component
+beehave-cost
+```
 
 > **TODO —** The yeast amounts are given as mg/day in the test design and as g/day
 > when the results are discussed. A factor of a thousand separates the two, and the
-> cost conclusion depends on which is right. Owner: dry lab.
+> cost conclusion depends on which is right. The model parameter is
+> `TREATMENT_YEAST_G_PER_DAY` and the sheets label the rows "g yeast applied per
+> day", but the cost column prices 35 a day over a 90-day winter (3,150) at
+> A$10.55, which is 3,150 × A$0.00335: right for milligrams at A$3.35 a gram, or
+> for grams at A$3.35 a kilogram. The figures above print the bare numbers until
+> this is settled. Owner: dry lab.
 
 Cycle 3 also carries an agricultural strand: the damage current pesticide use
 does to agriculture, as the counterfactual this treatment would be measured
@@ -276,7 +305,8 @@ is sequence-level screening, not this model. See
 
 ## Still missing
 
-- The plots and heat maps themselves. The numbers are here; the figures are not.
+- The cycle 1 sweep plot, and the Australian profiles in the cycle 2 and cycle 3
+  figures.
 - The BEEHAVE citation, alongside the NetLogo 5.3.1 version we ran.
 - The mg/day against g/day discrepancy in the yeast sweep.
 - Justified values and ranges for the five delivery-chain parameters.

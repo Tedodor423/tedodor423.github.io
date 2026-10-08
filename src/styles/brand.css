@@ -206,6 +206,37 @@
   --lab-wet-fill: #f0e9f5;
   --lab-bee-fill: #f7ecdd;
 
+  /* ---------- the three treatment regimens ---------- */
+
+  /* When in the year a treatment is applied, on the ecological-modelling
+   * figures. Winter is the regimen the model recommends, so it takes the
+   * hive's own burnt honey; year-round and fall take a navy and a violet.
+   *
+   * Not the kit's navy and violet themselves: those sit too dark to carry a
+   * 2px line, and they converge under deuteranopia (see the lab note above).
+   * These are lighter steps of the same two hues, pulled apart in lightness.
+   * Checked with the dataviz validator, all pairs, on white: worst CVD
+   * separation ΔE 17.0 (protan, fall against year-round), worst normal-vision
+   * ΔE 23.1, all three at least 3:1 against the surface. The figures also
+   * label every line directly, so colour is never the only key. */
+  --regimen-year: #2a5a8f;
+  --regimen-winter: var(--burnt-honey);
+  --regimen-fall: #b07ad6;
+
+  /* ---------- honey kept ---------- */
+
+  /* How much of an uninfested hive's five-year honey a treated hive keeps,
+   * on the cycle-3 heat maps. The same honey-into-burnt-wax family as the
+   * colony-loss scale, and the same reading: darker always means worse. It
+   * is its own set of tokens because the bands mean something else (share of
+   * honey kept, not share of colonies lost), so neither can move the other.
+   * The two darkest steps take wax type; the others take ink. */
+  --honey-kept-5: #fde7a0; /* 90% and up */
+  --honey-kept-4: #e2b04c; /* 75 to 90%  */
+  --honey-kept-3: #c0812f; /* 50 to 75%  */
+  --honey-kept-2: #874a1b; /* 25 to 50%  */
+  --honey-kept-1: #4f240f; /* under 25%  */
+
   /* One radius, used everywhere something is rounded at all. */
   --radius: 0.2rem;
 }

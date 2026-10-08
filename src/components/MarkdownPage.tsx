@@ -19,6 +19,9 @@ import { NectarDesigner } from "./NectarDesigner";
 import { BeeImportance } from "./BeeImportance";
 import { VarroaSlide } from "./VarroaSlide";
 import { SdgOverview } from "./SdgOverview";
+import { BeehaveEfficiency } from "./BeehaveEfficiency";
+import { BeehaveHeatmaps } from "./BeehaveHeatmaps";
+import { BeehaveCost } from "./BeehaveCost";
 
 /* Components a content file may place in the page.
  *
@@ -48,6 +51,9 @@ const SLOTS: Record<string, () => ReactNode> = {
   "bee-importance": () => <BeeImportance />,
   "varroa-slide": () => <VarroaSlide />,
   "sdg-overview": () => <SdgOverview />,
+  "beehave-efficiency": () => <BeehaveEfficiency />,
+  "beehave-heatmaps": () => <BeehaveHeatmaps />,
+  "beehave-cost": () => <BeehaveCost />,
 };
 
 /** One array, so a page with no marks does not rerender its consumers. */

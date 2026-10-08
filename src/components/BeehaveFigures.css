@@ -1,0 +1,598 @@
+/* The BEEHAVE figures on the ecological-modelling page: the efficiency sweep
+ * (cycle 2), the concentration-by-yeast heat maps (cycle 3) and the winter
+ * cost table.
+ *
+ * Same plate as the colony-loss map: its own paper and 1px rule, the single
+ * --radius, no shadows, no motion. Colours are brand tokens only; the regimen
+ * and honey-kept sets were added to brand.css for these figures and the note
+ * there records how they were checked. Data marks follow the dataviz rules:
+ * 2px lines, a surface ring round every marker, hairline solid gridlines, and
+ * text in ink, never in a series colour.
+ */
+
+.beehave-fig {
+  /* Breaks the 36rem measure, symmetrically, as the loss map does: three
+   * heat maps or three charts side by side do not fit a reading column. */
+  --bh-width: min(72rem, calc(100vw - 2rem));
+  width: var(--bh-width);
+  margin-block: 2rem 2.5rem;
+  margin-inline: calc((100% - var(--bh-width)) / 2);
+  padding: 1.1rem 1.25rem 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  color: var(--text);
+}
+
+/* The cost table is five rows; it reads better near the text it answers. */
+.beehave-fig--narrow {
+  --bh-width: min(52rem, calc(100vw - 2rem));
+}
+
+/* A phone gives the plate the whole width it can, and the heat maps scroll
+ * inside themselves below 20rem rather than pushing the page sideways. */
+@media (max-width: 575.98px) {
+  .beehave-fig {
+    padding: 0.9rem 0.75rem 1rem;
+  }
+}
+
+/* CombBands inverts type on a dark band; a plate brings its own paper, so
+ * these put its ink back. Same block as VarroaMap.css; drop with that file. */
+[data-comb="on"] [data-band="comb"] .beehave-fig strong,
+[data-comb="on"] [data-band="comb"] .beehave-fig summary,
+[data-comb="on"] [data-band="comb"] .beehave-fig .bh-title {
+  color: var(--ink);
+}
+
+[data-comb="on"] [data-band="comb"] .beehave-fig th,
+[data-comb="on"] [data-band="comb"] .beehave-fig td {
+  border-color: var(--rule);
+}
+
+.bh-title {
+  margin: 0 0 0.8rem;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--ink);
+}
+
+.bh-muted {
+  color: var(--text-muted);
+}
+
+/* ---------- controls ---------- */
+
+.bh-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.8rem 2rem;
+  margin-bottom: 0.8rem;
+}
+
+.bh-picks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.bh-pick {
+  padding: 0.2rem 0.65rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+
+.bh-pick:hover {
+  border-color: var(--ink);
+}
+
+.bh-pick.is-on {
+  border-color: var(--ink);
+  background: var(--honey);
+  color: var(--ink);
+}
+
+.bh-pick:focus-visible,
+.bh-slider input:focus-visible {
+  outline: 2px solid var(--oxford-navy);
+  outline-offset: 2px;
+}
+
+.bh-slider {
+  flex: 1 1 18rem;
+  max-width: 26rem;
+  font-size: 0.8rem;
+}
+
+.bh-slider label {
+  display: block;
+  margin-bottom: 0.15rem;
+}
+
+/* The chosen level is the figure's live number, so it is set large enough
+ * to read at a glance and in tabular figures so it does not jump. */
+.bh-slider-value {
+  margin-left: 0.4rem;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.bh-slider input {
+  display: block;
+  width: 100%;
+  accent-color: var(--violet);
+}
+
+.bh-slider-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- legend and keys ---------- */
+
+.bh-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 1.1rem;
+  margin: 0 0 0.6rem;
+  padding: 0;
+  list-style: none;
+  font-size: 0.74rem;
+}
+
+.bh-legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* A series key: a short thick line, the mark it stands for. */
+.bh-key {
+  display: inline-block;
+  flex: none;
+  width: 1rem;
+  height: 3px;
+  margin-right: 0.35rem;
+  vertical-align: middle;
+  border-radius: var(--radius);
+}
+
+.bh-key--ref {
+  background: var(--text-muted);
+  height: 1px;
+}
+
+.bh-key--hollow {
+  width: 0.65rem;
+  height: 0.65rem;
+  border: 2px solid var(--text);
+  border-radius: 50%;
+  background: var(--surface);
+}
+
+.bh-swatch {
+  display: inline-block;
+  flex: none;
+  width: 1rem;
+  height: 0.8rem;
+  border: 1px solid var(--rule);
+}
+
+/* ---------- charts ---------- */
+
+.bh-panels {
+  display: grid;
+  gap: 1rem 1.25rem;
+}
+
+.bh-panels--three {
+  grid-template-columns: repeat(auto-fit, minmax(min(17rem, 100%), 1fr));
+}
+
+.bh-chart {
+  min-width: 0;
+}
+
+.bh-chart-title {
+  margin: 0 0 0.2rem;
+  font-size: 0.76rem;
+  line-height: 1.4;
+  color: var(--ink);
+  min-height: 2.1em;
+}
+
+.bh-chart-plot {
+  position: relative;
+}
+
+.bh-chart-plot svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  touch-action: pan-y;
+}
+
+.bh-chart-plot svg.is-pickable {
+  cursor: pointer;
+}
+
+.bh-grid {
+  stroke: var(--rule);
+  stroke-width: 1;
+}
+
+.bh-tick {
+  fill: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.bh-axis-title {
+  fill: var(--text);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+}
+
+.bh-rule {
+  stroke: var(--text-muted);
+  stroke-width: 1;
+}
+
+.bh-rule-label {
+  fill: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+.bh-selected-col {
+  fill: var(--surface-muted);
+  stroke: var(--rule);
+  stroke-width: 1;
+}
+
+.bh-crosshair {
+  stroke: var(--text-muted);
+  stroke-width: 1;
+}
+
+.bh-line {
+  fill: none;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.bh-line--ref {
+  stroke: var(--text-muted);
+  stroke-width: 1;
+}
+
+/* The surface ring keeps crossing lines legible at a marker: a slightly
+ * larger disc in the surface colour, drawn under each dot. */
+.bh-dot-ring {
+  fill: var(--surface);
+}
+
+.bh-dot {
+  stroke-width: 2;
+}
+
+.bh-direct {
+  fill: var(--text);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+}
+
+.bh-tooltip {
+  position: absolute;
+  top: 0.25rem;
+  z-index: 2;
+  min-width: 11rem;
+  max-width: 16rem;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: 0.72rem;
+  line-height: 1.45;
+  pointer-events: none;
+}
+
+.bh-tooltip[data-side="right"] {
+  transform: translateX(0.75rem);
+}
+
+.bh-tooltip[data-side="left"] {
+  transform: translateX(calc(-100% - 0.75rem));
+}
+
+.bh-tooltip-head {
+  margin: 0 0 0.2rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.bh-tooltip ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ---------- readouts ---------- */
+
+.bh-readout {
+  margin: 0.9rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+.bh-readout strong {
+  color: var(--ink);
+}
+
+.bh-answer {
+  max-width: 44rem;
+  margin: 0 0 0.9rem;
+  padding: 0.6rem 0.8rem;
+  background: var(--surface-muted);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  font-size: 0.82rem;
+  line-height: 1.6;
+}
+
+.bh-inspect {
+  min-height: 1.6em;
+  margin: 0.5rem 0 0;
+  font-size: 0.74rem;
+  color: var(--text-muted);
+}
+
+/* The inspector follows a pointer; with no hover to follow it has nothing to
+ * say, and the table under the figure carries the same values. */
+@media (hover: none) {
+  .bh-inspect {
+    display: none;
+  }
+}
+
+/* ---------- heat maps ---------- */
+
+.bh-maps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(19.5rem, 100%), 1fr));
+  gap: 1rem 1.25rem;
+}
+
+/* Positioned so the cells' visually hidden "collapsed" notes, which are
+ * absolutely positioned, scroll with the table instead of widening the page. */
+.bh-map {
+  position: relative;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.bh-heat {
+  width: 100%;
+  border-collapse: separate;
+  /* The 2px surface gap between fills. */
+  border-spacing: 2px;
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.bh-heat caption {
+  caption-side: top;
+  padding: 0 0 0.35rem;
+  color: var(--text);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  text-align: left;
+}
+
+.bh-untreated {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+
+.bh-heat th {
+  padding: 0.15rem 0.3rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.bh-heat thead th {
+  text-align: center;
+  font-size: 0.68rem;
+}
+
+.bh-heat tbody th {
+  text-align: right;
+}
+
+.bh-corner {
+  font-size: 0.62rem;
+  line-height: 1.2;
+  text-align: right;
+}
+
+.bh-corner span {
+  display: block;
+}
+
+.bh-cell {
+  height: 2.1rem;
+  padding: 0 0.2rem;
+  text-align: center;
+  border-radius: var(--radius);
+}
+
+/* The chosen titre: its column is drawn round in ink, one outline made of
+ * the cells' own inside edges so it never shifts the layout. */
+.bh-heat .is-col {
+  box-shadow:
+    inset 2px 0 0 var(--ink),
+    inset -2px 0 0 var(--ink);
+}
+
+.bh-heat th.is-col {
+  color: var(--ink);
+  font-weight: 700;
+  box-shadow:
+    inset 2px 0 0 var(--ink),
+    inset -2px 0 0 var(--ink),
+    inset 0 2px 0 var(--ink);
+}
+
+.bh-heat .is-col-bottom {
+  box-shadow:
+    inset 2px 0 0 var(--ink),
+    inset -2px 0 0 var(--ink),
+    inset 0 -2px 0 var(--ink);
+}
+
+.bh-kept-5 {
+  background-color: var(--honey-kept-5);
+  color: var(--ink);
+}
+
+.bh-kept-4 {
+  background-color: var(--honey-kept-4);
+  color: var(--ink);
+}
+
+.bh-kept-3 {
+  background-color: var(--honey-kept-3);
+  color: var(--ink);
+}
+
+.bh-kept-2 {
+  background-color: var(--honey-kept-2);
+  color: var(--surface-muted);
+}
+
+.bh-kept-1 {
+  background-color: var(--honey-kept-1);
+  color: var(--surface-muted);
+}
+
+/* Collapse is a hatch over the fill, in the cell's own type colour, so it
+ * reads on the dark bands and the light ones and never rests on hue.
+ *
+ * `repeating-linear-gradient` trips the design guard as item 1. It stays,
+ * for the reason VarroaMap.css gives: hard stops, no blend, and the only way
+ * CSS draws a stripe on an HTML element. */
+.bh-hatched {
+  background-image: repeating-linear-gradient(
+    135deg,
+    color-mix(in srgb, currentcolor 45%, transparent) 0 1.5px,
+    transparent 1.5px 6px
+  );
+}
+
+/* ---------- tables ---------- */
+
+.bh-caption {
+  margin-top: 1rem;
+  font-size: 0.76rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.bh-caption p {
+  max-width: 48rem;
+  margin: 0 0 0.6rem;
+}
+
+.bh-table-wrap {
+  border-top: 1px solid var(--rule);
+  padding-top: 0.6rem;
+  overflow-x: auto;
+}
+
+.bh-table-wrap summary {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.bh-table-wrap .bh-table {
+  max-height: none;
+  margin-top: 0.6rem;
+}
+
+.bh-table-scroll {
+  overflow-x: auto;
+}
+
+.bh-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.74rem;
+  color: var(--text);
+}
+
+.bh-table caption {
+  caption-side: top;
+  padding-bottom: 0.4rem;
+  color: var(--text-muted);
+  font-size: 0.74rem;
+  text-align: left;
+}
+
+.bh-table th,
+.bh-table td {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--rule);
+  text-align: left;
+  vertical-align: top;
+  font-weight: 400;
+}
+
+.bh-table thead th {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  background: var(--surface-muted);
+  color: var(--ink);
+}
+
+.bh-table tbody th {
+  color: var(--ink);
+}
+
+.bh-num,
+.bh-table .bh-num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.bh-table--cost tr.is-works td,
+.bh-table--cost tr.is-works th {
+  background: var(--surface-muted);
+}
+
+.bh-table--cost tr.is-cheapest td,
+.bh-table--cost tr.is-cheapest th {
+  background: var(--honey);
+  color: var(--ink);
+  font-weight: 700;
+}
