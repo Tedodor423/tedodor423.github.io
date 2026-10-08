@@ -11,16 +11,14 @@ date: 12 August 2026
 provisional: Q1, Q5, Q6
 ---
 
-## Why did we choose this stakeholder
+## Why we interviewed
 
-## What did we learn from them
+We spoke with Elizabeth to understand the limitations of current Australian Varroa management and to get an expert assessment of whether NECTAR's proposed delivery methods would fit Australian beekeeping conditions. Her experience was particularly relevant because Australia's climate, long brood-production periods and prolonged nectar flows can restrict when existing treatments can be used.
 
-- Dual resistance has been detected, which means essentially all legal synthetic miticide options will soon be unusable.
-- Formic acid is hard to use in Australian heat and humidity, and most of the continent has a long brood period with often no brood break at all.
-- Oxalic acid, vaporised or as AluenCap strips, is the most popular option for beekeepers with dual-resistant mites. Homemade off-label products are in use, which she does not recommend.
-- Compared NECTAR to Norroa: Norroa is fed in sugar syrup and needs a total absence of nectar flow, which is hard to find in the Australian season. Pollen is limiting there, so a patty could realistically be a colony's main protein source.
-- Commercial beekeepers used to synthetics driving infestation down to undetectable may find a product that leaves a detectable alcohol-wash count a hard sell.
-- A dietary RNA platform could work for other pests and diseases - small hive beetle, American foulbrood, chalkbrood - though she was sceptical of a single patty targeting both Varroa and small hive beetle, which nobody has built.
-- Australian consumers would most likely be against anything genetically modified, even given large economic and welfare benefits, which would make the S. alvi version hard to put in front of beekeepers.
+## What we learned
 
-## How did this impact the project
+Elizabeth described **a rapidly narrowing treatment landscape as resistance reduces the effectiveness of synthetic miticides**, while alternatives such as formic acid can be difficult to use under Australian temperature and humidity conditions. She also compared NECTAR with existing RNAi approaches delivered through sugar syrup, noting that continuous nectar flows can make syrup feeding difficult to integrate into Australian colonies. Because pollen can instead be limiting, **she considered pollen-based delivery potentially well suited to this context**. However, she also highlighted an adoption challenge: commercial beekeepers may expect treatments to rapidly reduce detectable mite levels, meaning a slower dietary intervention would need convincing efficacy evidence.
+
+## How we implemented the advice to change NECTAR
+
+Elizabeth's feedback **strengthened our decision to prioritise pollen-patty delivery and the non-living yeast formulation**, particularly for Australian deployment. Her emphasis on cost, labour and honey productivity also informed the criteria used in our economic and BEEHAVE modelling, while her comments on beekeeper expectations reinforced our focus on improving direct mite mortality rather than relying solely on reproductive suppression. Finally, her suggestion that dietary RNA could target other bee threats helped us **envision NECTAR as a modular platform** that could eventually extend beyond Varroa to other pests and diseases.

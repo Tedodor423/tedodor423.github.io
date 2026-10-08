@@ -11,15 +11,14 @@ date: 5 August 2026
 questions: Q1, Q3, Q5, Q6
 ---
 
-## Why did we choose this stakeholder
+## Why we interviewed
 
-## What did we learn from them
+We spoke with Mike Allerton to understand Varroa from the perspective of Australian recreational and smaller-scale beekeepers, complementing our conversations with larger commercial operations and industry representatives. We particularly wanted to understand how the arrival of Varroa had changed everyday beekeeping, what limitations beekeepers experienced with existing treatments, and whether our proposed *S. alvi* and yeast delivery systems would appeal differently to commercial and hobbyist users.
 
-- Feral colonies in Australia are dense because forage is available all year. Under Varroa and small hive beetle together they collapsed within weeks rather than the projected two or three years, seeding managed colonies and removing free pollination that agriculture had relied on.
-- Membership of Amateur Beekeepers Australia fell from 5,000 to 3,000 when Varroa arrived in 2022, and has since recovered to about 4,000.
-- Bayvarol was initially the most effective treatment, but is expensive, slow to install and now faces resistance. Oxalic acid, as strips or vapour, is the most used treatment today.
-- Cost and labour are the biggest problems with every treatment, and hit small commercial operators of 200-300 hives hardest - they are being bought out by larger operators with more staff.
-- A recreational beekeeper himself: he produced 500-700 kg of honey a year before Varroa and is now focused on keeping bees alive. Some hobbyists cannot afford treatments and resort to off-label homemade ones.
-- Was especially interested in the S. alvi route for its lower labour, expecting it to appeal to commercial rather than recreational beekeepers - but said that if the yeast patty proves effective it will probably be the most widely accepted version. Suggested developing both, for two distinct markets.
+## What we learned
 
-## How did this impact the project
+Mike described the arrival of Varroa as devastating, with dense feral bee populations collapsing and contributing to reinfestation of managed colonies. He highlighted **cost and labour as major barriers to effective Varroa management**, particularly for smaller commercial operators without the staff and resources available to larger businesses. This strongly influenced his view of our delivery systems: he was particularly interested in living engineered *S. alvi* because persistent production of dsRNA could reduce repeated hive visits and therefore labour. However, he believed this approach might be less attractive to recreational beekeepers and suggested that, if sufficiently effective, a yeast pollen-patty treatment could achieve broader acceptance. His perspective showed us that **there was no single “beekeeper”**: commercial and recreational users can value different characteristics in a treatment.
+
+## How we implemented the advice to change NECTAR
+
+Mike's feedback **made labour and treatment frequency explicit design requirements for NECTAR** and encouraged us to consider different beekeeper markets rather than designing around a single user profile. Although subsequent regulatory and safety considerations led us to prioritise the non-living yeast approach rather than his preferred *S. alvi* system, we retained the problem he identified—minimising beekeeper intervention—as a central requirement. This strengthened our decision to deliver yeast through pollen patties that could integrate with existing hive-management practices, while our BEEHAVE and economic modelling explored treatment schedules, costs and application frequency. **His disagreement with our eventual chassis choice was also valuable**: it highlighted the genuine trade-off between the lower labour offered by a persistent living system and the greater regulatory and social deployability of a non-living formulation.

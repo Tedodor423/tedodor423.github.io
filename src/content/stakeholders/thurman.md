@@ -11,17 +11,14 @@ date: 29 July 2026
 provisional: Q5, Q7
 ---
 
-## Why did we choose this stakeholder
+## Why we interviewed
 
-An agricultural and resource economist specialising in pollination markets, which is the machinery NECTAR would have to pay for itself inside.
+We approached Professor Wally Thurman to understand how we could evaluate NECTAR's economic value, particularly within the US commercial beekeeping and pollination industries. We wanted to move beyond biological measures such as colony survival and determine whether our treatment could generate meaningful financial benefits for individual beekeepers and the wider agricultural market.
 
-## What did we learn from them
+## What we learned
 
-- Start from an average commercial beekeeping operation, use existing treatments as the counterfactual, and assess the change in costs and revenues rather than non-monetary metrics like survival rates and honey yields.
-- Use a simpler partial-equilibrium approach, assuming elasticities of supply and demand, to estimate market-level outcomes such as market surpluses.
-- For the US, focus on paid pollination markets and crops heavily reliant on managed bees, like almonds; ignore wild pollinators and incidental pollination outside the market.
-- Demand for pollination is derived from demand for food, so benefits to growers are ultimately passed along the supply chain to consumers.
+Wally recommended **beginning at the level of an average commercial beekeeping operation**, using existing Varroa treatments as the counterfactual and calculating how NECTAR would change costs and revenues. For wider impacts, he suggested a partial-equilibrium model using supply and demand elasticities to estimate changes in market surplus. He also recommended **focusing our US analysis on paid pollination markets**, particularly crops such as almonds that depend heavily on managed honey bees, rather than attempting to assign value to all pollination.
 
-## How did this impact the project
+## How we implemented the advice to change NECTAR
 
-Set the structure of the economic model: the counterfactual is the best existing treatment, operation level first, then market surplus. Confirmed running country-specific analyses. His advice is also why we do not multiply the A$4.6 billion pollination figure by an efficacy rate and call the product worth it.
+**Wally's advice directly shaped our economic modelling framework.** We first calculated NECTAR's estimated net private benefit per treated colony by considering treatment, labour and colony-replacement costs, before scaling this to estimate changes in honey and pollination market surplus. We also **developed separate US and Australian models** rather than assuming that economic impacts would transfer between countries with different beekeeping systems, costs and colony losses. This ultimately allowed us to evaluate NECTAR in monetary terms and assess if NECTAR would save beekeepers more money than it would cost.

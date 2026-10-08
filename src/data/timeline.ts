@@ -765,7 +765,7 @@ export const EVENTS: TimelineEvent[] = [
     links: [
       {
         label: "What must it cost?",
-        href: "/human-practices#q5-what-would-a-beekeeper-actually-use-and-what-can-they-afford",
+        href: "/human-practices#sm-heading",
       },
     ],
   },
@@ -794,7 +794,7 @@ export const EVENTS: TimelineEvent[] = [
       "Stakeholders had been collected but not connected to each other, markets and the public were under-explored, and misuse was unaddressed. The stakeholder map, the profiles and the debate podcast all come out of this meeting.",
     turn: true,
     threads: ["story"],
-    links: [{ label: "Who we spoke to", href: "/human-practices#who-we-spoke-to" }],
+    links: [{ label: "Who we spoke to", href: "/human-practices#sm-heading" }],
   },
   {
     id: "first-dbtl-week",
@@ -1022,7 +1022,7 @@ export const EVENTS: TimelineEvent[] = [
       "So many design changes had come out of stakeholder conversations that the team stops treating integrated work as a secondary target and pursues both.",
     threads: ["chassis", "story"],
     links: [
-      { label: "Before and after", href: "/human-practices#before-and-after" },
+      { label: "Before and after", href: "/human-practices#sm-heading" },
     ],
   },
   {
@@ -1124,7 +1124,7 @@ export const EVENTS: TimelineEvent[] = [
     links: [
       {
         label: "Should we be making a living GMO at all?",
-        href: "/human-practices#q3-should-we-be-making-a-living-gmo-at-all",
+        href: "/human-practices#sm-heading",
       },
     ],
   },
@@ -1192,7 +1192,7 @@ export const EVENTS: TimelineEvent[] = [
     detail:
       "Key takeaways per interview, and what each one led the team to do differently.",
     threads: ["story"],
-    links: [{ label: "Who we spoke to", href: "/human-practices#who-we-spoke-to" }],
+    links: [{ label: "Who we spoke to", href: "/human-practices#sm-heading" }],
   },
   {
     id: "mite-soak-designed",
@@ -1248,7 +1248,7 @@ export const EVENTS: TimelineEvent[] = [
     links: [
       {
         label: "What would a beekeeper use?",
-        href: "/human-practices#q5-what-would-a-beekeeper-actually-use-and-what-can-they-afford",
+        href: "/human-practices#sm-heading",
       },
     ],
   },
@@ -1426,7 +1426,7 @@ export const EVENTS: TimelineEvent[] = [
     links: [
       {
         label: "The six questions",
-        href: "/human-practices#the-six-questions",
+        href: "/human-practices#sm-heading",
       },
     ],
   },

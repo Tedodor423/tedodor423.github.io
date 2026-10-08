@@ -12,25 +12,18 @@ questions: Q2, Q3
 anchors: Q1, Q6
 ---
 
-## Why did we choose this stakeholder
+## Why we interviewed
 
-Preliminary research identified Australia and the United States, California in particular, as the two places struggling hardest with Varroa, so we approached the chief executive of the Australian industry's peak body.
+Our preliminary research identified Australia as an especially important case study because Varroa had only recently become established there, meaning its beekeeping industry was undergoing a rapid transition towards long-term mite management. We spoke with Danny Le Feuvre, CEO of the Australian Honey Bee Industry Council, to understand how Varroa was affecting Australian beekeepers, why existing control strategies were struggling, and what characteristics Australian beekeepers would want from a new treatment.
 
-## What did we learn from them
+## What we learned
 
-- Varroa arrived in Australia in 2022. An eradication programme costing A$100 million was initiated, and after it failed the mite was declared endemic in 2023. Beekeepers across eastern Australia have moved to permanent monitoring and treatment, complicated by resistant mites and by reinvasion from untreated feral colonies.
-- The most widely used treatments now are organic acids, which only protect for 6 to 8 weeks.
-- Even successfully treated hives are back at threshold within weeks, so a treatment that only kills mites well is not enough: it has to cut repeated labour, hold up under reinfestation, and fit a resistance-management rotation.
-- New South Wales has lost 35% of its commercial beekeepers, and 40% of Queensland's commercial beekeepers plan to leave the industry within 12 to 24 months, citing profitability and Varroa control.
-- Around 14 to 15% of Australian agriculture is directly reliant on feral and managed bee pollination, so beekeeper attrition threatens the country's ability to meet pollination demand. Our write-ups value that share three incompatible ways and we have not reconciled them: about A$14.6 billion, an estimated $5 billion impact from losing the bees, and a summary line putting honeybees at about 50% of Australian agriculture. None of the three is used anywhere else on this wiki until the team settles it.
-- There are no regulated RNAi products in Australia at all.
-- Preferred the live engineered bacterial system over the yeast alternative, on the grounds that it needs minimal labour, and suggested it could be pitched to beekeepers by explaining how abundant bacteria naturally are in the hive. He still stressed public acceptance, containment, communication and regulation, and that a non-live product may be easier to implement even at some cost in persistence.
-- His ideal treatment: cost-effective, perceived as natural, harmless to bee health, residue-free, and effective from a single feeding.
+Danny described both the biological and socioeconomic severity of the Australian Varroa problem. **Despite an eradication programme costing approximately A$100 million, Varroa could not be contained and was declared endemic.** He described emerging resistance to synthetic acaricides and the increasing reliance on alternative treatments, while also highlighting the substantial labour and financial burden of repeated Varroa management. He reported significant pressure on the beekeeping industry, including commercial beekeepers considering leaving because Varroa control was no longer sufficiently profitable, with consequences for an agricultural sector heavily reliant on honey bee pollination. From a beekeeper's perspective, Danny described an ideal treatment as **cheap, effective, low-labour, residue-free and perceived as natural, ideally requiring only a single administration**. Interestingly, he preferred our living *S. alvi* approach over repeatedly administered yeast because its persistence could minimise beekeeper labour, while recognising that GMO regulation and public perception could create challenges.
 
 ## Quote
 
 > Beekeepers are unable to use those synthetic treatments largely…we’re getting these re-infestation of mites, so they’re pulling out [treatments] and within weeks they’re back at threshold having to treat again.
 
-## How did this impact the project
+## How we implemented the advice to change NECTAR
 
-Redefined the problem as reinfestation, resistance and repeated labour rather than mite mortality. Fed the economic modelling and the decision to test for dsRNA in honey. That there are no regulated RNAi products in Australia is what sent us to the regulators next. His preference for the live bacterium is also one of the two beekeeper preferences we went against when we chose inactivated yeast on regulatory advice.
+Danny's preference for *S. alvi* prompted us to investigate whether its practical advantages could outweigh its regulatory disadvantages, **leading us to seek advice directly from Australian GMO regulators** and other policy experts. Those later conversations ultimately contributed to our decision to prioritise a non-living yeast formulation, meaning **we did not simply follow Danny's preferred solution**; instead, we weighed his labour and persistence requirements against regulatory, containment and social-acceptance concerns. His emphasis on cost also fed into our Australian economic modelling, while concerns surrounding residues encouraged us to investigate the fate of dsRNA in honey. More broadly, his feedback established several requirements that remained central to NECTAR even as our chassis changed: treatment should be affordable, minimise repeated beekeeper intervention, protect honey quality and be communicated transparently to the people expected to use it.

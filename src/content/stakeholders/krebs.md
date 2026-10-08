@@ -11,16 +11,14 @@ date: 23 July 2026
 questions: Q3, Q4, Q6
 ---
 
-## Why did we choose this stakeholder
+## Why we interviewed
 
-## What did we learn from them
+We spoke with Lord Krebs because his experience across science, environmental policy and, particularly, as the first Chairman of the UK Food Standards Agency gave him insight into how an emerging biotechnology could move from laboratory research towards real-world use. We wanted to understand what regulatory pathways NECTAR might encounter in the UK, particularly how releasing an engineered organism would be assessed and what would happen if components of our treatment reached honey or other bee products.
 
-- Deployment in the UK could touch three regulatory areas: contained GMO use (the Health and Safety Executive), environmental release (ACRE), and food and feed safety (the Food Standards Agency).
-- Even though our product is used on bees rather than being the food, regulators would want to know that none of it could reach honey, beeswax, pollen or the environment.
-- Off-target effects must be addressed, and he specifically pointed at species close to Varroa: other mites and potentially other arachnids.
-- If components were detectable in honey, we would need evidence that they are harmless to consumers. That enforced tracing the complete pathway, from what happens to Varroa through to what happens afterwards.
-- Cautioned against assuming GMO opposition is a lack of understanding. Responses are emotional and values-driven, and France and Austria are protective of traditional agriculture. Frame the product around protecting bees and sustainable food production rather than around GMOs.
+## What we learned
 
-## How did this impact the project
+Lord Krebs helped us separate regulation into **three relevant areas: contained GMO use, environmental release, and food/feed safety**. He explained that environmental release of an engineered organism could involve ACRE, while potential effects on honey and other food products could involve the FSA. Importantly, **NECTAR does not need to be the final food product for its downstream fate to matter**: we would need to consider whether its components could reach honey, wax, pollen, other organisms or the wider environment. He therefore encouraged us to investigate potential off-target effects, particularly in organisms related to Varroa. He also challenged us to think beyond formal regulation. Public concerns surrounding GM technologies may reflect values and attitudes towards agriculture rather than simply gaps in scientific knowledge, meaning that responsible communication should explain both what the technology is and why it is being developed.
 
-Responsible deployment needs both a rigorous assessment of what the technology does and a real explanation of why it is needed.
+## How we implemented the advice to change NECTAR
+
+His advice helped **make downstream fate and off-target safety explicit parts of NECTAR's design process**. We incorporated representative non-target organisms into our bioinformatic screening and investigated dsRNA persistence and biodegradability in honey rather than assuming that treatment remained confined to Varroa. His regulatory perspective also contributed to our comparison between persistent engineered *S. alvi* and a non-living yeast-derived formulation, encouraging us to consider regulatory and societal feasibility alongside biological performance. Finally, his comments on public perception influenced our Human Practices approach: rather than assuming that more scientific information alone would generate acceptance, we sought perspectives from potentially sceptical stakeholders and **framed our communication around NECTAR's purpose**—protecting honey bee health and the agricultural systems that depend upon it—while remaining transparent about the biotechnology used to achieve this.

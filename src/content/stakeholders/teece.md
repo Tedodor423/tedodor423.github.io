@@ -10,17 +10,14 @@ date: 20 August 2026
 provisional: Q4, Q5, Q6
 ---
 
-## Why did we choose this stakeholder
+## Why we interviewed
 
-## What did we learn from them
+We spoke with Melanie Teece to understand the priorities of the honey industry beyond our main US and Australian case studies. As Head of Technical at Hilltop Honey, with over 30 years of experience in the food industry, she offered a downstream perspective on how honey producers and suppliers might evaluate a biotechnology-based Varroa treatment. This was particularly valuable because much of Hilltop Honey's supply originates from China and South America, where Varroa had not significantly disrupted their supply.
 
-- Thirty years in the food industry. Most of Hilltop's honey originates from China or South America, and Varroa has not majorly affected their colonies or supply; transport and testing costs are high.
-- Their beekeepers will often choose the cheapest option, so cost-effectiveness is the factor to prioritise.
-- Honey is unusual among food products: consumers expect it to be natural and healthy, so wide acceptability matters.
-- Asked us to test whether dsRNA leaves residues in honey and, if so, whether it affects NMR and LC-HRMS results - the two industry tests for honey purity.
-- Small producers are unlikely to adopt an expensive treatment whatever its environmental advantages, and any treatment has to be simple to administer.
-- Weather, consumer expectations, transport and testing requirements all shape honey production alongside Varroa.
+## What we learned
 
-## How did this impact the project
+Melanie highlighted **cost-effectiveness, consumer acceptance and honey purity** as key considerations. With transport and testing already contributing substantially to production costs, she explained that beekeepers and suppliers would be strongly influenced by treatment price. She also emphasised that honey is marketed and perceived as a particularly natural and healthy product, making consumer confidence important for any biotechnology associated with its production. Finally, she encouraged us to **determine whether dsRNA residues could remain in honey and potentially interfere with industry purity testing**, including NMR and LC-HRMS analysis.
 
-Honey-residue and NMR / LC-HRMS testing were added to the wet-lab plan. The honey industry's concerns outside our two case studies turned out to be the same three: cost, consumer perception, contamination. For the SDG work, it overturned our assumption that a greener treatment is automatically more attractive to producers, made cheap fermentation, simple delivery and cost modelling core design criteria, and narrowed our zero-hunger claim to one biological pressure on pollinator-dependent agriculture.
+## How we implemented the advice to change NECTAR
+
+Melanie's perspective reinforced three areas of our project. Her emphasis on affordability strengthened our decision to develop economic models comparing NECTAR with existing Varroa-management costs, while her concerns around consumer perceptions supported our wider engagement with beekeepers, consumers and other stakeholders about biotechnology acceptance. Most directly, **her concerns around honey purity reinforced our decision to investigate dsRNA persistence and biodegradability in honey**. Her feedback showed us that responsible implementation requires considering not only whether NECTAR protects bees, but whether it also protects the quality, purity and consumer trust associated with the honey they produce.

@@ -141,7 +141,7 @@ regulatory leads explained that a strict national ban ruled out the engineered
 gut symbiont in that market, and that **price rather than efficacy** decides what
 a beekeeper buys, because honey is a low-margin business. Yeast became the lead
 platform on regulation and cost. See
-[What would a beekeeper use, and what can they afford?](/human-practices#q5-what-would-a-beekeeper-actually-use-and-what-can-they-afford)
+[What would a beekeeper use, and what can they afford?](/human-practices#sm-heading)
 and
 [the chassis cycle](/engineering#cycle-2-2).
 
@@ -155,7 +155,7 @@ a resistance researcher and a commercial beekeeper produced a design
 constraint neither the team nor the literature had raised: current treatments
 cannot be used **while honey supers are on the hive**. If NECTAR can be,
 beekeepers could treat at the right moment and less often. See
-[What would a beekeeper use?](/human-practices#q5-what-would-a-beekeeper-actually-use-and-what-can-they-afford).
+[What would a beekeeper use?](/human-practices#sm-heading).
 
 ## What the record cost, in numbers
 
@@ -171,7 +171,7 @@ and how much work a single number represents.
 | Bees in the adult uptake design             | 400, in 8 batches                    | [Bee lab](/bee-lab#adult-bee-assays)                  |
 | Jurisdictions mapped for route to market    | 6                                    | [Entrepreneurship](/entrepreneurship#regulatory-path) |
 | Hive profiles in the economic model         | 4                                    | [Economic modelling](/economic-modelling)             |
-| Conversations with people outside the team  | About 30                             | [Human practices](/human-practices#who-we-spoke-to)        |
+| Conversations with people outside the team  | About 30                             | [Human practices](/human-practices#sm-heading)        |
 
 ## What this page is made of
 
@@ -182,7 +182,7 @@ memory.
 
 Interviewees are described by role and organisation rather than by name unless
 their profile is already published on
-[Human Practices](/human-practices#who-we-spoke-to); the conversations still under
+[Human Practices](/human-practices#sm-heading); the conversations still under
 review are counted here but not named.
 
 > **TODO —** Reconcile the entries marked in the written record against the lab

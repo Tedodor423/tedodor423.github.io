@@ -25,3 +25,30 @@ export function Marked({ text }: { text: string }) {
   if (!marks.length) return <>{text}</>;
   return <Segments segments={highlight(text, marks)} />;
 }
+
+/* `**bold**` and `*italic*`, the only inline Markdown the stakeholder files
+ * use. A full Markdown renderer would wrap each field in a paragraph, and a
+ * field already sits inside one. A marker with no partner stays as typed, so
+ * a stray asterisk shows on the page rather than eating the rest of the line. */
+const EMPHASIS = /(\*\*[^*]+\*\*|\*[^*\s][^*]*\*)/;
+
+/** Like Marked, with `**bold**` and `*italic*` rendered. Searched-for words
+ * are marked inside each run, so a match never straddles an emphasis edge. */
+export function MarkedInline({ text }: { text: string }) {
+  return (
+    <>
+      {text.split(EMPHASIS).map((run, i) => {
+        if (i % 2 === 0) return run && <Marked key={i} text={run} />;
+        return run.startsWith("**") ? (
+          <strong key={i}>
+            <Marked text={run.slice(2, -2)} />
+          </strong>
+        ) : (
+          <em key={i}>
+            <Marked text={run.slice(1, -1)} />
+          </em>
+        );
+      })}
+    </>
+  );
+}

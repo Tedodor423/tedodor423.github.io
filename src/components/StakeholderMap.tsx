@@ -31,13 +31,13 @@ import {
   isKeyTo,
   questionsOf,
   stageOf,
-  type HoneyStage,
+  type HiveStage,
   type QuestionId,
   type Stakeholder,
 } from "../data/stakeholders";
 import { useDeckRests } from "../utils/deck";
 import { HpStats } from "./HpStats";
-import { Marked } from "./Marked";
+import { Marked, MarkedInline } from "./Marked";
 import "./StakeholderMap.css";
 
 /* Who we spoke to, and where.
@@ -50,7 +50,8 @@ import "./StakeholderMap.css";
  * The design is the team's own, from the 25 September write-up: "display
  * profile photos on a map", "stakeholders tied together into one HONEY cycle
  * are connected by visible links", and "Make HONEY cyclical: H > O > N > E >
- * Y > H". So:
+ * Y > H". The loop has since become HIVE (Hear, Investigate, Verdict,
+ * Evaluate), the 8 October write-up. So:
  *
  *   - On a wide screen the map takes the whole viewport and pins briefly,
  *     so the world is seen at once, easing in on the way in and out on the
@@ -69,17 +70,17 @@ import "./StakeholderMap.css";
  *     record in the same place, in the team's three sections, sized so it
  *     never scrolls, until a click away, Escape, or another selection.
  *   - Picking a question (the list in the bottom corner) turns everyone who
- *     fed it into large faces and draws that question's HONEY loop through
- *     them: curved arrows run Hear > Observe > Navigate > Evaluate > Yield
- *     and close back to Hear, and each face is badged with its stage. Stages
+ *     fed it into large faces and draws that question's HIVE loop through
+ *     them: curved arrows run Hear > Investigate > Verdict > Evaluate and
+ *     close back to Hear, and each face is badged with its stage. Stages
  *     come from src/data/stakeholders.ts (stageOf), which records only what
  *     the team's write-up states and defaults the rest to Hear - the
  *     write-up's own definition of the stage.
- *   - The same pick opens the question's write-up, stage by stage, in a pane
- *     down the right-hand side, and the map shrinks left to make room for
- *     it rather than being covered. The pane never scrolls: its type is
- *     fitted to the room (see the fit effect), so the whole question reads
- *     at once beside the loop it describes.
+ *   - The same pick opens the question's write-up in a pane down the
+ *     right-hand side - its summary, then stage by stage - and the map
+ *     shrinks left to make room for it rather than being covered. The
+ *     write-ups run to several paragraphs, so the pane scrolls below its
+ *     title.
  *
  * PHOTOS. A face renders only for entries carrying `photo` in
  * src/data/stakeholders.ts. A withheld interview never does - a face
@@ -140,24 +141,15 @@ const FACE_MIN_DIST = 92;
  */
 const SEA_PENALTY = 30;
 
-/**
- * The write-up pane's type, in px: the largest size it is set at, the size
- * the panel was designed at (below which the pane widens instead of
- * shrinking its type further), and the floor, under which it scrolls after
- * all. PANE_MAX_VW caps the widening, so the map always keeps most of the
- * screen.
- */
-const FIT_MAX = 13;
-const FIT_COMFORT = 12;
+/** The smallest type, in px, the selected card is shrunk to. */
 const FIT_MIN = 10.5;
-const PANE_MAX_VW = 0.4;
 
 /**
  * The person card. CARD_M is its margin from the canvas edge, in px.
  * A selected card starts at the width its CSS gives it and widens, up to
  * CARD_MAX_REM or the room beside its face, until the whole record fits
  * the height without scrolling; past that its type shrinks, down to
- * FIT_MIN, the pane's floor. HOVER_GRACE is how long, in ms, the small card
+ * FIT_MIN. HOVER_GRACE is how long, in ms, the small card
  * outlives the pointer leaving its face: long enough to cross the gap to
  * the card and press one of its questions. HOVER_SWITCH is how long the
  * pointer has to rest on another cell, while a card is up, before that
@@ -247,7 +239,10 @@ interface Block {
  * pair), the result is deterministic for a given panel layout, and only
  * computed for the people the current question shows.
  */
-function relax(points: { id: string; x: number; y: number }[], blocks: Block[]) {
+function relax(
+  points: { id: string; x: number; y: number }[],
+  blocks: Block[],
+) {
   const p = points.map((o) => ({ ...o }));
   const m = HEX_R * ACTIVE_SCALE + 8;
   // Bounds and blocks are enforced inside every pass, not after the last
@@ -424,37 +419,45 @@ function RecordSections({ s, level }: { s: Stakeholder; level: 3 | 5 }) {
   return (
     <>
       <section className="sm-sec">
-        <H className="sm-sec-head">Why did we choose this stakeholder</H>
+        <H className="sm-sec-head">Why we interviewed</H>
         {s.why && (
           <p>
-            <Marked text={s.why} />
+            <MarkedInline text={s.why} />
           </p>
         )}
       </section>
       <section className="sm-sec">
-        <H className="sm-sec-head">What did we learn from them</H>
+        <H className="sm-sec-head">What we learned</H>
         {s.quote && (
           <p className="sm-quote">
             &ldquo;
-            <Marked text={s.quote} />
+            <MarkedInline text={s.quote} />
             &rdquo;
           </p>
         )}
-        {s.learnt.length > 0 && (
+        {s.learntIsList && s.learnt.length > 0 && (
           <ul className="sm-learnt">
             {s.learnt.map((l) => (
               <li key={l}>
-                <Marked text={l} />
+                <MarkedInline text={l} />
               </li>
             ))}
           </ul>
         )}
+        {!s.learntIsList &&
+          s.learnt.map((l) => (
+            <p key={l}>
+              <MarkedInline text={l} />
+            </p>
+          ))}
       </section>
       <section className="sm-sec">
-        <H className="sm-sec-head">How did this impact the project</H>
+        <H className="sm-sec-head">
+          How we implemented the advice to change NECTAR
+        </H>
         {s.changed && (
           <p>
-            <Marked text={s.changed} />
+            <MarkedInline text={s.changed} />
           </p>
         )}
       </section>
@@ -600,15 +603,107 @@ export function StakeholderMap() {
   };
   const releaseHover = () => {
     holdHover();
-    leaveTimer.current = window.setTimeout(
-      () => setHovered(null),
-      HOVER_GRACE,
-    );
+    leaveTimer.current = window.setTimeout(() => setHovered(null), HOVER_GRACE);
   };
   useEffect(() => holdHover, []);
-  // The HONEY stage under the pointer in the cycle panel, picking that
+  // The HIVE stage under the pointer in the cycle panel, picking that
   // stage's people out on the map.
-  const [stageHover, setStageHover] = useState<HoneyStage | null>(null);
+  const [stageHover, setStageHover] = useState<HiveStage | null>(null);
+
+  // The open question's HIVE write-up stays folded under its summary until
+  // the reader asks for it. Remembered per question, so a new pick opens
+  // folded.
+  const [unfolded, setUnfolded] = useState<QuestionId | null>(null);
+  const hiveOpen = filter !== null && unfolded === filter;
+  const qscrollRef = useRef<HTMLDivElement>(null);
+  // Where the four letters and the summary sat just before a fold or an
+  // unfold, so the layout effect below can glide them from there.
+  const flipFrom = useRef<{
+    letters: Map<string, DOMRect>;
+    summary: DOMRect | null;
+  } | null>(null);
+
+  const toggleHive = (open: boolean) => {
+    const pane = qpanelRef.current;
+    if (pane) {
+      const letters = new Map<string, DOMRect>();
+      pane
+        .querySelectorAll<HTMLElement>("[data-hive-letter]")
+        .forEach((el) =>
+          letters.set(el.dataset.hiveLetter!, el.getBoundingClientRect()),
+        );
+      const summary =
+        pane.querySelector(".sm-qsummary")?.getBoundingClientRect() ?? null;
+      flipFrom.current = { letters, summary };
+    }
+    setUnfolded(open ? filter : null);
+  };
+
+  /* Folding and unfolding, as one movement. Unfolded, the pane scrolls so
+   * the HIVE stages start near its top with the last lines of the summary
+   * still showing above them; folded, it goes back to the top. Then the
+   * letters glide from where they were (in the button, or in the stage
+   * headings) to where they now are, while the whole column glides by as
+   * far as the summary moved, so it reads as one scroll rather than text
+   * jumping. Measured before the change and after it, and animated back
+   * from the difference. Both share one easing, so each letter is offset by
+   * its own move less the column's, which the column's transform adds
+   * back. Skipped under prefers-reduced-motion. */
+  useLayoutEffect(() => {
+    const from = flipFrom.current;
+    flipFrom.current = null;
+    const pane = qpanelRef.current;
+    const scroller = qscrollRef.current;
+    if (!from || !pane || !scroller) return;
+    const summary = pane.querySelector<HTMLElement>(".sm-qsummary");
+    if (hiveOpen) {
+      const fold = pane.querySelector<HTMLElement>(".sm-qfold");
+      if (fold) {
+        const line = summary
+          ? parseFloat(getComputedStyle(summary).lineHeight)
+          : NaN;
+        const peek = (Number.isFinite(line) ? line : 20) * 2.5;
+        const top =
+          fold.getBoundingClientRect().top -
+          scroller.getBoundingClientRect().top +
+          scroller.scrollTop;
+        scroller.scrollTop = Math.max(0, top - peek);
+      }
+    } else {
+      scroller.scrollTop = 0;
+    }
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const sumNow = summary?.getBoundingClientRect();
+    const shift = sumNow && from.summary ? from.summary.top - sumNow.top : 0;
+    const glide = (el: HTMLElement, was: DOMRect, off: number) => {
+      const now = el.getBoundingClientRect();
+      const dx = was.left - now.left;
+      const dy = was.top - now.top - off;
+      const s = now.width ? was.width / now.width : 1;
+      if (!dx && !dy && s === 1) return;
+      el.animate(
+        [
+          {
+            transformOrigin: "0 0",
+            transform: `translate(${dx}px, ${dy}px) scale(${s})`,
+          },
+          { transformOrigin: "0 0", transform: "none" },
+        ],
+        { duration: 650, easing: "cubic-bezier(0.22, 0.8, 0.25, 1)" },
+      );
+    };
+    pane.querySelectorAll<HTMLElement>("[data-hive-letter]").forEach((el) => {
+      const was = from.letters.get(el.dataset.hiveLetter!);
+      if (was) glide(el, was, shift);
+    });
+    const flow = pane.querySelector<HTMLElement>(".sm-qflow");
+    if (flow && shift) {
+      flow.animate(
+        [{ transform: `translateY(${shift}px)` }, { transform: "none" }],
+        { duration: 650, easing: "cubic-bezier(0.22, 0.8, 0.25, 1)" },
+      );
+    }
+  }, [hiveOpen]);
 
   // Wide screens get the fullscreen stage and the box beside the face;
   // narrow ones keep everything in normal flow with the card under the map.
@@ -665,85 +760,6 @@ export function StakeholderMap() {
     measure();
     return () => ro.disconnect();
   }, []);
-
-  /* The write-up pane does not scroll: the whole question has to be readable
-   * at once, beside the loop it describes. So its type is fitted to the
-   * room - the largest size up to FIT_MAX at which every stage fits. If that
-   * would drop below FIT_COMFORT, the pane widens instead (up to
-   * PANE_MAX_VW, the map giving up the width) just far enough to hold
-   * FIT_COMFORT. Only a viewport too short even then falls back to a
-   * scrolling pane at FIT_MIN. Measured, not estimated, because the stage
-   * texts are the team's to edit (src/content/questions) and their length
-   * moves.
-   *
-   * The pane's height is its content's, capped by the room, so "fits" is
-   * simply scrollHeight within clientHeight. Trial widths go on the pane
-   * alone, so only the pane relays out per trial; the chosen width goes on
-   * the frame, where the canvas reads it too. Narrow screens keep the pane
-   * in flow and are left alone. */
-  useLayoutEffect(() => {
-    const pane = qpanelRef.current;
-    const frame = frameRef.current;
-    if (!filter || !pane || !frame) return;
-    const wideMq = window.matchMedia("(min-width: 48rem)");
-    const fit = () => {
-      frame.style.removeProperty("--sm-pane-w");
-      pane.style.removeProperty("--sm-pane-w");
-      pane.style.removeProperty("--sm-qfit");
-      pane.removeAttribute("data-overflow");
-      if (!wideMq.matches) return;
-      const fits = (px: number) => {
-        pane.style.setProperty("--sm-qfit", `${px}px`);
-        return pane.scrollHeight <= pane.clientHeight;
-      };
-      const largest = () => {
-        if (fits(FIT_MAX)) return FIT_MAX;
-        if (!fits(FIT_MIN)) return 0;
-        let lo = FIT_MIN;
-        let hi = FIT_MAX;
-        while (hi - lo > 0.125) {
-          const mid = (lo + hi) / 2;
-          if (fits(mid)) lo = mid;
-          else hi = mid;
-        }
-        return lo;
-      };
-      const widthTo = (px: number) =>
-        pane.style.setProperty("--sm-pane-w", `${px}px`);
-      let size = largest();
-      if (size < FIT_COMFORT) {
-        let lo = pane.offsetWidth;
-        let hi = Math.max(lo, Math.round(window.innerWidth * PANE_MAX_VW));
-        widthTo(hi);
-        if (fits(FIT_COMFORT)) {
-          while (hi - lo > 8) {
-            const mid = Math.round((lo + hi) / 2);
-            widthTo(mid);
-            if (fits(FIT_COMFORT)) hi = mid;
-            else lo = mid;
-          }
-          widthTo(hi);
-        }
-        size = largest();
-        frame.style.setProperty("--sm-pane-w", `${hi}px`);
-        pane.style.removeProperty("--sm-pane-w");
-      }
-      pane.style.setProperty("--sm-qfit", `${size || FIT_MIN}px`);
-      pane.toggleAttribute("data-overflow", size === 0);
-    };
-    fit();
-    // Only the viewport changes the room; the frame is the viewport here.
-    const ro = new ResizeObserver(fit);
-    ro.observe(frame);
-    // The brand faces load from static.igem.wiki, possibly after this first
-    // fit, and a swapped face re-wraps every line.
-    document.fonts.addEventListener("loadingdone", fit);
-    return () => {
-      ro.disconnect();
-      document.fonts.removeEventListener("loadingdone", fit);
-      frame.style.removeProperty("--sm-pane-w");
-    };
-  }, [filter]);
 
   /* The pin-and-move-on scroll treatment. The stage is position:sticky, so
    * scrolling never stops working; this only eases the stage in while it
@@ -807,7 +823,11 @@ export function StakeholderMap() {
     if (!wide || !wrap) return [];
     const r = wrap.getBoundingClientRect();
     const top = r.top + window.scrollY;
-    return [Math.max(0, top - window.innerHeight), top, r.bottom + window.scrollY];
+    return [
+      Math.max(0, top - window.innerHeight),
+      top,
+      r.bottom + window.scrollY,
+    ];
   }, [wide]);
   useDeckRests(rests);
 
@@ -842,11 +862,10 @@ export function StakeholderMap() {
     return base;
   }, [nodes, filter, layout]);
 
-  /* The question's HONEY loop, drawn as one closed tour: the faces grouped
-   * and ordered Hear > Observe > Navigate > Evaluate > Yield (only the
-   * stages that have people), walked nearest-neighbour within a stage so the
-   * path does not zigzag, and closed back to the start - the write-up's "H >
-   * O > N > E > Y > H", not a decoration. */
+  /* The question's HIVE loop, drawn as one closed tour: the faces grouped
+   * and ordered Hear > Investigate > Verdict > Evaluate (only the stages
+   * that have people), walked nearest-neighbour within a stage so the path
+   * does not zigzag, and closed back to the start, not a decoration. */
   const loop = useMemo(() => {
     if (!filter) return [] as string[];
     const q = filter;
@@ -867,9 +886,7 @@ export function StakeholderMap() {
           dist(at(id), from) < dist(at(m), from) ? id : m,
         );
       } else {
-        cur = [...remaining].reduce((m, id) =>
-          at(id).x < at(m).x ? id : m,
-        );
+        cur = [...remaining].reduce((m, id) => (at(id).x < at(m).x ? id : m));
       }
       for (;;) {
         order.push(cur);
@@ -938,8 +955,7 @@ export function StakeholderMap() {
       const fits = () => el.offsetHeight <= room;
       if (!fits()) {
         const rem =
-          parseFloat(getComputedStyle(document.documentElement).fontSize) ||
-          16;
+          parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
         const { face, gap } = faceGeom;
         const beside = Math.max(
           face.x - gap - CARD_M,
@@ -1173,7 +1189,10 @@ export function StakeholderMap() {
                     markerHeight="4.4"
                     orient="auto-start-reverse"
                   >
-                    <path className="sm-arrowhead" d="M 0 0.6 L 9.4 5 L 0 9.4 Z" />
+                    <path
+                      className="sm-arrowhead"
+                      d="M 0 0.6 L 9.4 5 L 0 9.4 Z"
+                    />
                   </marker>
                 </defs>
 
@@ -1206,13 +1225,12 @@ export function StakeholderMap() {
                   );
                   const isProvisional = Boolean(
                     filter &&
-                      (s.provisional ?? []).includes(filter) &&
-                      !s.questions.includes(filter) &&
-                      !(s.anchors ?? []).includes(filter),
+                    (s.provisional ?? []).includes(filter) &&
+                    !s.questions.includes(filter) &&
+                    !(s.anchors ?? []).includes(filter),
                   );
                   const wantsFace = Boolean(filter) && lit;
-                  const hasPhoto =
-                    Boolean(photoOf(s)) && !s.consent;
+                  const hasPhoto = Boolean(photoOf(s)) && !s.consent;
                   const nodeStage =
                     filter && lit ? stageOf(filter, s.id) : null;
                   const cls = [
@@ -1352,7 +1370,7 @@ export function StakeholderMap() {
               <div
                 className="sm-filter"
                 role="group"
-                aria-label="Show one HONEY question"
+                aria-label="Show one HIVE question"
               >
                 <button
                   type="button"
@@ -1360,7 +1378,7 @@ export function StakeholderMap() {
                   aria-pressed={!filter}
                   onClick={() => pick(null)}
                 >
-                  All conversations
+                  All questions
                 </button>
                 {QUESTION_IDS.map((q) => (
                   <button
@@ -1374,22 +1392,16 @@ export function StakeholderMap() {
                   </button>
                 ))}
               </div>
-              {filter && (
-                <p className="sm-filter-key">
-                  Arrows run this cycle&rsquo;s HONEY loop, Hear to Yield and
-                  back. Conversations central to the question wear their
-                  stage letter, the anchor interview carries the heavier rim,
-                  and a dashed rim is a tag we assigned provisionally, not
-                  one the team&rsquo;s question table states. Hover a stage
-                  in the write-up to pick its people out.
-                </p>
-              )}
             </div>
 
-            {/* The question walked through its HONEY stages, from the
-             * question's own file (src/content/questions), in the pane down
-             * the right-hand side. Hovering or focusing a stage picks its
-             * people out on the map. */}
+            {/* The question in the pane down the right-hand side, from its
+             * own file (src/content/questions). Folded, it is the title, the
+             * summary a step larger and a button that unfolds the HIVE
+             * write-up; unfolded, the stages follow the summary under a small
+             * Collapse button. The title stays put and the rest scrolls
+             * beneath it, clear of the hive that sits over the pane's top
+             * corner. Hovering or focusing a stage that has people picks them
+             * out on the map. */}
             {filter && (
               <aside
                 className="sm-qpanel"
@@ -1397,50 +1409,140 @@ export function StakeholderMap() {
                 aria-labelledby="sm-qpanel-title"
               >
                 <header className="sm-qpanel-head">
-                  <p className="sm-qpanel-id">{filter} through the HONEY loop</p>
+                  <p className="sm-qpanel-id">{filter} through the HIVE loop</p>
                   <h3 id="sm-qpanel-title" className="sm-qpanel-title">
                     {QUESTION_TITLES[filter]}
                   </h3>
                 </header>
-                {QUESTION_CYCLES[filter].stages.map((st) => (
-                  <section
-                    key={st.stage}
-                    className={`sm-qstage${
-                      stageHover === st.stage ? " is-hover" : ""
-                    }`}
-                    tabIndex={0}
-                    onPointerEnter={() => setStageHover(st.stage)}
-                    onPointerLeave={() =>
-                      setStageHover((h) => (h === st.stage ? null : h))
-                    }
-                    onFocus={() => setStageHover(st.stage)}
-                    onBlur={() =>
-                      setStageHover((h) => (h === st.stage ? null : h))
-                    }
-                  >
-                    <h4 className="sm-qstage-head">
-                      <span className="sm-qstage-letter" aria-hidden>
-                        {st.stage}
-                      </span>
-                      {STAGE_NAMES[st.stage]}
-                      {st.people.length > 0 && (
-                        <span className="sm-qstage-count">
-                          {st.people.length}{" "}
-                          {st.people.length === 1
-                            ? "conversation"
-                            : "conversations"}
-                        </span>
+                {/* Keyed by question, so a new pick starts at the top. */}
+                <div
+                  className={`sm-qpanel-scroll${hiveOpen ? " is-open" : ""}`}
+                  key={filter}
+                  ref={qscrollRef}
+                >
+                  <div className="sm-qflow">
+                    <div className="sm-qintro">
+                      {QUESTION_CYCLES[filter].summary && (
+                        <div className="sm-qsummary">
+                          <Markdown remarkPlugins={[remarkGfm]}>
+                            {QUESTION_CYCLES[filter].summary}
+                          </Markdown>
+                        </div>
                       )}
-                    </h4>
-                    {st.body && (
-                      <div className="sm-qstage-body">
-                        <Markdown remarkPlugins={[remarkGfm]}>
-                          {st.body}
-                        </Markdown>
-                      </div>
+                      {!hiveOpen && (
+                        <button
+                          type="button"
+                          className="sm-qread"
+                          aria-expanded={false}
+                          aria-label="Read the HIVE framework"
+                          onClick={() => toggleHive(true)}
+                        >
+                          <span>Read the</span>
+                          <span className="sm-qread-letters" aria-hidden>
+                            {QUESTION_CYCLES[filter].stages.map((st) => (
+                              <span
+                                key={st.stage}
+                                className="sm-qstage-letter"
+                                data-hive-letter={st.stage}
+                              >
+                                {st.stage}
+                              </span>
+                            ))}
+                          </span>
+                          <span>framework</span>
+                          <svg
+                            className="sm-qarrow"
+                            viewBox="0 0 16 16"
+                            aria-hidden
+                          >
+                            <path d="M 8 2 V 13 M 3.5 8.5 L 8 13 L 12.5 8.5" />
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+                    {hiveOpen && (
+                      <>
+                        <div className="sm-qfold">
+                          <button
+                            type="button"
+                            className="sm-qcollapse"
+                            aria-expanded
+                            onClick={() => toggleHive(false)}
+                          >
+                            Collapse
+                            <svg
+                              className="sm-qarrow"
+                              viewBox="0 0 16 16"
+                              aria-hidden
+                            >
+                              <path d="M 8 14 V 3 M 3.5 7.5 L 8 3 L 12.5 7.5" />
+                            </svg>
+                          </button>
+                        </div>
+                        <div className="sm-qhive">
+                          {QUESTION_CYCLES[filter].stages.map((st) => {
+                            const lights = st.people.length > 0;
+                            return (
+                              <section
+                                key={st.stage}
+                                className={`sm-qstage${
+                                  stageHover === st.stage ? " is-hover" : ""
+                                }`}
+                                tabIndex={0}
+                                onPointerEnter={
+                                  lights
+                                    ? () => setStageHover(st.stage)
+                                    : undefined
+                                }
+                                onPointerLeave={() =>
+                                  setStageHover((h) =>
+                                    h === st.stage ? null : h,
+                                  )
+                                }
+                                onFocus={
+                                  lights
+                                    ? () => setStageHover(st.stage)
+                                    : undefined
+                                }
+                                onBlur={() =>
+                                  setStageHover((h) =>
+                                    h === st.stage ? null : h,
+                                  )
+                                }
+                              >
+                                <h4 className="sm-qstage-head">
+                                  <span
+                                    className="sm-qstage-letter"
+                                    data-hive-letter={st.stage}
+                                    aria-hidden
+                                  >
+                                    {st.stage}
+                                  </span>
+                                  {STAGE_NAMES[st.stage]}
+                                  {lights && (
+                                    <span className="sm-qstage-count">
+                                      {st.people.length}{" "}
+                                      {st.people.length === 1
+                                        ? "conversation"
+                                        : "conversations"}
+                                    </span>
+                                  )}
+                                </h4>
+                                {st.body && (
+                                  <div className="sm-qstage-body">
+                                    <Markdown remarkPlugins={[remarkGfm]}>
+                                      {st.body}
+                                    </Markdown>
+                                  </div>
+                                )}
+                              </section>
+                            );
+                          })}
+                        </div>
+                      </>
                     )}
-                  </section>
-                ))}
+                  </div>
+                </div>
               </aside>
             )}
 
@@ -1464,9 +1566,7 @@ export function StakeholderMap() {
                     filter={filter}
                     pinned={activePinned}
                     photoNote={
-                      photoOf(activeS)
-                        ? activeS.photoShows
-                        : undefined
+                      photoOf(activeS) ? activeS.photoShows : undefined
                     }
                     onPick={pick}
                     onClose={() => setPinned(null)}

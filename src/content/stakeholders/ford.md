@@ -13,18 +13,14 @@ anchors: Q5
 provisional: Q4
 ---
 
-## Why did we choose this stakeholder
+## Why we interviewed
 
-## What did we learn from them
+We spoke with Wade Ford to understand how Varroa was affecting large-scale Australian beekeeping and honey production, and what would determine whether commercial beekeepers adopted a new treatment. His role working directly with beekeepers also gave us an opportunity to understand regional differences in Varroa's impact and obtain realistic hive profiles for our modelling.
 
-- Varroa has had a huge impact on Australia, although honey supply has not fallen yet, partly because suppliers hold on to their yields. New South Wales beekeepers have lost over 1,200 hives and seen about a 50% drop in honey production.
-- Mainstream Australian treatments are oxalic and formic acid, with off-label use and a temperature ceiling on formic. Synthetics like Apivar and Bayvarol face resistance, and thyme oil leaves a bitter taste in honey.
-- Varroa management costs split roughly 60% treatment and 40% additional labour. Formic acid runs to A$7 per hive, which adds up over 1,000+ hives, before counting synthetics bought and colonies replaced only to discover resistant mites.
-- After talking to his beekeepers, cost is the factor to prioritise, then effectiveness, time and labour, and ease of use.
-- Preferred pollen patties over S. alvi: his beekeepers already feed patties regularly, and attitudes towards living GMOs matter. Stressed being transparent about the biotechnology used.
-- Asked us to test how honey composition changes under treatment, including after processing - honey is heated to 65 degrees C for 8 hours to be sent into Western Australia - and how efficacy varies regionally with temperature.
-- Provided hive profiles from his beekeepers for our modelling.
+## What we learned
 
-## How did this impact the project
+Wade described substantial regional impacts, including losses of over 1,200 hives and an approximately 50% reduction in honey production among beekeepers in New South Wales. He also highlighted limitations across existing treatments, including resistance, off-label use, temperature restrictions and effects on honey quality. Importantly, **he identified cost as the leading consideration for treatment adoption**, followed by efficacy, labour, time and ease of administration. He estimated that Varroa-management costs for commercial operations comprise roughly 60% treatment costs and 40% additional labour, with formic acid alone costing around A$7 per hive. Of our proposed delivery approaches, **Wade preferred pollen patties**, since his beekeepers already use them routinely and they avoid some concerns surrounding living GMOs. He also emphasised transparency and encouraged us to investigate whether our intervention could leave residues or otherwise affect honey.
 
-The 60/40 cost split and the existing use of patties made the delivery format a stakeholder choice rather than a lab one. Fed the honey-residue tests and the region-specific hive profiles in the model.
+## How we implemented the advice to change NECTAR
+
+Wade's feedback directly influenced several parts of NECTAR. His recommendation **strengthened our decision to use pollen patties as a delivery method**, allowing treatment to fit into an existing beekeeping practice rather than creating additional labour. His emphasis on affordability motivated our economic modelling comparing NECTAR with existing treatments, while the regional differences he described encouraged us to develop distinct hive profiles in BEEHAVE to explore how treatment performance could vary geographically. Finally, his concerns about honey quality **led us to investigate the fate and biodegradability of dsRNA in honey**, ensuring that our safety assessment considered not only bee health but also the product commercial beekeepers ultimately sell.

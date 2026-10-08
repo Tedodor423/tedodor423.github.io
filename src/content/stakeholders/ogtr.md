@@ -1,7 +1,7 @@
 ---
 order: 30
-name: Geraldine Lester and colleagues
-role: Office of the Gene Technology Regulator (OGTR), Australian Government
+name: Office of the Gene Technology Regulator
+role: Australian Government agency
 place: Canberra
 region: Australia
 lat: -35.28
@@ -11,18 +11,14 @@ questions: Q4, Q6
 anchors: Q3
 ---
 
-## Why did we choose this stakeholder
+## Why we interviewed
 
-## What did we learn from them
+We approached the OGTR to understand how our proposed delivery systems would be treated under Australia's gene-technology framework. At the time, we were considering both living engineered *S. alvi*—including constitutive and inducible versions—and dsRNA produced using engineered yeast before the yeast was inactivated. We particularly wanted to know whether introducing an inducible switch into *S. alvi* would meaningfully reduce the regulatory barriers associated with releasing a living GMO.
 
-- A non-living engineered yeast product would not be regulated by the OGTR. Both S. alvi delivery systems, constitutive or inducible, would fall within its remit.
-- Constitutive and inducible S. alvi would be regulated similarly: an inducible switch changes aspects of the risk assessment but not the regulatory route, even if it makes the system seem more acceptable to the public.
-- One of the most important concerns would be effects on non-target species - native bees, mites and other organisms the bacterium or dsRNA might reach - and whether the bacterium could spread between colonies or colonise other insects.
-- The applicant is responsible for providing sufficient evidence of safety, and there is no universal set of experiments because GM organisms and their risks vary.
-- If the engineered bacterium or its products were found in honey, additional assessment would be needed.
-- Unlike some other regulators, the OGTR does not consider the potential benefits of a GMO release in its assessment.
-- One point in the live system's favour: gut bacteria have a lifespan and have to be reintroduced, so from a regulatory standpoint their presence is not constant if nobody reintroduces them.
+## What we learned
 
-## How did this impact the project
+The OGTR clarified a major distinction between our approaches: our living engineered *S. alvi* systems **would fall within its regulatory remit, whereas the non-living yeast-derived formulation would not**. Importantly, adding an inducible switch to *S. alvi* **would not fundamentally change its regulatory pathway**, although conditional expression could be considered during risk assessment. We also learned what evidence would become important for a living system, including whether the bacterium could spread between colonies, colonise other insects or adversely affect non-target species such as native bees and mites. Potential movement into honey could trigger additional assessment. The OGTR also stressed that applicants must build their own evidence base to address relevant risks and that its assessment focuses on risk, not the potential benefits that might justify taking that risk.
 
-The only binary, jurisdictionally authoritative answer we obtained, and the anchor for the chassis decision: the inducible switch buys nothing. Note that the same conversation gave the live route its one regulatory point, the need for reintroduction, which we did not take up.
+## How we implemented the advice to change NECTAR
+
+This conversation was **one of the strongest regulatory influences on our chassis decision**. An inducible *S. alvi* system had initially seemed like a possible compromise—retaining persistent in-bee dsRNA production while giving beekeepers greater control—but learning that inducibility would not fundamentally change the Australian regulatory route reduced this advantage. Combined with concerns about spread and non-target exposure, this strengthened our decision to **prioritise engineered yeast followed by heat inactivation, separating synthetic-biology production from environmental release of a living GMO**. The OGTR's emphasis on non-target effects also reinforced our off-target screening and environmental-safety work, ensuring that regulatory considerations directly influenced both NECTAR's design and the evidence we sought to generate.

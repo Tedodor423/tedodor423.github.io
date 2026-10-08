@@ -11,17 +11,16 @@ date: 6 July 2026
 anchors: Q2, Q4
 ---
 
-## Why did we choose this stakeholder
+## Why we interviewed
 
-To understand the environmental concerns around chemical pesticides compared with an RNAi pesticide, the risks of our own project and how to mitigate them. He has been responsible for over 35 major government consultancy projects in the environmental field.
+Interested in comparing the environmental concerns surrounding chemical pesticides and RNAi-based biopesticides, as well as understanding the potential risks of our project and how to mitigate them, we spoke to Professor Paul Lam. He is the President and Chair Professor of Environmental Chemistry at the Hong Kong Metropolitan University, who has also been responsible for over 35 major government consultancy projects in the environmental field.
 
-## What did we learn from them
+## What we learned
 
-- The major environmental impacts of chemical pesticides are toxicity to non-target species, bioaccumulation and biomagnification, and the development of resistance.
-- Off-target effects were his key environmental concern for our project. He agreed with screening against representative species with bioinformatic tools, and said the choice of those species has to be justified.
-- When we said cost-benefit analysis, he urged us to say risk-benefit analysis instead, so that the risks of an idea count alongside its costs.
-- Set out risk handling as identify, assess, manage and communicate, and singled out communication with beekeepers and the public as the hardest and most important step.
+Through his sharings, we learned about the major environmental impacts of chemical pesticides, including toxicity to non-target species, bioaccumulation and biomagnification, as well as development of pesticide resistance. This supported our idea to develop an RNAi-based biopesticide instead of another chemical, as **it is sequence-specific and inherently biodegradable**, overcoming most major challenges with current controls like bioaccumulation and biomagnification. To evaluate and mitigate the potential toxicity of our dsRNA therapeutic to non-target species, he reaffirmed our idea of **using bioinformatic tools to screen for potential off-target effects against representative species** in selection of our dsRNA sequence, and noted that careful selection and justification of our representative species was required.
 
-## How did this impact the project
+When we mentioned the idea of ‘cost-benefit analysis’ in deciding between our two delivery methods for our dsRNA therapeutic (yeast extract in pollen patty versus honeybee gut bacterium), he urged us to use the term **‘risk-benefit analysis’** instead, in order to encapsulate both the current costs and potential risks of our idea. He outlined the process of handling risks—identify, assess, manage, and communicate—notably highlighting the difficulty and importance of the last step, which involved **communicating the risks with our stakeholders and the public**.
 
-Off-target screening with justified representative species moved inside the dsRNA design pipeline; the risk assessment; and the podcast and talks aimed at the public. Which tool does that screening, and against which species, is unsettled: our write-up says BLAST, R&D's note on the same page says Bowtie1 for exact matches and Edlib for approximate ones, possibly against the honeybee transcriptome alone. The difference matters to Lam's advice, so the page does not name a tool until R&D confirms one.
+## How we implemented the advice to change NECTAR
+
+Our conversation with Professor Paul Lam supported our idea of developing biodegradable, sequence-specific RNAi-based biopesticides rather than producing another chemical pesticide to overcome the biomagnification and bioaccumulation risks. As he was most concerned about the off-target effects of NECTAR, after he agreed with our proposal of leveraging bioinformatics tools to minimise this risk, **we decided to utilise BLAST** (basic local alignment search tool, which identifies similar genetic sequences in a database) to assess whether our dsRNA would unintentionally silence genes in other non-target species. Finally, he changed our perspective that **public engagement was not only to share the potential benefits of our project, but also a core part of risk management**. This inspired us to engage in more balanced discussions about our synthetic biology solution in our public outreach activities like podcasts, transparently addressing our project’s potential risks and how we are minimising them, in order to build trust with our audiences.

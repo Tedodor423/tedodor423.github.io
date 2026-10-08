@@ -9,7 +9,7 @@
  *
  * Surfaces are solid and separated by 1px rules rather than by shadow, and
  * every movement carries meaning: the cell growing into the person you are
- * pointing at, a question's faces spreading to become its HONEY loop, and
+ * pointing at, a question's faces spreading to become its HIVE loop, and
  * the stage easing in and out as the reader scrolls through it. All of it
  * is disabled under prefers-reduced-motion.
  *
@@ -83,19 +83,20 @@
 .sm-filter {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.4rem;
   margin: 0 0 0.5rem;
 }
 
 .sm-filter button {
-  padding: 0.3rem 0.6rem;
+  padding: 0.5rem 0.8rem;
   border: 1px solid var(--rule);
   border-radius: var(--radius);
   background: var(--surface);
   color: var(--text);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  line-height: 1.45;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.4;
   text-align: left;
 }
 
@@ -117,23 +118,13 @@
   margin-right: 0.35rem;
 }
 
-/* How to read the loop: set apart from the question itself, not hidden. */
-.sm-filter-key {
-  display: block;
-  margin-top: 0.3rem;
-  color: var(--text-muted);
-  font-size: 0.73rem;
-  line-height: 1.5;
-}
-
 /* ---------- the cycle panel ---------- */
 
-/* The selected question's write-up, walked through its HONEY stages. Each
+/* The selected question's write-up: its summary, then its HIVE stages. Each
  * stage is a row; pointing at one picks its people out on the map.
  *
- * Everything inside is sized in em off the panel's own font-size, because
- * on wide screens that one number is fitted to the room (StakeholderMap.tsx,
- * the fit effect) and the whole panel has to scale with it. */
+ * Everything inside is sized in em off the panel's own font-size, so the
+ * panel scales as one if that number changes. */
 .sm-qpanel {
   margin: 0 0 0.75rem;
   padding: 0.7rem 0.85rem;
@@ -156,16 +147,134 @@
   font-size: 0.9em;
 }
 
+/* The question's name, in the display face the page title uses. */
 .stakeholder-map .sm-qpanel .sm-qpanel-title {
-  margin: 0.15em 0 0;
-  font-family: var(--font-heading);
-  font-size: 1.3em;
-  line-height: 1.3;
+  margin: 0.2em 0 0;
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 400;
+  line-height: 1.15;
   color: var(--ink);
 }
 
+/* The summary leads, a step up from the stages under it. */
+.sm-qintro {
+  flex-shrink: 0;
+}
+
+/* Everything that scrolls, as one block, so folding can glide it whole. */
+.sm-qflow {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+}
+
+.stakeholder-map .sm-qpanel .sm-qsummary {
+  margin-bottom: 0.6em;
+  font-size: 1.35em;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.sm-qsummary p {
+  margin: 0 0 0.5em;
+}
+
+.sm-qsummary p:last-child {
+  margin-bottom: 0;
+}
+
+/* Folded, the HIVE write-up is one button under the summary: the honey
+ * fill the pressed question row uses, with the four letters in the same
+ * navy squares the stage headings carry, which is where they glide to when
+ * it unfolds (the FLIP effect in StakeholderMap.tsx). */
+.stakeholder-map .sm-qpanel .sm-qread {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45em;
+  width: 100%;
+  margin-top: 1.1em;
+  padding: 0.75em 1em;
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--honey);
+  color: var(--ink);
+  font-family: var(--font-heading);
+  font-size: 1.4em;
+  line-height: 1.2;
+}
+
+.stakeholder-map .sm-qpanel .sm-qread:hover {
+  background: var(--ink);
+  color: var(--honey);
+}
+
+.sm-qread-letters {
+  display: inline-flex;
+  gap: 0.2em;
+}
+
+.sm-qread .sm-qstage-letter {
+  font-size: 0.8em;
+}
+
+.sm-qarrow {
+  width: 1em;
+  height: 1em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Unfolded: a small Collapse on the right, between the summary and the
+ * stages. */
+.sm-qfold {
+  display: flex;
+  flex-shrink: 0;
+  justify-content: flex-end;
+  margin: 0.6em 0 0.4em;
+}
+
+.stakeholder-map .sm-qpanel .sm-qcollapse {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.25em 0.6em;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.95em;
+}
+
+.stakeholder-map .sm-qpanel .sm-qcollapse:hover {
+  border-color: var(--ink);
+}
+
+.sm-qhive {
+  flex-shrink: 0;
+}
+
+/* The stage text arrives under its heading as the letters land. */
+.sm-qhive .sm-qstage-body,
+.sm-qfold {
+  animation: sm-qhive-in 450ms 150ms ease both;
+}
+
+@keyframes sm-qhive-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.4rem);
+  }
+}
+
 .sm-qstage {
-  padding: 0.4em 0.35em;
+  padding: 0.5em 0.35em;
   border-top: 1px solid var(--rule);
   outline: none;
 }
@@ -186,8 +295,11 @@
   color: var(--ink);
 }
 
-/* The stage letter, in the badge pairing the faces wear: honey on navy. */
+/* The stage letter, in the badge pairing the faces wear: honey on navy.
+ * Raised above its neighbours so it is never painted under while it glides. */
 .sm-qstage-letter {
+  position: relative;
+  z-index: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -258,9 +370,9 @@ html[data-map-stage] .site-nav {
   pointer-events: none;
 }
 
-/* ---------- the HONEY loop ---------- */
+/* ---------- the HIVE loop ---------- */
 
-/* One closed tour through the question's faces, Hear to Yield and back.
+/* One closed tour through the question's faces, Hear to Evaluate and back.
  * Curved so the eye can follow one arrow across a crowded stretch, cased in
  * honey so the navy core reads over land and sea alike, and headed so the
  * direction of the loop is a fact on the page rather than a caption. */
@@ -610,6 +722,14 @@ button.sm-tag:hover {
   margin: 0.3rem 0 0;
 }
 
+/* The phrases the team marked as the point of each section. Restated at
+ * .stakeholder-map depth so the comb band's light `strong` rule cannot
+ * bleach them on the white card. */
+.stakeholder-map .sm-sec strong {
+  font-weight: 700;
+  color: var(--ink);
+}
+
 /* ---------- the text record ---------- */
 
 /* Not a duplicate of the map: it is the accessible and printable copy of the
@@ -643,7 +763,7 @@ button.sm-tag:hover {
    * fit effect in StakeholderMap.tsx overrides it on the frame when a long
    * question needs more room. */
   .stakeholder-map {
-    --sm-pane-w: clamp(22rem, 30vw, 34rem);
+    --sm-pane-w: clamp(24rem, 32vw, 36rem);
     width: 100vw;
     margin-inline: calc(50% - 50vw);
     margin-block: 3rem;
@@ -761,7 +881,7 @@ button.sm-tag:hover {
     bottom: 1.25rem;
     left: 1.25rem;
     z-index: 4;
-    width: min(26rem, 42vw);
+    width: min(28rem, 42vw);
     max-height: calc(100vh - 4rem);
     max-height: calc(100dvh - 4rem);
     overflow-y: auto;
@@ -776,32 +896,34 @@ button.sm-tag:hover {
     margin: 0;
   }
 
-  .stakeholder-map .sm-filterbox .sm-filter-key {
-    margin-top: 0.5rem;
-  }
-
   /* The write-up pane, down the right-hand side, beside the shrunken map
    * rather than over it. As tall as its text, up to the room between the
    * top of the stage and the comb switch (CombBands.css: fixed 1.25rem off
-   * the bottom-right corner, about 2.1rem tall). It does not scroll: the
-   * fit effect sizes its type (--sm-qfit) so every stage fits, and only a
-   * viewport too short even at the smallest size gets data-overflow and a
-   * scrollbar. */
+   * the bottom-right corner, about 2.1rem tall). The title stays put and
+   * the summary and stages scroll beneath it. */
   .stakeholder-map .sm-qpanel {
     position: absolute;
     top: 1rem;
     right: 1.25rem;
     z-index: 4;
+    display: flex;
+    flex-direction: column;
     width: var(--sm-pane-w);
-    max-height: calc(100% - 1rem - 4.1rem);
+    height: calc(100% - 1rem - 4.1rem);
     overflow: hidden;
     margin: 0;
-    font-size: var(--sm-qfit, 0.75rem);
+    padding-right: 0.4rem;
     animation: sm-pane-in 380ms ease both;
   }
 
-  .stakeholder-map .sm-qpanel[data-overflow] {
+  .stakeholder-map .sm-qpanel-scroll {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
     overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-right: 0.45rem;
   }
 
   /* The hive (BeeScene.css: 112px wide, 2rem in from the window's right
@@ -816,6 +938,13 @@ button.sm-tag:hover {
 
   /* The pane slides in from the side it lives on, the map making way for it
    * at the same pace. */
+  /* Folded, the summary and its button sit a little above the middle of
+   * the pane; auto margins give way to the top if the summary is long. */
+  .stakeholder-map .sm-qpanel-scroll:not(.is-open) .sm-qflow > .sm-qintro {
+    margin-block: auto;
+    padding-bottom: 12%;
+  }
+
   @keyframes sm-pane-in {
     from {
       opacity: 0;
@@ -859,7 +988,9 @@ button.sm-tag:hover {
     transition: none;
   }
 
-  .stakeholder-map .sm-qpanel {
+  .stakeholder-map .sm-qpanel,
+  .sm-qhive .sm-qstage-body,
+  .sm-qfold {
     animation: none;
   }
 }

@@ -54,7 +54,7 @@ the registered RNAi treatment for Varroa, is **not available at commercial scale
 which is why Hiatt could not use it even though it is the closest existing
 product to ours. The documented history of US miticide resistance, and the
 amitraz-resistance mutation USDA ARS still reports, are cited in
-[Q2 of human practices](/human-practices#q2-why-rnai-rather-than-another-chemical).
+[Q2 of human practices](/human-practices#sm-heading).
 
 ## Costs and constraints
 

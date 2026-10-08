@@ -7,18 +7,19 @@ region: United Kingdom
 lat: 55.95
 lon: -3.19
 photo: scottish-government--molero
+date: 6 August 2026
 photo-shows: Luis Molero
 provisional: Q1, Q3, Q4, Q6
 ---
 
-## Why did we choose this stakeholder
+## Why we interviewed
 
-## What did we learn from them
+We spoke with the Scottish Government Honey Bee Health Team to understand whether NECTAR would address a meaningful need in Scotland and what considerations would arise if it were deployed there. Their combined experience in bee-health policy, veterinary advice and inspection also allowed us to explore the regulatory and practical requirements of introducing a novel Varroa treatment beyond our main Australian and Californian case studies.
 
-- Varroa is recognised as one of the top three threats to bees in Scotland, which puts the problem beyond our two main case studies.
-- Raised concern over pesticide contamination in honey.
-- Supported a biocontrol therapeutic, but described the regulation around it as complex.
+## What we learned
 
-## How did this impact the project
+The team **identified Varroa as one of Scotland's major honey bee health threats** and highlighted concerns surrounding the use of unauthorised treatments, including possible colony damage and contamination of honey. While they were receptive to biological approaches to Varroa control, they emphasised that **genetically engineered products could face complex regulation**. They also encouraged us to think beyond treatment efficacy to consider how a product would be contained, administered responsibly and prevented from affecting honey or the wider environment.
 
-Led us to Laura Bowden for regulatory advice.
+## How we implemented the advice to change NECTAR
+
+Their feedback **strengthened our focus on containment, honey safety and clear delivery protocols** as requirements for NECTAR. It also prompted us to investigate the Scottish and wider UK regulatory landscape further by approaching additional regulatory experts. More broadly, identifying Varroa as a significant Scottish bee-health concern supported our decision to **design NECTAR for adaptability across different geographical contexts**, rather than solely around the conditions of our Australian and US case studies.

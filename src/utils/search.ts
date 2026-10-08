@@ -233,7 +233,9 @@ function stakeholderPassages(path: string, page: PageEntry): Passage[] {
       person.changed,
     ]
       .filter(Boolean)
-      .join(" ");
+      .join(" ")
+      // The fields carry **bold** and *italic*; a snippet shows neither.
+      .replace(/\*+/g, "");
 
     return {
       path,

@@ -11,6 +11,14 @@ date: 8 September 2026
 provisional: Q3
 ---
 
-<!-- Consent confirmed by the team on 7 October 2026. The sections
-     (see the README) are still to be transcribed from this conversation's
-     write-up in references/. -->
+## Why we interviewed
+
+Towards the later stages of NECTAR, we spoke with Sarah Coy to identify potential blind spots in our Human Practices and responsible innovation approach. We wanted an external perspective on whether we had engaged sufficiently diverse stakeholders, how considerations such as trust and responsible translation should influence NECTAR, and how we could communicate this process clearly on our Wiki.
+
+## What we learned
+
+Sarah emphasised that **responsible innovation requires considering what would make people trust and feel confident in a technology**, rather than focusing solely on technical performance. She supported the diversity of our stakeholder engagement, particularly our decision to consult regulators across multiple geographical contexts, and encouraged us to **organise these perspectives around the decisions they influenced** rather than simply presenting interviews chronologically. Looking towards translation, she highlighted affordability and scalability across the entire production process and supported the potential advantages of heat-killed yeast given the existing infrastructure for industrial yeast production. She also suggested future engagement with organisations such as the BioIndustry Association and European Biosolutions Coalition and encouraged us to consider longer-term commercialisation and exit strategies.
+
+## How we implemented the advice to change NECTAR
+
+Sarah's feedback helped us evaluate and restructure our Human Practices approach around the decisions that shaped NECTAR, ultimately **contributing to our use of the HIVE framework and question-based stakeholder groupings on our Wiki**. Her emphasis on trust reinforced our consideration of regulation, public acceptance and transparent communication alongside safety and efficacy, while her focus on scalable production strengthened our rationale for prioritising heat-inactivated yeast as a more readily manufacturable platform. Her recommendations also expanded our implementation roadmap beyond initial development to consider future regulatory advocacy, industry partnerships and pathways for translating NECTAR from a research project into a deployable technology.

@@ -11,16 +11,14 @@ date: 7 August 2026
 anchors: Q5, Q6
 ---
 
-## Why did we choose this stakeholder
+## Why we interviewed
 
-## What did we learn from them
+We spoke with Professor Brittney Goodrich to understand the true economic burden of Varroa on commercial beekeepers. Her research models the costs and revenues of large commercial beekeeping operations, allowing us to investigate not only how much existing treatments cost, but also how labour, colony losses, honey production and pollination revenue influence the economics of Varroa management.
 
-- Models the costs and revenues of a commercial operation across a year: 8,500 colonies, of which about 5,000 go to California for almond pollination.
-- About 27% of total costs are capital recovery and equipment, 21% labour, and 9% Varroa treatment products alone - excluding the labour to administer them and the cost of replacing lost hives, so the real figure is higher.
-- The modelled operation uses two amitraz treatments, one oxalic acid and one formic acid each year.
-- Roughly 700 colonies per worker, so labour-intensive treatments are difficult at commercial scale.
-- Almond pollination brings in about $195 per colony and honey about 70 lb per hive, so a lost colony costs both its rebuilding and its revenue.
+## What we learned
 
-## How did this impact the project
+Brittney's representative operation manages up to 8,500 colonies, with around 5,000 sent to California for almond pollination. In the model, capital recovery accounts for approximately 27% of total costs, labour 21%, and **Varroa-control products alone 9%—with the latter excluding treatment labour and costs indirectly associated with replacing lost colonies**. The operation uses multiple treatments annually and manages roughly 700 colonies per worker, demonstrating why labour-intensive interventions become difficult at commercial scale. Colony mortality also creates lost revenue: the model assumes approximately $195 per colony for almond pollination and 70 lb of honey production per hive, meaning **dead colonies both cost money to replace and lose their potential earnings**.
 
-Treatment price is an incomplete measure of the cost of Varroa. The model now counts treatment labour, repeated administration, colony rebuilding and lost pollination and honey revenue.
+## How we implemented the advice to change NECTAR
+
+Our conversation **changed how we defined the cost of Varroa and the value of NECTAR**. Rather than comparing NECTAR solely against the purchase price of existing treatments, our economic analysis considers treatment expenditure alongside labour, colony replacement and lost honey and pollination revenue. Her work also reinforced our decision to prioritise a low-labour, scalable treatment delivered through existing beekeeping practices, and informed our modelling of whether NECTAR could ultimately save a commercial beekeeper more money than it costs to use.

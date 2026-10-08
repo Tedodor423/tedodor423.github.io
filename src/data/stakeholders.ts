@@ -1,13 +1,14 @@
-/* The stakeholder record and the seven HONEY questions, loaded from Markdown.
+/* The stakeholder record and the seven HIVE questions, loaded from Markdown.
  *
  * The content lives where the team can edit it without touching code:
  *
  *   - one file per conversation in `src/content/stakeholders/*.md`
- *     (frontmatter for the fields, sections for why we chose them, what
- *     we learnt, the verbatim quote and how it changed the project);
+ *     (frontmatter for the fields, sections for why we interviewed them,
+ *     what we learned, the verbatim quote and how we implemented the
+ *     advice);
  *   - one file per question in `src/content/questions/q1.md` … `q7.md`
  *     (frontmatter for the title and the per-stage people, sections for the
- *     cycle panel's text).
+ *     summary and each stage of the cycle panel).
  *
  * The editing rules — provenance, verbatim quotes, the consent handling for
  * withheld interviews, photos — are in each folder's README.md. This module
@@ -21,7 +22,7 @@
  * ignored on purpose.
  */
 
-/** The HONEY questions the page is organised around. */
+/** The HIVE questions the page is organised around. */
 export type QuestionId = "Q1" | "Q2" | "Q3" | "Q4" | "Q5" | "Q6" | "Q7";
 
 export const QUESTION_IDS: QuestionId[] = [
@@ -34,26 +35,24 @@ export const QUESTION_IDS: QuestionId[] = [
   "Q7",
 ];
 
-/** The five stages of the team's HONEY loop, in cycle order. */
-export type HoneyStage = "H" | "O" | "N" | "E" | "Y";
+/** The four stages of the team's HIVE loop, in cycle order. */
+export type HiveStage = "H" | "I" | "V" | "E";
 
-export const STAGE_ORDER: HoneyStage[] = ["H", "O", "N", "E", "Y"];
+export const STAGE_ORDER: HiveStage[] = ["H", "I", "V", "E"];
 
-export const STAGE_NAMES: Record<HoneyStage, string> = {
+export const STAGE_NAMES: Record<HiveStage, string> = {
   H: "Hear",
-  O: "Observe",
-  N: "Navigate",
+  I: "Investigate",
+  V: "Verdict",
   E: "Evaluate",
-  Y: "Yield",
 };
 
 /** Frontmatter key and body heading for each stage, in the question files. */
-const STAGE_KEYS: Record<HoneyStage, string> = {
+const STAGE_KEYS: Record<HiveStage, string> = {
   H: "hear",
-  O: "observe",
-  N: "navigate",
+  I: "investigate",
+  V: "verdict",
   E: "evaluate",
-  Y: "yield",
 };
 
 export interface Stakeholder {
@@ -78,8 +77,10 @@ export interface Stakeholder {
   provisional?: QuestionId[];
   /** Why the team chose this conversation, where the write-up says. */
   why?: string;
-  /** What we learnt from them. Transcribed, one point per bullet. */
+  /** What we learnt from them, transcribed: bullets or paragraphs. */
   learnt: string[];
+  /** Whether `learnt` is a list of points rather than paragraphs. */
+  learntIsList: boolean;
   /** A verbatim quote, exactly as the team transcribed it. */
   quote?: string;
   /** How it changed the project, where the source states it. */
@@ -103,7 +104,7 @@ export interface Stakeholder {
 
 /** One stage of one question's cycle, for the panel and the map. */
 export interface CycleStage {
-  stage: HoneyStage;
+  stage: HiveStage;
   /** Conversation ids placed in this stage by the question file. */
   people: string[];
   /** The subset central to the question: only these wear the badge. */
@@ -115,7 +116,9 @@ export interface CycleStage {
 export interface QuestionCycle {
   id: QuestionId;
   title: string;
-  /** Only stages with people or text, in H > O > N > E > Y order. */
+  /** The question in one paragraph, shown above its stages. Plain Markdown. */
+  summary: string;
+  /** Only stages with people or text, in H > I > V > E order. */
   stages: CycleStage[];
 }
 
@@ -168,6 +171,21 @@ function bullets(section: string | undefined): string[] {
     else if (out.length) out[out.length - 1] += ` ${t}`;
   }
   return out;
+}
+
+/** A section written either as bullets or as prose: the bullets, or the
+ * paragraphs (split at blank lines) each reflowed to one string. */
+function pointsOrParagraphs(section: string | undefined): {
+  items: string[];
+  list: boolean;
+} {
+  if (!section) return { items: [], list: false };
+  if (/^\s*- /m.test(section)) return { items: bullets(section), list: true };
+  const items = section
+    .split(/\n\s*\n/)
+    .map((para) => flow(para))
+    .filter((para): para is string => Boolean(para));
+  return { items, list: false };
 }
 
 /** A paragraph (or blockquote) reflowed to one string, as the record keeps
@@ -261,6 +279,9 @@ export const STAKEHOLDERS: Stakeholder[] = Object.entries(stakeholderFiles)
       warn(`${file}: photo on a withheld entry is ignored`);
     }
     const hex = list(f.hex).map(Number);
+    const learnt = withheld
+      ? { items: [], list: false }
+      : pointsOrParagraphs(parsed.sections["What we learned"]);
     const s: Stakeholder = {
       id,
       name: f.name,
@@ -275,16 +296,15 @@ export const STAKEHOLDERS: Stakeholder[] = Object.entries(stakeholderFiles)
       provisional: f.provisional ? qids(f.provisional, file) : undefined,
       // The body of a withheld file is ignored on purpose: nothing from
       // that conversation may render until consent is resolved.
-      why: withheld
-        ? undefined
-        : flow(parsed.sections["Why did we choose this stakeholder"]),
-      learnt: withheld
-        ? []
-        : bullets(parsed.sections["What did we learn from them"]),
+      why: withheld ? undefined : flow(parsed.sections["Why we interviewed"]),
+      learnt: learnt.items,
+      learntIsList: learnt.list,
       quote: withheld ? undefined : flow(parsed.sections["Quote"]),
       changed: withheld
         ? undefined
-        : flow(parsed.sections["How did this impact the project"]),
+        : flow(
+            parsed.sections["How we implemented the advice to change NECTAR"],
+          ),
       photo: !withheld && f.photo ? photoUrl(f.photo) : undefined,
       photoFallbacks: !withheld && f.photo ? localPhotos(f.photo) : undefined,
       photoShows: f["photo-shows"] || undefined,
@@ -332,7 +352,7 @@ for (const q of QUESTION_IDS) {
   if (!parsed || !parsed.front.title) {
     warn(`questions/${q.toLowerCase()}.md missing or without a title`);
     QUESTION_TITLES[q] = q;
-    QUESTION_CYCLES[q] = { id: q, title: q, stages: [] };
+    QUESTION_CYCLES[q] = { id: q, title: q, summary: "", stages: [] };
     continue;
   }
   QUESTION_TITLES[q] = parsed.front.title;
@@ -353,15 +373,20 @@ for (const q of QUESTION_IDS) {
     const body = parsed.sections[STAGE_NAMES[stage]] ?? "";
     if (people.length || body) stages.push({ stage, people, key, body });
   }
-  QUESTION_CYCLES[q] = { id: q, title: QUESTION_TITLES[q], stages };
+  QUESTION_CYCLES[q] = {
+    id: q,
+    title: QUESTION_TITLES[q],
+    summary: parsed.sections["Summary"] ?? "",
+    stages,
+  };
 }
 
 /**
- * The HONEY stage of one conversation within one question's cycle: the
+ * The HIVE stage of one conversation within one question's cycle: the
  * stage list that names it, else Hear — the write-up's own definition of
  * the stage ("Hear - stakeholders"). See questions/README.md.
  */
-export function stageOf(q: QuestionId, id: string): HoneyStage {
+export function stageOf(q: QuestionId, id: string): HiveStage {
   for (const st of QUESTION_CYCLES[q].stages) {
     if (st.people.includes(id)) return st.stage;
   }

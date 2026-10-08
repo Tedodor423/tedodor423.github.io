@@ -12,23 +12,18 @@ questions: Q1, Q2, Q5
 anchors: Q6
 ---
 
-## Why did we choose this stakeholder
+## Why we interviewed
 
-His family has been in beekeeping for almost six decades, and he manages about 18,000 colonies with his five brothers: an operation on a completely different scale from the hobbyist and small-scale beekeepers we had considered until then. Owning a 46-acre almond farm as well, he sees the almond-pollination relationship from both sides, as a grower who needs bees and a beekeeper supplying them.
+We spoke with Chris because his position as both a large-scale commercial beekeeper and almond grower gave him a unique perspective on the relationship between Varroa, commercial beekeeping and pollination-dependent agriculture. His family manages approximately 18,000 colonies that move between states for almond pollination, honey production and other crop-pollination services. We wanted to understand how Varroa affects an operation at this scale and, crucially, what would make a new treatment practical enough to use across thousands of colonies.
 
-## What did we learn from them
+## What we learned
 
-- Manages around 18,000 colonies with his five brothers, in a business his father started 58 years ago, and owns a 46-acre almond farm. Colonies move from California almonds to North Dakota for honey and on to Washington for apples.
-- In the mid-2000s a single annual CheckMite+ (coumaphos organophosphate) strip gave highly effective control. By the third year the mites were resistant and he lost 55% of his colonies.
-- Now rotates amitraz, fluvalinate, oxalic acid, formic acid and brood breaks. The worst years of the past decade still ran to 50-60% losses, with viral loads in the 80th-90th percentile of national surveillance in those years.
-- Losses have left him short of colonies for almond pollination contracts, forcing him to buy in colonies while paying to rebuild his own with queens, packages and splits.
-- Norroa is not available at commercial scale. A useful solution must work across thousands of colonies.
-- Strongly supported pollen patties: they are already widely used, so combining treatment with feeding avoids an extra trip to every hive. Wants 3 to 4 months of protection.
+Chris described how Varroa management has become increasingly difficult as previously effective treatments have lost efficacy. After coumaphos initially provided strong control, **his operation experienced approximately 55% colony loss when it stopped working effectively**. They now combine approaches including amitraz, oxalic acid, formic acid and brood breaks, yet some of their worst years have still resulted in losses of around 50–60%. These losses have direct business consequences: insufficient surviving colonies can prevent them from fulfilling valuable almond-pollination contracts, while rebuilding colonies requires additional queens, bees, labour and resources. Most importantly, Chris emphasised **the difference between a treatment that works experimentally and one that works across 18,000 hives**. Complicated or frequently repeated administration quickly becomes impractical at commercial scale.
 
 ## Quote
 
 > But it’s just throwing everything but the kitchen sink at them. And some of our worst years over the last 10 years, we’ve had like 60% loss, 50%.
 
-## How did this impact the project
+## How we implemented the advice to change NECTAR
 
-Changed our definition of efficacy. An intervention cannot simply kill Varroa: it must work cheaply, simply and reliably across thousands of colonies, without repeated visits. Efficacy has to include practicality.
+Chris's feedback directly influenced our approach to beekeeper adoption and delivery. His enthusiasm for pollen patties **strengthened our decision to incorporate heat-inactivated yeast into a feeding method already used by commercial beekeepers**, potentially allowing NECTAR to be administered without an additional dedicated hive visit. His emphasis on labour, duration and cost also informed our BEEHAVE treatment-schedule and economic modelling, where we considered not only biological efficacy but how frequently treatment would be required and whether its benefits could outweigh its costs. Ultimately, Chris helped us redefine what an effective treatment means: **NECTAR could not simply kill Varroa—it needed to do so affordably, simply and reliably at commercial scale**.

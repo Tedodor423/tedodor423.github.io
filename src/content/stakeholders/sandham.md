@@ -11,16 +11,14 @@ questions: Q1, Q5, Q6
 provisional: Q3
 ---
 
-## Why did we choose this stakeholder
+## Why we interviewed
 
-## What did we learn from them
+We spoke with Mark to understand the perspective of a treatment-free beekeeper, particularly because our project began from the assumption that better Varroa treatment was inherently desirable. Mark keeps colonies around Oxford, including at University College and Botley Meadow, without using chemical treatments for pests or diseases. His experience gave us an opportunity to challenge our starting assumptions and consider whether intervention itself could have unintended consequences.
 
-- Keeps bees at University College and Botley Meadow with no chemical treatments, preferring to let them live as naturally as possible.
-- Varroa arrived in the UK in the 1990s but has not, in his experience, devastated the Oxford beekeepers he knows. He has never seen mites in his established colonies, though colonies acquired from a beekeeper who had died showed deformed wings consistent with Varroa-associated disease.
-- Believes treatment interferes with bees adapting naturally, and that some selective pressure produces more resilient bees. He is not alone: about a third of UK beekeepers are treatment-free.
-- His position is not absolute: if his colonies were infested and unable to adapt, the argument for treatment would be different.
-- Was concerned that a living engineered bacterium could pass between bees of different colonies, making its spread hard to control. A non-living treatment avoids that but must be reapplied, at a cost in time and money.
+## What we learned
 
-## How did this impact the project
+Mark argued that **continuously protecting colonies from pests may reduce opportunities for bees to naturally adapt**, whereas leaving some selective pressure could contribute to more resilient populations. Although Varroa has not significantly affected his established colonies, he had observed signs consistent with Varroa-associated disease in colonies acquired from another beekeeper. Importantly, his treatment-free philosophy was not absolute: if colonies experienced serious infestation and could not adapt, he acknowledged that the case for intervention would become stronger. Mark also **challenged our assumption** that continuous protection from engineered *S. alvi* would automatically be advantageous. He was concerned that a living engineered bacterium could potentially move between interacting bees and colonies, making its spread difficult for an individual beekeeper to control.
 
-Challenged the assumption at the core of the project. We had asked how to treat Varroa more effectively; Mark made us ask whether a one-time treatment that works continuously is actually better than one that has to be reapplied.
+## How we implemented the advice to change NECTAR
+
+Mark's perspective encouraged us to reconsider both when treatment is appropriate and how controllable it should be. Although a persistent *S. alvi* system could reduce repeated labour, we began to recognise that **persistence also means relinquishing some control over when and where an intervention acts**. This contributed to our consideration of a non-living yeast formulation that could be deliberately administered and stopped, despite requiring repeated dosing. His interview also prompted us to engage further with treatment-free beekeepers through the Oxfordshire Natural Beekeeping Group and ultimately helped us refine our target users, recognising that **NECTAR should not assume every beekeeper wants or needs continuous Varroa treatment**.

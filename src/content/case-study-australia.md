@@ -163,7 +163,7 @@ of it we cannot defend on Australian preferences alone.
   NECTAR outside the OGTR's remit and away from a consumer base Frost expects to
   reject a living GMO — but Le Feuvre and Allerton, the two Australian beekeeper
   voices, **both preferred the living system**. See [the decision that changed the
-  project](/human-practices#the-decision-that-changed-the-project).
+  project](/human-practices#sm-heading).
 - **Regional efficacy became a test, not an assumption.** Ford asked how
   efficacy varies with temperature across Australia; that is now part of the
   [bee lab](/bee-lab) and [ecological modelling](/ecological-modelling) plan.

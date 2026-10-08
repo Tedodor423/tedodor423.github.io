@@ -52,22 +52,26 @@ A section left empty is shown with its heading and nothing under it, so
 write nothing rather than a placeholder.
 
 ```markdown
-## Why did we choose this stakeholder
+## Why we interviewed
 
 Why we went to this person, where the team has written it down.
 
-## What did we learn from them
+## What we learned
 
-- One point per bullet, transcribed.
+Prose, one paragraph per blank-line break, as the 8 October write-up has
+it. Bullets (- one point per bullet) also work.
 
 ## Quote
 
 > Verbatim, exactly as the team transcribed it.
 
-## How did this impact the project
+## How we implemented the advice to change NECTAR
 
 What it changed in NECTAR, where the source states it.
 ```
 
-A bullet or quote may wrap over several lines; a line that does not start a
-new bullet continues the previous one.
+A bullet, paragraph or quote may wrap over several lines; a line that does
+not start a new bullet continues the previous one.
+
+Inline emphasis is `**bold**` and `*italic*` only, and the two cannot nest:
+keep an italic species name outside a bold run (`*S. alvi* **persists**`).

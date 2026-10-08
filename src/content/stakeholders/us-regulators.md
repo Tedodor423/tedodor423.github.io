@@ -10,17 +10,14 @@ date: 14 August 2026
 questions: Q2, Q3, Q4, Q6
 ---
 
-## Why did we choose this stakeholder
+## Why we interviewed
 
-We met representatives of the EPA, FDA and USDA together, to understand how our product would move through the US regulatory system.
+We met representatives from the EPA, FDA and USDA together to understand how NECTAR could move through the US regulatory system. Because our project combines biotechnology, honey bees, pest control and potentially food products such as honey, we wanted to determine which agencies might become involved and whether our living *S. alvi* and non-living yeast approaches would face substantially different regulatory barriers.
 
-## What did we learn from them
+## What we learned
 
-- US biotechnology regulation is split across agencies, with jurisdiction set by how a product functions and what it is intended for.
-- Living GMO versus non-living engineered product does not by itself make the path easier or harder. It changes what evidence of safety is required.
-- Four areas would need addressing: safety to the honeybee, environmental impact, safety to the people handling the product, and whether anything enters honey or another food. Honey would not need to be labelled as bioengineered.
-- An intervention intended to treat a condition in the bee may fall under an animal-drug pathway rather than being treated simply as a pesticide, which changes who assesses it.
+The regulators explained that the US framework is product- and risk-focused, with responsibility divided between agencies according to what a biotechnology does and how it is intended to be used. This challenged our assumption that removing a living GMO would necessarily make regulation simpler everywhere: **in the US, GMO versus non-GMO status alone would not determine regulatory difficulty**. Instead, regulators would consider evidence relating to safety for bees, environmental exposure, people handling the treatment and whether any components could enter honey or other food products. They also raised the importance of classification, explaining that **an intervention intended to treat a condition in bees could potentially involve an animal-drug pathway**, rather than simply being treated as a pesticide.
 
-## How did this impact the project
+## How we implemented the advice to change NECTAR
 
-US regulation is product- and risk-focused rather than triggered by the word GMO. The questions are what the treatment does, where it goes, what is exposed, and whether the evidence shows that is safe.
+This conversation **prevented us from treating our shift to heat-inactivated yeast as a universal regulatory shortcut**. Although other jurisdictions provided strong regulatory reasons to favour a non-living formulation, the US regulators showed us that deployment would require a country-specific assessment based on NECTAR's function and risk profile. This contributed to our international regulatory mapping and regional case studies, while their emphasis on bee, environmental, user and food safety reinforced our off-target analysis and investigation of dsRNA in honey. Ultimately, their advice helped us **design NECTAR as an adaptable platform whose regulatory strategy would need to respond to the requirements of each jurisdiction** rather than relying on a single global classification.
