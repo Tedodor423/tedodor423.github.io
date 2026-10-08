@@ -1,0 +1,402 @@
+/* The construct builder on /software.
+ *
+ * Brand tokens only, and the same shapes as NectarPipeline.css above it on the
+ * page: a 2px ink frame, hard edges, --radius, honey for the chosen state.
+ * The two components sit one under the other and should read as one tool.
+ *
+ * ONE COLOUR DISTINCTION, and it carries meaning rather than decoration:
+ * sequence that came out of NECTAR is ink, sequence the generator stood in is
+ * muted grey. It is the only thing colour encodes here, and the feature table
+ * prints the same distinction in words, so nothing rests on the colour.
+ *
+ * This file is the construct half of what was NectarDesigner.css. The rules for
+ * the accessibility comb, the folding view, the docking readout and the
+ * off-target matrix went with the generated walkthrough they drew.
+ */
+
+.nc {
+  width: min(72rem, calc(100vw - 2rem));
+  margin: 2rem calc(50% - min(36rem, calc(50vw - 1rem)));
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--surface-muted);
+}
+
+.nc-body {
+  padding: 1.25rem;
+}
+
+.nc-body h3 {
+  margin: 0 0 1rem;
+  font-size: 1.15rem;
+}
+
+.nc-body h4 {
+  margin: 2rem 0 0.5rem;
+  font-size: 1rem;
+  padding-bottom: 0.2rem;
+  border-bottom: 2px solid var(--honey);
+}
+
+/* ---------- controls ---------- */
+
+.nc-field {
+  margin: 0 0 1.25rem;
+  padding: 0;
+  border: 0;
+}
+
+.nc-field legend {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 0;
+  margin-bottom: 0.35rem;
+}
+
+.nc-hint,
+.nc-fact {
+  margin: 0.45rem 0 0;
+  font-size: 0.85rem;
+  line-height: 1.65;
+}
+
+.nc-hint {
+  color: var(--text-muted);
+}
+
+.nc-pair {
+  display: grid;
+  gap: 1rem 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+}
+
+.nc-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.nc-chip {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.85rem;
+  min-height: 2.25rem;
+  padding: 0.3rem 0.8rem;
+  color: var(--ink);
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.nc-chip:hover {
+  background: var(--surface-muted);
+}
+
+.nc-chip[aria-pressed="true"] {
+  background: var(--honey);
+}
+
+.nc-chip:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+/* ---------- the regions on offer ---------- */
+
+.nc-regions {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.3rem;
+}
+
+.nc-regions label {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: baseline;
+  gap: 0.2rem 0.6rem;
+  padding: 0.4rem 0.6rem;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.nc-regions label:has(input:checked) {
+  border-color: var(--ink);
+  border-width: 2px;
+  padding: calc(0.4rem - 1px) calc(0.6rem - 1px);
+}
+
+.nc-regions input {
+  accent-color: var(--ink);
+  width: 1rem;
+  height: 1rem;
+}
+
+.nc-region-name {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.nc-region-detail {
+  grid-column: 2;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* ---------- the map ---------- */
+
+.nc-map {
+  display: block;
+  margin: 1rem 0 0.4rem;
+  padding: 0.5rem;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+}
+
+.nc-map-rule {
+  stroke: var(--rule);
+  stroke-width: 1;
+}
+
+.nc-map-feature {
+  stroke: var(--ink);
+  stroke-width: 1;
+}
+
+.nc-real {
+  fill: var(--ink);
+}
+
+.nc-filler {
+  fill: var(--rule);
+}
+
+.nc-map-site {
+  stroke: var(--violet);
+  stroke-width: 2;
+}
+
+.nc-map-scale {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  fill: var(--text-muted);
+}
+
+.nc-legend {
+  margin: 0 0 1rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.nc-key {
+  display: inline-block;
+  width: 0.8rem;
+  height: 0.8rem;
+  margin: 0 0.3rem 0 1rem;
+  vertical-align: -0.05rem;
+  border: 1px solid var(--ink);
+}
+
+.nc-legend .nc-key:first-child {
+  margin-left: 0;
+}
+
+.nc-key-real {
+  background: var(--ink);
+}
+
+.nc-key-filler {
+  background: var(--rule);
+}
+
+.nc-key-site {
+  width: 0.2rem;
+  background: var(--violet);
+  border-color: var(--violet);
+}
+
+/* ---------- table ---------- */
+
+.nc-scroll {
+  margin: 0.6rem 0 1rem;
+  max-height: 24rem;
+  overflow: auto;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.nc-scroll:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.nc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.nc-table th,
+.nc-table td {
+  padding: 0.3rem 0.55rem;
+  border-bottom: 1px solid var(--rule);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.nc-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  background: var(--surface-muted);
+  color: var(--ink);
+  border-bottom: 2px solid var(--ink);
+}
+
+.nc-table tbody th {
+  font-weight: 400;
+}
+
+.nc-num {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+/* ---------- assembly sites ---------- */
+
+.nc-sites {
+  margin: 0.5rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+}
+
+.nc-seq {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  padding: 0.05em 0.3em;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+}
+
+.nc-pick {
+  font: inherit;
+  margin-left: 0.4rem;
+  padding: 0 0.1rem;
+  color: var(--link);
+  background: none;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  cursor: pointer;
+}
+
+.nc-pick:hover {
+  color: var(--ink);
+}
+
+.nc-site-done,
+.nc-site-locked {
+  margin-left: 0.5rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* ---------- downloads ---------- */
+
+.nc-downloads {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.75rem 0;
+}
+
+.nc-button {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.88rem;
+  min-height: 2.5rem;
+  padding: 0.35rem 0.9rem;
+  color: var(--ink);
+  background: var(--honey);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.nc-button:hover {
+  background: var(--surface);
+}
+
+.nc-button:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+/* ---------- the assembled sequence ---------- */
+
+.nc-sequence {
+  max-height: 14rem;
+  overflow: auto;
+  padding: 0.6rem 0.7rem;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  line-height: 1.8;
+  word-break: break-all;
+}
+
+.nc-sequence:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.nc-seq-real {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.nc-seq-filler {
+  color: var(--text-muted);
+}
+
+/* ---------- the standing warning ---------- */
+
+/* Under the tool rather than over it, because the page leads with the tool and
+ * because the feature table, the map legend and every exported file already
+ * carry the same distinction. This is the summary, not the only mention. */
+.nc-warning {
+  margin: 0;
+  padding: 0.85rem 1.25rem;
+  border-top: 2px solid var(--ink);
+  background: var(--surface);
+  font-size: 0.82rem;
+  line-height: 1.65;
+}
+
+@media (max-width: 48rem) {
+  .nc {
+    width: calc(100vw - 2rem);
+    margin-inline: calc(50% - 50vw + 1rem);
+  }
+
+  .nc-body {
+    padding: 1rem 0.75rem;
+  }
+}

@@ -1,0 +1,729 @@
+/* The NECTAR reader on /software.
+ *
+ * Brand tokens only. The roles below name what each hue means INSIDE this
+ * component, in the way src/styles/brand.css names --lab-dry and --loss-3, so
+ * that two figures here never disagree about which colour Layer 2 is.
+ *
+ * THE FOUR SERIES. Three brand hues for the three layers of evidence and ink
+ * for their equal-thirds combination: the inputs are coloured, the result is
+ * black. Checked with the dataviz validator for pairwise separation against the
+ * cream chart surface: worst pair violet against navy, 16.4 under simulated
+ * protanopia and 22.8 at normal vision, both well clear of the floors. They do
+ * fail that validator's lightness band and chroma floor, which want mid-tone
+ * saturated fills; navy, violet and ink are the team's kit and this wiki is
+ * drawn in them, and these are thin lines on cream rather than large fills.
+ * Nothing leans on hue alone: every panel is captioned with its own name and
+ * every series sharing a frame carries a dash pattern too.
+ *
+ * THE TWO SPECIES. Violet for Varroa, burnt honey for the bee. Separation 26.6
+ * at normal vision and 25.7 under protanopia, and every bar is labelled with
+ * its count.
+ *
+ * NO NEW RADIUS, FONT OR SPACING SCALE. --radius, --font-heading, --font-mono.
+ */
+
+.np {
+  /* Wider than the 36rem prose measure: a hundred-row table and a
+   * thousand-unit chart cannot live inside a column of running text. Bleeds
+   * symmetrically out of .markdown-page, and stops at the viewport. */
+  width: min(72rem, calc(100vw - 2rem));
+  margin: 2rem calc(50% - min(36rem, calc(50vw - 1rem)));
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--surface-muted);
+
+  --np-l1: var(--oxford-navy);
+  --np-l2: var(--violet);
+  --np-l3: var(--burnt-honey);
+  --np-total: var(--ink);
+  --np-varroa: var(--violet);
+  --np-apis: var(--burnt-honey);
+}
+
+/* ---------- the rail ---------- */
+
+.np-rail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  border-bottom: 2px solid var(--ink);
+}
+
+.np-rail button {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.95rem;
+  flex: 1 1 auto;
+  min-height: 2.75rem;
+  padding: 0.5rem 1rem;
+  color: var(--ink);
+  background: transparent;
+  border: 0;
+  border-right: 1px solid var(--ink);
+  cursor: pointer;
+}
+
+.np-rail button:last-child {
+  border-right: 0;
+}
+
+.np-rail button.np-rail-on {
+  background: var(--honey);
+}
+
+.np-rail button:hover:not(.np-rail-on) {
+  background: var(--surface);
+}
+
+/* ---------- head, body, foot ---------- */
+
+.np-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem 1.5rem;
+  padding: 1rem 1.25rem 0.75rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.np-head h3 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.np-gene-sub {
+  margin: 0.3rem 0 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.np-body {
+  padding: 1.25rem;
+}
+
+.np-body h4 {
+  margin: 2rem 0 0.5rem;
+  font-size: 1rem;
+  padding-bottom: 0.2rem;
+  border-bottom: 2px solid var(--honey);
+}
+
+.np-body h4:first-child {
+  margin-top: 0;
+}
+
+.np-body h5.np-layer-head {
+  margin: 1.25rem 0 0.4rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.np-foot {
+  padding: 0.85rem 1.25rem;
+  border-top: 2px solid var(--ink);
+  background: var(--surface);
+  font-size: 0.78rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.np-lede {
+  margin: 0 0 1rem;
+  font-size: 1rem;
+}
+
+.np-note {
+  margin: 0.6rem 0;
+  font-size: 0.82rem;
+  line-height: 1.65;
+  color: var(--text-muted);
+}
+
+.np-count {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+/* ---------- controls ---------- */
+
+.np-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.75rem 1.5rem;
+  margin: 1rem 0;
+  padding: 0.7rem 0.9rem;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+}
+
+.np-choice {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.np-choice-label {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.np-choice select,
+.np-choice input {
+  font: inherit;
+  font-size: 0.9rem;
+  min-height: 2.25rem;
+  padding: 0.2rem 0.4rem;
+  color: var(--ink);
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+}
+
+.np-choice input {
+  min-width: 14rem;
+}
+
+/* ---------- figures ---------- */
+
+.np-figure {
+  margin: 1rem 0;
+  padding: 0.75rem 0.5rem 0.5rem;
+  background: var(--surface-muted);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+}
+
+.np-figure svg {
+  display: block;
+}
+
+.np-plot {
+  touch-action: none;
+}
+
+.np-readout {
+  /* Fixed two lines of room, so the panel does not jump as the pointer moves
+   * across the chart and the readout grows a line. */
+  min-height: 2.9rem;
+  margin: 0.4rem 0 0;
+  padding: 0.35rem 0.5rem;
+  background: var(--surface);
+  border-top: 1px solid var(--rule);
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--text);
+}
+
+.np-grid {
+  stroke: var(--rule);
+  stroke-width: 1;
+}
+
+.np-axis,
+.np-axis-title,
+.np-anno-label,
+.np-series-sub {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  fill: var(--text-muted);
+}
+
+.np-axis {
+  text-anchor: end;
+}
+
+.np-lane-name,
+.np-series-name {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 11px;
+  fill: var(--ink);
+}
+
+.np-series {
+  fill: none;
+  stroke-width: 1.2;
+  /* Thousands of points per line: joining them smoothly costs time and shows
+   * nothing, and square caps match the hard edges everywhere else here. */
+  stroke-linejoin: miter;
+  stroke-linecap: butt;
+  shape-rendering: optimizeSpeed;
+}
+
+.np-series-l1 {
+  stroke: var(--np-l1);
+}
+.np-series-l2 {
+  stroke: var(--np-l2);
+}
+.np-series-l3 {
+  stroke: var(--np-l3);
+}
+.np-series-total {
+  stroke: var(--np-total);
+  stroke-width: 1.6;
+}
+
+.np-name-l1 {
+  fill: var(--np-l1);
+  color: var(--np-l1);
+}
+.np-name-l2 {
+  fill: var(--np-l2);
+  color: var(--np-l2);
+}
+.np-name-l3 {
+  fill: var(--np-l3);
+  color: var(--np-l3);
+}
+.np-name-total {
+  fill: var(--np-total);
+  color: var(--np-total);
+}
+
+.np-anno {
+  fill: var(--wax-deep);
+}
+
+.np-anno-cds {
+  fill: var(--ink);
+}
+
+.np-crosshair {
+  stroke: var(--ink);
+  stroke-width: 1;
+  stroke-dasharray: 2 2;
+}
+
+/* The selected region or guide, marked across every panel. Honey is a fill
+ * here, never type: at 1.6:1 on white it fails as a text colour. */
+.np-marked {
+  fill: var(--honey);
+  fill-opacity: 0.35;
+  stroke: var(--burnt-honey);
+  stroke-width: 1;
+}
+
+/* ---------- the panel scatter ---------- */
+
+.np-dot {
+  fill: var(--ink);
+  fill-opacity: 0.55;
+  stroke: none;
+}
+
+.np-dot-skipped {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+
+.np-dot-featured {
+  fill: var(--honey);
+  fill-opacity: 1;
+  stroke: var(--ink);
+  stroke-width: 1.5;
+  cursor: pointer;
+}
+
+.np-dot-current {
+  stroke-width: 3;
+}
+
+.np-route-notes p {
+  margin: 0 0 0.4rem;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+/* ---------- facts ---------- */
+
+.np-facts {
+  display: grid;
+  grid-template-columns: minmax(10rem, 18rem) 1fr;
+  gap: 0;
+  margin: 0.6rem 0 1rem;
+  font-size: 0.85rem;
+}
+
+.np-facts > div {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  border-top: 1px solid var(--rule);
+}
+
+.np-facts > div:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+
+.np-facts dt {
+  padding: 0.35rem 0.6rem 0.35rem 0;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.np-facts dd {
+  margin: 0;
+  padding: 0.35rem 0;
+  color: var(--text);
+}
+
+/* ---------- tables ---------- */
+
+.np-scroll {
+  margin: 0.6rem 0 1rem;
+  max-height: 30rem;
+  overflow: auto;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.np-scroll:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.np-table {
+  width: 100%;
+  margin: 0;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.np-table-tight {
+  width: auto;
+  min-width: min(100%, 34rem);
+  margin: 0.6rem 0 1rem;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+}
+
+.np-table th,
+.np-table td {
+  padding: 0.3rem 0.55rem;
+  border-bottom: 1px solid var(--rule);
+  text-align: left;
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+.np-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  background: var(--surface-muted);
+  color: var(--ink);
+  border-bottom: 2px solid var(--ink);
+}
+
+.np-table .np-num {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.np-table .np-wrap {
+  white-space: normal;
+  min-width: 14rem;
+}
+
+.np-table .np-strong {
+  font-weight: 700;
+}
+
+.np-row-featured td {
+  background: var(--lab-bee-fill);
+}
+
+.np-row-current td {
+  background: var(--honey);
+}
+
+.np-link {
+  font: inherit;
+  padding: 0;
+  color: var(--link);
+  background: none;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  cursor: pointer;
+}
+
+.np-link:hover {
+  color: var(--ink);
+}
+
+/* ---------- sequence ---------- */
+
+.np-sequence {
+  max-height: 11rem;
+  overflow: auto;
+  padding: 0.6rem 0.7rem;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  line-height: 1.8;
+  word-break: break-all;
+}
+
+.np-sequence-short {
+  max-height: none;
+  font-size: 0.8rem;
+}
+
+.np-sequence:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.np-seq-cds {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.np-seq-utr {
+  color: var(--text-muted);
+}
+
+.np-mono {
+  font-family: var(--font-mono);
+}
+
+.np-break {
+  word-break: break-all;
+}
+
+/* ---------- published studies ---------- */
+
+.np-studies {
+  margin: 0.5rem 0 1rem;
+  padding-left: 1.4rem;
+}
+
+.np-studies > li {
+  margin-bottom: 1.25rem;
+}
+
+.np-study-head {
+  margin: 0 0 0.4rem;
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+/* ---------- bars ---------- */
+
+.np-bar-row,
+.np-length-row {
+  display: grid;
+  grid-template-columns: minmax(8rem, 14rem) 1fr;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.8rem;
+}
+
+.np-bar-row {
+  grid-template-columns: minmax(8rem, 14rem) 1fr 4rem;
+}
+
+.np-bar-label {
+  color: var(--text-muted);
+}
+
+.np-bar-track {
+  display: block;
+  height: 0.85rem;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+}
+
+.np-bar {
+  display: block;
+  height: 100%;
+}
+
+.np-bar-varroa {
+  background: var(--np-varroa);
+}
+
+.np-bar-apis {
+  background: var(--np-apis);
+}
+
+.np-bar-value {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.np-length-bars {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.np-length-bar-line {
+  display: grid;
+  grid-template-columns: 1fr 4rem;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.np-length-chart {
+  margin: 0.8rem 0;
+}
+
+.np-legend {
+  margin: 0.4rem 0 1rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.np-key {
+  display: inline-block;
+  width: 0.8rem;
+  height: 0.8rem;
+  margin: 0 0.3rem 0 0.9rem;
+  vertical-align: -0.05rem;
+}
+
+.np-legend .np-key:first-child {
+  margin-left: 0;
+}
+
+.np-key-varroa {
+  background: var(--np-varroa);
+}
+
+.np-key-apis {
+  background: var(--np-apis);
+}
+
+/* ---------- histogram ---------- */
+
+.np-histogram {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 7rem;
+  margin: 0.8rem 0 0.25rem;
+  padding: 0 0.1rem;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+}
+
+.np-hist-col {
+  flex: 1;
+  min-height: 1px;
+  background: var(--np-total);
+}
+
+.np-hist-axis {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* ---------- the two species, side by side ---------- */
+
+.np-species-pair {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+}
+
+.np-species h4 {
+  margin-top: 1.25rem;
+}
+
+/* ---------- guide detail ---------- */
+
+.np-detail {
+  margin: 1.25rem 0 0;
+  padding: 1rem 1.1rem;
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+}
+
+.np-detail-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem 1rem;
+}
+
+.np-detail-head h4 {
+  margin: 0;
+  border: 0;
+}
+
+/* ---------- while a gene file is in flight ---------- */
+
+/* A fixed block rather than a spinner: the views below it are 40rem or more
+ * tall, so letting the panel collapse and spring back moves the whole page. */
+.np-waiting {
+  min-height: 24rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
+  border: 1px dashed var(--rule);
+  border-radius: var(--radius);
+}
+
+/* ---------- narrow screens ---------- */
+
+@media (max-width: 48rem) {
+  .np {
+    width: calc(100vw - 2rem);
+    margin-inline: calc(50% - 50vw + 1rem);
+  }
+
+  .np-body {
+    padding: 1rem 0.75rem;
+  }
+
+  .np-facts {
+    grid-template-columns: 1fr;
+  }
+
+  .np-facts dt {
+    padding-bottom: 0;
+    font-size: 0.78rem;
+  }
+
+  .np-facts dd {
+    padding-top: 0.1rem;
+    padding-bottom: 0.4rem;
+  }
+
+  .np-rail button {
+    flex: 1 1 33%;
+    font-size: 0.85rem;
+  }
+
+  .np-bar-row,
+  .np-length-row {
+    grid-template-columns: 6.5rem 1fr 3.5rem;
+  }
+
+  .np-length-row {
+    grid-template-columns: 6.5rem 1fr;
+  }
+}

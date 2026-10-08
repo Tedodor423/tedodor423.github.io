@@ -15,7 +15,8 @@ import { ProjectTimeline } from "./ProjectTimeline";
 import { HeadlineStats } from "./HeadlineStats";
 import { DbtlGallery } from "./DbtlGallery";
 import { BeeReset } from "./BeeReset";
-import { NectarDesigner } from "./NectarDesigner";
+import { NectarConstruct } from "./NectarConstruct";
+import { NectarPipeline } from "./NectarPipeline";
 import { BeeImportance } from "./BeeImportance";
 import { VarroaSlide } from "./VarroaSlide";
 import { SdgOverview } from "./SdgOverview";
@@ -47,7 +48,8 @@ const SLOTS: Record<string, () => ReactNode> = {
   "headline-stats": () => <HeadlineStats />,
   "dbtl-cycles": () => <DbtlGallery />,
   "bee-reset": () => <BeeReset />,
-  "nectar-designer": () => <NectarDesigner />,
+  "nectar-pipeline": () => <NectarPipeline />,
+  "nectar-construct": () => <NectarConstruct />,
   "bee-importance": () => <BeeImportance />,
   "varroa-slide": () => <VarroaSlide />,
   "sdg-overview": () => <SdgOverview />,
