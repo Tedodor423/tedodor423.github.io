@@ -73,7 +73,6 @@ jobs:
         run: |
           mkdir -p dist/local/eng-icons dist/local/stakeholder-photos dist/local/sdg
           cp wiki-assets-source/images_dev/web/*.mp4 dist/local/
-          cp wiki-assets-source/images_dev/bee_with_mite_trans.webm dist/local/
           cp wiki-assets-source/images_dev/sdg/*.png dist/local/sdg/
           cp wiki-assets-source/images_dev/oxford-igem-logo.png dist/local/
           cp wiki-assets-source/images_dev/eng-icons-upload/*.svg dist/local/eng-icons/

@@ -30,13 +30,14 @@ treatments-slide
 > arrays at the top of `src/components/VarroaSlide.tsx` and drop the `[FLAG]`
 > under the chart. Owner: dry lab.
 >
-> **TODO —** Slide four's bee clip, `bee_with_mite_trans.webm`, is served from
+> **TODO —** Slide four's bee clip, `bee_with_mite_stacked.mp4`, is served from
 > the gitignored `public/local/` and needs a home before the freeze that keeps
 > its transparency: a Video Universe embed is an iframe with its own
-> background, so it cannot sit over the claim. Ask iGEM whether a transparent
-> `.webm` may go through Uploads, or turn it into an animated image that can.
-> Safari does not draw VP9 transparency, so it also needs an HEVC-with-alpha
-> fallback or a still. The "100%" is from the Lamas et al. 2025 bioRxiv
+> background, so it cannot sit over the claim. It is a plain H.264 `.mp4`
+> with its alpha stacked under the picture, which the page recombines, so it
+> plays transparent in Safari as well (`src/components/AlphaClip.tsx`). Ask
+> iGEM whether it may go through Uploads, and check it on a Mac and an iPhone.
+> The "100%" is from the Lamas et al. 2025 bioRxiv
 > preprint (39 mites, five operations): before the freeze, check whether a
 > peer-reviewed version is out and cite that instead. Owner: wiki.
 >

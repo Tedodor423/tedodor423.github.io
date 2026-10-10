@@ -1,0 +1,14 @@
+/* The stacked clip (AlphaClip.tsx). The caller's class sizes and places the
+   frame; the video and the canvas both fill it, the video see-through
+   underneath, as the clock, and the canvas on top, as the picture. */
+.alpha-clip > video,
+.alpha-clip > canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.alpha-clip > video {
+  opacity: 0;
+}
