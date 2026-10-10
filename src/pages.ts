@@ -49,7 +49,6 @@ import beeLabLabbook from "./content/bee-lab-labbook.md?raw";
 import workingWithBees from "./content/working-with-bees.md?raw";
 import hardware from "./content/hardware.md?raw";
 import userManual from "./content/user-manual.md?raw";
-import wetLab from "./content/wet-lab.md?raw";
 import wetLabExperiments from "./content/wet-lab-experiments.md?raw";
 import wetLabLabbook from "./content/wet-lab-labbook.md?raw";
 import model from "./content/model.md?raw";
@@ -191,13 +190,6 @@ const Pages: MenuEntry[] = [
     section: "The project in detail",
     children: [
       {
-        name: "Wet lab",
-        title: "Wet Lab",
-        path: "/wet-lab",
-        content: wetLab,
-        lead: "Making the molecule: construct design, assembly and production.",
-      },
-      {
         name: "RNA design",
         title: "RNA Design",
         path: "/software", // iGEM standard URL
@@ -236,7 +228,7 @@ const Pages: MenuEntry[] = [
     section: "The project in detail",
     children: [
       {
-        name: "Bee lab",
+        name: "Overview",
         title: "Bee Lab",
         path: "/bee-lab",
         content: beeLab,

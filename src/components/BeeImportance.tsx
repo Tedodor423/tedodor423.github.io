@@ -1,22 +1,31 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { headingId } from "../utils/headingId";
-import { easeOut, useClock } from "../utils/useClock";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type RefObject,
+} from "react";
+import { BEE_FRAMES } from "../utils/bees";
 import { useMedia } from "../utils/useMedia";
 import { DECK_MEDIA, useDeckRests } from "../utils/deck";
+import { useScrolledIn } from "../utils/useScrolledIn";
 import { Marked } from "./Marked";
 import "./BeeImportance.css";
 
 /* Slide two of the home page: why bees matter, in two numbers.
  *
  * The home page is a presentation. The hero is slide one; this is slide two,
- * a screen of its own that the hero's scroll glide lands on. Each half plays
- * once, on its own clock, from the moment it is on screen: the number
- * counts up from zero, and the figure under it fills in step. On the left
- * the count climbs to 50 and a plate lands for every ten; on the right it
- * climbs to 35 while a hand sweeps clockwise from twelve and turns the
- * trees it passes yellow. Nothing here interpolates a claim: the count is a
- * reveal of the endpoint, not a trajectory, and the sweep stops at 35%
- * because that is the figure the paper gives.
+ * a screen of its own that the hero's scroll glide lands on. In each half the
+ * number counts up from zero and the figure under it fills in step, both
+ * driven by the reader's scroll on to the slide, so each figure is whole as
+ * the slide lands. On the left the count climbs to 50 while a line of the
+ * world's daily food draws from 1960 to 2050. On the right the count climbs
+ * to 35 while a hand sweeps clockwise from twelve and turns the crops it
+ * passes yellow. Nothing
+ * here interpolates a claim: the count is a reveal of the endpoint, not a
+ * trajectory, the line only reveals points already computed, and the sweep
+ * stops at 35% because that is the figure the paper gives.
  *
  * Both numbers come from sources we retrieved and read, so they carry [LIT]:
  *
@@ -41,69 +50,229 @@ import "./BeeImportance.css";
  * are kept so they can be made links again in one edit; iGEM's rules allow
  * outbound links, it is loaded assets they forbid.
  *
+ * The food line is the team's own arithmetic, [CALC], from
+ * references/food/Food_Data.csv and the projection in
+ * NECTAR_graphs_with_food_land_addon.R (section 14): see FOOD below.
+ *
  * Under prefers-reduced-motion nothing moves: the numbers stand at their
- * final values, every plate is on the table and the third is already yellow.
+ * final values, the line is drawn to 2050 and the third is already yellow.
  */
 
-/* ---------- the plates ---------- */
+/* ---------- the food line ---------- */
 
-const TODAY = 10;
-const BY_2050 = 15;
-const COLS = 5;
-const CELL = 56;
+/* The world's food supply per day: population times food supply per head,
+ * the measure the dry lab's food add-on calls food demand. Recorded rows are
+ * references/food/Food_Data.csv (Year, Population, CaloriesPerCapita). The
+ * projection is that script's own: population and kcal per head each run
+ * in a straight line from 2020 to 9.7 billion people (UN World Population
+ * Prospects 2024, as the script cites it) and 3,050 kcal a head in 2050,
+ * and are multiplied year by year, which bends the line slightly. */
+const FOOD: [year: number, population: number, kcal: number][] = [
+  [1960, 3_034_950_000, 2275],
+  [1970, 3_700_437_000, 2436],
+  [1980, 4_458_003_000, 2560],
+  [1990, 5_327_231_000, 2599],
+  [2000, 6_143_494_000, 2679],
+  [2010, 6_956_824_000, 2827],
+  [2020, 7_794_799_000, 2894],
+];
+const POPULATION_2050 = 9.7e9;
+const KCAL_2050 = 3050;
 
-function Plates({ shown }: { shown: number }) {
-  const rows = Math.ceil(BY_2050 / COLS);
+const FIRST = 1960;
+const NOW = 2020;
+const LAST = 2050;
+
+interface Point {
+  year: number;
+  /** Trillion kcal a day. */
+  v: number;
+}
+
+const RECORDED: Point[] = FOOD.map(([year, population, kcal]) => ({
+  year,
+  v: (population * kcal) / 1e12,
+}));
+
+const PROJECTED: Point[] = (() => {
+  const [, population, kcal] = FOOD[FOOD.length - 1];
+  return Array.from({ length: LAST - NOW + 1 }, (_, i) => {
+    const f = i / (LAST - NOW);
+    return {
+      year: NOW + i,
+      v:
+        ((population + (POPULATION_2050 - population) * f) *
+          (kcal + (KCAL_2050 - kcal) * f)) /
+        1e12,
+    };
+  });
+})();
+
+const END = PROJECTED[PROJECTED.length - 1];
+
+/** The line's value at any year, straight between neighbouring points. */
+function foodAt(year: number): number {
+  const points = [...RECORDED.slice(0, -1), ...PROJECTED];
+  const i = points.findIndex((p) => p.year >= year);
+  if (i <= 0) return points[0].v;
+  const a = points[i - 1];
+  const b = points[i];
+  return a.v + ((b.v - a.v) * (year - a.year)) / (b.year - a.year);
+}
+
+const FW = 360;
+const FH = 260;
+const FM = { top: 34, right: 24, bottom: 30, left: 36 };
+const PLOT_W = FW - FM.left - FM.right;
+const PLOT_H = FH - FM.top - FM.bottom;
+const Y_TICKS = [0, 10, 20, 30];
+const X_TICKS = [1960, 1990, 2020, 2050];
+
+const fx = (year: number) =>
+  FM.left + ((year - FIRST) / (LAST - FIRST)) * PLOT_W;
+const fy = (v: number) => FM.top + PLOT_H - (v / 30) * PLOT_H;
+const pathOf = (points: Point[]) =>
+  points
+    .map(
+      (p, i) =>
+        `${i ? "L" : "M"}${fx(p.year).toFixed(1)},${fy(p.v).toFixed(1)}`,
+    )
+    .join("");
+
+const tenths = (v: number) => v.toFixed(1);
+
+/* The chart carries no values of its own, by the team's choice: the shape
+ * is the point, and the axes give the scale. The values stay in the
+ * description a screen reader reads out. */
+function FoodLine({ drawn }: { drawn: number }) {
+  const clip = useId();
+  const head = FIRST + (LAST - FIRST) * drawn;
+  const done = drawn >= 1;
+
   return (
     <svg
-      className="bi-plates"
-      viewBox={`0 0 ${COLS * CELL} ${rows * CELL}`}
+      className="bi-food"
+      viewBox={`0 0 ${FW} ${FH}`}
       role="img"
-      aria-label="Fifteen plates: ten for 2012, and five more in honey for 2050"
+      aria-label={`Line chart of the food the world supplies each day, in trillion kilocalories: ${tenths(RECORDED[0].v)} in 1960, ${tenths(RECORDED[3].v)} in 1990 and ${tenths(RECORDED[6].v)} in 2020, then a dashed projection to ${tenths(END.v)} in 2050.`}
     >
-      {Array.from({ length: BY_2050 }, (_, i) => {
-        const extra = i >= TODAY;
-        const on = !extra || i - TODAY < shown;
-        const cx = CELL / 2 + (i % COLS) * CELL;
-        const cy = CELL / 2 + Math.floor(i / COLS) * CELL;
-        return (
-          <g
-            key={i}
-            className={`bi-plate${extra ? " bi-plate--more" : ""}${on ? " is-on" : ""}`}
+      <defs>
+        <clipPath id={clip}>
+          <rect x={0} y={0} width={fx(head)} height={FH} />
+        </clipPath>
+      </defs>
+
+      <text className="bi-food-unit" x={0} y={16}>
+        trillion kcal a day
+      </text>
+      {Y_TICKS.map((v) => (
+        <g key={v}>
+          <line
+            className="bi-food-grid"
+            x1={FM.left}
+            x2={FM.left + PLOT_W}
+            y1={fy(v)}
+            y2={fy(v)}
+          />
+          <text
+            className="bi-food-tick"
+            x={FM.left - 8}
+            y={fy(v)}
+            dy="0.32em"
+            textAnchor="end"
           >
-            <circle className="bi-plate-rim" cx={cx} cy={cy} r={24} />
-            <circle className="bi-plate-well" cx={cx} cy={cy} r={15} />
-          </g>
-        );
-      })}
+            {v}
+          </text>
+        </g>
+      ))}
+      {X_TICKS.map((year) => (
+        <text
+          key={year}
+          className="bi-food-tick"
+          x={fx(year)}
+          y={FH - 8}
+          textAnchor="middle"
+        >
+          {year}
+        </text>
+      ))}
+
+      <g clipPath={`url(#${clip})`}>
+        <path
+          className="bi-food-line bi-food-line--projected"
+          d={pathOf(PROJECTED)}
+        />
+        <path className="bi-food-line" d={pathOf(RECORDED)} />
+      </g>
+
+      {/* The one word on the chart, under the line where it climbs away:
+          the dashed stretch is named, and the solid one is everything else. */}
+      <text
+        className={`bi-food-label bi-food-label--projected${head >= 2035 ? " is-on" : ""}`}
+        x={fx(2026)}
+        y={fy(foodAt(2026)) + 28}
+      >
+        projected
+      </text>
+
+      {RECORDED.map((p) => (
+        <g
+          key={p.year}
+          className={`bi-food-mark${head >= p.year ? " is-on" : ""}`}
+        >
+          <circle className="bi-food-dot" cx={fx(p.year)} cy={fy(p.v)} r={6} />
+        </g>
+      ))}
+
+      {/* The projection's end is hollow: a year nobody has measured. */}
+      <g className={`bi-food-mark${done ? " is-on" : ""}`}>
+        <circle
+          className="bi-food-dot bi-food-dot--projected"
+          cx={fx(LAST)}
+          cy={fy(END.v)}
+          r={6}
+        />
+      </g>
     </svg>
   );
 }
 
-function FoodHalf() {
-  const half = useRef<HTMLDivElement>(null);
-  const t = useClock(half);
-  // The count climbs to 50, and a plate lands for every ten of it.
-  const count = Math.round(50 * easeOut(t));
-  const shown = Math.floor(count / 10);
+/* The line draws with the reader's scroll rather than on a clock, and the
+ * count climbs in step with it: as the slide comes up from below on to the
+ * screen, or where the page flows, as the chart comes up the window
+ * (src/utils/useScrolledIn.ts). Scrolling back up undraws it. */
+function FoodHalf({
+  drawn,
+  figure,
+}: {
+  drawn: number;
+  figure: RefObject<HTMLElement | null>;
+}) {
+  const count = Math.round(50 * drawn);
 
   return (
-    <div className="bi-half" ref={half}>
+    <div className="bi-half">
       <h3 className="bi-claim">
         <span className="bi-when">
-          <span>by 2050, humanity will require</span>
+          <span>
+            by 2050, humanity
+            <br />
+            will require
+          </span>
         </span>
         <span className="bi-figure">{count}%</span>
         <span className="bi-words">
           <Marked text="more food" />
         </span>
       </h3>
-      <div className="bi-visual">
-        <Plates shown={shown} />
-      </div>
-      <p className="bi-note">
-        <Marked text="Almost half as much again as in 2012, to feed nearly 10 billion people." />
-      </p>
+      <figure className="bi-visual bi-visual--food" ref={figure}>
+        <FoodLine drawn={drawn} />
+        <figcaption className="bi-food-caption">
+          World population times food supply per head, 1960 to 2020; dashed, our
+          projection to 9.7 billion people at 3,050 kcal a head in 2050.{" "}
+          <code>[CALC]</code>
+        </figcaption>
+      </figure>
       <p className="bi-ref">
         FAO 2017, The future of food and agriculture: Trends and challenges.
         Rome: FAO. <code>[LIT]</code>
@@ -112,192 +281,239 @@ function FoodHalf() {
   );
 }
 
-/* ---------- the forest ---------- */
+/* ---------- the harvest ---------- */
 
 /** The share of global crop production volume from pollinator-dependent crops. */
 const SHARE = 0.35;
 const DISC = 100;
 
-/* The tree is the team's own Excalidraw drawing, in two colourings: green,
- * and yellow for the pollinated share. Like the bee scene's artwork
- * (BeeScene.tsx) the sources are tree.svg and tree_yellow.svg in the
- * gitignored wiki-assets-source/images_dev/, kept upload-ready, and the
- * published site serves them from static.igem.wiki under assets/. The dev
- * server answers them straight from that folder (the images-dev plugin in
- * vite.config.ts), so a redrawn tree shows on the next reload.
- * tree_yellow.svg is tree.svg with its green (#2f9e44) swapped for #f08c00;
- * redo the swap whenever the tree is redrawn.
+/* The crops are the team's own Excalidraw drawings, an apple and a pear,
+ * each in two colourings: its own, and yellow for
+ * the pollinated share. Like the comb's icons (cycleIcons.ts) the sources are
+ * in the gitignored wiki-assets-source/images_dev/eng-icons/, upload-ready
+ * copies in eng-icons-upload/ next to it, and the published site serves them
+ * from static.igem.wiki under assets/eng-icons/. The dev server answers them
+ * straight from the source folder (the images-dev plugin in vite.config.ts),
+ * so a redrawn crop shows on the next reload. Each <name>_yellow.svg is
+ * <name>.svg with every colour but the ink (#1e1e1e) swapped for #fab005;
+ * redo the swap whenever a crop is redrawn. The wheat drawing (wheat.svg)
+ * was dropped from the heap by the team's choice; its files are still in
+ * the folder.
  *
  * TEMPORARY FALLBACK. Until the upload is done, a published build that
  * cannot load the static.igem.wiki URLs tries copies in the gitignored
- * public/local/, which CI builds without. One probe decides for every tree,
- * rather than an onError on each of them. Once the static.igem.wiki URLs
- * answer, drop LOCAL_ART and the probe. */
+ * public/local/eng-icons/, which CI builds without. One probe decides for
+ * every crop, rather than an onError on each of them. Once the
+ * static.igem.wiki URLs answer, drop LOCAL_ART and the probe. */
 const ART = import.meta.env.DEV
-  ? `${import.meta.env.BASE_URL}images-dev/`
-  : "https://static.igem.wiki/teams/6391/wiki/assets/";
-const LOCAL_ART = `${import.meta.env.BASE_URL}local/`;
-const GREEN = "tree.svg";
-const YELLOW = "tree_yellow.svg";
+  ? `${import.meta.env.BASE_URL}images-dev/eng-icons/`
+  : "https://static.igem.wiki/teams/6391/wiki/assets/eng-icons/";
+const LOCAL_ART = `${import.meta.env.BASE_URL}local/eng-icons/`;
 
-/** Where the two drawings come from, or null while that is being found out. */
-function useTreeArt(): string | null {
+/** Where the drawings come from, or null while that is being found out. */
+function useCropArt(): string | null {
   const [base, setBase] = useState<string | null>(null);
   useEffect(() => {
     const probe = new Image();
     probe.onload = () => setBase(ART);
     probe.onerror = () => setBase(LOCAL_ART);
-    probe.src = ART + GREEN;
+    probe.src = `${ART}apple.svg`;
   }, []);
-  useEffect(() => {
-    // Fetched ahead, so the first tree the hand reaches does not blink.
-    if (base) new Image().src = base + YELLOW;
-  }, [base]);
   return base;
 }
 
-/* The drawing's own frame, and two points in it: the middle of the canopy,
- * which is where a tree is placed from and where its angle is read, and the
- * foot of the trunk, which decides what stands in front of what. */
-const ART_W = 199.394;
-const ART_H = 213.939;
-const CANOPY = { x: 99, y: 83 };
-const FOOT_Y = 209;
+interface Kind {
+  /** The file's basename; the yellow colouring adds _yellow. */
+  file: string;
+  /** The drawing's own frame. */
+  w: number;
+  h: number;
+  /** The middle of the fruit: where the crop is placed
+   * from and where its angle is read. */
+  centre: { x: number; y: number };
+  /** Size against the other, so the two read as one harvest. */
+  size: number;
+  /** The crop's silhouette, traced from the drawing: the outline filled in,
+   * the gaps between strokes closed, then pulled in 3 units so its edge stays
+   * under the outline. The strokes are drawn rather than filled, so the paper
+   * shows through them; painted in the paper colour behind each crop, this
+   * hides whatever lies behind. */
+  outline: string;
+}
 
-/* The canopy is scribbled in rather than filled, and the trunk is five
- * strokes, so the paper shows through both: packed close, every tree behind
- * would show through the one in front of it. This is the tree's silhouette,
- * traced from the drawing (the outline filled in, the gaps between the trunk
- * strokes closed, then pulled in 3 units so its edge stays under the
- * outline). Painted in the paper colour behind each tree, it hides whatever
- * stands behind. */
-const SILHOUETTE =
-  "M112.1 7.9L120.1 8.4L130.4 12.4L135.1 18.6L138.4 26.9L144.4 29.9L154.1 28.9L175.6 29.6L180.4 31.4L184.4 35.1L187.9 40.9L190.4 50.4L190.1 59.6L186.6 63.9L184.4 69.6L190.4 83.9L190.9 93.1L189.6 98.4L186.4 102.4L174.6 108.4L172.4 113.6L173.1 120.4L171.4 125.6L164.4 134.6L154.6 140.1L151.9 148.9L149.4 152.1L143.4 155.4L135.4 157.6L119.4 157.9L113.4 160.9L111.1 166.6L115.1 185.1L115.1 194.9L112.4 205.1L109.4 206.1L106.9 203.1L101.6 200.9L94.6 202.9L86.9 200.4L83.9 201.6L79.1 201.6L72.4 205.4L69.1 204.4L69.9 198.1L81.1 158.4L78.9 153.1L72.9 150.1L51.6 152.1L45.1 150.6L40.9 147.9L37.1 142.1L35.6 136.4L35.4 128.9L37.6 122.6L35.4 117.4L24.4 111.6L11.4 101.1L8.1 95.4L7.6 87.6L10.4 80.9L19.4 72.4L35.4 64.9L37.6 59.6L35.6 52.1L34.9 35.9L35.9 31.6L40.1 26.6L47.9 23.4L56.4 21.9L70.9 21.9L81.9 24.1L87.1 21.9L92.6 15.4L99.1 10.6L104.4 8.6Z";
+const KINDS: Kind[] = [
+  {
+    file: "apple",
+    w: 145.936,
+    h: 110.704,
+    centre: { x: 73, y: 63 },
+    size: 1,
+    outline:
+      "M92.5 5.5L97 8L97 11.5L90 19.5L91.5 28.5L97 32.5L107.5 32L117 34L131 45L137 58L135.5 74.5L122 88L110.5 92.5L88.5 97.5L50 100.5L25 97.5L18.5 94.5L14 89.5L9 63L9 47.5L13.5 31.5L18.5 25.5L21 25L37.5 28L53 37L59 37L65 32.5L67.5 26L77 13.5Z",
+  },
+  {
+    file: "pear",
+    w: 97.96,
+    h: 130.194,
+    centre: { x: 47, y: 80 },
+    size: 1.05,
+    outline:
+      "M86.5 6L90 6.5L91.5 11L77 19L65.5 33.5L68.5 49L64.5 60L66.5 66.5L79.5 76.5L85.5 83.5L87.5 90L86 97.5L78.5 107.5L64 117.5L51 123L40 123L26 119L15.5 112L9.5 105L6.5 91L8 69.5L40 38L58 33L72.5 14.5Z",
+  },
+];
 
-/** The canopy's edge, from the silhouette: the part that must stay inside the circle. */
-const CANOPY_EDGE = SILHOUETTE.slice(1, -1)
-  .split("L")
-  .map((pair) => pair.split(" ").map(Number))
-  .filter(([, y]) => y < 150);
+/** Each silhouette's corners, to keep inside the circle and to stand the crop on. */
+const EDGES = KINDS.map((kind) =>
+  kind.outline
+    .slice(1, -1)
+    .split("L")
+    .map((pair) => pair.split(" ").map(Number)),
+);
 
-/** Tree size in disc units per drawing unit: a tree is about 33 units tall. */
-const SCALE = 0.16;
-/** Spacing between neighbours along a ring, and between rings. */
-const SPACING = 16;
-const RING_GAP = 12;
+/** Crop size in disc units per drawing unit: an apple is about 19 units wide. */
+const SCALE = 0.13;
+/** Spacing between neighbours along a ring, and between rings: closer than a
+ * crop is wide, so the heap is packed and each crop overlaps the next. */
+const SPACING = 11;
+const RING_GAP = 8.5;
 
-interface Tree {
-  /** The middle of the canopy, in disc units. */
+interface Crop {
+  kind: number;
+  /** The crop's centre, in disc units. */
   x: number;
   y: number;
   scale: number;
   /** Fraction of a turn clockwise from twelve o'clock, 0 to 1. */
   turn: number;
-  /** Where the trunk meets the ground. */
+  /** The lowest point of the drawing, which decides what lies in front. */
   foot: number;
 }
 
-/** A small deterministic hash, so the forest is the same on every render. */
+/** A small deterministic hash, so the harvest is the same on every render. */
 function noise(a: number, b: number): number {
   let h = (a * 374761393 + b * 668265263) | 0;
   h = Math.imul(h ^ (h >>> 13), 1274126177);
   return (h ^ (h >>> 16)) >>> 0;
 }
 
-/** How far from the centre a tree's canopy reaches. */
-function reach(x: number, y: number, scale: number): number {
+/** How far from the centre a crop's silhouette reaches. */
+function reach(kind: number, x: number, y: number, scale: number): number {
+  const { centre } = KINDS[kind];
   let far = 0;
-  for (const [ex, ey] of CANOPY_EDGE) {
+  for (const [ex, ey] of EDGES[kind]) {
     far = Math.max(
       far,
-      Math.hypot(x + (ex - CANOPY.x) * scale, y + (ey - CANOPY.y) * scale),
+      Math.hypot(x + (ex - centre.x) * scale, y + (ey - centre.y) * scale),
     );
   }
   return far;
 }
 
-/** A tree at (x, y), drawn straight in towards the centre until its canopy is inside the circle. */
-function plant(x: number, y: number, scale: number): Tree {
+/** A crop at (x, y), drawn straight in towards the centre until it is inside the circle. */
+function plant(kind: number, x: number, y: number, scale: number): Crop {
   const r = Math.hypot(x, y);
-  if (r > 0 && reach(x, y, scale) > DISC) {
+  if (r > 0 && reach(kind, x, y, scale) > DISC) {
     let lo = 0;
     let hi = r;
     for (let step = 0; step < 24; step++) {
       const mid = (lo + hi) / 2;
-      if (reach((x * mid) / r, (y * mid) / r, scale) <= DISC) lo = mid;
+      if (reach(kind, (x * mid) / r, (y * mid) / r, scale) <= DISC) lo = mid;
       else hi = mid;
     }
     x = (x * lo) / r;
     y = (y * lo) / r;
   }
+  const bottom = Math.max(...EDGES[kind].map(([, ey]) => ey));
   return {
+    kind,
     x,
     y,
     scale,
     turn: (Math.atan2(x, -y) / (2 * Math.PI) + 1) % 1,
-    foot: y + (FOOT_Y - CANOPY.y) * scale,
+    foot: y + (bottom - KINDS[kind].centre.y) * scale,
   };
 }
 
-/* Trees on concentric rings, each nudged a little so the rings do not read as
- * rings. The outermost ring is planted closer and every tree on it is drawn
- * in until its canopy touches the circle, so the canopies, not a drawn line,
- * make the edge; the trunks of the bottom row stand just below it. Even
- * spacing round each ring also keeps the count honest: 35.2% of the trees
- * end up yellow, against the 35% the hand sweeps. Sorted by the foot of the
- * trunk, so a tree nearer the viewer paints over the ones behind it. */
-const TREES: Tree[] = (() => {
-  const trees: Tree[] = [plant(0, 0, SCALE)];
+/* Crops on concentric rings, each nudged a little so the rings do not read as
+ * rings, and each one of the two drawings at random (from a fixed hash, so
+ * the same one every time). The outermost ring is planted closer and every
+ * crop on it is drawn in until it touches the circle, so the crops, not a
+ * drawn line, make the edge. Even spacing round each ring also keeps the
+ * count honest: 123 of the 349 crops (35.2%) end up yellow, against the 35%
+ * the hand sweeps. Sorted by the lowest point of each drawing, so a
+ * crop nearer the viewer paints over the ones behind it. */
+const CROPS: Crop[] = (() => {
+  const crops: Crop[] = [plant(0, 0, 0, SCALE * KINDS[0].size)];
   let ring = 0;
-  for (let r = DISC - 80 * SCALE; r > SPACING * 0.4; r -= RING_GAP, ring++) {
+  for (let r = DISC - 60 * SCALE; r > SPACING * 0.4; r -= RING_GAP, ring++) {
     const n = Math.round((2 * Math.PI * r) / (ring ? SPACING : SPACING * 0.6));
     const offset = (noise(ring, 77) % 1000) / 1000;
     for (let i = 0; i < n; i++) {
       const h = noise(ring, i);
+      const kind = noise(i, ring + 101) % KINDS.length;
       const angle = ((i + offset + ((h % 7) - 3) * 0.04) / n) * 2 * Math.PI;
       const radius = r + (((h >> 3) % 7) - 3) * 0.4;
-      const scale = SCALE * (0.9 + ((h >> 8) % 5) * 0.05);
-      trees.push(
-        plant(radius * Math.sin(angle), -radius * Math.cos(angle), scale),
+      const scale = SCALE * KINDS[kind].size * (0.9 + ((h >> 8) % 5) * 0.05);
+      crops.push(
+        plant(kind, radius * Math.sin(angle), -radius * Math.cos(angle), scale),
       );
     }
   }
-  return trees.sort((a, b) => a.foot - b.foot);
+  return crops.sort((a, b) => a.foot - b.foot);
 })();
 
-/** The lowest trunk foot: the bottom row stands a little below the circle. */
-const GROUND = Math.max(...TREES.map((tree) => tree.foot));
+/** The lowest point of any crop, should a drawing ever reach below the circle. */
+const GROUND = Math.max(DISC, ...CROPS.map((crop) => crop.foot));
 
-function Forest({ sweep }: { sweep: number }) {
-  const art = useTreeArt();
+function Harvest({ sweep }: { sweep: number }) {
+  const art = useCropArt();
   const angle = sweep * 2 * Math.PI;
   const hand = { x: DISC * Math.sin(angle), y: -DISC * Math.cos(angle) };
 
   return (
     <svg
-      className="bi-forest"
+      className="bi-harvest"
       viewBox={`${-DISC - 4} ${-DISC - 4} ${2 * DISC + 8} ${DISC + GROUND + 8}`}
       role="img"
-      aria-label="A round stand of green trees, 35% of them turned yellow, swept out from twelve o'clock like a pie chart"
+      aria-label="A round heap of apples and pears, 35% of them turned yellow, swept out from twelve o'clock like a pie chart"
     >
       <defs>
-        <path id="bi-tree-back" d={SILHOUETTE} />
+        {KINDS.map((kind) => (
+          <path key={kind.file} id={`bi-back-${kind.file}`} d={kind.outline} />
+        ))}
       </defs>
-      {TREES.map((tree, i) => (
-        <g
-          key={i}
-          transform={`translate(${(tree.x - CANOPY.x * tree.scale).toFixed(2)} ${(tree.y - CANOPY.y * tree.scale).toFixed(2)}) scale(${tree.scale.toFixed(3)})`}
-        >
-          <use className="bi-tree-back" href="#bi-tree-back" />
-          {art && (
-            <image
-              href={art + (tree.turn < sweep ? YELLOW : GREEN)}
-              width={ART_W}
-              height={ART_H}
-            />
-          )}
-        </g>
-      ))}
+      {CROPS.map((crop, i) => {
+        const kind = KINDS[crop.kind];
+        return (
+          <g
+            key={i}
+            transform={`translate(${(crop.x - kind.centre.x * crop.scale).toFixed(2)} ${(crop.y - kind.centre.y * crop.scale).toFixed(2)}) scale(${crop.scale.toFixed(3)})`}
+          >
+            {/* Placed by the outer group, so the stylesheet's transform on
+                this one, the pop as it turns yellow, adds to the placement
+                rather than replacing it. */}
+            <g className={`bi-crop${crop.turn < sweep ? " is-yellow" : ""}`}>
+              <use className="bi-crop-back" href={`#bi-back-${kind.file}`} />
+              {art && (
+                <>
+                  <image
+                    className="bi-crop-own"
+                    href={`${art}${kind.file}.svg`}
+                    width={kind.w}
+                    height={kind.h}
+                  />
+                  <image
+                    className="bi-crop-yellow"
+                    href={`${art}${kind.file}_yellow.svg`}
+                    width={kind.w}
+                    height={kind.h}
+                  />
+                </>
+              )}
+            </g>
+          </g>
+        );
+      })}
       <line className="bi-noon" x1={0} y1={0} x2={0} y2={-DISC} />
       <line
         className="bi-hand"
@@ -310,25 +526,57 @@ function Forest({ sweep }: { sweep: number }) {
   );
 }
 
-function BeesHalf() {
-  const half = useRef<HTMLDivElement>(null);
-  const t = useClock(half);
-  const sweep = SHARE * easeOut(t);
+/* The team's bee, over the word it stands for. It hangs about a fixed point,
+ * a few pixels either way, and beats its wings while the pointer is on it:
+ * the two frames swap at the cursor bees' own wingbeat. All of it is CSS, so
+ * it costs nothing per frame, and under prefers-reduced-motion it is still.
+ * Decoration: hidden from screen readers, and the heading's text is
+ * unchanged. A span, because a heading may only hold phrasing content. */
+function HoverBee() {
+  return (
+    <span className="bi-bee" aria-hidden="true">
+      <span className="bi-bee-drift">
+        <span className="bi-bee-bob">
+          {BEE_FRAMES.map((src, i) => (
+            <img
+              key={src}
+              className={`bi-bee-frame bi-bee-frame-${i}`}
+              src={src}
+              alt=""
+            />
+          ))}
+        </span>
+      </span>
+    </span>
+  );
+}
+
+/* The sweep follows the scroll exactly as the food line does, so the two
+ * figures fill together and the hand winds back on the way up. */
+function BeesHalf({
+  swept,
+  figure,
+}: {
+  swept: number;
+  figure: RefObject<HTMLDivElement | null>;
+}) {
+  const sweep = SHARE * swept;
   const percent = Math.round(100 * sweep);
 
   return (
-    <div className="bi-half" ref={half}>
+    <div className="bi-half">
       <h3 className="bi-claim">
         <span className="bi-when">
-          <span>already</span>
+          <HoverBee />
+          <span>pollinators account for</span>
         </span>
         <span className="bi-figure">{percent}%</span>
         <span className="bi-words">
-          <Marked text="of the world's crop production relies on pollinators" />
+          <Marked text="of the world's crop production" />
         </span>
       </h3>
-      <div className="bi-visual">
-        <Forest sweep={sweep} />
+      <div className="bi-visual" ref={figure}>
+        <Harvest sweep={sweep} />
       </div>
       <p className="bi-note">
         <Marked text="Of global production by volume, counting every crop that depends on animal pollination. Honeybees are the most valuable of those pollinators." />
@@ -343,13 +591,11 @@ function BeesHalf() {
 
 /* ---------- the slide ---------- */
 
+/* The slide shows no title, by the team's choice: the two claims are the
+ * slide. The name stays on the section for screen readers. */
 const TITLE = "Why bees matter";
 
 export function BeeImportance() {
-  // The same id a Markdown `## Why bees matter` would get, so the anchor
-  // reads like every other section's.
-  const id = headingId(TITLE);
-
   // Where the slide is a screen of its own, its top and bottom are rests
   // for the deck: a reader who stops part way onto it or off it is eased on.
   const section = useRef<HTMLElement>(null);
@@ -363,15 +609,24 @@ export function BeeImportance() {
   }, [slide]);
   useDeckRests(rests);
 
+  // Both figures draw on the way down to the slide.
+  const figure = useRef<HTMLElement>(null);
+  const drawn = useScrolledIn(section, figure);
+  const harvest = useRef<HTMLDivElement>(null);
+  const swept = useScrolledIn(section, harvest);
+
   return (
-    <section className="bee-importance" aria-labelledby={id} ref={section}>
+    <section
+      className="bee-importance"
+      aria-label={TITLE}
+      ref={section}
+      // As a slide it fills the screen: the menu steps aside (Navbar.tsx).
+      data-fullscreen={slide || undefined}
+    >
       <div className="bi-stage">
-        <h2 className="bi-title" id={id}>
-          {TITLE}
-        </h2>
         <div className="bi-halves">
-          <FoodHalf />
-          <BeesHalf />
+          <FoodHalf drawn={drawn} figure={figure} />
+          <BeesHalf swept={swept} figure={harvest} />
         </div>
       </div>
     </section>

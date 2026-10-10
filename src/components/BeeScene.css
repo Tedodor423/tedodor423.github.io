@@ -68,6 +68,23 @@
   opacity: 0.35;
 }
 
+/* On the home page a hive put away is not shown at all (BeeScene.tsx). It
+ * fades out rather than vanishing from under the click, and visibility, which
+ * flips at the end of the fade, takes it out of the tab order too. The
+ * element stays, because the loop keeps placing it. */
+.hive-cluster {
+  transition: visibility 0s linear 0s;
+}
+
+.hive-cluster.is-hidden {
+  visibility: hidden;
+  transition-delay: 220ms;
+}
+
+.hive-cluster.is-hidden .hive {
+  opacity: 0;
+}
+
 /* The hive is the switch: clicking it puts the bees away and clicking it again
  * brings them back. The drawing is the whole button, so every scrap of
  * user-agent button chrome has to go, `appearance` included. */

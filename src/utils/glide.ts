@@ -14,6 +14,8 @@ export const REDUCED_MOTION =
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 let frame = 0;
+/** When the last ride ended, for gliding(). */
+let endedAt = -Infinity;
 
 function easeInOut(t: number): number {
   return t < 0.5 ? 2 * t * t : 1 - (2 - 2 * t) ** 2 / 2;
@@ -21,8 +23,17 @@ function easeInOut(t: number): number {
 
 /** Stop the ride in flight, if there is one. */
 export function cancelGlide(): void {
+  if (frame) endedAt = performance.now();
   cancelAnimationFrame(frame);
   frame = 0;
+}
+
+/**
+ * True while a ride is running, and for a moment after: the scroll event for
+ * a ride's last step arrives after the ride has already finished.
+ */
+export function gliding(): boolean {
+  return frame !== 0 || performance.now() - endedAt < 100;
 }
 
 /** Ride the window to `top`, in document coordinates, over `duration` ms. */
@@ -43,6 +54,7 @@ export function glideTo(top: number, duration = 700): void {
     const t = Math.min((now - started) / duration, 1);
     window.scrollTo({ top: from + distance * easeInOut(t), behavior: "instant" });
     frame = t < 1 ? requestAnimationFrame(step) : 0;
+    if (!frame) endedAt = now;
   };
   frame = requestAnimationFrame(step);
 }

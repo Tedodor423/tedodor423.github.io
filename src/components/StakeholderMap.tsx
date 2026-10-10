@@ -1153,7 +1153,12 @@ export function StakeholderMap() {
 
   return (
     <section className="stakeholder-map" aria-labelledby="sm-heading">
-      <div className="sm-pin" ref={pinRef}>
+      <div
+        className="sm-pin"
+        ref={pinRef}
+        // The menu steps aside while the stage fills the screen (Navbar.tsx).
+        data-fullscreen={wide || undefined}
+      >
         <div className="sm-stage">
           <div
             className={`sm-frame${filter ? " has-pane" : ""}`}

@@ -1,0 +1,337 @@
+/* Slide five of the home page: the barriers, and what answering them took.
+ *
+ * Played on slide four's stage, so it shares its wax ground, its ink and its
+ * --ts-big. Honey marks the barriers on the arrow, as it marks the answer
+ * they hang from. Everything else is ink in the brand's two faces: Cubao
+ * for "Requiring us to do" and the numbers, Basenji for the rest, the claim
+ * and the three demands included.
+ *
+ * RnaiChallenges.tsx hands each step over as a variable from 0 to 1:
+ * --claim, --draw (the arrow, top down) and --demands on the section, and
+ * --in on each demand's word and on its proof. Stacked they all stand at 1.
+ */
+
+.rc {
+  --claim: 1;
+  --draw: 1;
+  --demands: 1;
+  /* One unit for the whole slide: a hundredth of the width on a 16:9
+     screen, and held to the height on anything wider. */
+  --u: min(1vw, 1.78dvh);
+
+  position: relative;
+  margin-top: 4rem;
+  color: var(--ink);
+}
+
+/* ---------- the claim ---------- */
+
+/* The selector outweighs .markdown-page h2. */
+.treatments-slide .rc-claim {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: clamp(2rem, 9vw, 4rem);
+  line-height: 1.05;
+  color: var(--ink);
+  opacity: var(--claim);
+  transform: translateY(calc(1.5rem * (1 - var(--claim))));
+}
+
+/* ---------- the arrow ---------- */
+
+/* A shaft that draws down from the answer, a head that rides its tip, and
+   a honey point for each barrier, which comes in as the tip passes it. */
+.rc-arrow {
+  --shaft: 0.3rem;
+  --gutter: 2.6rem;
+  --dot: 1.15rem;
+
+  position: relative;
+  margin: 2.5rem 0;
+  padding-left: var(--gutter);
+}
+
+.rc-shaft {
+  position: absolute;
+  top: 0;
+  bottom: 1.2rem;
+  left: calc(var(--dot) / 2 + 0.2rem);
+  width: var(--shaft);
+}
+
+.rc-shaft::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  transform: scaleY(var(--draw));
+  transform-origin: top;
+}
+
+/* The head: two sides of a square, turned to point down, its point on the
+   shaft's tip. */
+.rc-shaft::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: calc(var(--draw) * 100%);
+  width: 1.1rem;
+  height: 1.1rem;
+  border-right: var(--shaft) solid var(--ink);
+  border-bottom: var(--shaft) solid var(--ink);
+  transform: translate(-50%, -85%) rotate(45deg);
+  opacity: min(1, calc(var(--draw) * 20));
+}
+
+.treatments-slide .rc-barriers {
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
+  margin: 0;
+  padding: 0 0 2.2rem;
+  list-style: none;
+}
+
+/* Each barrier comes in as the tip reaches its point: --at is where the
+   point sits along the shaft. */
+.rc-barriers li {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: clamp(1.1rem, 4.6vw, 1.5rem);
+  line-height: 1.15;
+  opacity: clamp(0, (var(--draw) - var(--at)) * 14, 1);
+}
+
+/* The point, centred on the shaft: the shaft's middle sits half a point,
+   0.2rem and half a shaft in from the arrow's edge, and the label starts a
+   gutter in. */
+.rc-barriers li::before {
+  content: "";
+  position: absolute;
+  left: calc(0.2rem + var(--shaft) / 2 - var(--gutter));
+  top: 50%;
+  width: var(--dot);
+  height: var(--dot);
+  border: var(--shaft) solid var(--ink);
+  border-radius: 50%;
+  background: var(--honey);
+  transform: translateY(-50%);
+}
+
+/* ---------- the demands ---------- */
+
+.rc-demands {
+  opacity: var(--demands);
+  transform: translateY(calc(1.5rem * (1 - var(--demands))));
+}
+
+.treatments-slide .rc-requiring {
+  margin: 0 0 1.5rem;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.3rem, 5.4vw, 2rem);
+  line-height: 1.1;
+}
+
+.treatments-slide .rc-rows {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: 0.75rem;
+  margin: 0;
+}
+
+/* The row is only a grouping: its word and its proof sit in the grid. */
+.rc-row {
+  display: contents;
+}
+
+/* Each word comes in on its own, a little ahead of its proof. */
+.rc-word {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: clamp(1.9rem, 8.4vw, 3.4rem);
+  line-height: 1;
+  opacity: var(--in, 1);
+  transform: translateY(calc(1rem * (1 - var(--in, 1))));
+}
+
+.rc-word:not(:first-child) {
+  margin-top: 2.5rem;
+}
+
+.rc-joint {
+  font-size: 0.5em;
+}
+
+.treatments-slide .rc-proof {
+  margin: 0;
+  opacity: var(--in, 1);
+  transform: translateX(calc(2rem * (1 - var(--in, 1))));
+}
+
+.treatments-slide .rc-says {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: clamp(1.15rem, 4.8vw, 1.7rem);
+  line-height: 1.2;
+}
+
+/* The numbers, in the claim's face, count up with the scroll. */
+.rc-count {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.55em;
+  line-height: 0.8;
+  font-variant-numeric: tabular-nums;
+}
+
+.treatments-slide .rc-more {
+  margin: 0.35rem 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+/* The proofs' clips, each framed in honey, the colour that marks the
+   barriers they answer. Square-cornered, like the pictures they are. */
+.rc-clip {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 28rem;
+  height: auto;
+  margin-top: 0.6rem;
+  border: 0.25rem solid var(--honey);
+}
+
+/* ---------- the ride ---------- */
+
+@media (min-width: 48rem) and (min-height: 36rem) and (prefers-reduced-motion: no-preference) {
+  /* The whole stage, laid out on a grid under the risen answer: the claim
+     and the demands down the left, the arrow down the right. Where the
+     answer ends: 4dvh from the top, 1.06 of --ts-big tall. */
+  .rc {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: minmax(0, calc(60 * var(--u))) 1fr calc(26 * var(--u));
+    grid-template-rows: auto minmax(0, 1fr);
+    margin: 0;
+    padding: calc(4dvh + 1.06 * var(--ts-big) + 3dvh) 6vw 4dvh;
+    pointer-events: none;
+  }
+
+  .rc a {
+    pointer-events: auto;
+  }
+
+  .treatments-slide .rc-claim {
+    grid-area: 1 / 1;
+    margin-top: 1dvh;
+    font-size: calc(3.25 * var(--u));
+  }
+
+  .rc-arrow {
+    --shaft: calc(0.36 * var(--u));
+    --gutter: calc(3.4 * var(--u));
+    --dot: calc(1.5 * var(--u));
+
+    grid-column: 3;
+    grid-row: 1 / 3;
+    margin: 0;
+  }
+
+  .rc-shaft {
+    bottom: calc(1.4 * var(--u));
+  }
+
+  .rc-shaft::after {
+    width: calc(1.5 * var(--u));
+    height: calc(1.5 * var(--u));
+  }
+
+  /* Six equal shares of the shaft, each barrier centred in its own, so its
+     point sits where --at says. */
+  .treatments-slide .rc-barriers {
+    height: 100%;
+    gap: 0;
+    padding: 0 0 calc(2.6 * var(--u));
+  }
+
+  .rc-barriers li {
+    flex: 1 1 0;
+    font-size: calc(1.45 * var(--u));
+  }
+
+  .rc-demands {
+    grid-area: 2 / 1;
+    align-self: start;
+    margin-top: 3dvh;
+  }
+
+  .treatments-slide .rc-requiring {
+    margin-bottom: 2.5dvh;
+    font-size: calc(1.9 * var(--u));
+  }
+
+  /* Word, then proof, row by row; "several lines" between the rows. */
+  .treatments-slide .rc-rows {
+    grid-template-columns: calc(24 * var(--u)) minmax(0, 1fr);
+    column-gap: calc(2.2 * var(--u));
+    row-gap: 3.2dvh;
+    align-items: start;
+  }
+
+  .rc-word {
+    font-size: calc(2.8 * var(--u));
+  }
+
+  .rc-word:not(:first-child) {
+    margin-top: 0;
+  }
+
+  .treatments-slide .rc-says {
+    font-size: calc(1.5 * var(--u));
+  }
+
+  .treatments-slide .rc-more {
+    font-size: calc(0.78 * var(--u));
+  }
+
+  /* A proof with a clip: its words beside it. */
+  .rc-row[data-clip] .rc-proof {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) calc(17 * var(--u));
+    grid-template-areas:
+      "says fold"
+      "more fold";
+    column-gap: calc(1.6 * var(--u));
+    align-content: start;
+  }
+
+  .rc-row[data-clip] .rc-says {
+    grid-area: says;
+  }
+
+  .rc-row[data-clip] .rc-more {
+    grid-area: more;
+  }
+
+  .rc-clip {
+    grid-area: fold;
+    max-width: none;
+    margin-top: 0;
+    border-width: calc(0.3 * var(--u));
+  }
+
+  .rc [data-shown="false"] {
+    visibility: hidden;
+  }
+}

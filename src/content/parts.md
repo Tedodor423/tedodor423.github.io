@@ -10,10 +10,12 @@ That modularity is what makes the platform argument on
 [the description page](/project-description) true: **swap the targeting sequence**,
 keep everything else.
 
-> **TODO —** Figure: part hierarchy. The collection and how the levels combine, drawn
-> on the same construct diagram as [wet lab](/wet-lab): the U1–U2 backbone with
-> the loop slot highlighted, and L0, L1 and L2 shown as three cartridges that drop
-> into it.
+> **TODO —** Figure: construct architecture and part hierarchy, drawn once. The
+> dumbbell annotated with the T7 promoter, the U1 and U2 universal adaptors, the
+> duplex stem and the two ~150 nt loops with the cargo slot marked; L0, L1 and L2
+> shown as three cartridges that drop into that slot; and the ribozyme-flanked
+> yeast variant underneath as a second row. The same diagram is reused on
+> [yeast](/wet-lab-experiments#yeast-production), so draw it properly.
 
 ## What we are registering
 
@@ -114,6 +116,7 @@ Registry rather than from this wiki still gets the full picture:
 
 ## Where this connects
 
-[Wet lab](/wet-lab) · [Yeast](/wet-lab-experiments#yeast-production) · [RNA design](/software) ·
+[Experiments and protocols](/wet-lab-experiments) ·
+[Yeast](/wet-lab-experiments#yeast-production) · [RNA design](/software) ·
 [Measurement](/measurement) · [Results](/results) ·
 [Contribution](/contribution) · [Engineering](/engineering)

@@ -4,18 +4,18 @@
  * solid surfaces on hard ink rules, no shadow, nothing translucent. The stage
  * is the wax paper (--surface-muted) rather than the page's white, closed at
  * the foot by the masthead's 0.5rem ink rule. Nothing parts the two halves:
- * each is its own centred column, and the honey label opens each claim.
+ * each is its own centred column.
  *
  * Colour is the wiki's own vocabulary: honey for the quantity the claim is
- * about (the five extra plates), ink rules and rims. The trees are the one
- * exception: they are the team's drawing and keep its green and yellow. The
- * qualifying word above each number sits on a honey label, the masthead's
- * own pairing.
+ * about (the projected stretch of the food line), ink rules and rims. The
+ * crops are the one exception: they are the team's drawings and keep their
+ * own colours. Both claims open on a honey label, the masthead's own
+ * pairing, then the number.
  *
  * Mobile first. The default layout stacks the two halves; from 48rem they
  * sit side by side on a screen-high stage, sharing their rows so the two
- * numbers sit level. Motion is on a clock in BeeImportance.tsx, not on the
- * scroll, so nothing here pins.
+ * numbers sit level. Both figures draw with the scroll (useScrolledIn in
+ * BeeImportance.tsx), but nothing here pins.
  */
 
 /* Full-bleed. The slide is placed from a Markdown file, so it renders inside
@@ -44,20 +44,6 @@
   border-bottom: 0.5rem solid var(--ink);
 }
 
-/* A running head, not a headline: the two h3s below are the loud ones. The
- * selector outweighs .markdown-page h2, which would underline it in honey. */
-.bee-importance .bi-title {
-  font-family: var(--font-display);
-  font-size: clamp(1rem, 1.5vw, 1.25rem);
-  line-height: 1;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--ink);
-  margin: 0;
-  padding: 1.25rem clamp(1rem, 4vw, 3rem) 0;
-  border-bottom: 0;
-}
-
 .bi-halves {
   flex: 1;
   min-height: 0;
@@ -65,8 +51,8 @@
   grid-template-columns: 1fr;
 }
 
-/* Each half is four things top to bottom: the claim, the figure, the note,
- * the reference. They sit in one column of at most 24rem, centred in the
+/* Each half is four things top to bottom: the claim (label, number, words),
+ * the figure, the note, the reference. They sit in one column of at most 24rem, centred in the
  * half, so the two blocks hang either side of the middle rather than from
  * the window's edges. */
 .bi-half {
@@ -81,6 +67,7 @@
 
 .bi-visual {
   width: 100%;
+  margin: 0;
 }
 
 /* ---------- the claim ---------- */
@@ -97,8 +84,8 @@
   color: var(--ink);
 }
 
-/* "By 2050 humanity will require", "Already": the words that make the
- * number a claim, on the masthead's honey so they are read before the
+/* "By 2050, humanity will require", "pollinators account for": the words
+ * that make the number a claim, on the masthead's honey so they are read before the
  * number rather than after. The honey is on an inline span inside, cloned
  * per line, so a label that wraps reads as two highlighted lines rather
  * than one block with a ragged second line. */
@@ -113,11 +100,109 @@
   margin-bottom: 0.5rem;
 }
 
-.bi-when span {
+.bi-when > span:not(.bi-bee) {
   background: var(--honey);
   padding: 0.22em 0.5em 0.18em;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
+}
+
+/* The bee over "pollinators" (HoverBee in BeeImportance.tsx). Its own box
+ * is the fixed point and stays put, so the pointer can rest on it while the
+ * drawing inside wanders; that box is also what answers the hover. Sized in
+ * em of the label, so it scales with it, and set in a little from the label's
+ * edge so it hangs over the word rather than the corner. */
+.bi-bee {
+  display: block;
+  position: relative;
+  width: 2.7em;
+  aspect-ratio: 194 / 171.33;
+  margin: 0 0 0.3em 1.4em;
+}
+
+/* Two slow motions on different periods, side to side with a slight tilt
+ * and up and down, so the path never quite repeats and never strays more
+ * than a few pixels. */
+.bi-bee-drift,
+.bi-bee-bob {
+  position: absolute;
+  inset: 0;
+}
+
+.bi-bee-drift {
+  animation:
+    bi-bee-sway 3.7s ease-in-out infinite alternate,
+    bi-bee-tilt 5.3s ease-in-out infinite alternate;
+}
+
+.bi-bee-bob {
+  animation: bi-bee-bob 2.3s ease-in-out infinite alternate;
+}
+
+@keyframes bi-bee-sway {
+  from {
+    translate: -3px 0;
+  }
+  to {
+    translate: 3px 0;
+  }
+}
+
+@keyframes bi-bee-tilt {
+  from {
+    rotate: -4deg;
+  }
+  to {
+    rotate: 3deg;
+  }
+}
+
+@keyframes bi-bee-bob {
+  from {
+    translate: 0 1.5px;
+  }
+  to {
+    translate: 0 -2.5px;
+  }
+}
+
+.bi-bee-frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+}
+
+.bi-bee-frame-1 {
+  opacity: 0;
+}
+
+/* The wingbeat: the frames swap every 80ms, the cursor bees' FLAP_MS. */
+.bi-bee:hover .bi-bee-frame-0 {
+  animation: bi-bee-flap-0 160ms steps(1, end) infinite;
+}
+
+.bi-bee:hover .bi-bee-frame-1 {
+  animation: bi-bee-flap-1 160ms steps(1, end) infinite;
+}
+
+@keyframes bi-bee-flap-0 {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes bi-bee-flap-1 {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 /* The number takes the wordmark's face: this is the presentation voice, and
@@ -141,18 +226,51 @@
   max-width: 16em;
 }
 
-/* ---------- the plates ---------- */
+/* ---------- the food line ---------- */
 
-.bi-plates {
+/* One quantity in two states: recorded in the navy the text is set in, and
+ * projected in burnt honey, the hive colour that can carry a line on paper.
+ * The projection is also dashed and ends on a hollow dot, so the split never
+ * rests on colour alone. Grid and ticks follow the BEEHAVE charts (hairline
+ * rules, mono ticks in muted ink, text never in a series colour), set larger
+ * and heavier because this chart is read across a room, as a slide. Sizes
+ * are in the chart's own units: 360 across, so on a 30rem chart a unit is
+ * about 1.33px. */
+.bi-food {
   display: block;
-  width: min(100%, 20rem);
+  width: 100%;
   height: auto;
 }
 
-/* Each extra plate lands with a short pop: scaled up from small and faded
- * in, with a touch of overshoot so it reads as set down rather than faded.
- * transform-box makes the group scale about its own centre. */
-.bi-plate {
+.bi-food-grid {
+  stroke: var(--rule);
+  stroke-width: 1.25;
+}
+
+.bi-food-tick,
+.bi-food-unit {
+  fill: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.bi-food-line {
+  fill: none;
+  stroke: var(--text);
+  stroke-width: 4.5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.bi-food-line--projected {
+  stroke: var(--burnt-honey);
+  stroke-dasharray: 10 7;
+  stroke-linecap: butt;
+}
+
+/* A point lands as the line reaches it, with the plates' old pop. */
+.bi-food-mark {
   transform-box: fill-box;
   transform-origin: center;
   transition:
@@ -160,41 +278,107 @@
     opacity 140ms linear;
 }
 
-.bi-plate:not(.is-on) {
+.bi-food-mark:not(.is-on),
+.bi-food-label:not(.is-on) {
   opacity: 0;
+}
+
+.bi-food-mark:not(.is-on) {
   transform: scale(0.4);
 }
 
-.bi-plate-rim {
-  fill: var(--surface);
-  stroke: var(--ink);
-  stroke-width: 2;
+/* No paper ring round the dots: the line never crosses itself, and on a
+ * line this thick a ring would cut the recorded stretch into dashes. */
+.bi-food-dot {
+  fill: var(--text);
 }
 
-.bi-plate--more .bi-plate-rim {
-  fill: var(--honey);
+.bi-food-dot--projected {
+  fill: var(--surface-muted);
+  stroke: var(--burnt-honey);
+  stroke-width: 3.5;
 }
 
-.bi-plate-well {
-  fill: none;
-  stroke: var(--ink);
-  stroke-width: 1.25;
+/* The one word on the chart, naming the projection, in the claim's own
+ * heading face. It sits over the grid, so it carries a halo of paper rather
+ * than a box. */
+.bi-food-label {
+  fill: var(--ink);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 19px;
+  paint-order: stroke;
+  stroke: var(--surface-muted);
+  stroke-width: 5px;
+  stroke-linejoin: round;
+  transition: opacity 200ms linear;
 }
 
-/* ---------- the forest ---------- */
+.bi-food-caption {
+  margin-top: 0.6rem;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
 
-.bi-forest {
+/* ---------- the harvest ---------- */
+
+.bi-harvest {
   display: block;
   width: min(100%, 17rem);
   height: auto;
 }
 
-/* The trees are the team's drawing and bring their own colours, green and
- * yellow. What the stylesheet gives each one is the paper behind it: the
- * canopy is scribbled rather than filled, and this fill is what stops the
- * trees behind showing through the gaps in the one in front. */
-.bi-tree-back {
+/* The crops are the team's drawings and bring their own colours, and their
+ * own yellow. What the stylesheet gives each one is the paper behind it: the
+ * drawings are scribbled rather than filled, and this fill is what stops the
+ * crops behind showing through the gaps in the one in front. */
+.bi-crop-back {
   fill: var(--surface-muted);
+}
+
+/* As the hand passes a crop it ripens: the yellow drawing fades in over its
+ * own colours while the crop swells and settles back, the plates' overshoot
+ * stretched into a there-and-back. transform-box makes the group scale about
+ * its own centre; the placement is on the parent group, so this adds to it. */
+.bi-crop {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.bi-crop.is-yellow {
+  animation: bi-ripen 480ms cubic-bezier(0.3, 0.7, 0.4, 1);
+}
+
+@keyframes bi-ripen {
+  40% {
+    transform: scale(1.35);
+  }
+}
+
+.bi-crop-own,
+.bi-crop-yellow {
+  transition: opacity 220ms linear;
+}
+
+.bi-crop-yellow,
+.bi-crop.is-yellow .bi-crop-own {
+  opacity: 0;
+}
+
+.bi-crop.is-yellow .bi-crop-yellow {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bi-crop.is-yellow {
+    animation: none;
+  }
+
+  .bi-crop-own,
+  .bi-crop-yellow {
+    transition: none;
+  }
 }
 
 /* The pie's two edges: a thin fixed line at twelve o'clock, and the hand
@@ -230,10 +414,11 @@
 
 /* ---------- side by side ---------- */
 
-/* Side by side, the two halves share their rows: both claims on one line,
- * both figures on the next, and so on down, so the two numbers sit level
- * however many lines their words take. The halves are subgrids of the same
- * four rows; a browser without subgrid gets two independent columns. */
+/* Side by side, the two halves share their rows: both labels on one line,
+ * both numbers on the next, then the words, the figures and so on down, so
+ * the two numbers sit level however many lines their labels and words take.
+ * The halves are subgrids of the same six rows, and each claim a subgrid of
+ * the first three; a browser without subgrid gets two independent columns. */
 @media (min-width: 48rem) {
   .bi-stage {
     /* A slide: it fills the screen the hero's glide lands on. min-height, so
@@ -241,12 +426,13 @@
     min-height: 100dvh;
   }
 
-  /* The two columns are a pair, centred as one: each at most 24rem, a hand's
-   * width apart, so both statistics sit close to the middle of the page
-   * rather than spread to its edges. */
+  /* The two columns are a pair, centred as one, a hand's width apart, so
+   * both statistics sit close to the middle of the page rather than spread
+   * to its edges. The food half is the wider, at most 32rem against 24rem,
+   * because its figure is a chart with words on it. */
   .bi-halves {
-    grid-template-columns: minmax(0, 24rem) minmax(0, 24rem);
-    grid-template-rows: repeat(4, auto);
+    grid-template-columns: minmax(0, 32rem) minmax(0, 24rem);
+    grid-template-rows: repeat(6, auto);
     justify-content: center;
     align-content: center;
     column-gap: clamp(2.5rem, 7vw, 6rem);
@@ -262,7 +448,16 @@
     padding: 1.5rem 0 2.5rem;
   }
 
+  .bee-importance .bi-claim {
+    display: grid;
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+    row-gap: 0;
+  }
+
+  /* A label shorter than the other hugs its number from above. */
   .bi-when {
+    align-self: end;
     font-size: clamp(1rem, 2.6vh, 1.4rem);
   }
 
@@ -274,11 +469,23 @@
     font-size: clamp(1.2rem, 3vh, 1.8rem);
   }
 
-  .bi-plates {
-    width: min(100%, 22rem, 52vh);
+  .bi-half:first-child {
+    grid-template-columns: minmax(0, 32rem);
   }
 
-  .bi-forest {
+  /* The food half has no note: its chart and caption take the note's row
+   * as well as the figure's, so its reference still sits level with the
+   * other's. */
+  .bi-visual--food {
+    grid-row: 4 / 6;
+    padding-bottom: 1rem;
+  }
+
+  .bi-food {
+    width: min(100%, 58vh);
+  }
+
+  .bi-harvest {
     width: min(100%, 19rem, 40vh);
   }
 }
@@ -286,7 +493,15 @@
 /* ---------- still ---------- */
 
 @media (prefers-reduced-motion: reduce) {
-  .bi-plate {
+  .bi-food-mark,
+  .bi-food-label {
     transition: none;
+  }
+
+  .bi-bee-drift,
+  .bi-bee-bob,
+  .bi-bee:hover .bi-bee-frame-0,
+  .bi-bee:hover .bi-bee-frame-1 {
+    animation: none;
   }
 }

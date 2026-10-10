@@ -1,22 +1,17 @@
-/* Slide three of the home page: the mite, then the map.
+/* Slide three of the home page: the mite.
  *
- * Two screens in one. First the mite's footage, coated in ink so the two
- * numbers over it read, the numbers counting up as on slide two. Then, on
- * the next wheel tick, the footage rides off to the left and the colony-loss
- * map rides in from the right while the numbers shrink into a bar across the
- * top. The ride is the scroll: the stage pins for one window of travel and
- * --p, 0 to 1, is how far through it the reader is. VarroaSlide.tsx sets it,
- * and snaps the window to either end so nobody is left half way.
+ * Everything sits straight on the footage, which runs with no coat over it.
+ * The footage is a light grey ground with the mite dark in the middle. How
+ * the large type sits on it, plain in one colour or on a rectangle, is still
+ * being tried: see "the type trial" below. Small type, the references, sits
+ * on a strip of wax paper in every treatment.
  *
- * Same line language as the rest of the page: the hero's honey-on-dark for
- * the numbers, the masthead's ink-on-honey for the qualifying words, the wax
- * paper for the map. The scrim is a flat coat of ink at 55%, not a gradient:
- * the footage is dark already and only needs to be a little darker.
+ * Red is the mite and nothing else: the word "Varroa" and its chart line.
  *
- * Mobile first, like slide two. By default the stats sit over the footage and
- * the map follows underneath, and nothing pins; the pinned ride is only for
- * a screen wide and tall enough to hold it, for a reader who has not asked
- * for reduced motion.
+ * The ride is the scroll. VarroaSlide.tsx works out how far through it the
+ * reader is and hands each step over as a variable from 0 to 1: --shrink
+ * (the claim going up), --toll, --trend and --verdict (each piece coming in).
+ * Stacked they stand at their ends and the page simply flows.
  */
 
 .varroa-slide {
@@ -30,194 +25,367 @@
 
 /* ---------- the stage, stacked ---------- */
 
-.vs-stage {
-  /* How far through the ride, 0 (the mite) to 1 (the map). Stays 0 unless
-     the stage is pinned; the sizes below interpolate on it. */
-  --p: 0;
-  /* The height of the numbers once they are a bar, which the map panel keeps
-     clear at its top. A first guess; VarroaSlide.tsx measures the bar at the
-     end of the ride and sets the real figure. */
-  --vs-bar: 9rem;
-  /* The numbers at full size. Clamped to the window, since "1.7 million" in
-     the display face has to fit a phone. */
-  --vs-figure-big: clamp(2.4rem, 8.5vw, 4.5rem);
-  --vs-words-big: clamp(1.15rem, 3.2vw, 1.5rem);
-  --vs-when-big: clamp(0.95rem, 2.4vw, 1.2rem);
+.ms-stage {
+  --shrink: 0;
+  --toll: 1;
+  --trend: 1;
+  --verdict: 1;
+  /* The claim, large and once shrunk. */
+  --lead-big: clamp(1.4rem, 3.3vw, 3.1rem);
+  --lead-small: clamp(1.05rem, 2vw, 1.85rem);
+  --mite-big: clamp(2.6rem, 8.6vw, 8.4rem);
+  --mite-small: clamp(1.8rem, 4.4vw, 4.2rem);
 
   position: relative;
-  display: grid;
-  grid-template-columns: 100%;
-  background: var(--ink);
-  border-bottom: 0.5rem solid var(--ink);
+  display: flow-root;
+  padding: 0 1rem 3rem;
+  color: var(--ink);
+  /* The backdrop's negative margin lets its box run a window past the
+     stage's end; clip, which unlike hidden leaves sticky working, stops it
+     covering whatever follows the slide. */
+  overflow: clip;
 }
 
-/* Stacked, the strip is no box at all: its two panels are the stage's own
-   grid items, the footage in row one under the numbers and the map in row
-   two. */
-.vs-strip {
-  display: contents;
-}
-
-.vs-video {
-  grid-area: 1 / 1;
-  position: relative;
-  min-height: 70dvh;
+/* Stacked, the footage holds still behind the slide while it scrolls past:
+   a window-tall sticky layer that takes up no room of its own. */
+.ms-backdrop {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  margin: 0 -1rem -100dvh;
   overflow: hidden;
-  background: var(--ink);
+  background: var(--rule);
 }
 
-.vs-video video {
-  position: absolute;
-  inset: 0;
+.ms-backdrop video {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.vs-scrim {
-  position: absolute;
-  inset: 0;
-  background: rgb(0 0 0 / 0.55);
-}
-
-/* The map's panel. The figure inside is VarroaMap's slide form, which brings
-   no plate of its own, so the gutter is this padding. */
-.vs-map {
-  grid-area: 2 / 1;
-  padding: 1rem 1rem 1.5rem;
-  background: var(--surface-muted);
-  color: var(--text);
-}
-
-/* ---------- the numbers ---------- */
-
-.vs-stats {
-  grid-area: 1 / 1;
-  align-self: center;
+.ms-title,
+.ms-toll,
+.ms-trend,
+.ms-missing {
   position: relative;
-  z-index: 1;
-  padding: 3rem 1rem;
-  color: var(--surface-muted);
-  text-align: center;
 }
 
-/* The running head, honey on the footage, and the first line of the bar. */
-.varroa-slide .vs-title {
-  font-family: var(--font-display);
-  font-size: calc(1.15rem * (1 - var(--p)) + 0.8rem * var(--p));
-  line-height: 1;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--honey);
-  margin: 0 0 calc(1.75rem * (1 - var(--p)) + 0.5rem * var(--p));
-  border-bottom: 0;
+/* ---------- the type trial ---------- */
+
+/* How the words sit on the footage, one treatment for every line at once.
+ * --ink-fg is the type, --ink-bg the rectangle behind each line (none in the
+ * plain treatments). EXPERIMENT: VarroaSlide.tsx sets data-ink from a
+ * dev-only switcher; once the team has chosen, keep that one block. */
+.ms-stage[data-ink="black"] {
+  --ink-fg: var(--ink);
 }
 
-.vs-pair {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: flex-start;
-  gap: calc(2.5rem * (1 - var(--p)) + 1rem * var(--p))
-    calc(4rem * (1 - var(--p)) + 3rem * var(--p));
+.ms-stage[data-ink="white"] {
+  --ink-fg: var(--surface);
 }
 
-.vs-stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 24rem;
-  color: var(--surface-muted);
+.ms-stage[data-ink="honey"] {
+  --ink-fg: var(--honey);
 }
 
-/* The heading is the whole claim, read top to bottom: the qualifying word,
- * the number, the words. The selector outweighs .markdown-page h3. */
-.varroa-slide .vs-claim {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 0;
-  font-size: 1rem;
-  line-height: 1;
-  color: var(--surface-muted);
+.ms-stage[data-ink="on-white"] {
+  --ink-fg: var(--ink);
+  --ink-bg: var(--surface);
 }
 
-/* The qualifying words, on the masthead's honey. */
-.vs-when {
-  font-family: var(--font-heading);
-  font-weight: 600;
-  font-size: calc(var(--vs-when-big) * (1 - var(--p)) + 0.7rem * var(--p));
-  line-height: 1.55;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--ink);
-  margin-bottom: calc(0.6rem * (1 - var(--p)) + 0.2rem * var(--p));
+.ms-stage[data-ink="on-black"] {
+  --ink-fg: var(--surface);
+  --ink-bg: var(--ink);
 }
 
-.vs-when span {
-  background: var(--honey);
-  padding: 0.22em 0.5em 0.18em;
+.ms-stage[data-ink="on-honey"] {
+  --ink-fg: var(--ink);
+  --ink-bg: var(--honey);
+}
+
+.ms-stage[data-ink="honey-on-black"] {
+  --ink-fg: var(--honey);
+  --ink-bg: var(--ink);
+}
+
+.ms-stage[data-ink^="on-"],
+.ms-stage[data-ink="honey-on-black"] {
+  --ink-pad: 0.06em 0.3em;
+}
+
+.ms-ink {
+  color: var(--ink-fg);
+  background: var(--ink-bg, transparent);
+  padding: var(--ink-pad, 0);
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
 }
 
-/* The number: the wordmark's face in honey, the hero's own pairing. It
- * counts up while the reader watches, so tabular figures where the face has
- * them. */
-.vs-figure {
+/* The face for the lines that are not the claim or a number; those two are
+   always Cubao. */
+.ms-stage[data-face="cubao"] :is(.ms-when, .ms-lost, .ms-verdict) {
   font-family: var(--font-display);
-  font-size: calc(var(--vs-figure-big) * (1 - var(--p)) + 1.7rem * var(--p));
-  line-height: 0.95;
-  letter-spacing: 0.01em;
-  font-variant-numeric: tabular-nums;
-  color: var(--honey);
+  font-weight: 400;
 }
 
-.vs-words {
-  font-family: var(--font-heading);
-  font-weight: 600;
-  font-size: calc(var(--vs-words-big) * (1 - var(--p)) + 0.85rem * var(--p));
-  line-height: 1.15;
-  margin-top: calc(0.5rem * (1 - var(--p)) + 0.15rem * var(--p));
-  max-width: 18em;
+.ms-red {
+  color: var(--mite-red);
 }
 
-/* The sentence under each number. It fades over the first half of the ride
- * and leaves the layout at the midpoint, so the bar the numbers become is
- * numbers and references only; the references never go. */
-.vs-note {
-  font-size: 0.9rem;
-  line-height: 1.5;
-  margin: 0.8rem 0 0;
-  max-width: 28em;
-  opacity: calc(1 - 2 * var(--p));
-  /* The light wax rule tone: wax at a step down, for the smaller type on
-     ink, where full wax would shout over the number. 11.7:1 on ink. */
-  color: var(--rule);
-}
-
-.vs-stage.is-map .vs-note {
-  display: none;
-}
-
-.vs-refs {
+/* The switcher itself: a plain control on paper, out of the way in the
+   corner. Development builds only. */
+.ms-trial {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 1rem;
+  inline-size: max-content;
+  margin: 1rem 0 0 auto;
+  padding: 0.4rem 0.75rem 0.6rem;
   font-family: var(--font-mono);
-  font-size: calc(0.8rem * (1 - var(--p)) + 0.68rem * var(--p));
-  line-height: 1.5;
-  color: var(--rule);
-  margin: calc(2rem * (1 - var(--p)) + 0.5rem * var(--p)) auto 0;
-  max-width: 60rem;
-}
-
-/* The placeholder for the footage while it is hosted locally: the same
-   paper block the hero uses for its own. */
-.vs-missing {
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
-  text-align: left;
+  font-size: 0.75rem;
   color: var(--text);
   background: var(--surface-muted);
-  border-left: 5px solid var(--honey);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+}
+
+.ms-trial legend {
+  float: left;
+  width: auto;
+  margin: 0;
+  font-size: inherit;
+  font-weight: 700;
+}
+
+/* ---------- the claim ---------- */
+
+/* The selector outweighs .markdown-page h2. */
+.varroa-slide .ms-title {
+  min-height: 92dvh;
+  margin: 0;
+  padding: 10dvh 0 0;
+  border: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.15;
+  text-align: center;
+  color: var(--ink);
+}
+
+.ms-lead {
+  display: block;
+  font-size: calc(var(--lead-big) * (1 - var(--shrink)) + var(--lead-small) * var(--shrink));
+}
+
+/* The second line drops down onto the mite, and rises back to the first
+   as the claim shrinks. */
+.ms-mite {
+  display: block;
+  margin-top: calc(12dvh * (1 - var(--shrink)));
+  font-size: calc(var(--mite-big) * (1 - var(--shrink)) + var(--mite-small) * var(--shrink));
+  line-height: 1.05;
+}
+
+/* ---------- the toll ---------- */
+
+.ms-toll {
+  max-width: 40rem;
+  margin: 0 auto 4rem;
+}
+
+.ms-toll p {
+  margin: 0;
+}
+
+.ms-when {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: clamp(1.1rem, 1.9vw, 1.7rem);
+  line-height: 1.2;
+  margin-bottom: 0.4rem;
+}
+
+/* The two numbers, the claim's face at one size, words and all. They count
+   up as the reader scrolls, so tabular figures where the face has them. */
+.varroa-slide .ms-count {
+  margin-top: 0.4rem;
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 4.6vw, 4.8rem);
+  line-height: 1.08;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+.ms-lost {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: clamp(1.15rem, 2.1vw, 1.9rem);
+  line-height: 1.15;
+}
+
+.varroa-slide .ms-lost {
+  margin-top: 0.6rem;
+  max-width: 22em;
+}
+
+/* The references, on wax paper so the small type reads over the mite. */
+.varroa-slide .ms-refs {
+  margin: 1.1rem 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.95;
+  color: var(--text);
+}
+
+.ms-refs > span {
+  background: var(--surface-muted);
+  padding: 0.2em 0.45em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* ---------- the chart ---------- */
+
+.ms-trend {
+  max-width: 44rem;
+  margin: 0 auto;
+}
+
+.varroa-slide .ms-figure-wrap {
+  margin: 0;
+}
+
+.ms-chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.ms-series--warming {
+  --series: var(--warming);
+}
+
+.ms-series--mites {
+  --series: var(--mite-red);
+}
+
+/* The chart follows the type trial: its type and rules take the treatment's
+   colour, and a boxed treatment puts the whole plot on its rectangle. */
+.ms-chart {
+  background: var(--ink-bg, transparent);
+}
+
+.ms-stage[data-ink^="on-"] .ms-chart,
+.ms-stage[data-ink="honey-on-black"] .ms-chart {
+  padding: 0.5rem 0.75rem;
+}
+
+.ms-chart text {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  fill: var(--ink-fg);
+}
+
+.ms-chart .ms-legend {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 16px;
+}
+
+/* On a phone the chart is drawn at little over half its own size, so its
+   type is set larger to land at a readable size. */
+@media (max-width: 36rem) {
+  .ms-chart text {
+    font-size: 20px;
+  }
+
+  .ms-chart .ms-legend {
+    font-size: 20px;
+  }
+}
+
+.ms-key {
+  stroke: var(--series);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.ms-grid {
+  stroke: var(--ink-fg);
+  stroke-opacity: 0.2;
+  stroke-width: 1;
+}
+
+.ms-axis {
+  stroke: var(--ink-fg);
+  stroke-width: 1.25;
+}
+
+/* The two value scales, each in its series' colour: the left is the
+   temperature's, the right the mites'. */
+.ms-scale {
+  stroke: var(--series);
+  stroke-width: 3;
+}
+
+/* The line is drawn a little heavier than a chart on paper would be, so it
+   holds up where it crosses the mite. The casing, the rectangle's colour
+   round the line, only shows in a boxed treatment. */
+.ms-casing,
+.ms-line {
+  fill: none;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.ms-casing {
+  stroke: var(--ink-bg, transparent);
+  stroke-width: 7;
+}
+
+.ms-line {
+  stroke: var(--series);
+  stroke-width: 3;
+}
+
+.ms-head circle {
+  fill: var(--series);
+  stroke: var(--ink-bg, transparent);
+  stroke-width: 2.5;
+}
+
+.ms-chart .ms-head text,
+.ms-chart .ms-now text {
+  font-weight: 700;
+}
+
+.ms-now line {
+  stroke: var(--ink-fg);
+  stroke-opacity: 0.5;
+  stroke-dasharray: 3 4;
+}
+
+/* ---------- the closing line ---------- */
+
+.varroa-slide .ms-verdict {
+  margin: 1.2rem 0 0;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: clamp(1.35rem, 2.5vw, 2.3rem);
+  line-height: 1.12;
+}
+
+/* The placeholder for the footage while it is hosted locally. */
+.ms-missing {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text);
+  background: var(--surface-muted);
   border-radius: var(--radius);
   padding: 0.5rem 1rem;
   margin: 1.5rem auto 0;
@@ -227,74 +395,100 @@
 /* ---------- the ride ---------- */
 
 @media (min-width: 48rem) and (min-height: 36rem) and (prefers-reduced-motion: no-preference) {
-  /* One window of travel: the stage pins at the top of the track and the
-     ride runs as the reader scrolls the second window's worth. */
-  .vs-track {
-    height: 200dvh;
+  /* Two windows of travel: the stage pins at the top of the track and plays
+     out over the rest. */
+  .ms-track {
+    height: 300dvh;
   }
 
-  .vs-stage {
+  .ms-stage {
     position: sticky;
     top: 0;
     height: 100dvh;
-    display: block;
     overflow: hidden;
+    padding: 0;
   }
 
-  /* The strip is two windows wide, footage then map, and slides one window
-     to the left over the ride. */
-  .vs-strip {
-    display: flex;
+  .ms-backdrop {
     position: absolute;
     inset: 0;
-    width: 200%;
-    transform: translateX(calc(-50% * var(--p)));
+    height: auto;
+    margin: 0;
   }
 
-  .vs-video,
-  .vs-map {
-    flex: none;
-    width: 50%;
-    height: 100%;
-    min-height: 0;
-  }
-
-  .vs-video {
-    grid-area: auto;
-  }
-
-  /* The map keeps the bar clear at its top and scrolls inside itself if the
-     window is shorter than the whole figure. */
-  .vs-map {
-    grid-area: auto;
-    overflow-y: auto;
-    padding: var(--vs-bar) 1rem 1rem;
-  }
-
-  /* The figure is exactly the panel under the bar, and its frame, the room
-     the map has, is the height the strip of controls leaves. Making the frame
-     a size container is what lets the map and its column size themselves to
-     that room with 100cqh (VarroaMap.css). */
-  .vs-map > .varroa-map--slide {
-    height: 100%;
-  }
-
-  .vs-map .vm-frame {
-    flex: 1 1 auto;
-    min-height: 0;
-    container-type: size;
-  }
-
-  /* From centred over the footage to a bar across the top. Position, size
-     and the ink behind it all follow --p. */
-  .vs-stats {
-    grid-area: auto;
+  /* From the top middle, large, to a running head across the top. */
+  .varroa-slide .ms-title {
     position: absolute;
-    left: 0;
-    right: 0;
-    top: calc(50% * (1 - var(--p)));
-    transform: translateY(calc(-50% * (1 - var(--p))));
-    padding: calc(3rem * (1 - var(--p)) + 0.75rem * var(--p)) 1rem;
-    background: rgb(0 0 0 / var(--p));
+    left: 4vw;
+    right: 4vw;
+    top: calc(9dvh * (1 - var(--shrink)) + 3dvh * var(--shrink));
+    min-height: 0;
+    padding: 0;
+  }
+
+  /* The toll, the right half under the running head. */
+  .ms-toll {
+    position: absolute;
+    left: 53vw;
+    right: 4vw;
+    top: 23dvh;
+    max-width: none;
+    margin: 0;
+    opacity: var(--toll);
+    transform: translateX(calc(3rem * (1 - var(--toll))));
+  }
+
+  /* The chart and the closing line, the left half, level with the toll. The
+     chart takes its natural height where the window allows and gives way to
+     the line where it does not. */
+  .ms-trend {
+    position: absolute;
+    left: 4vw;
+    width: 45vw;
+    top: 23dvh;
+    bottom: 4dvh;
+    max-width: none;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    opacity: var(--trend);
+    transform: translateX(calc(-3rem * (1 - var(--trend))));
+  }
+
+  .varroa-slide .ms-figure-wrap {
+    flex: 0 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ms-chart {
+    flex: 0 1 auto;
+    min-height: 0;
+  }
+
+  .varroa-slide .ms-verdict {
+    opacity: var(--verdict);
+    transform: translateY(calc(1.5rem * (1 - var(--verdict))));
+  }
+
+  .ms-trial {
+    position: absolute;
+    right: 1rem;
+    bottom: 1rem;
+    margin: 0;
+  }
+
+  /* A piece not yet in is out of the tab order too. */
+  .ms-stage [data-shown="false"] {
+    visibility: hidden;
+  }
+
+  .ms-missing {
+    position: absolute;
+    left: 50%;
+    bottom: 2rem;
+    transform: translateX(-50%);
+    margin: 0;
   }
 }

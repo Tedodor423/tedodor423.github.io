@@ -36,7 +36,8 @@ spin down.
 **Primer checklist before ordering anything.** Confirm promoter orientation, that
 the T7 promoter is followed by **GGG and not a single G**, and that adaptor parity
 holds across every member of a construct series. Each line of that checklist
-exists because of a documented failure; see [wet lab](/wet-lab).
+exists because of a documented failure; see
+[cycle 2.1](/engineering#cycle-2-1).
 
 ##### DNA purification
 
@@ -396,7 +397,7 @@ Full-length hairpin RNA accumulates predominantly **intact** in
 _S. cerevisiae_ (~2 ng per µg total yeast RNA), is degraded in _E. coli_ HT115,
 and is processed in _N. benthamiana_ (Zhong et al. 2019, _Genes_ 10:458)
 `[LIT]`. Yeast has no Dicer, so nothing in the cell recognises and cleaves the
-loop that [wet lab](/wet-lab) exists to build. **The chassis is chosen for the
+loop that the [construct design](/parts) exists to build. **The chassis is chosen for the
 absence of a machine, not the presence of one.**
 
 **2 · Fermentation at scale is a solved problem.** Industrial yeast
@@ -529,8 +530,30 @@ not alive, does not replicate, and is not released as an organism.
 
 **Formulated as what: the pollen patty.** Sugars, protein supplements such as
 yeasts, and binding agents, administered as a slab on top of the hive that worker and
-nurse bees feed on. The case for it, and the four properties of the route, are on
-[wet lab](/wet-lab#how-it-gets-into-the-hive).
+nurse bees feed on. Choosing yeast as the chassis means **the chassis and the
+delivery vehicle are the same object**, and the argument for that came from
+literature review plus discussion with **Prof. Geraldine Wright**, who has
+engineered yeast to deliver vital sterols in a pollen patty. Four advantages, in
+her and our terms:
+
+- Engineered yeast can be **heat-inactivated** and put into a supplement bees
+  readily feed on.
+- Yeast can be **significantly enriched in the patty without affecting
+  palatability**, which raises the dose administered.
+- **Heat-inactivated yeast is not considered a GMO** `[FLAG]`.
+- dsRNA fed to nurse bees, in sucrose, is **transferred to the mite via the
+  glandular secretions of nurse bees**, which is what the mite feeds on `[FLAG]`.
+
+The problem this addresses is a delivery problem. A key limitation of current
+_Varroa_ dsRNA therapeutics is that they deliver in a sucrose solution, **in which
+dsRNA has a very short half-life**. The cycle-by-cycle version is at
+[cycle 2.3](/engineering#cycle-2-3).
+
+> **TODO —** "Stability in sucrose vs stability in pollen patty." The comparison the
+> whole delivery argument rests on, flagged as owed in our own write-up with no data
+> attached. Until it exists the sucrose half-life is cited from the literature and
+> the patty side of it is **unmeasured**, so nothing on this wiki shows that the
+> patty is the better carrier. Owner: wet lab.
 
 > **TODO —** The patty protocol. Prof. Geraldine Wright recommended a formulation,
 > which we adjusted to maximise the dsRNA dose, and **neither the recommended
@@ -562,7 +585,7 @@ term is the design target the wet lab has to hit.
 
 ## Where this connects
 
-[Wet lab](/wet-lab) · [Wet lab lab book](/wet-lab-labbook) ·
+[Wet lab lab book](/wet-lab-labbook) ·
 [RNA design](/software) · [Parts](/parts) · [Measurement](/measurement) ·
 [Bee lab experiments and protocols](/bee-lab-experiments) ·
 [Results](/results) · [Engineering](/engineering) ·

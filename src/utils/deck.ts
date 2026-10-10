@@ -1,5 +1,6 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useState, type RefObject } from "react";
 import { REDUCED_MOTION, cancelGlide, glideTo } from "./glide";
+import { clamp01 } from "./useClock";
 
 /* Scrolling past full-screen pieces: the home page's slides and the
  * stakeholder map on the human practices page.
@@ -7,7 +8,8 @@ import { REDUCED_MOTION, cancelGlide, glideTo } from "./glide";
  * Each piece registers its rests: the scroll positions at which it reads
  * whole, in document coordinates. The hero has two (the top of the page and
  * the top of the body), slide two its top and bottom, slide three its top,
- * the end of its ride and its bottom, the map the screen above it, the map
+ * the end of its ride and its bottom, slide four its top, "The solution
+ * is", the answer and its bottom, the map the screen above it, the map
  * filling the screen, and the screen after it.
  *
  * Scrolling itself is never taken over: the wheel, touch, keyboard and
@@ -210,4 +212,76 @@ export function useDeckRests(source: Rests): void {
       if (sources.size === 0) listen(false);
     };
   }, [source]);
+}
+
+/* ---------- rides ---------- */
+
+/* A slide that plays out as the reader scrolls: its track is taller than
+ * the window, its stage pins to the top of the track, and every step reads
+ * off how far through the travel the reader is. Slide three and slide four
+ * of the home page are rides. */
+
+export type Span = [from: number, to: number];
+
+/** How far through `span` the ride is at `p`, 0 to 1. */
+export const within = (p: number, [from, to]: Span) => clamp01((p - from) / (to - from));
+
+/** The ride's ends, in document coordinates: the track's top, and its travel on. */
+function endsOf(track: HTMLElement): { a: number; b: number } {
+  const rect = track.getBoundingClientRect();
+  const a = rect.top + window.scrollY;
+  return { a, b: a + rect.height - window.innerHeight };
+}
+
+/**
+ * How far through the ride the window is, 0 to 1. Unpinned it is 0.
+ *
+ * Pinned, the ride also registers its rests: the track's top, each fraction
+ * of the travel in `stops`, and the window after the track. Pass a
+ * module-level array, so the rests stay stable between renders.
+ */
+export function useRide(
+  track: RefObject<HTMLElement | null>,
+  pinned: boolean,
+  stops: readonly number[],
+): number {
+  const [progress, setProgress] = useState(0);
+
+  const rests = useCallback(() => {
+    const element = track.current;
+    if (!pinned || !element) return [];
+    const { a, b } = endsOf(element);
+    return [a, ...stops.map((r) => a + (b - a) * r), b + window.innerHeight];
+  }, [track, pinned, stops]);
+  useDeckRests(rests);
+
+  useEffect(() => {
+    if (!pinned) {
+      setProgress(0);
+      return;
+    }
+    const element = track.current;
+    if (!element) return;
+
+    let frame = 0;
+    const measure = () => {
+      frame = 0;
+      const { a, b } = endsOf(element);
+      setProgress(b > a ? clamp01((window.scrollY - a) / (b - a)) : 0);
+    };
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(measure);
+    };
+
+    schedule();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    return () => {
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      cancelAnimationFrame(frame);
+    };
+  }, [track, pinned]);
+
+  return progress;
 }

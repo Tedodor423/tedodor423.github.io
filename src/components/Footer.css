@@ -1,0 +1,220 @@
+/* The footer: navy, opened by a honey rule as thick as the ink rule that closes
+ * the menu bar, so the page sits between the two. The wordmark returns in
+ * honey on the left; how to reach the team is on the right; the licence and
+ * repository lines iGEM requires sit under a hairline, small and muted. */
+
+.site-footer {
+  margin-top: 4rem;
+  padding: 3rem 0 1.5rem;
+  border-top: 0.5rem solid var(--honey);
+}
+
+.site-footer-top {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 2rem 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--text-on-dark-muted);
+}
+
+.site-footer-wordmark {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, 7vw, 4.5rem);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--honey);
+}
+
+.site-footer-team {
+  margin: 0.6rem 0 0;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--text-on-dark-muted);
+}
+
+/* <address> is the element for "how to reach whoever this page belongs to";
+ * browsers italicise it by default. */
+.site-footer-contact {
+  margin: 0;
+  font-style: normal;
+}
+
+/* Small, in honey, and in the heading face: it names the list rather than
+ * competing with the wordmark across from it. */
+.site-footer-heading {
+  margin: 0 0 0.6rem;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--honey);
+}
+
+/* Two columns shared by every row: the icon, then the name with its address
+ * running on from it. Each row is one link spanning both (a subgrid), so the
+ * whole row is the target, and the second column is as wide as the longest
+ * name and address together, so there is always room for one to come out. */
+.site-footer-contact ul {
+  display: grid;
+  grid-template-columns: auto auto;
+  /* Columns as wide as their content, however wide the list is; without
+   * this, spare width is shared out between them and the row spreads apart. */
+  justify-content: start;
+  column-gap: 0.7rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-footer-contact li {
+  display: contents;
+}
+
+.site-footer-contact-row {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  align-items: center;
+  padding: 0.3rem 0;
+  font-weight: 400;
+  color: white;
+  text-decoration: none;
+}
+
+.site-footer-contact-row:hover,
+.site-footer-contact-row:focus-visible {
+  color: var(--honey);
+  text-decoration: none;
+}
+
+.site-footer-contact-row:focus-visible {
+  outline: 2px solid var(--honey);
+  outline-offset: 2px;
+}
+
+.site-footer-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.site-footer-icon .is-filled {
+  fill: currentColor;
+  stroke: none;
+}
+
+/* White on a honey underline, the treatment the section links use on white. */
+.site-footer-contact-name {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1.05rem;
+  text-decoration: underline;
+  text-decoration-color: var(--honey);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.3em;
+}
+
+.site-footer-contact-text {
+  display: flex;
+  align-items: baseline;
+}
+
+/* The address comes out of the name. Its slot follows straight on from the
+ * last letter and is always in the layout, so nothing shifts; it clips
+ * whatever is left of its own edge. Inside it the address waits a full
+ * length to the left, tucked behind the name, and on hover or focus slides
+ * out to the right, so it is seen emerging from the word itself. Clipping
+ * hides it from the eye only: the link's accessible name is the channel and
+ * the address either way. */
+.site-footer-contact-address {
+  overflow: hidden;
+  padding-left: 0.6rem;
+  font-size: 0.9rem;
+  color: var(--text-on-dark-muted);
+}
+
+.site-footer-contact-address > span {
+  display: inline-block;
+  translate: calc(-100% - 0.6rem) 0;
+  transition: translate 380ms cubic-bezier(0.22, 0.8, 0.25, 1);
+}
+
+.site-footer-contact-row:hover .site-footer-contact-address > span,
+.site-footer-contact-row:focus-visible .site-footer-contact-address > span {
+  translate: 0 0;
+}
+
+/* No pointer to hover with, so the addresses simply show. */
+@media (hover: none) {
+  .site-footer-contact-address > span {
+    translate: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-footer-contact-address > span {
+    transition: none;
+  }
+}
+
+.site-footer-legal {
+  padding-top: 1.25rem;
+  color: var(--text-on-dark-muted);
+  line-height: 1.7;
+}
+
+.site-footer-legal p {
+  margin: 0;
+}
+
+/* Below a tablet's width the contact list, with its addresses' room
+ * reserved, no longer fits beside the wordmark, so it goes under it. */
+@media (max-width: 767.98px) {
+  .site-footer-top {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* On a phone each address goes under its name, since the email alone is
+ * wider than the screen leaves beside one. */
+@media (max-width: 575.98px) {
+  .site-footer {
+    padding-top: 2.25rem;
+  }
+
+  .site-footer-contact ul {
+    grid-template-columns: 1fr;
+  }
+
+  .site-footer-contact-row {
+    grid-template-columns: 1.25rem minmax(0, 1fr);
+    align-items: start;
+    column-gap: 0.7rem;
+    padding: 0.4rem 0;
+  }
+
+  /* Level with the name, not centred on the name and address together. */
+  .site-footer-icon {
+    margin-top: 0.1rem;
+  }
+
+  .site-footer-contact-text {
+    flex-wrap: wrap;
+    min-width: 0;
+  }
+
+  .site-footer-contact-address {
+    flex-basis: 100%;
+    padding: 0.2rem 0 0;
+    overflow-wrap: anywhere;
+  }
+}

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { findFlowerSpots, type FlowerSpot } from "../utils/flowerSpots";
-import { RESET_EVENT, beesAvailable } from "../utils/bees";
+import { BEE_FRAMES, RESET_EVENT, beesAvailable } from "../utils/bees";
 import "./BeeScene.css";
 
 /* Artwork, served from static.igem.wiki via the iGEM uploads tool. The source
@@ -10,7 +10,6 @@ import "./BeeScene.css";
  * <?xml> and <!DOCTYPE> lines stripped first or the uploader rejects them.
  */
 const ASSETS = "https://static.igem.wiki/teams/6391/wiki/assets/";
-const BEE_FRAMES = [`${ASSETS}bee1.svg`, `${ASSETS}bee2.svg`];
 const FLOWER_SRC = `${ASSETS}flower.svg`;
 const POLLEN_SRC = `${ASSETS}pollen.svg`;
 const HIVE_SRC = `${ASSETS}hive.svg`;
@@ -292,7 +291,9 @@ interface Flower {
  * the cursor, but each one answers it exactly as fast as a lone bee would.
  *
  * The hive goes faint while they are away, and the choice is remembered, so a
- * visitor who put the bees away is not overruled on the next visit.
+ * visitor who put the bees away is not overruled on the next visit. On the
+ * home page, a presentation, it goes altogether, by the team's choice: the
+ * faint hive on every other page is how the bees are brought back.
  *
  * Only the two buttons are interactive. Everything else is `aria-hidden`, never
  * takes a pointer event, and is not rendered at all for a coarse pointer (no
@@ -1043,7 +1044,13 @@ export function BeeScene() {
         <div className="bee-layer" ref={layerRef} aria-hidden="true" />
 
         <div
-          className={running ? "hive-cluster" : "hive-cluster is-off"}
+          className={
+            running
+              ? "hive-cluster"
+              : pathname === "/"
+                ? "hive-cluster is-off is-hidden"
+                : "hive-cluster is-off"
+          }
           ref={clusterRef}
         >
           <button

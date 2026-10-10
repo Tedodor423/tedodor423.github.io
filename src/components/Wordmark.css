@@ -1,0 +1,40 @@
+/* The drawn A in the wordmark, lined up on Cubao's own metrics (per 1000 em
+ * units, read from cubao-free-regular.otf):
+ *   cap height 629, the top of every capital, so the arches stop there;
+ *   letter A  advance 629, ink 589 wide.
+ * The drawn A is 975:1099, so at cap height it is 558 wide, narrower than
+ * Cubao's. Centred in Cubao's A it would leave a wider gap either side than
+ * the 76 between N-E-C-T, so it is set 16 in from the A's origin (76 from
+ * the T) and the transparent A gives back 49 so the R follows at 76 too.
+ *
+ * The svg comes before the transparent A and gives back all the room it
+ * takes (margins + width = 0), so the A's own advance and the letter-spacing
+ * after it still apply. Everything is in em, so it holds at the 2rem menu
+ * bar and the 14rem hero alike. */
+
+.wordmark {
+  white-space: nowrap;
+}
+
+.wordmark-a {
+  --cap: 0.629em;
+  --width: calc(var(--cap) * 975 / 1099);
+  display: inline;
+  height: var(--cap);
+  width: var(--width);
+  /* An inline svg's bottom edge sits on the baseline, where the legs belong. */
+  vertical-align: baseline;
+  margin-left: 0.016em;
+  margin-right: calc(-0.016em - var(--width));
+  overflow: visible;
+}
+
+/* Painted transparent with the fill, not with color: the svg above takes its
+ * colour from currentColor, and the link underline keeps its colour too.
+ * The 1px it starts early (and gives back on the right) overlaps its stretch
+ * of that underline with the T's, so the hover rule shows no seam. */
+.wordmark-a-text {
+  -webkit-text-fill-color: transparent;
+  margin-left: -1px;
+  margin-right: calc(1px - 0.049em);
+}

@@ -249,7 +249,7 @@ increments.
 silencing target in a bee or a mite, so any signal we recover isolates the
 **delivery-and-persistence** question from biological knockdown. Each fragment is
 flanked by our modular adapters (see
-[the random-up/down adaptor system](/wet-lab)) and the first three carry the
+[the random-up/down adaptor system](/engineering#cycle-2-1)) and the first three carry the
 Mango aptamer used to quantify haemolymph dsRNA (see
 [Measurement](/measurement)). The 500 bp no-Mango arm exists to resolve whether
 the aptamer itself changes uptake — so that any length effect we see is **not

@@ -19,7 +19,7 @@
  * WHAT IT SEARCHES
  *
  * Not whole pages. A page is split into passages at its headings, so a result
- * can say "Wet Lab, Assembly strategy" and link to `/wet-lab#assembly-strategy`
+ * can say "Parts, Characterisation" and link to `/parts#characterisation`
  * instead of dropping the reader at the top of four thousand words.
  *
  * Matching is substring, not whole-word: "titr" finds "titre" and "titration",

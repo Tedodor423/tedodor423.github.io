@@ -190,7 +190,8 @@ in week one. They feed directly into [Contribution](/contribution).
 
 ## Where this connects
 
-[Results](/results) · [Wet lab](/wet-lab) · [Bee lab](/bee-lab) ·
+[Results](/results) · [Experiments and protocols](/wet-lab-experiments) ·
+[Bee lab](/bee-lab) ·
 [Yeast](/wet-lab-experiments#yeast-production) · [Measurement](/measurement) · [Parts](/parts) ·
 [Dry lab and modelling](/model) · [RNA design](/software) ·
 [Human practices](/human-practices) · [Contribution](/contribution)

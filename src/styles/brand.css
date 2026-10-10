@@ -141,7 +141,12 @@
   --text-muted: #4a5a6b;
   --link: var(--violet);
 
-  --measure: 36rem;
+  /* The muted step for type on the navy footer, where --text-muted vanishes:
+   * 9.1:1 on --oxford-navy. Honey on navy is 10.6:1, so honey may be type
+   * there, unlike on white. */
+  --text-on-dark-muted: #b8c4d2;
+
+  --measure: 52rem;
 
   /* ---------- the colony-loss scale ---------- */
 
@@ -236,6 +241,20 @@
   --honey-kept-3: #c0812f; /* 50 to 75%  */
   --honey-kept-2: #874a1b; /* 25 to 50%  */
   --honey-kept-1: #4f240f; /* under 25%  */
+
+  /* ---------- the mite and the warming ---------- */
+
+  /* The home page's mite slide, which sits straight on the mite footage with
+   * no coat over it, so both have to read on its light grey ground.
+   *
+   * --mite-red is the mite: the word "Varroa" wherever the slide names it, and
+   * its line on the chart. --warming is the temperature line, the kit's violet
+   * lifted one step, because #6b2895 sits just under the lightness band a
+   * chart line needs. Checked as a pair with the dataviz validator against the
+   * footage's grey (#cfcfcd) and against wax: ΔE 24.1 normal vision, 20.2
+   * worst-case CVD, both over 3:1. */
+  --mite-red: #c1121f;
+  --warming: #7a32a6;
 
   /* One radius, used everywhere something is rounded at all. */
   --radius: 0.2rem;
@@ -778,7 +797,7 @@ pre {
  * the sticky bar stays a single row of top-level sections however deep the
  * tree goes. Aligned to the lead's measure so the page head reads as a block. */
 .section-links {
-  max-width: 44rem;
+  max-width: var(--measure);
   margin: 0 auto 2.25rem;
   padding-bottom: 1.1rem;
   border-bottom: 1px solid var(--rule);
@@ -860,7 +879,7 @@ pre {
   font-family: var(--font-heading);
   font-weight: 600;
   margin: 0.75rem 0 0;
-  max-width: 44rem;
+  max-width: var(--measure);
   color: var(--text-muted);
   font-size: 1.1rem;
 }
@@ -882,13 +901,13 @@ pre {
   }
 }
 
-/* The page is one centred column. The head shares the lead's 44rem measure and
- * sits on the same axis as the 36rem body, so the whole page hangs from one
- * centre line instead of the container's left edge. */
+/* The page is one centred column. The head and the body share --measure,
+ * so the whole page hangs from one column instead of the container's
+ * left edge. */
 .page-header .breadcrumbs,
 .page-header h1,
 .page-header .lead {
-  max-width: 44rem;
+  max-width: var(--measure);
   margin-inline: auto;
 }
 
@@ -1073,7 +1092,7 @@ pre {
 .search-correction {
   font-family: var(--font-heading);
   font-weight: 600;
-  max-width: 44rem;
+  max-width: var(--measure);
   margin: 0 auto 0.6rem;
   color: var(--ink);
 }
@@ -1090,14 +1109,14 @@ pre {
   font-family: var(--font-heading);
   font-weight: 600;
   color: var(--text-muted);
-  max-width: 44rem;
+  max-width: var(--measure);
   margin: 0 auto 2rem;
 }
 
 /* One page of results. The heading rule is the honey underline used for h2 in
  * the page body, so a result reads as the section it will take you to. */
 .search-result {
-  max-width: 44rem;
+  max-width: var(--measure);
   margin-inline: auto;
   margin-bottom: 2.5rem;
 }

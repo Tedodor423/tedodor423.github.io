@@ -5,6 +5,14 @@
  * this browser shows bees at all.
  */
 
+/** The bee's two wingbeat frames, from static.igem.wiki via the uploads tool;
+ *  sources in the gitignored wiki-assets-source/images_dev/. bee1.svg is
+ *  194 x 164, bee2.svg 194 x 171.33: same width, so they stack top-left. */
+export const BEE_FRAMES = [
+  "https://static.igem.wiki/teams/6391/wiki/assets/bee1.svg",
+  "https://static.igem.wiki/teams/6391/wiki/assets/bee2.svg",
+];
+
 /** Sent by the reset button on the bee lab page (components/BeeReset.tsx). */
 export const RESET_EVENT = "nectar:bees-reset";
 

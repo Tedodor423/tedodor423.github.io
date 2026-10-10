@@ -19,6 +19,7 @@ import { NectarConstruct } from "./NectarConstruct";
 import { NectarPipeline } from "./NectarPipeline";
 import { BeeImportance } from "./BeeImportance";
 import { VarroaSlide } from "./VarroaSlide";
+import { TreatmentsSlide } from "./TreatmentsSlide";
 import { SdgOverview } from "./SdgOverview";
 import { BeehaveEfficiency } from "./BeehaveEfficiency";
 import { BeehaveHeatmaps } from "./BeehaveHeatmaps";
@@ -52,6 +53,7 @@ const SLOTS: Record<string, () => ReactNode> = {
   "nectar-construct": () => <NectarConstruct />,
   "bee-importance": () => <BeeImportance />,
   "varroa-slide": () => <VarroaSlide />,
+  "treatments-slide": () => <TreatmentsSlide />,
   "sdg-overview": () => <SdgOverview />,
   "beehave-efficiency": () => <BeehaveEfficiency />,
   "beehave-heatmaps": () => <BeehaveHeatmaps />,

@@ -1,0 +1,377 @@
+/* Slide four of the home page: the treatments, and the answer.
+ *
+ * Wax paper, ink, and the brand's display face. Three colours do work here
+ * and nothing else does: violet is the arrow on a word that can be pointed
+ * at (violet is the wiki's link colour, so it reads as "this answers you"),
+ * honey is the block under the answer, and the bee brings its own. The
+ * evidence sits in the wiki's panel: solid surface, hard ink border, no
+ * shadow, as the menu's dropdowns do (brand.css).
+ *
+ * The bee's clip sits above the claim with no pointer events, so it never
+ * covers a letter or takes a hover or a tap from one.
+ *
+ * The ride is the scroll. TreatmentsSlide.tsx hands each step over as a
+ * variable from 0 to 1: --solution ("The solution is" coming in) and
+ * --answer ("RNA interference"), then, on into slide five, --leave
+ * (everything but the answer going) and --rise (the answer climbing to the
+ * top). Stacked the first two run on a clock and the last two stay at 0.
+ */
+
+.treatments-slide {
+  margin-inline: calc(50% - 50vw);
+}
+
+.page-band:has(> .container > .markdown-page > .treatments-slide) {
+  padding-block: 0;
+  overflow-x: clip;
+}
+
+/* ---------- the stage, stacked ---------- */
+
+.ts-stage {
+  --solution: 1;
+  --answer: 1;
+  --leave: 0;
+  --rise: 0;
+  /* The answer is the largest thing on the slide. */
+  --ts-big: clamp(2.5rem, 11.5vw, 7.4rem);
+  /* The claim is smaller, so that both charges fit on its second line. */
+  --ts-title: clamp(1.25rem, 6.9vw, 3.4rem);
+  /* The bee's frame, which keeps the clip's 16:9. */
+  --ts-bee: 76vw;
+
+  position: relative;
+  display: flow-root;
+  /* Room above the claim for the bee's whole frame. */
+  padding: calc(1rem + 0.5625 * var(--ts-bee)) 1rem 4rem;
+  color: var(--ink);
+  background: var(--surface-muted);
+  overflow: clip;
+}
+
+.ts-upper,
+.ts-solution,
+.ts-missing {
+  position: relative;
+}
+
+/* The bee, with no pointer events, so it is in the way of no hover or tap.
+   It wanders most of its frame over the clip (the left 70% of it, top to
+   bottom). Stacked, the whole frame sits above the claim at the right
+   edge, its empty right 30% run off the side. */
+.ts-bee {
+  position: absolute;
+  top: 0.5rem;
+  right: calc(1rem - 0.3 * var(--ts-bee));
+  z-index: 2;
+  width: var(--ts-bee);
+  aspect-ratio: 16 / 9;
+  pointer-events: none;
+}
+
+/* ---------- the claim ---------- */
+
+/* The selector outweighs .markdown-page h2. */
+.treatments-slide .ts-title {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--ts-title);
+  line-height: 0.98;
+  color: var(--ink);
+}
+
+.ts-line {
+  display: block;
+}
+
+/* "are ineffective and toxic" is one line, whatever the width: the title's
+   size is chosen so it fits. */
+.ts-line--charges {
+  white-space: nowrap;
+}
+
+/* "are" and "and" carry the sentence, not the charge: half size. */
+.ts-joint {
+  font-size: 0.5em;
+}
+
+/* The two charges. A plain word in the claim, followed by an arrow: down
+   while its evidence is shut, up while it is open. */
+.ts-charge {
+  display: inline;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  line-height: inherit;
+  color: inherit;
+  text-transform: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
+}
+
+.ts-charge:focus-visible {
+  outline: 3px solid var(--violet);
+  outline-offset: 0.06em;
+}
+
+/* A chevron drawn as heavy as Cubao's strokes, sitting at the middle of
+   the capitals. It turns over when the evidence opens, and that is its only
+   motion. */
+.ts-cue {
+  display: inline-block;
+  width: 0.42em;
+  height: 0.28em;
+  margin-left: 0.12em;
+  vertical-align: 0.22em;
+  overflow: visible;
+  fill: none;
+  stroke: var(--violet);
+  stroke-width: 2.6;
+  stroke-linecap: square;
+  transition: transform 200ms ease-out;
+}
+
+.ts-charge[data-open="true"] .ts-cue {
+  transform: rotate(180deg);
+}
+
+/* ---------- the evidence ---------- */
+
+.ts-evidence {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.ts-fact {
+  padding: 1rem 1.15rem 0.9rem;
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+}
+
+/* A charge not yet opened keeps its room, so opening one never moves the
+   rest, and the solution stays below the fold until the reader scrolls to
+   it. */
+.ts-fact[data-open="false"] {
+  visibility: hidden;
+}
+
+.ts-fact[data-open="true"] {
+  animation: ts-in 500ms ease-out both;
+}
+
+@keyframes ts-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+}
+
+.treatments-slide .ts-fact p {
+  margin: 0;
+}
+
+.treatments-slide .ts-claim {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: clamp(1.25rem, 1.85vw, 2.15rem);
+  line-height: 1.15;
+  max-width: 24em;
+}
+
+.ts-figure {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 2.3em;
+  line-height: 1;
+}
+
+.treatments-slide .ts-detail {
+  margin-top: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: clamp(0.95rem, 1vw, 1.1rem);
+  line-height: 1.45;
+  color: var(--text);
+  max-width: 38em;
+}
+
+.treatments-slide .ts-refs {
+  margin-top: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+/* ---------- the solution ---------- */
+
+.treatments-slide .ts-solution {
+  margin: 6rem 0 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1;
+  text-align: right;
+}
+
+.ts-so {
+  display: block;
+  font-size: calc(var(--ts-big) * 0.5);
+  opacity: var(--solution);
+  transform: translateY(calc(1.5rem * (1 - var(--solution))));
+}
+
+/* The answer on a honey block: the one thing on the slide to carry away. */
+.ts-answer {
+  display: inline-block;
+  margin-top: 0.15em;
+  padding: 0.06em 0.22em 0;
+  font-size: var(--ts-big);
+  background: var(--honey);
+  opacity: var(--answer);
+  transform: translateY(calc(1.5rem * (1 - var(--answer))));
+}
+
+/* The placeholder for the clip while it is hosted locally. */
+.ts-missing {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 0.5rem 1rem;
+  margin: 1.5rem 0 0;
+  max-width: 36rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ts-fact[data-open="true"] {
+    animation: none;
+  }
+
+  .ts-cue {
+    transition: none;
+  }
+}
+
+/* ---------- the ride ---------- */
+
+@media (min-width: 48rem) and (min-height: 36rem) and (prefers-reduced-motion: no-preference) {
+  /* Six windows of travel: the stage pins at the top of the track and plays
+     out over the rest, this slide in the first two, slide five
+     (RnaiChallenges.css) in the other four. */
+  .ts-track {
+    height: 700dvh;
+  }
+
+  .ts-stage {
+    --ts-big: min(6.2vw, 11.5dvh);
+    --ts-title: min(4.6vw, 8.5dvh);
+    --ts-bee: min(48vw, 85dvh);
+
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    overflow: hidden;
+    padding: 0;
+  }
+
+  /* The bee sits large at the claim's top right corner. The claim's second
+     line, arrow included, runs to about 12.85 of --ts-title, and the frame
+     starts just past it, so even at the far left of its wander (the end of
+     the clip) the bee stops short of "toxic" and its arrow. The frame runs
+     off the right edge, where the clip is empty. Its top stays under the
+     bee tally in the screen's corner (BeeScene, about 5.5rem deep). */
+  .ts-bee {
+    top: max(calc(9dvh - 0.08 * var(--ts-bee)), 6rem);
+    left: calc(6vw + 12.85 * var(--ts-title) + 0.02 * var(--ts-bee));
+  }
+
+  /* The claim, upper left, with its evidence straight under it. */
+  .ts-upper {
+    position: absolute;
+    left: 6vw;
+    right: 6vw;
+    top: 9dvh;
+  }
+
+  /* Two columns, each charge's evidence in its own box, kept left of
+     where "The solution is" comes in. */
+  .ts-evidence {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2vw;
+    max-width: 62vw;
+    margin-top: 3.5dvh;
+  }
+
+  .ts-fact {
+    padding: 2dvh 1.6vw 1.8dvh;
+  }
+
+  .treatments-slide .ts-claim {
+    font-size: min(1.85vw, 3.4dvh);
+  }
+
+  .treatments-slide .ts-detail {
+    font-size: max(0.9rem, min(1vw, 1.9dvh));
+  }
+
+  /* The solution, bottom middle right. Its two lines are placed on the
+     stage one by one, so the answer can rise on its own: with no padding
+     below and a line height of 1, the honey block is 1.06 of --ts-big tall,
+     and "The solution is" sits 0.15 of it above. */
+  .treatments-slide .ts-solution {
+    position: static;
+    margin: 0;
+  }
+
+  .ts-so {
+    position: absolute;
+    right: 6vw;
+    bottom: calc(7dvh + 1.21 * var(--ts-big));
+  }
+
+  /* On to slide five, the answer rises straight up to the top of the
+     screen. */
+  .ts-answer {
+    position: absolute;
+    right: 6vw;
+    top: calc(
+      (93dvh - 1.06 * var(--ts-big)) * (1 - var(--rise)) + 4dvh * var(--rise)
+    );
+    margin: 0;
+  }
+
+  /* Everything else on this slide leaves as it does. */
+  .ts-upper,
+  .ts-bee,
+  .ts-missing {
+    opacity: calc(1 - var(--leave));
+  }
+
+  .ts-so {
+    opacity: calc(var(--solution) * (1 - var(--leave)));
+  }
+
+  .ts-stage[data-gone] :is(.ts-upper, .ts-so, .ts-bee, .ts-missing) {
+    visibility: hidden;
+  }
+
+  .ts-stage [data-shown="false"] {
+    visibility: hidden;
+  }
+
+  .ts-missing {
+    position: absolute;
+    left: 6vw;
+    bottom: 2rem;
+    margin: 0;
+  }
+}

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
 import { REDUCED_MOTION, glideTo } from "../utils/glide";
 import { useDeckRests } from "../utils/deck";
+import { Wordmark } from "./Wordmark";
 import "./HomeHero.css";
 
 /* The home page opens on this and nothing else: the menu bar, the hive
@@ -85,8 +86,10 @@ export function HomeHero() {
       />
 
       <div className="home-hero-title">
-        <h1>Introducing: Project NECTAR</h1>
-        <p>RNA-based pesticides</p>
+        <h1>
+          <Wordmark />
+        </h1>
+        <p>Programmable Biopesticides</p>
       </div>
 
       <button

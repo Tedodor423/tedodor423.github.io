@@ -674,6 +674,6 @@ dilution, is 233× the wrong side of the point where dilution helps.
 
 ## Where this connects
 
-[Results](/results) · [Bee lab](/bee-lab) · [Wet lab](/wet-lab) ·
+[Results](/results) · [Bee lab](/bee-lab) ·
 [Experiments and lab book](/wet-lab-experiments) · [Parts](/parts) ·
 [Contribution](/contribution) · [Engineering](/engineering)

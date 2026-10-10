@@ -20,5 +20,5 @@ failures and their diagnoses on [Engineering](/engineering), the chronology on
 
 ## Where this connects
 
-[Wet lab](/wet-lab) · [Experiments and protocols](/wet-lab-experiments) ·
+[Experiments and protocols](/wet-lab-experiments) ·
 [Engineering](/engineering) · [Results](/results) · [Timeline](/timeline)

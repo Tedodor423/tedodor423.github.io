@@ -44,7 +44,7 @@ export const TRACKS: Track[] = [
     id: "wet",
     name: "Wet lab",
     blurb: "Making the molecule.",
-    page: "/wet-lab",
+    page: "/wet-lab-experiments",
   },
   {
     id: "bee",

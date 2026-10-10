@@ -167,8 +167,8 @@ of it we cannot defend on Australian preferences alone.
 - **Regional efficacy became a test, not an assumption.** Ford asked how
   efficacy varies with temperature across Australia; that is now part of the
   [bee lab](/bee-lab) and [ecological modelling](/ecological-modelling) plan.
-- **Honey is in scope.** Residue testing through processing sits in the [wet
-  lab](/wet-lab) because of this region.
+- **Honey is in scope.** Residue testing through processing sits in the
+  [wet lab's protocols](/wet-lab-experiments) because of this region.
 - **The model is Australian where it needs to be.** Ford supplied hive profiles
   from his beekeepers, and [economic modelling](/economic-modelling) runs
   Australia separately rather than converting US figures.

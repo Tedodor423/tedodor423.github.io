@@ -340,7 +340,8 @@ be able to.
 **Multigene concatenation** is part of the output rather than an abandoned idea.
 The pipeline picks one favourable region per target gene, and several are
 concatenated into a single construct so that one dsRNA molecule silences several
-genes. Which genes, and from which candidate pool, is on [wet lab](/wet-lab).
+genes. Which genes, and from which candidate pool, is at
+[cycle 1.1](/engineering#cycle-1-1).
 
 > **TODO —** Two of our own records conflict on concatenation, and a third set of
 > numbers has now joined them. An earlier calculation set the strategy aside and
@@ -426,5 +427,5 @@ tool versions so that it can be repeated rather than taken on trust.
 
 [Dry lab and modelling](/model) · [Description](/project-description) ·
 [Safety and security](/project-safety) · [Parts](/parts) ·
-[Wet lab](/wet-lab) · [Attributions](/attributions) ·
+[Experiments and protocols](/wet-lab-experiments) · [Attributions](/attributions) ·
 [Contribution](/contribution) · [Engineering](/engineering) · [Results](/results)

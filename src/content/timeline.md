@@ -204,7 +204,7 @@ review are counted here but not named.
 ## Where this connects
 
 [Engineering](/engineering) · [Results](/results) ·
-[Human practices](/human-practices) · [Wet lab](/wet-lab) ·
+[Human practices](/human-practices) ·
 [Bee lab](/bee-lab) · [Experiments and lab book](/wet-lab-experiments) ·
 [Bee lab notebook](/bee-lab-labbook) · [Contribution](/contribution) ·
 [Attributions](/attributions)

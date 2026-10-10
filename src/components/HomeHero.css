@@ -52,22 +52,28 @@
 }
 
 .home-hero-title h1 {
-  /* The wordmark's face, at masthead size: this is the loudest thing on the
-   * wiki and it is saying the project's name. Honey, per the header comment. */
+  /* The wordmark's face, as large as the screen allows: this is the loudest
+   * thing on the wiki and it is the project's name, one word. Sized on both
+   * axes of the hero (a size container), so a short wide window does not
+   * push it into the arrow. Honey, per the header comment. */
   font-family: var(--font-display);
-  font-size: clamp(2.5rem, 7vw, 5rem);
-  line-height: 1.05;
+  font-size: clamp(4rem, min(23cqw, 34cqh), 14rem);
+  line-height: 0.9;
   text-transform: uppercase;
   letter-spacing: 0.02em;
   margin: 0;
   color: var(--honey);
 }
 
+/* What the name is, in the same face: Cubao reads at a glance at this size
+ * where Basenji's semibold did not. */
 .home-hero-title p {
-  font-family: var(--font-heading);
-  font-weight: 600;
-  font-size: clamp(1.15rem, 2.2vw, 1.6rem);
-  margin: 0.75rem 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, min(5cqw, 7cqh), 3.25rem);
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin: 1rem 0 0;
   color: var(--honey);
 }
 

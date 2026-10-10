@@ -3,6 +3,8 @@ import { useEffect, useRef, useState, type FocusEvent } from "react";
 import Pages, { isGroup, type Group, type MenuEntry, type Page } from "../pages.ts";
 import { SearchField } from "./SearchField";
 import { useMedia } from "../utils/useMedia";
+import { Wordmark } from "./Wordmark";
+import { gliding } from "../utils/glide";
 
 /**
  * Below this width the bar no longer fits on one row, so it folds into a
@@ -42,6 +44,23 @@ function containsPath(page: Page, pathname: string): boolean {
   );
 }
 
+/** How long the menu may sit over a full-screen piece before it steps aside. */
+const FULLSCREEN_LINGER = 3000;
+
+/**
+ * True if a full-screen piece fills the window: an element marked
+ * `data-fullscreen` (the home page's slides, the stakeholder map) whose box
+ * runs from the top of the window to the bottom.
+ */
+function fullscreenInView(): boolean {
+  const vh = window.innerHeight;
+  for (const el of document.querySelectorAll("[data-fullscreen]")) {
+    const r = el.getBoundingClientRect();
+    if (r.top <= 1 && r.bottom >= vh - 1) return true;
+  }
+  return false;
+}
+
 /**
  * True while the menu should be hidden.
  *
@@ -50,15 +69,43 @@ function containsPath(page: Page, pathname: string): boolean {
  * the first scroll up — the nav is reachable from the middle of a page without
  * scrolling to the top. It never hides near the top of the document, and it
  * resets on navigation so a new page always opens with the menu visible.
+ *
+ * Over a full-screen piece the menu would cover the top of something built to
+ * fill the window, so there it only lingers: it goes FULLSCREEN_LINGER after
+ * it last came back, unless `held` (the pointer or focus is on it, or the
+ * compact menu is open), in which case the wait starts over once let go.
+ * And the page's own rides between slides (src/utils/glide.ts) never bring
+ * it back: a ride up onto a slide is not the reader reaching for the menu.
  */
-function useHideOnScrollDown(resetKey: string, revealAbove = 80) {
+function useHideOnScrollDown(resetKey: string, held: boolean, revealAbove = 80) {
   const [hidden, setHidden] = useState(false);
   const lastY = useRef(0);
+  const heldRef = useRef(held);
+  const hiddenRef = useRef(hidden);
+  heldRef.current = held;
+  hiddenRef.current = hidden;
+  const linger = useRef<number | undefined>(undefined);
+
+  /** (Re)start the wait, if the menu is showing over a full-screen piece. */
+  const armLinger = useRef(() => {
+    window.clearTimeout(linger.current);
+    linger.current = undefined;
+    if (hiddenRef.current || heldRef.current || !fullscreenInView()) return;
+    linger.current = window.setTimeout(() => {
+      linger.current = undefined;
+      if (!heldRef.current && fullscreenInView()) setHidden(true);
+    }, FULLSCREEN_LINGER);
+  }).current;
 
   useEffect(() => {
     setHidden(false);
     lastY.current = window.scrollY;
   }, [resetKey]);
+
+  // Letting go of the menu, or the menu coming back, starts the wait afresh.
+  useEffect(() => {
+    armLinger();
+  }, [held, hidden, armLinger]);
 
   useEffect(() => {
     lastY.current = window.scrollY;
@@ -76,9 +123,13 @@ function useHideOnScrollDown(resetKey: string, revealAbove = 80) {
         // Ignore sub-pixel jitter and elastic overscroll, which would
         // otherwise flap the menu open and shut.
         if (Math.abs(delta) < 4) return;
-
-        setHidden(delta > 0 && y > revealAbove);
         lastY.current = y;
+
+        if (delta < 0 && gliding()) return;
+        setHidden(delta > 0 && y > revealAbove);
+        // Each scroll up over a full-screen piece keeps the menu a while
+        // longer, so it does not drop away under a reader still going up.
+        if (delta < 0) armLinger();
       });
     };
 
@@ -86,8 +137,9 @@ function useHideOnScrollDown(resetKey: string, revealAbove = 80) {
     return () => {
       window.removeEventListener("scroll", onScroll);
       if (frame) cancelAnimationFrame(frame);
+      window.clearTimeout(linger.current);
     };
-  }, [revealAbove]);
+  }, [revealAbove, armLinger]);
 
   return hidden;
 }
@@ -101,9 +153,17 @@ export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(
     () => pathname === "/search" && window.matchMedia(COMPACT_MEDIA).matches,
   );
+  // The pointer resting on the bar, or keyboard focus inside it, keeps it from
+  // stepping aside over a full-screen piece. Keyboard focus only: a link
+  // clicked with the mouse keeps focus after the page changes, and would hold
+  // the bar for good.
+  const [pointerIn, setPointerIn] = useState(false);
+  const [focusIn, setFocusIn] = useState(false);
   // An open menu holds the bar in place: it would be odd for the list you are
   // reading to slide away because the page under it moved.
-  const hidden = useHideOnScrollDown(pathname) && !menuOpen;
+  const hidden =
+    useHideOnScrollDown(pathname, pointerIn || focusIn || menuOpen) &&
+    !menuOpen;
   const [openGroup, setOpenGroup] = useState<string | null>(null);
   const navRef = useRef<HTMLElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
@@ -170,6 +230,14 @@ export function Navbar() {
       ref={navRef}
       className={`site-nav${hidden ? " is-hidden" : ""}${menuOpen ? " is-open" : ""}`}
       aria-label="Main"
+      onPointerEnter={() => setPointerIn(true)}
+      onPointerLeave={() => setPointerIn(false)}
+      onFocus={(event) => setFocusIn(event.target.matches(":focus-visible"))}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+          setFocusIn(false);
+        }
+      }}
     >
       <div className="site-nav-bar">
         <Link
@@ -179,7 +247,7 @@ export function Navbar() {
           aria-current={pathname === "/" ? "page" : undefined}
           onClick={closeMenu}
         >
-          NECTAR
+          <Wordmark />
         </Link>
 
         {/* Only drawn below the breakpoint (brand.css). Words rather than

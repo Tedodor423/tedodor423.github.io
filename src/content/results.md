@@ -577,6 +577,7 @@ Three BEEHAVE cycles have now run, and their headline outputs are:
 ## Where this connects
 
 [Engineering](/engineering) · [Measurement](/measurement) ·
-[Wet lab](/wet-lab) · [Bee lab](/bee-lab) · [Yeast](/wet-lab-experiments#yeast-production) ·
+[Experiments and protocols](/wet-lab-experiments) · [Bee lab](/bee-lab) ·
+[Yeast](/wet-lab-experiments#yeast-production) ·
 [Dry lab and modelling](/model) · [Parts](/parts) ·
 [Contribution](/contribution) · [Timeline](/timeline)
