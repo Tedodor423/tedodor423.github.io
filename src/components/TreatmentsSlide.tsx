@@ -4,17 +4,10 @@ import {
   useRef,
   useState,
   type CSSProperties,
+  type ReactNode,
   type RefObject,
 } from "react";
-import { useLocation } from "react-router-dom";
 import { headingId } from "../utils/headingId";
-import {
-  DECK_ANCHORS,
-  TREATMENTS,
-  treatmentsTitle,
-  type Charge,
-} from "../data/homeDeck";
-import { Marked, Runs } from "./Marked";
 import { useClock } from "../utils/useClock";
 import { REDUCED_MOTION } from "../utils/glide";
 import { useMedia } from "../utils/useMedia";
@@ -73,11 +66,15 @@ import "./TreatmentsSlide.css";
  * its first frame and everything stands at its end.
  */
 
-/* The words, the numbers and their sources are TREATMENTS in
- * src/data/homeDeck.ts, where the search index reads them too. */
+const TITLE = "Existing treatments are ineffective and toxic";
 const VIDEO = `${import.meta.env.BASE_URL}local/bee_with_mite_stacked.mp4`;
 /** The clip's own pace is a scurry; a third of it is a crawl. */
 const PACE = 1 / 3;
+
+const LAMAS_2025 = "https://doi.org/10.1101/2025.05.28.656706";
+const ARS_2025 =
+  "https://www.ars.usda.gov/news-events/news/research-news/2025/usda-researchers-find-viruses-from-miticide-resistant-parasitic-mites-are-cause-of-recent-honey-bee-colony-collapses/";
+const TANG_2021 = "https://doi.org/10.1038/s41561-021-00712-5";
 
 /* Where each step of the ride sits, counted in windows of scroll from the
  * top of the track. The ride is TRAVEL windows long: two for this slide,
@@ -103,27 +100,48 @@ const VIVO = span(5.55, 5.85);
  *  ride's end). */
 const RESTS = [0.8, 2, 4, 4.5, 5, 5.45, 6].map(at);
 
-const CHARGES = TREATMENTS.charges;
+type Charge = "ineffective" | "toxic";
+
+const EVIDENCE: Record<
+  Charge,
+  { figure: string; claim: string; detail?: string; source: ReactNode }
+> = {
+  ineffective: {
+    figure: "100%",
+    claim: "of screened Varroa mites carry a resistance mutation.",
+    detail:
+      "Every mite USDA scientists screened from US commercial operations hit by the 2025 collapses carried the mutation that lets it survive amitraz, a miticide used widely by beekeepers.",
+    source: (
+      <>
+        <a href={LAMAS_2025} target="_blank" rel="noreferrer">
+          Lamas et al., bioRxiv, 2025
+        </a>
+        , 39 mites from five operations, preprint;{" "}
+        <a href={ARS_2025} target="_blank" rel="noreferrer">
+          USDA ARS, June 2025
+        </a>{" "}
+        <code>[LIT]</code>
+      </>
+    ),
+  },
+  toxic: {
+    figure: "64%",
+    claim:
+      "of the world's farmland is already at risk of pollution from more than one pesticide.",
+    source: (
+      <>
+        <a href={TANG_2021} target="_blank" rel="noreferrer">
+          Tang et al., Nature Geoscience, 2021
+        </a>
+        , 92 pesticides mapped across 168 countries <code>[LIT]</code>
+      </>
+    ),
+  },
+};
+
+const CHARGES = Object.keys(EVIDENCE) as Charge[];
 const NONE_OPEN: Record<Charge, boolean> = { ineffective: false, toxic: false };
 const ALL_OPEN: Record<Charge, boolean> = { ineffective: true, toxic: true };
-
-/** The charge whose evidence a fragment names (DECK_ANCHORS.evidence), if any. */
-const chargeOf = (hash: string): Charge | null =>
-  CHARGES.find((charge) => hash === `#${DECK_ANCHORS.evidence(charge)}`) ??
-  null;
-
-/* Where a search result lands. Stacked, the evidence box itself carries its
- * anchor. Pinned, the box is inside a stage that pins to the top of the
- * track and plays out over six windows of travel, so an anchor on the box
- * would land part way into the ride; instead a zero-sized marker in the
- * track carries it, at the ride's start for the evidence (the claim and its
- * evidence are what the ride opens on) and at the rest where the barriers
- * are drawn for the challenges (RESTS). The box then takes a different id,
- * so the charge's aria-controls still has something to point at. */
-const factId = (charge: Charge, pinned: boolean) =>
-  pinned ? `ts-fact-${charge}` : DECK_ANCHORS.evidence(charge);
-/** Windows of travel from the top of the track to the challenges' landing. */
-const CHALLENGES_LANDING = 4;
 
 /** The bee: runs at PACE, only while the slide is on screen and `active`. */
 function useCrawl(stage: RefObject<HTMLElement | null>, active: boolean) {
@@ -167,13 +185,10 @@ const HOVER_GRACE = 400;
  *  evidence will go: down while it is shut, up once it is open. */
 function ChargeWord({
   charge,
-  controls,
   open,
   onSet,
 }: {
   charge: Charge;
-  /** The id of the evidence box this word opens. */
-  controls: string;
   open: boolean;
   onSet: (charge: Charge, open: boolean) => void;
 }) {
@@ -183,7 +198,7 @@ function ChargeWord({
       type="button"
       className="ts-charge"
       aria-expanded={open}
-      aria-controls={controls}
+      aria-controls={`ts-evidence-${charge}`}
       data-open={open}
       onPointerEnter={(e) => {
         if (e.pointerType !== "mouse" || open) return;
@@ -195,7 +210,7 @@ function ChargeWord({
         onSet(charge, !open);
       }}
     >
-      <Marked text={charge} />
+      {charge}
       <svg className="ts-cue" viewBox="0 0 12 8" aria-hidden="true">
         <path d="M1.4 1.4 6 6 10.6 1.4" />
       </svg>
@@ -213,18 +228,7 @@ export function TreatmentsSlide() {
   const arrived = useClock(solution, 1600, 200);
   const [missing, setMissing] = useState(false);
   const lose = useCallback(() => setMissing(true), []);
-  // A search result for a charge's evidence carries its anchor in the
-  // fragment, and the evidence opens with the page, so the reader lands on
-  // it open rather than on a word to hover. Read during the first render,
-  // so it is never shut for a frame first.
-  const { hash } = useLocation();
-  const named = chargeOf(hash);
-  const [open, setOpen] = useState(() =>
-    named ? { ...NONE_OPEN, [named]: true } : NONE_OPEN,
-  );
-  useEffect(() => {
-    if (named) setOpen((current) => ({ ...current, [named]: true }));
-  }, [named]);
+  const [open, setOpen] = useState(NONE_OPEN);
 
   // Stacked, slide five simply follows: nothing leaves, nothing rises, and
   // all of it stands at its end.
@@ -261,39 +265,16 @@ export function TreatmentsSlide() {
   const setCharge = (charge: Charge, shown: boolean) =>
     setOpen((current) => ({ ...current, [charge]: shown }));
 
-  const id = headingId(treatmentsTitle());
+  const id = headingId(TITLE);
 
-  // <Marked> and <Runs> put a honey background on the words a reader
-  // searched for; the section's id is where a result for the claim lands.
   return (
-    <section
-      className="treatments-slide"
-      id={DECK_ANCHORS.treatments}
-      aria-labelledby={id}
-    >
+    <section className="treatments-slide" aria-labelledby={id}>
       <div
         className="ts-track"
         ref={track}
         // Pinned, the ride fills the screen: the menu steps aside (Navbar.tsx).
         data-fullscreen={pinned || undefined}
       >
-        {/* The landing markers: see factId. */}
-        {pinned && (
-          <>
-            {CHARGES.map((charge) => (
-              <span
-                key={charge}
-                id={DECK_ANCHORS.evidence(charge)}
-                className="ride-landing"
-              />
-            ))}
-            <span
-              id={DECK_ANCHORS.challenges}
-              className="ride-landing"
-              style={{ top: `${CHALLENGES_LANDING * 100}dvh` }}
-            />
-          </>
-        )}
         <div
           className="ts-stage"
           ref={stage}
@@ -302,55 +283,31 @@ export function TreatmentsSlide() {
         >
           <div className="ts-upper">
             <h2 className="ts-title" id={id}>
-              <span className="ts-line">
-                <Marked text={TREATMENTS.lead} />
-              </span>{" "}
+              <span className="ts-line">Existing treatments</span>{" "}
               <span className="ts-line ts-line--charges">
-                <span className="ts-joint">
-                  <Marked text={TREATMENTS.are} />
-                </span>{" "}
-                <ChargeWord
-                  charge="ineffective"
-                  controls={factId("ineffective", pinned)}
-                  open={open.ineffective}
-                  onSet={setCharge}
-                />{" "}
-                <span className="ts-joint">
-                  <Marked text={TREATMENTS.and} />
-                </span>{" "}
-                <ChargeWord
-                  charge="toxic"
-                  controls={factId("toxic", pinned)}
-                  open={open.toxic}
-                  onSet={setCharge}
-                />
+                <span className="ts-joint">are</span>{" "}
+                <ChargeWord charge="ineffective" open={open.ineffective} onSet={setCharge} />{" "}
+                <span className="ts-joint">and</span>{" "}
+                <ChargeWord charge="toxic" open={open.toxic} onSet={setCharge} />
               </span>
             </h2>
 
             <div className="ts-evidence" aria-live="polite">
               {CHARGES.map((charge) => {
-                const { figure, claim, detail, source } =
-                  TREATMENTS.evidence[charge];
+                const { figure, claim, detail, source } = EVIDENCE[charge];
                 return (
                   <div
                     key={charge}
-                    id={factId(charge, pinned)}
+                    id={`ts-evidence-${charge}`}
                     className={`ts-fact ts-fact--${charge}`}
                     data-open={open[charge]}
                   >
                     <p className="ts-claim">
-                      <span className="ts-figure">{figure}</span>{" "}
-                      <Marked text={claim} />
+                      <span className="ts-figure">{figure}</span> {claim}
                     </p>
-                    {detail && (
-                      <p className="ts-detail">
-                        <Marked text={detail} />
-                      </p>
-                    )}
+                    {detail && <p className="ts-detail">{detail}</p>}
                     <p className="ts-refs">
-                      <span>
-                        <Runs runs={source} />
-                      </span>
+                      <span>{source}</span>
                     </p>
                   </div>
                 );
@@ -363,11 +320,9 @@ export function TreatmentsSlide() {
             ref={solution}
             data-shown={steps.solution > 0}
           >
-            <span className="ts-so">
-              <Marked text={TREATMENTS.solution} />
-            </span>{" "}
+            <span className="ts-so">The solution is</span>{" "}
             <span className="ts-answer" data-shown={steps.answer > 0}>
-              <Marked text={TREATMENTS.answer} />
+              RNA interference
             </span>
           </p>
 
