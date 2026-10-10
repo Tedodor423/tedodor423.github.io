@@ -7,24 +7,28 @@ import "./AlphaClip.css";
  * Safari, and so every browser on iOS, plays the same file and paints the
  * transparent part black. HEVC with alpha would suit Safari alone and can
  * only be encoded on a Mac. So the clip is "stacked": an ordinary H.264 MP4
- * twice the frame's height, the colour premultiplied onto black in the top
- * half and the alpha as grey in the bottom half, and a WebGL canvas puts
- * the two back together, frame by frame. Made from a VP9-alpha source with
+ * twice the frame's width, the colour premultiplied onto black in the left
+ * half and the alpha as grey in the right half, and a WebGL canvas puts the
+ * two back together, frame by frame. Made from a VP9-alpha source with
  *
- *   ffmpeg -c:v libvpx-vp9 -i in.webm -filter_complex "[0:v]scale=1600:900,
- *     format=rgba,split[c][a];[c]premultiply=inplace=1,format=yuv420p[co];
+ *   ffmpeg -c:v libvpx-vp9 -i in.webm -filter_complex "[0:v]format=rgba,
+ *     split[c][a];[c]premultiply=inplace=1,format=yuv420p[co];
  *     [a]format=rgba,alphaextract,format=gray,format=yuv420p[al];
- *     [co][al]vstack,format=yuv420p" -c:v libx264 -preset slow -crf 21
- *     -movflags +faststart -an out.mp4
+ *     [co][al]hstack,format=yuv420p" -c:v libx264 -preset slow -crf 20
+ *     -level 5.1 -movflags +faststart -an out.mp4
  *
  * (libvpx-vp9 as the decoder: FFmpeg's own VP9 decoder drops the alpha).
+ * Side by side rather than one above the other for the iGEM Video Universe,
+ * which re-encodes to fixed heights (240, 480, 1080, 2160) no larger than
+ * the upload's shorter side: 3840x1080 comes back with each half a full
+ * 1920x1080, where 1920x2160 would come back 1080 wide.
  *
  * The video element is the clock: the caller plays, pauses and paces it
  * through `video`, and the canvas follows whatever frame it shows. It stays
  * laid out under the canvas at full size, only see-through, because WebKit
  * may pause a muted video it judges hidden. A file on another origin needs
- * CORS for WebGL to read it; static.igem.wiki sends
- * Access-Control-Allow-Origin: *. Without WebGL the clip counts as failed,
+ * CORS for WebGL to read it; static.igem.wiki and the Video Universe's
+ * files on static.igem.org both send Access-Control-Allow-Origin: *. Without WebGL the clip counts as failed,
  * as a missing file does. */
 
 const VERTEX = `
@@ -40,8 +44,8 @@ precision mediump float;
 uniform sampler2D frame;
 varying vec2 uv;
 void main() {
-  vec3 colour = texture2D(frame, vec2(uv.x, uv.y * 0.5)).rgb;
-  float alpha = texture2D(frame, vec2(uv.x, 0.5 + uv.y * 0.5)).r;
+  vec3 colour = texture2D(frame, vec2(uv.x * 0.5, uv.y)).rgb;
+  float alpha = texture2D(frame, vec2(0.5 + uv.x * 0.5, uv.y)).r;
   // Compression can lift the colour above its alpha at the edges, which in
   // premultiplied terms is a glow; hold it to the alpha.
   gl_FragColor = vec4(min(colour, vec3(alpha)), alpha);
@@ -90,8 +94,8 @@ function painter(canvas: HTMLCanvasElement, video: HTMLVideoElement) {
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 
   return () => {
-    const width = video.videoWidth;
-    const height = video.videoHeight / 2;
+    const width = video.videoWidth / 2;
+    const height = video.videoHeight;
     if (!width || !height) return;
     if (canvas.width !== width || canvas.height !== height) {
       canvas.width = width;
@@ -109,7 +113,7 @@ export function AlphaClip({
   video,
   onError,
 }: {
-  /** The stacked MP4. */
+  /** The stacked MP4, colour left and alpha right. */
   src: string;
   /** Placed on the frame that holds the canvas; it sets size and place. */
   className?: string;

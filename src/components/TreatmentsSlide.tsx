@@ -41,7 +41,7 @@ import "./TreatmentsSlide.css";
  * TEMPORARY HOSTING, as for slide three. The clip is served from
  * public/local/, which is gitignored: bee_with_mite_stacked.mp4, made from
  * bee_with_mite_trans.webm (VP9 with an alpha channel, 1920x1080, 22 s at
- * 60 fps, 17 MB) as a stacked-alpha H.264 at 1600x900, 12 MB, because Safari
+ * 60 fps, 17 MB) as a stacked-alpha H.264, 3840x1080, 16 MB, because Safari
  * draws no VP9 alpha (AlphaClip.tsx). It needs its alpha to sit on the
  * page, and the Video Universe player is an iframe that cannot give it one:
  * home.md's TODO carries where it goes instead. Anywhere the file is absent
