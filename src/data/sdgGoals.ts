@@ -12,7 +12,16 @@
  * the uploads tool keeps the basename and converts to .avif, so the URL is
  * knowable before the upload. Until then the published page shows a
  * silhouette in place of a face and no tile.
+ *
+ * TEMPORARY FALLBACK, as for the stakeholder photos. A published build that
+ * cannot load the static.igem.wiki image tries the original in the
+ * gitignored public/local/sdg/, which the GitHub Pages preview fills from
+ * wiki-assets-source/images_dev/sdg/ and the wiki's own CI never has. Once
+ * the static.igem.wiki URLs answer, drop sdgLocal and useSdgImage's second
+ * try.
  */
+
+import { useState } from "react";
 
 const PUBLISHED = "https://static.igem.wiki/teams/6391/wiki/assets/sdg/";
 
@@ -20,6 +29,25 @@ export function sdgImage(basename: string): string {
   return import.meta.env.DEV
     ? `${import.meta.env.BASE_URL}images-dev/sdg/${basename}.png`
     : `${PUBLISHED}${basename}.avif`;
+}
+
+function sdgLocal(basename: string): string | null {
+  if (import.meta.env.DEV) return null;
+  return `${import.meta.env.BASE_URL}local/sdg/${basename}.png`;
+}
+
+/** The image's current source, the handler for its onError, and whether
+ *  every source has failed. */
+export function useSdgImage(basename: string) {
+  const [misses, setMisses] = useState(0);
+  const sources = [sdgImage(basename), sdgLocal(basename)].filter(
+    (s): s is string => s !== null,
+  );
+  return {
+    src: sources[misses],
+    failed: misses >= sources.length,
+    onError: () => setMisses((m) => m + 1),
+  };
 }
 
 export interface SdgStakeholder {

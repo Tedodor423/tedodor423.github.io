@@ -1,6 +1,6 @@
 import "./SdgPage.css";
-import { useMemo, useState } from "react";
-import { SDG_GOALS, sdgImage, type SdgStakeholder } from "../data/sdgGoals";
+import { useMemo } from "react";
+import { SDG_GOALS, useSdgImage, type SdgStakeholder } from "../data/sdgGoals";
 import { headingId } from "../utils/headingId";
 import { MarksContext } from "../utils/marksContext";
 import { splitAt } from "../utils/markdownSections";
@@ -99,20 +99,20 @@ function Silhouette() {
 }
 
 function Face({ who }: { who?: SdgStakeholder }) {
-  const [failed, setFailed] = useState(false);
+  const { src, failed, onError } = useSdgImage(who?.photo ?? "");
   return (
     <span className="sdg-face">
       <span className="sdg-face-inner">
         {who?.photo && !failed ? (
           <img
-            src={sdgImage(who.photo)}
+            src={src}
             alt={who.name}
             style={{
               objectPosition: who.focus,
               transform: who.zoom ? `scale(${who.zoom})` : undefined,
               transformOrigin: who.focus,
             }}
-            onError={() => setFailed(true)}
+            onError={onError}
           />
         ) : (
           <>
@@ -126,7 +126,7 @@ function Face({ who }: { who?: SdgStakeholder }) {
 }
 
 function Tile({ number }: { number: number }) {
-  const [failed, setFailed] = useState(false);
+  const { src, failed, onError } = useSdgImage(SDG_GOALS[number].tile);
   if (failed) {
     return (
       <span className="sdg-tile sdg-tile--text" aria-hidden>
@@ -138,9 +138,9 @@ function Tile({ number }: { number: number }) {
   return (
     <img
       className="sdg-tile"
-      src={sdgImage(SDG_GOALS[number].tile)}
+      src={src}
       alt=""
-      onError={() => setFailed(true)}
+      onError={onError}
     />
   );
 }
