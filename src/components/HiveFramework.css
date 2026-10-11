@@ -1,0 +1,360 @@
+/* The HIVE framework: the hive on the page, the note under it and the
+ * window they open.
+ *
+ * Same tokens as everything else: honey letter cells on ink strokes on the
+ * corners of the bee scene's hive drawing, violet for the cell you are
+ * pointing at, the wiki's panel (solid surface, hard ink border, no shadow)
+ * and violet for the control that opens it, as every opener on the wiki.
+ */
+
+/* The window: most of the screen, its height the text's own up to the
+ * screen's, scrolling inside past that. */
+.hf-dialog {
+  width: min(72rem, calc(100vw - 2rem));
+  max-width: none;
+  max-height: calc(100dvh - 2rem);
+  padding: 0;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--surface-muted);
+  color: var(--text);
+  /* On screen it is in the top layer, but in the DOM it sits beside its
+   * button, inside a line of display copy, and would inherit that line's
+   * face and size. The page's body type, restated. */
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 400;
+  overscroll-behavior: contain;
+}
+
+/* It takes focus when it opens (HiveFramework.tsx); its ink border already
+ * marks it, so no ring on top. */
+.hf-dialog:focus {
+  outline: none;
+}
+
+/* While the hive flies in or out (HiveFramework.tsx), it overhangs the
+ * window, so the window stops clipping for those few hundred ms. The words
+ * are faded out then, so nothing else shows past the edge. */
+.hf-dialog[data-flying] {
+  overflow: visible;
+}
+
+/* The page dims behind it, in Oxford navy. A literal colour: older engines
+ * do not pass custom properties down to ::backdrop. No blur. */
+.hf-dialog::backdrop {
+  background: rgb(0 33 71 / 0.6);
+}
+
+/* The page under an open window does not scroll; the gutter stays, so
+ * nothing shifts sideways when the scrollbar goes. */
+html:has(.hf-dialog[open]) {
+  overflow: hidden;
+  scrollbar-gutter: stable;
+}
+
+/* Fills the dialog, so a click on the dialog element itself is a click on
+ * the backdrop (HiveFramework.tsx). */
+.hf-framework {
+  position: relative;
+  padding: 1.5rem 1.75rem 1.75rem;
+  line-height: 1.75;
+}
+
+/* The hive heads the window, the heading and lead beside it, clear of the
+ * cross. */
+.hf-head {
+  display: grid;
+  grid-template-columns: 13rem minmax(0, 1fr);
+  gap: 0.75rem 2rem;
+  align-items: center;
+  margin: 0 3rem 1.5rem 0;
+}
+
+.hf-mini {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  /* The flight scales it from its top left corner (over() in
+   * HiveFramework.tsx). */
+  transform-origin: 0 0;
+}
+
+/* ---------- the hive, on the page and in the window ---------- */
+
+/* The hive with its note under it. No panel behind it: it sits straight
+ * on the page. The whole hive opens the window, so the whole of it points. */
+.hf-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hf-page-hive {
+  align-self: stretch;
+  cursor: pointer;
+}
+
+/* "Click to see the explanation", written under the hive like a note
+ * scribbled beside the drawing: heading face, tipped a few degrees, with a
+ * hand-drawn violet arrow that loops once and ends pointing up at the hive.
+ * Violet is the wiki's colour for something that opens. Static. Tucked up
+ * under the hive's own margin. Pointing anywhere at the hive turns the note
+ * violet too, since the whole hive opens the same window. */
+.hf-more {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.15rem;
+  margin: -1.5rem auto 0;
+  padding: 0.25rem 0.5rem 0.35rem;
+  border: 0;
+  border-radius: var(--radius);
+  background: none;
+  color: var(--ink);
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.2;
+  transform: rotate(-4deg);
+  cursor: pointer;
+}
+
+.hf-more:hover,
+.hf-page-hive:hover + .hf-more {
+  color: var(--violet);
+}
+
+.hf-more:focus-visible {
+  outline: 3px solid var(--violet);
+  outline-offset: 2px;
+}
+
+.hf-more-arrow {
+  flex: none;
+  width: 6.5rem;
+  height: 5.15rem;
+  overflow: visible;
+}
+
+.hf-more-arrow path {
+  fill: none;
+  stroke: var(--violet);
+  stroke-width: 3.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* On one line, as a note would be, even where it runs a little wider than
+ * the hive above it. */
+.hf-more-label {
+  padding-bottom: 0.2rem;
+  white-space: nowrap;
+}
+
+.hf-page-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* The lit cells overhang the drawing; let them. */
+  overflow: visible;
+}
+
+/* While the window is open its hive is this one, flown up into it, so the
+ * page's copy is not there to be seen twice. The window sits beside it in
+ * the DOM (HpIntro places both in one list item). */
+:has(> .hf-dialog[open]) .hf-page-svg {
+  visibility: hidden;
+}
+
+.hf-hive {
+  pointer-events: none;
+}
+
+.hf-hex {
+  fill: var(--honey);
+  stroke: var(--ink);
+  stroke-width: 2;
+  /* The lit cell grows enough to hold its whole word. Scaled about its own
+   * centre, so each corner swells in place. */
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    fill 120ms linear,
+    transform 160ms ease;
+}
+
+/* Violet for the cell being pointed at: the lit-cell convention the
+ * engineering comb uses. Only the page's hive lights; the window's copy is
+ * decoration. */
+.hf-cell.is-lit .hf-hex {
+  fill: var(--violet);
+  transform: scale(1.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hf-hex {
+    transition: fill 120ms linear;
+  }
+}
+
+/* The letter, and under it the word it is short for, both always shown.
+ * Ink on honey; paper on the violet of a lit cell. */
+.hf-letter,
+.hf-word {
+  fill: var(--ink);
+  pointer-events: none;
+  transition: fill 120ms linear;
+}
+
+.hf-letter {
+  font-family: var(--font-display);
+  font-size: 34px;
+}
+
+.hf-word {
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.hf-cell.is-lit .hf-letter,
+.hf-cell.is-lit .hf-word {
+  fill: var(--surface);
+}
+
+/* In the top layer on screen but still inside .markdown-page in the DOM, so
+ * the page's h2 rule reaches it and would push it 2.75rem down from the
+ * window's top edge; its size and honey rule are kept. */
+.hf-dialog .hf-heading {
+  margin-top: 0;
+}
+
+.hf-dialog .hf-lead {
+  max-width: 40rem;
+  margin: 0.75rem 0 0;
+}
+
+/* The four letters two by two, in reading order. Restated at dialog depth
+ * so the page's list rules do not reach them. */
+.hf-dialog .hf-stages {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem 2.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Each paragraph hangs from its letter: the hive's own cell, honey on a
+ * heavy ink stroke with the letter in Cubao, as big as a heading. */
+.hf-dialog .hf-stage {
+  display: grid;
+  grid-template-columns: 4.75rem minmax(0, 1fr);
+  gap: 1.1rem;
+  align-items: start;
+  margin: 0;
+}
+
+.hf-dialog .hf-stage > p {
+  margin: 0;
+}
+
+.hf-stage-cell {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.hf-stage-cell polygon {
+  fill: var(--honey);
+  stroke: var(--ink);
+  stroke-width: 4;
+}
+
+.hf-stage-cell text {
+  font-family: var(--font-display);
+  font-size: 52px;
+  fill: var(--ink);
+}
+
+/* The cross, in the top right corner. Ink, the DBTL panel's two strokes;
+ * violet on hover and focus, as every opener on the wiki. */
+.hf-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
+  background: none;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.hf-close:hover,
+.hf-close:focus-visible {
+  color: var(--violet);
+}
+
+.hf-close:focus-visible {
+  outline: 3px solid var(--violet);
+  outline-offset: 0;
+}
+
+.hf-close-cross {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: square;
+}
+
+@media (max-width: 52rem) {
+  /* The note still on one line under a phone-width hive. */
+  .hf-more {
+    margin-top: -1rem;
+    font-size: 1.05rem;
+  }
+
+  .hf-more-arrow {
+    width: 4.25rem;
+    height: 3.4rem;
+  }
+
+  .hf-framework {
+    padding-inline: 1rem;
+  }
+
+  /* Stacked: the hive centred over the heading, which keeps clear of the
+   * cross by being below it. */
+  .hf-head {
+    grid-template-columns: minmax(0, 1fr);
+    margin-right: 0;
+  }
+
+  .hf-mini {
+    width: min(12rem, 60%);
+    margin-inline: auto;
+  }
+
+  .hf-dialog .hf-heading {
+    font-size: 1.3rem;
+  }
+
+  .hf-dialog .hf-stages {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hf-dialog .hf-stage {
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    gap: 0.85rem;
+  }
+}

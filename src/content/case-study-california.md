@@ -1,161 +1,133 @@
-California is the scale case. Migratory commercial beekeeping tied to a
-pollination market changes almost every assumption a treatment designed for a
-small apiary would make — about labour, timing, transport and what a colony is
-worth. The question is the same as for [Australia](/case-studies/australia):
-**how would the requirements for NECTAR change here?**
+## Summary
 
-## The pest situation
+In the United States, honeybee pollination services and honey production
+contribute approximately **$22 billion annually** to the agricultural industry.
+One state in particular is the face of this interdependency between commercial
+agriculture and bees: California. California is home to a range of crops reliant
+on honeybee pollination, but during the early spring, **80% of commercial
+honeybee hives from all over the US are moved to California to pollinate just
+one: almonds** (1).
 
-Almonds bloom early and require insect pollination, and about 80% of US
-commercial honeybee colonies are transported to California for the February to
-March bloom before moving on to cherries, apples, melons and sunflowers.
-**Virtually every commercial beekeeper** in that market has to manage Varroa. Its
-arrival coincided with rapid almond expansion, and together they pushed
-pollination costs sharply up. Josette Lewis, former Chief Scientific Officer of
-the Almond Board of California, described the result as a *“codependency
+## The California almond migration
+
+Almonds typically bloom very early, between February and mid-March, creating
+lots of demand for colonies at a time when many other crops are still in
+hibernation from the winter. This results in many commercial beekeepers sending
+their colonies to California, with some traveling over 2,000 miles (2). Every
+February, **1.5 to 2 million colonies are transported to pollinate over a
+million acres of almond trees** (1).
+
+Josette Lewis, former Vice President and Chief Scientific Officer of the Almond
+Board of California, described the resulting relationship as a **“codependency
 between the tree and the bee and between the almond grower and the
-beekeeper.”*
+beekeeper.”** Almond growers depend on managed honey bees to pollinate their
+crop, while almond pollination has become the main source of income for almost
+all commercial beekeepers. In 2024, almond pollination generated approximately
+**$325.8 million, representing around 81% of all US pollination-service
+revenue**. In 2024, growers paid $181 per colony of bees and $305 per acre of
+land (3). But by 2025, growers were paying an average of approximately $209 per
+colony and $310 per acre for almond pollination, an increase of $28 per colony
+and $5 per acre. Pollination fees first skyrocketed in this way in the early
+2000s when almond acreage grew faster than honeybee supply; back then,
+beekeepers responded by simply increasing their hive numbers. Now, **the high
+level of colony losses due to Varroa has meant the price of pollination services
+continues to rise each year** as beekeepers struggle to pay for treatments and to
+replace their colonies (4).
 
-Chris Hiatt manages around 18,000 colonies with his five brothers and owns a
-46-acre almond farm, so he sees both sides of that codependency. In the
-mid-2000s a single annual CheckMite+ strip — coumaphos, an organophosphate —
-gave highly effective control. Within a few years the mites were resistant and
-he **lost 55% of his colonies**. Since then the operation has rotated synthetic
-acaricides with oxalic acid, formic acid and brood breaks: *“But it's just
-throwing everything but the kitchen sink at them. And some of our worst years
-over the last 10 years, we've had like 60% loss, 50%.”* The proximate killer is
-viral: in his worst years viral loads sat in the 80th to 90th percentile of
-national surveillance.
+## Varroa in commercial beekeeping
 
-**2024–25 was an exceptionally severe episode for the wider US industry.** A survey
-administered by Project Apis m., with participants accounting for **72% of the
-nation's bees (1.96 million colonies)**, found that approximately **1.6 million
+A number of factors including exposure to pesticides and other crop protection
+products and declining wild spaces of food sources have contributed to honeybee
+health decline and colony losses, but **by far the biggest factor is pests such
+as the Varroa mite**. Josette Lewis estimated that **almost 100% of beekeepers
+participating in almond pollination are affected by Varroa**, in the sense that
+virtually all must actively manage Varroa.
+
+Commercial beekeeper and almond grower Chris Hiatt's father started a beekeeping
+business 58 years ago; Hiatt and his five brothers now manage 18,000 colonies,
+many of which rotate between California, North Dakota, and Washington for almond
+season, honey-harvesting time, and apple season respectively. Varroa has had
+devastating effects on their family business; in some of their worst years,
+they have experienced **50–60% colony losses**. During high-loss years, their
+colonies have also ranked in the 80th–90th percentiles for viral loads in
+national disease-surveillance results, illustrating **the close relationship
+between uncontrolled Varroa populations, viral disease, and colony mortality**.
+
+The wider US industry experienced an exceptionally severe episode in 2024–25. A
+survey administered by Project Apis m. with participants accounting for 72% of
+the nation’s bees (1.96 million colonies) found that **approximately 1.6 million
 colonies were lost between June 2024 and March 2025**, with surveyed commercial
-operations reporting average losses of around **62%** and hobbyist beekeepers
-**51%**. The economic impact is estimated at **over US$600 million** in lost honey
-production, pollination income and colony replacement costs.
+operations reporting average losses of around 62% and hobbyist beekeepers losing
+51%. The economic impact associated with this massive loss is estimated to be
+**over $600 million** in lost honey production, pollination income, and costs to
+replace colonies (5).
 
-The scale of the pollination market those colonies serve: in 2024, almond
-pollination generated approximately **US$325.8 million, around 81% of all US
-pollination-service revenue**. Growers paid **US$181 per colony and US$305 per acre
-in 2024**, rising to approximately **US$209 per colony and US$310 per acre in 2025**.
-Pollination fees first rose sharply in the early 2000s, when almond acreage grew
-faster than honeybee supply and beekeepers answered by increasing hive numbers.
-**Now that Varroa-driven colony losses make hive numbers the constraint, the price
-rises instead**, each year, as beekeepers struggle to pay for treatments and replace
-their colonies.
+## Current Varroa Controls
 
-## Current practice
+Over the years controlling for Varroa has become more and more complicated.
+Chris Hiatt described that back in the mid-2000s, a once-a-year treatment with
+one of Bayer’s Checkmite+ strips, made with coumaphos organophosphate, was
+sufficient to wipe out any infesting Varroa. But on the third year of this
+treatment, **the mites had become resistant and Hiatt lost 55% of his
+colonies**. Afterwards, Hiatt began to rotate treatments first of harsh synthetic
+chemicals such as amitraz and fluvalinate and then mixing in oxalic acid, formic
+acid, and management techniques such as brood breaks. Despite **“throwing
+everything but the kitchen sink at them,”** their worst years have still seen 60%
+losses.
 
-Rotation is the strategy, because no single product survives contact with the
-mite for long. Professor Brittney Goodrich's modelled commercial operation runs
-two amitraz treatments, one oxalic acid and one formic acid over a year. Norroa,
-the registered RNAi treatment for Varroa, is **not available at commercial scale**,
-which is why Hiatt could not use it even though it is the closest existing
-product to ours. The documented history of US miticide resistance, and the
-amitraz-resistance mutation USDA ARS still reports, are cited in
-[Q2 of human practices](/human-practices#sm-heading).
+One treatment Hiatt uses, amitraz, is a preferred method highly used by
+beekeepers as it is highly toxic to Varroa mites, but safe for honeybees when
+used as instructed (6). However, **beekeepers have increasingly seen resistance
+to it**; scientists at the U.S. Department of Agriculture’s Agricultural Research
+Service screened mites from many collapsed colonies and found signs of
+increasing resistance to amitraz due to a genetic mutation (7). Recent industry
+reporting has identified **chemical resistance to amitraz and other treatments as
+a growing challenge** for Varroa management.
 
-## Costs and constraints
+## The economic cost
 
-Goodrich models the year for an operation of 8,500 colonies, of which about
-5,000 go to California for almonds:
+The economic costs of Varroa are both direct and indirect, as represented in the
+$600 million figure. Agricultural economist Brittney Goodrich has surveyed
+beekeepers to create a representative commercial-beekeeping model, in which she
+has found **purchasing Varroa-control products accounts for approximately 9% of
+total production costs**. This figure **excludes the labor required to administer
+those treatments**; labor itself represents approximately 21% of total costs.
 
-| Share of total costs | Item                                                     |
-| -------------------- | -------------------------------------------------------- |
-| 27%                  | Capital recovery and equipment                           |
-| 21%                  | Labour                                                    |
-| 9%                   | Varroa treatment **products alone**                       |
+Beyond the costs of treatments and labor required to administer treatments,
+colony losses create further costs. Lost colonies must be rebuilt by splitting
+surviving colonies, purchasing queens or queen cells, and providing additional
+labor. Additionally, **losses mean fewer colonies are available to fulfill
+pollination contracts**; during severe loss years, Hiatt described that his
+operation sometimes did not have enough surviving colonies to fulfill its almond
+contracts, forcing him to spend money sourcing colonies from other beekeepers.
+The combination of treatments costs, labor costs, colony rebuilding costs, and
+lost pollination and honey revenue **create incredible economic burdens on
+Californian beekeepers**.
 
-The 9% is **the number that misleads**. It excludes the labour to administer the
-treatments and the cost of replacing lost hives, so the real burden of Varroa is
-higher — and it excludes the revenue a dead colony does not earn: about $195 per
-colony sent to almonds and about 70 lb of honey. One worker covers roughly 700
-colonies, so any treatment that **adds a visit scales badly** by construction.
+## Why California Matters
 
-Hiatt's experience puts that in cash terms. Losses have left him short of
-colonies for pollination contracts, so he buys colonies in while also paying to
-rebuild his own with queens, packages and splits — **spending twice**, and pulling
-resources off the colonies that survived. In our own dataset, US Varroa control
-runs to about US$9.22 per colony per year `[CALC]`.
+California demonstrates how **a parasite affecting individual honey bee colonies
+can have consequences far beyond the hive**. The almond industry depends on an
+enormous annual supply of healthy colonies, while commercial beekeepers depend
+heavily on the income generated by almond pollination. Those same colonies then
+travel across the country, supporting honey production and the pollination of
+numerous other crops.
 
-## Regulation
+Increasing colony losses, treatment resistance and rising management costs due
+to Varroa are placing more pressure on beekeepers. California needs a solution
+that **doesn’t just keep levels low, but does so continuously, affordably, and at
+the scale of a commercial beekeeping industry** responsible for moving millions
+of colonies across the country each year. As existing treatments face resistance
+and the costs of maintaining healthy colonies rise, the California almond system
+demonstrates why **sustainable, scalable approaches to Varroa management are
+increasingly important**.
 
-US biotechnology regulation is split across agencies, with jurisdiction set by
-how a product functions and what it is for. The EPA, FDA and USDA told us that
-living versus non-living does not by itself make the path easier or harder; it
-changes what evidence of safety is required. Four areas would need addressing:
-safety to the honeybee, environmental impact, safety to the people handling the
-product, and whether anything enters honey or another food. Honey would not need
-to be labelled as bioengineered. An intervention intended to treat a condition
-in the bee may be **assessed as an animal drug** rather than a pesticide, which
-changes who assesses it.
+## References
 
-There is precedent for the technology itself: the EPA has already registered two
-RNAi pesticides, Calantha for Colorado potato beetle and Norroa for Varroa.
-
-## Stakeholder attitudes
-
-Enthusiasm here is conditional on practicality rather than on biology. Hiatt
-strongly supported pollen patties, because commercial beekeepers already use
-them, so combining treatment with feeding avoids an extra trip to every hive;
-he wants three to four months of protection. Lewis judged any treatment against
-whether it is simple, inexpensive and scalable across thousands of colonies, and
-picked the patty for the same reason — it fits existing practice. From her
-agricultural biotechnology experience, she expected a living GMO to face a
-longer and more expensive route to market than a non-living alternative.
-
-Lewis also named a stakeholder group **we did not reach**: bee brokers, who contract
-colonies from beekeepers to growers and sit between the two parties whose
-economics we modelled.
-
-> **TODO —** No bee broker was interviewed. They set the terms both sides trade
-> on, so their view of a new input is a real gap. Owner: HP.
-
-## What an acceptable treatment would need to do
-
-- **Last three to four months**, so one application covers the part of the year
-  that matters.
-- **Require no additional visit.** At 700 colonies per worker, a visit is the
-  expensive part, not the product.
-- **Work across thousands of colonies on the road**, through transport and
-  through the bloom calendar.
-- **Be available at commercial scale**, which is the specific reason the one
-  existing RNAi product is not in use.
-- **Be cheap per colony**, against a treatment-product line already worth 9% of
-  total costs.
-
-## Implication for NECTAR
-
-- **The duration target is Californian.** Three to four months of protection
-  came from Hiatt and is what the [bee lab](/bee-lab) persistence work is
-  measured against.
-- **The patty is the delivery format because of scale**, not because it is
-  convenient in a laboratory — Hiatt and Lewis endorsed it independently of the
-  Australian stakeholders who said the same thing.
-- **The cost ceiling is per colony.** A provisional affordability constraint of
-  US$12 per colony drives the allowable-cost chain in [economic
-  modelling](/economic-modelling) and the titre target in [Yeast](/wet-lab-experiments#yeast-production).
-- **Revenue loss, not treatment price, is the thing to beat.** Goodrich's
-  figures put colony replacement and lost pollination and honey revenue ahead of
-  the treatment line item, which is why the model measures change in costs *and*
-  revenues.
-- **A treatment that works per colony and a treatment that works across a
-  migratory operation are not the same product**, and the difference is mostly
-  logistics rather than biology. That part is outside what
-  a laboratory project can demonstrate, and **we are not claiming it**.
-
-## Still missing
-
-- The regulatory reading for this jurisdiction written out in full; see
-  [safety and security](/project-safety).
-- A bee broker interviewed, or the gap accepted in writing.
-- The US `[CALC]` figures checked against the spreadsheet.
-
-## Where this connects
-
-[Case studies](/case-studies) · [Australia](/case-studies/australia) ·
-[Human practices](/human-practices) ·
-[Economic modelling](/economic-modelling) ·
-[Entrepreneurship](/entrepreneurship) ·
-[Safety and security](/project-safety)
+1. [californiastatebeekeepers.com: Issue: pollination](https://www.californiastatebeekeepers.com/issue-pollination/)
+2. [ers.usda.gov: Charts of Note 107088](https://ers.usda.gov/data-products/charts-of-note/107088)
+3. [ers.usda.gov: Charts of Note 112782](https://www.ers.usda.gov/data-products/charts-of-note/112782)
+4. [almonds.org: Pollinators and Food Production (PDF)](https://www.almonds.org/sites/default/files/2020-09/Pollinators%20and%20Food%20Production.pdf)
+5. [honeybeehealthcoalition.org: New data confirm catastrophic honey bee colony losses](https://honeybeehealthcoalition.org/new-data-confirm-catastrophic-honey-bee-colony-losses-underscoring-urgent-need-for-action/)
+6. [ucdavis.edu: Helping beekeepers fight mites through more effective treatments](https://www.ucdavis.edu/food/news/helping-beekeepers-fight-mites-through-more-effective-treatments)
+7. [ars.usda.gov: USDA researchers find viruses from miticide-resistant parasitic mites are cause of recent honey bee colony collapses](https://www.ars.usda.gov/news-events/news/research-news/2025/usda-researchers-find-viruses-from-miticide-resistant-parasitic-mites-are-cause-of-recent-honey-bee-colony-collapses/)

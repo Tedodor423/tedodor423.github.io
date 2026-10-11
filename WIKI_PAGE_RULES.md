@@ -30,6 +30,8 @@ accessibility requirement, not a style preference.
 1. Create `src/content/my-page.md`.
 2. Import it and add an entry to `src/pages.ts` — `name`, `title`, `path`,
    `content`, and optionally `lead` and `children`.
+3. Give it an entry in `src/content/link-previews.md`, or links to it preview
+   as "No summary yet".
 
 That's it. The route, the menu entry and the page all come from that one entry.
 
@@ -58,7 +60,7 @@ Four things follow for how you write:
   two pages is findable under both, and a term misspelled everywhere is
   findable only by the misspelling.
 - **What the components hold is searched too.** The stakeholder interviews
-  (name, role, place, key points, quote, what we learnt), the seven HIVE questions and
+  (name, role, place, key points, quote, what we learnt), the HIVE questions and
   their write-ups, the timeline, the engineering cycles and the workstreams
   behind the comb, the home deck's slides and the colony-loss map's caption
   are all read from the same data the components render, and a result opens
@@ -131,6 +133,15 @@ base path and navigate without reloading the page. Do **not** write the base
 path yourself (`/oxford/bee-lab` is wrong) and do not use relative paths —
 they break on nested URLs. External links are ordinary Markdown links and open
 in a new tab automatically.
+
+**Every internal link previews its page.** Rest the pointer on one, or tab to
+it, and a card shows a title, the section the link lands on, a one- or
+two-sentence summary and, optionally, an image. All but the section come from
+the page's entry in `src/content/link-previews.md`, one entry per page; the
+format is explained at the top of that file. A page with no summary there
+says "No summary yet". When you add a page, add its entry too. A summary
+restates its page and never adds to it, because nothing may exist only behind
+a hover.
 
 ---
 

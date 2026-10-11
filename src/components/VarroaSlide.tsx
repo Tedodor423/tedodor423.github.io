@@ -15,8 +15,8 @@ import "./VarroaSlide.css";
  * large, its second line laid over the mite itself. A little scroll and the
  * claim shrinks up to the top while the toll comes in on the right, its two
  * numbers counting up with the scroll. Scroll on and the chart comes in on
- * the left, drawing 1950 to 2026 as the reader goes, with the closing line
- * under it.
+ * the left with the closing line under it, and draws 1950 to 2026 as the
+ * reader goes.
  *
  * The scroll is the clock: the stage pins for two windows of travel and
  * every step reads off how far through them the reader is. Three rests go to
@@ -83,7 +83,6 @@ const TOLL: Span = [0.14, 0.3];
 const COUNT: Span = [0.16, 0.34];
 const TREND: Span = [0.4, 0.55];
 const DRAW: Span = [0.45, 0.88];
-const VERDICT: Span = [0.85, 1];
 /** The deck's rests inside the ride: the toll counted, and the end. */
 const RESTS = [COUNT[1], 1];
 
@@ -230,10 +229,11 @@ function TrendChart({ drawn }: { drawn: number }) {
                 ),
             )}
 
-            <g clipPath="url(#ms-drawn)">
-              <path className="ms-casing" d={pathOf(series.points, fy)} />
-              <path className="ms-line" d={pathOf(series.points, fy)} />
-            </g>
+            <path
+              className="ms-line"
+              clipPath="url(#ms-drawn)"
+              d={pathOf(series.points, fy)}
+            />
 
             {shown && (
               <g className="ms-head">
@@ -265,104 +265,6 @@ function TrendChart({ drawn }: { drawn: number }) {
   );
 }
 
-/* ---------- the type trial ---------- */
-
-/* EXPERIMENT, development only. How the slide's type sits on the footage is
- * still open, so `yarn dev` shows a switcher in the stage's corner that sets
- * the treatment and the face for every line at once. The production build
- * ships DEFAULT_INK and DEFAULT_FACE. Once the team has chosen, keep that
- * pair here and delete the switcher and the data-ink rules it drives in
- * VarroaSlide.css. */
-
-const INKS = [
-  { key: "black", label: "Black" },
-  { key: "white", label: "White" },
-  { key: "honey", label: "Yellow" },
-  { key: "on-white", label: "Black on white" },
-  { key: "on-black", label: "White on black" },
-  { key: "on-honey", label: "Black on yellow" },
-  { key: "honey-on-black", label: "Yellow on black" },
-] as const;
-const FACES = [
-  { key: "basenji", label: "Basenji" },
-  { key: "cubao", label: "Cubao" },
-] as const;
-type Ink = (typeof INKS)[number]["key"];
-type Face = (typeof FACES)[number]["key"];
-type Trial = { ink: Ink; face: Face };
-
-const DEFAULT_TRIAL: Trial = { ink: "black", face: "basenji" };
-const TRIAL_KEY = "nectar:mite-type";
-
-function readTrial(): Trial {
-  try {
-    const saved = JSON.parse(localStorage.getItem(TRIAL_KEY) ?? "{}");
-    return {
-      ink: INKS.some((i) => i.key === saved.ink) ? saved.ink : DEFAULT_TRIAL.ink,
-      face: FACES.some((f) => f.key === saved.face) ? saved.face : DEFAULT_TRIAL.face,
-    };
-  } catch {
-    return DEFAULT_TRIAL;
-  }
-}
-
-function useTrial() {
-  const [trial, setTrial] = useState<Trial>(() =>
-    import.meta.env.DEV ? readTrial() : DEFAULT_TRIAL,
-  );
-  const update = (next: Partial<Trial>) =>
-    setTrial((current) => {
-      const merged = { ...current, ...next };
-      try {
-        localStorage.setItem(TRIAL_KEY, JSON.stringify(merged));
-      } catch {
-        // Storage refused: the choice still holds for this visit.
-      }
-      return merged;
-    });
-  return [trial, update] as const;
-}
-
-function TypeTrial({
-  trial,
-  onChange,
-}: {
-  trial: Trial;
-  onChange: (next: Partial<Trial>) => void;
-}) {
-  return (
-    <fieldset className="ms-trial">
-      <legend>Type trial (dev only)</legend>
-      <label>
-        Treatment{" "}
-        <select
-          value={trial.ink}
-          onChange={(e) => onChange({ ink: e.target.value as Ink })}
-        >
-          {INKS.map((i) => (
-            <option key={i.key} value={i.key}>
-              {i.label}
-            </option>
-          ))}
-        </select>
-      </label>
-      <label>
-        Face{" "}
-        <select
-          value={trial.face}
-          onChange={(e) => onChange({ face: e.target.value as Face })}
-        >
-          {FACES.map((f) => (
-            <option key={f.key} value={f.key}>
-              {f.label}
-            </option>
-          ))}
-        </select>
-      </label>
-    </fieldset>
-  );
-}
-
 /* ---------- the slide ---------- */
 
 export function VarroaSlide() {
@@ -375,7 +277,6 @@ export function VarroaSlide() {
   const counted = useClock(toll, 1800, 150);
   const plotted = useClock(trend, 2400, 250);
   const [missing, setMissing] = useState(false);
-  const [trial, setTrial] = useTrial();
 
   const count = pinned ? easeOut(within(p, COUNT)) : easeOut(counted);
   const drawn = pinned ? within(p, DRAW) : plotted;
@@ -383,21 +284,18 @@ export function VarroaSlide() {
     shrink: pinned ? within(p, SHRINK) : 0,
     toll: pinned ? within(p, TOLL) : 1,
     trend: pinned ? within(p, TREND) : 1,
-    verdict: pinned ? within(p, VERDICT) : 1,
   };
   const style = {
     "--shrink": steps.shrink,
     "--toll": steps.toll,
     "--trend": steps.trend,
-    "--verdict": steps.verdict,
   } as CSSProperties;
 
   const id = headingId(miteTitle());
 
-  // Each line's words sit in an .ms-ink span: that span is what carries the
-  // rectangle in the boxed treatments. <Marked> puts a honey background on
-  // the words a reader searched for; the section's id is where their result
-  // lands.
+  // Each line's words sit in an .ms-ink span, which carries the honey
+  // rectangle. <Marked> marks the words a reader searched for; the
+  // section's id is where their result lands.
   return (
     <section
       className="varroa-slide"
@@ -410,12 +308,7 @@ export function VarroaSlide() {
         // Pinned, the ride fills the screen: the menu steps aside (Navbar.tsx).
         data-fullscreen={pinned || undefined}
       >
-        <div
-          className="ms-stage"
-          style={style}
-          data-ink={trial.ink}
-          data-face={trial.face}
-        >
+        <div className="ms-stage" style={style}>
           <div className="ms-backdrop">
             {!missing && (
               <video
@@ -499,8 +392,6 @@ export function VarroaSlide() {
               </span>
             </p>
           </div>
-
-          {import.meta.env.DEV && <TypeTrial trial={trial} onChange={setTrial} />}
 
           {missing && (
             <p className="ms-missing">

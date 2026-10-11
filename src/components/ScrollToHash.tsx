@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigationType } from "react-router-dom";
+import { isPlaced } from "../utils/placed";
 
 /**
  * Puts the reader where the link said they would be.
@@ -21,15 +22,26 @@ import { useLocation } from "react-router-dom";
  *
  * The offset under the sticky menu is `scroll-margin-top` in brand.css, not
  * arithmetic here.
+ *
+ * A link that moves the window itself, with an animation of its own (the
+ * stakeholder map shrinking into the small map beside an interview, and
+ * growing back), still puts its fragment in the address, so the address is
+ * a permalink to where the reader now is. It says so with PLACED
+ * (src/utils/placed.ts) as the navigation's state, and this leaves the
+ * window to it. Only on that click: history keeps the state, and Back or
+ * Forward to the same address has no animation to leave the window to, so
+ * there this lands on the fragment as usual.
  */
 
 /** Frames to wait for a target that a component is still rendering. */
 const PATIENCE = 6;
 
 export function ScrollToHash() {
-  const { pathname, hash } = useLocation();
+  const { pathname, hash, state } = useLocation();
+  const how = useNavigationType();
 
   useEffect(() => {
+    if (isPlaced(state) && how !== "POP") return;
     if (!hash) {
       window.scrollTo(0, 0);
       return;
@@ -88,7 +100,7 @@ export function ScrollToHash() {
       cancelled = true;
       cancelAnimationFrame(frame);
     };
-  }, [pathname, hash]);
+  }, [pathname, hash, state, how]);
 
   return null;
 }

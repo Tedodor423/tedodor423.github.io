@@ -6,7 +6,7 @@ import {
   type MouseEvent,
   type ReactNode,
 } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   GROUPS,
   MAP_ANCHOR,
@@ -25,6 +25,7 @@ import { chainWheel } from "../utils/wheelChain";
 import { assignCells } from "../utils/stakeholderCells";
 import { HEXES, HEX_R, MAP_H, MAP_W, hexPoints } from "../utils/worldHexes";
 import { Marked, MarkedInline } from "./Marked";
+import { PLACED } from "../utils/placed";
 import "./StakeholderRecord.css";
 
 /* Every interview in full, at the foot of the human practices page.
@@ -63,17 +64,21 @@ function FragmentLink({
   /** Marks the link as the place on screen, for the list. */
   current?: boolean;
   /** Takes the reader there itself, returning true if it did; the link
-   * then leaves the address alone. Only for a plain click. */
+   * then still puts its fragment in the address, as a permalink, but tells
+   * ScrollToHash the window is already there (PLACED). Only for a plain
+   * click. */
   onFollow?: () => boolean;
   children: ReactNode;
 }) {
   const { hash } = useLocation();
+  const navigate = useNavigate();
   const onClick = (e: MouseEvent) => {
     if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
       return;
     }
     if (onFollow?.()) {
       e.preventDefault();
+      if (hash !== `#${anchor}`) navigate({ hash: anchor }, { state: PLACED });
       return;
     }
     if (hash !== `#${anchor}`) return;
@@ -98,10 +103,13 @@ function FragmentLink({
  * is a short ride (src/utils/glide.ts, the one way this wiki moves the
  * window) rather than the browser's own smooth scroll, which takes seconds
  * over a record this long, landing where the map's fragment would. Still a real link underneath, so a modified click opens it
- * in a new tab as a link would. The address is left as it was: changing the
- * fragment would have ScrollToHash scroll the window as well.
+ * in a new tab as a link would. The address takes the map's fragment, as a
+ * permalink to where the reader now is, with PLACED so ScrollToHash leaves
+ * the window to the jump or the ride.
  */
 function BackToMap() {
+  const { hash } = useLocation();
+  const navigate = useNavigate();
   const onClick = (e: MouseEvent) => {
     if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
       return;
@@ -109,9 +117,13 @@ function BackToMap() {
     const map = document.getElementById(MAP_ANCHOR);
     if (!map) return;
     e.preventDefault();
-    if (rideToMap()) return;
-    const margin = parseFloat(getComputedStyle(map).scrollMarginTop) || 0;
-    glideTo(map.getBoundingClientRect().top + window.scrollY - margin);
+    if (!rideToMap()) {
+      const margin = parseFloat(getComputedStyle(map).scrollMarginTop) || 0;
+      glideTo(map.getBoundingClientRect().top + window.scrollY - margin);
+    }
+    if (hash !== `#${MAP_ANCHOR}`) {
+      navigate({ hash: MAP_ANCHOR }, { state: PLACED });
+    }
   };
   return (
     <Link to={{ hash: MAP_ANCHOR }} className="sr-back" onClick={onClick}>

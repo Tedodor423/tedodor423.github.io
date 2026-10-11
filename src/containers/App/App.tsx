@@ -14,6 +14,7 @@ import { ViewSwitch } from "../../components/ViewSwitch";
 import { NotFound } from "../../components/NotFound";
 import { SearchPage } from "../../components/SearchPage";
 import { ScrollToHash } from "../../components/ScrollToHash";
+import { LinkPreview } from "../../components/LinkPreview";
 import { Footer } from "../../components/Footer";
 import { BeeScene } from "../../components/BeeScene";
 import { CombBands } from "../../components/CombBands";
@@ -38,6 +39,10 @@ const App = () => {
   return (
     <>
       <ScrollToHash />
+
+      {/* The card that opens on a link to another page. One for the whole
+          site, listening at the document, so every link has it. */}
+      <LinkPreview />
 
       {/* Temporary: the comb treatment on the page bands, currently held off
           with its switch put away. See CombBands.tsx. */}

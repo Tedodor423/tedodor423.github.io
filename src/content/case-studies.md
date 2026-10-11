@@ -47,13 +47,6 @@ the European average.
 > [human practices](/human-practices). Either is defensible; leaving it
 > half-written is not. Owner: HP.
 
-## How each case study is written
-
-Seven parts, the same order every time, so the two regions can be read against
-each other: **pest situation · current practice · costs and constraints ·
-regulation · stakeholder attitudes · what an acceptable treatment would need to
-do · implication for NECTAR.**
-
 ## What differs between regions
 
 | Axis                     | Australia                                                                      | California                                                                     |

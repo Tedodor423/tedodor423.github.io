@@ -6,15 +6,18 @@ import { MAP_H, MAP_W } from "./worldHexes";
  * back.
  *
  * The interviews (StakeholderRecord) follow the map (StakeholderMap). The
- * map is "big" while its stage holds the window; the moment the stage starts
- * to leave, it is "small". Crossing that line either way plays one quick
+ * map stays "big" while its stage holds the window and as it scrolls away,
+ * and turns "small" only once the interviews have come up to all but fill
+ * the window (SHRINK_AT). Crossing that line either way plays one quick
  * morph, MORPH_MS long whatever the scroll is doing: the small map's frame is
  * flown, by transform, from where the world is drawn on the stage to the
  * small map's place half way down the right of the window, shrinking as it
  * goes, while the big map's drawing and the panels on it fade from under it;
- * or the reverse. Once small, the frame holds that place while the
- * interviews scroll up to meet it, which is exactly where its own sticky
- * column then holds it, so it hands over to the page without a seam.
+ * or the reverse. Until then the small map waits unseen in its column, so it
+ * is not drawn twice. Once small, the frame holds that place while the
+ * interviews scroll the last stretch up to meet it, which is exactly where
+ * its own sticky column then holds it, so it hands over to the page without
+ * a seam.
  *
  * The world is drawn the same on both: one lattice, one set of colours.
  * StakeholderRecord.css brings the small map's people cells to the big
@@ -40,6 +43,10 @@ const MORPH_MS = 240;
  * button and caption fade in beside it. */
 const SEAM = 0.2;
 const LANDED = 0.6;
+
+/** How far down the window the top of the interviews has come when the map
+ * turns small, as a fraction of the window's height. */
+const SHRINK_AT = 0.2;
 
 interface Box {
   x: number;
@@ -112,6 +119,16 @@ function holdOf(p: Parts): number {
   );
 }
 
+/** The scroll at which the map turns small: the interviews SHRINK_AT down
+ * the window, and never later than the stage's bottom edge reaching the top
+ * of it. That is where the deck settles a reader who scrolls on past the map
+ * (StakeholderMap.tsx), and on a short window the interviews' top is lower
+ * down than SHRINK_AT there, so it has to count as past the line. */
+function shrinkOf(p: Parts): number {
+  const vh = window.innerHeight;
+  return Math.min(holdOf(p) - SHRINK_AT * vh, leaveOf(p) + vh - 8);
+}
+
 /** Where the big map draws the world now: its canvas, letterboxed as the
  * svg's `meet` does. */
 function worldOf(p: Parts): Box {
@@ -131,6 +148,7 @@ function rest() {
   const where = document.querySelector<HTMLElement>(".sr-where");
   if (!where) return;
   where.removeAttribute("data-flying");
+  where.removeAttribute("data-waiting");
   for (const el of where.querySelectorAll<HTMLElement>(
     ".sr-where-fly, .sr-back, .sr-where-caption",
   )) {
@@ -151,7 +169,7 @@ function place(now: number): boolean {
     rest();
     return false;
   }
-  const want: Mode = window.scrollY - leaveOf(p) >= 1 ? "small" : "big";
+  const want: Mode = window.scrollY - shrinkOf(p) >= 1 ? "small" : "big";
   if (!settled) {
     mode = want;
     settled = true;
@@ -202,13 +220,16 @@ function place(now: number): boolean {
   shownK = k;
 
   // At rest big, or at rest small with the column holding the frame itself:
-  // nothing to draw over the page.
+  // nothing to draw over the page. Big, the small map is kept out of sight
+  // in its column as the interviews come up under the big one.
   if (!tween && (mode === "big" || own.y - held.y < 0.5)) {
     rest();
+    p.where.toggleAttribute("data-waiting", mode === "big");
     return false;
   }
 
   shown = at;
+  p.where.removeAttribute("data-waiting");
   const seam = clamp01(k / SEAM);
   const landed = String(clamp01((k - LANDED) / (1 - LANDED)));
   const dx = at.x - own.x;

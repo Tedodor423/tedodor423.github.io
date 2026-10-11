@@ -1143,7 +1143,7 @@ export const EVENTS: TimelineEvent[] = [
     turn: true,
     threads: ["story"],
     links: [
-      // The id is set by the HiveCorners figure that opens the page, not by a
+      // The id is set by the HpIntro opening of the page, not by a
       // Markdown heading.
       { label: "How we worked", href: "/human-practices#how-we-worked" },
     ],

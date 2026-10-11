@@ -17,6 +17,7 @@ import {
   type Lab,
 } from "../utils/dbtlCycles";
 import { layOutComb, slantOf } from "../utils/combLayout";
+import { glideTo } from "../utils/glide";
 import { cycleIcon } from "../data/cycleIcons";
 import { DbtlFamilyPanel } from "./DbtlFamilyPanel";
 import "./DbtlGallery.css";
@@ -26,8 +27,9 @@ import "./DbtlGallery.css";
  * One hexagon per overarching cycle, which here means one per workstream: all of
  * 1.1 to 1.4 are turns of the same question and live in the same cell. Six cells,
  * on a real staggered lattice rather than a grid of cards. Clicking one opens it
- * across the full width of the comb, wider than it is tall, and the rest flow
- * below it; what is inside is DbtlFamilyPanel.
+ * across the full width of the comb and the full height of the window, and the
+ * window rides to it so the open hexagon is the screen; the rest flow below it.
+ * What is inside is DbtlFamilyPanel.
  *
  * Nothing here is authored. Every word comes from the files in
  * src/content/cycles/, grouped by the `##` sections of
@@ -170,6 +172,10 @@ export function DbtlGallery() {
   );
   const [lab, setLab] = useState<Lab | null>(null);
   const [width, setWidth] = useState(0);
+  /** The window's height, which an opened cell fills (combLayout.ts). */
+  const [screen, setScreen] = useState(() => window.innerHeight);
+  /** Set by a click that opens a cell: ride the window to it once it is laid out. */
+  const ride = useRef(false);
   const frame = useRef<HTMLDivElement>(null);
   const root = useRef<HTMLDivElement>(null);
   const buttons = useRef<Partial<Record<Lab, HTMLButtonElement | null>>>({});
@@ -199,6 +205,12 @@ export function DbtlGallery() {
     });
     watch.observe(node);
     return () => watch.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const measure = () => setScreen(window.innerHeight);
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
   }, []);
 
   /* A link from anywhere else on the wiki, or a search result, names a cycle:
@@ -269,7 +281,7 @@ export function DbtlGallery() {
 
   const { placed, height } = useMemo(() => {
     if (width <= 0) return { placed: [], height: 0 };
-    const { seats, height } = layOutComb(order, width, openId);
+    const { seats, height } = layOutComb(order, width, screen, openId);
     const byId = new Map(FAMILIES.map((one) => [one.id, one]));
     const placed = seats.map((seat) => ({
       family: byId.get(seat.id)!,
@@ -277,7 +289,32 @@ export function DbtlGallery() {
       open: seat.open,
     }));
     return { placed, height };
-  }, [width, openId, order]);
+  }, [width, screen, openId, order]);
+
+  /* The open cell always opens at the top of the comb, which may be well above
+   * the hexagon that was clicked, so the window rides there with it: the hexagon's
+   * flat top on the top of the window, or centred where it is shorter than the
+   * window (a portrait screen; see combLayout.ts).
+   *
+   * The menu decides the last few pixels. A ride down sends it away (Navbar.tsx),
+   * so the whole window is free. A ride up leaves it where it was, and if it is
+   * showing, the hexagon is set under it rather than having its heading covered. */
+  useEffect(() => {
+    if (!ride.current) return;
+    ride.current = false;
+    const open = placed.find((one) => one.open);
+    const comb = frame.current;
+    if (!open || !comb) return;
+    const top = comb.getBoundingClientRect().top + window.scrollY + open.box.y;
+    const fit = (cover: number) =>
+      top - cover - Math.max(0, (window.innerHeight - cover - open.box.h) / 2);
+    let to = fit(0);
+    if (to <= window.scrollY) {
+      const nav = document.querySelector(".site-nav");
+      to = fit(Math.max(0, nav?.getBoundingClientRect().bottom ?? 0));
+    }
+    glideTo(to);
+  }, [placed]);
 
   /* The connector from a pressed filter to its lab's cells. The button is
    * measured, the cells are not: their boxes are the layout's destination, so the
@@ -415,6 +452,10 @@ export function DbtlGallery() {
               }`}
               data-lab={family.lab}
               data-state={open ? "open" : "shut"}
+              /* Filling the window, the open cell is a full-screen piece, and
+                 the menu steps aside for it as it does for the home page's
+                 slides (Navbar.tsx). */
+              data-fullscreen={(open && box.h >= screen - 1) || undefined}
               style={
                 {
                   left: `${box.x}px`,
@@ -457,6 +498,7 @@ export function DbtlGallery() {
                       if (lab !== null && lab !== family.lab) setLab(null);
                       if (openId) takeOff(openId);
                       takeOff(family.id);
+                      ride.current = true;
                       setTarget(null);
                       setOpenId(family.id);
                     }}

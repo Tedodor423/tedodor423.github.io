@@ -41,6 +41,18 @@ treatments-slide
 > preprint (39 mites, five operations): before the freeze, check whether a
 > peer-reviewed version is out and cite that instead. Owner: wiki.
 >
+> **TODO —** Slide four's evidence boxes show a clip and a photo that are not
+> hosted yet, so the published page shows their file names instead. The mites
+> clip, `mites-resistance.mp4`, is served from the gitignored `public/local/`
+> (cut from `wiki-assets-source/images_dev/mites-resistance.mp4`): record who
+> filmed it and what the white powder is, and upload it to the Video Universe
+> or, as for the bee, ask iGEM whether a muted loop may go through Uploads.
+> The sprayer photo, `pesticides.jpg`: find its source and licence (it must
+> allow reuse, redistribution and modification: CC0, CC-BY, CC-BY-SA or public
+> domain), credit it inline under the photo, and upload the web-sized copy in
+> `wiki-assets-source/images_dev/web/` through Uploads as
+> `assets/home/pesticides`. Owner: wiki.
+>
 > **TODO —** Slide five's experiment count ("hundreds of experiments") and
 > bee-lab hours ("1200+ hours") are not yet recorded anywhere in the team's
 > sources, so both carry `[FLAG]`. Tally them from the wet-lab and bee-lab

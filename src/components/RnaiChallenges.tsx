@@ -7,18 +7,17 @@ import { CHALLENGES, DECK_ANCHORS } from "../data/homeDeck";
 import { Marked } from "./Marked";
 import "./RnaiChallenges.css";
 
-/* Slide five of the home page: what RNA interference is up against, and
+/* Slide five of the home page: what the technology is up against, and
  * what answering it took.
  *
  * It plays on slide four's stage (TreatmentsSlide.tsx), because it starts
- * from slide four's last words: everything else there leaves, "RNA
- * interference" rises to the top of the screen without moving sideways,
- * and from under it an arrow draws down through the six barriers between
- * RNAi and the field. With it the claim comes in on the left. Then
- * "Requiring us to do", and the three things the barriers demanded, one
- * word to a row, one at a time: each word comes in with its proof beside
- * it, the word a little ahead, the proof's number counting up with the
- * scroll.
+ * from slide four's last words: everything else there leaves, "NECTAR"
+ * rises to the top of the screen without moving sideways, and the claim
+ * comes in on the left. Then "Requiring us to do", and the three things the
+ * challenges demanded, one word to a row, one at a time: each word comes in
+ * with its proof beside it, the word a little ahead, the proof's number
+ * counting up with the scroll. The six barriers themselves are set out on
+ * the project description.
  *
  * The host hands over how far each step has run, 0 to 1. Stacked, on a
  * phone or under reduced motion, every step stands at 1 and the slide
@@ -52,8 +51,6 @@ import "./RnaiChallenges.css";
 export type ChallengeSteps = {
   /** The claim on the left. */
   claim: number;
-  /** The arrow, drawn from the top down; each barrier comes in as it passes. */
-  draw: number;
   /** "Requiring us to do". */
   demands: number;
   /** The proofs, one each. */
@@ -123,7 +120,6 @@ export function RnaiChallenges({
   const id = headingId(CHALLENGES.title);
   const style = {
     "--claim": steps.claim,
-    "--draw": steps.draw,
     "--demands": steps.demands,
   } as CSSProperties;
 
@@ -140,20 +136,6 @@ export function RnaiChallenges({
       <h2 className="rc-claim" id={id} data-shown={steps.claim > 0}>
         <Marked text={CHALLENGES.title} />
       </h2>
-
-      <div className="rc-arrow" data-shown={steps.draw > 0}>
-        <span className="rc-shaft" aria-hidden="true" />
-        <ol className="rc-barriers">
-          {CHALLENGES.barriers.map((barrier, i) => (
-            <li
-              key={barrier}
-              style={{ "--at": (i + 0.5) / CHALLENGES.barriers.length } as CSSProperties}
-            >
-              <Marked text={barrier} />
-            </li>
-          ))}
-        </ol>
-      </div>
 
       <div className="rc-demands" data-shown={steps.demands > 0}>
         <p className="rc-requiring">

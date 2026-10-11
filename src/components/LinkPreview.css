@@ -1,0 +1,126 @@
+/* The preview card for links between pages (LinkPreview.tsx).
+ *
+ * Drawn like the wiki's other floating readout, .bh-tooltip in
+ * BeehaveFigures.css: a solid surface, a 1px ink rule and the one radius, no
+ * shadow, no motion. A fixed width, so every summary wraps to the same
+ * measure; and a fixed image column, so a slow image fills a box that is
+ * already there instead of shoving the text aside when it lands. */
+
+.link-preview {
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* Above the sticky menu (1030, brand.css) and the bees (1040,
+   * BeeScene.css), which would otherwise fly across the text being read;
+   * below the comb switch (1050, CombBands.css). */
+  z-index: 1045;
+  display: flex;
+  width: min(25rem, calc(100vw - 2rem));
+  /* No overflow clip here: the notch stands outside the card. The image
+   * column clips itself instead (.lp-figure). */
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+}
+
+/* The notch that points at the link: a 10px square turned 45°, centred on
+ * the card's border line, with its two outer sides drawn in the border's
+ * ink. Half of it stands out of the card as the point; the other half, in
+ * the card's colour, blanks the border where the point opens, so the outline
+ * runs unbroken from the card into the point. LinkPreview.tsx sets which
+ * edge it is on (data-side) and how far along (--notch-x). */
+.link-preview[data-side]::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--notch-x) - 5px);
+  width: 10px;
+  height: 10px;
+  background: var(--surface);
+  transform: rotate(45deg);
+}
+
+/* Card under the link: the point on its top edge, aimed up. */
+.link-preview[data-side="below"]::before {
+  top: -5.5px;
+  border-top: 1px solid var(--ink);
+  border-left: 1px solid var(--ink);
+}
+
+/* Card over the link: the point on its bottom edge, aimed down. */
+.link-preview[data-side="above"]::before {
+  bottom: -5.5px;
+  border-right: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+}
+
+.lp-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0.75rem 0.9rem 0.85rem;
+}
+
+.lp-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  line-height: 1.25;
+  color: var(--ink);
+}
+
+/* The section the link lands on, under the page it is on. */
+.lp-section {
+  margin: 0.2rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+.lp-summary {
+  margin: 0.55rem 0 0;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.lp-summary.is-missing {
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+/* The image's source and licence, which iGEM wants next to the image
+ * wherever it appears, the card included. */
+.lp-credit {
+  margin: 0.5rem 0 0;
+  font-size: 0.7rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+/* Beside the text, as tall as the card and never shorter than square. Its
+ * outer corners follow the card's, inside the border. Stacked above the
+ * notch, so a notch aimed past the text column shows its point and not its
+ * inner half laid over the picture. */
+.lp-figure {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 8rem;
+  min-height: 8rem;
+  overflow: hidden;
+  border-left: 1px solid var(--rule);
+  border-radius: 0 calc(var(--radius) - 1px) calc(var(--radius) - 1px) 0;
+  background: var(--surface-muted);
+}
+
+.lp-figure img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media print {
+  .link-preview {
+    display: none;
+  }
+}

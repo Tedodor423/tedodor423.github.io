@@ -14,8 +14,9 @@
  * is disabled under prefers-reduced-motion.
  *
  * Layout is mobile-first: everything in normal flow, card under the map.
- * From 48rem up the map becomes a full-viewport stage that pins briefly
- * while the reader scrolls (position: sticky inside the tall .sm-pin), with
+ * From 48rem up the map becomes a full-viewport stage that pins while the
+ * reader scrolls through the questions (position: sticky inside the tall
+ * .sm-pin), with
  * the heading, the question picker and the person card floating over it as
  * solid panels. A picked question's write-up takes a pane down the right
  * instead, and the map shrinks left to make room for it.
@@ -52,10 +53,16 @@
 }
 
 /* Mobile order: heading, picker, map, card. The stage machinery is inert
- * here; .sm-pin and .sm-stage are plain boxes until the desktop query. */
+ * here; .sm-pin and .sm-stage are plain boxes until the desktop query.
+ *
+ * Out of scroll anchoring: the map comes first in the markup but is shown
+ * after the write-up pane, so the browser would anchor on the map and, when
+ * a question's pane opens above it, move the window down to keep the map
+ * still, carrying the reader past the pane they had just asked for. */
 .sm-frame {
   display: flex;
   flex-direction: column;
+  overflow-anchor: none;
 }
 
 .sm-head {
@@ -80,16 +87,23 @@
 
 /* Where a search result lands (StakeholderMap.tsx). On a narrow screen the
  * pane and its stages carry the ids, under the menu like any heading; on a
- * wide one the markers at the top of the pin do, zero-sized so the stage
- * sits exactly where it did. */
+ * wide one zero-sized markers on the pin do, one per question at that
+ * question's rest, so the window lands with the stage showing it. */
 .sm-qpanel[id],
 .sm-qstage[id] {
   scroll-margin-top: 7rem;
 }
 
-.sm-landing {
+.sm-landing,
+.sm-landing-at {
+  position: absolute;
+  left: 0;
+  width: 0;
   height: 0;
-  overflow: hidden;
+}
+
+.sm-landing {
+  top: 0;
 }
 
 /* ---------- the question picker ---------- */
@@ -304,12 +318,13 @@
   background: var(--surface-muted);
 }
 
+/* A step above the stage text, which reads at the summary's size. */
 .stakeholder-map .sm-qpanel .sm-qstage-head {
   display: flex;
   align-items: center;
   gap: 0.45em;
   margin: 0;
-  font-size: 1.25em;
+  font-size: 1.75em;
   color: var(--ink);
 }
 
@@ -338,9 +353,12 @@
   font-weight: 400;
 }
 
+/* The summary's size and leading (.sm-qsummary): unfolded, the pane is half
+ * the window wide, so the stages need not be set smaller to fit. */
 .stakeholder-map .sm-qpanel .sm-qstage-body {
   margin-top: 0.2em;
-  font-size: 1.2em;
+  font-size: 1.55em;
+  line-height: 1.5;
   color: var(--text);
 }
 
@@ -367,16 +385,31 @@ html[data-map-stage] .site-nav {
 }
 
 /* While the map is the small one beside the interviews (set by
- * src/utils/mapMorph.ts once the stage starts to leave), the small map's
- * frame is flown over this one: the drawing and the panels floating on it
- * fade out from under it as the morph begins (--sm-fade, 1 to 0) and take no
- * pointer until they come back. */
+ * src/utils/mapMorph.ts once the interviews all but fill the window), the
+ * small map's frame is flown over this one: the drawing and the panels
+ * floating on it fade out from under it as the morph begins (--sm-fade, 1 to
+ * 0) and take no pointer until they come back. */
 .stakeholder-map[data-morphing] .sm-svg,
 .stakeholder-map[data-morphing] .sm-head,
 .stakeholder-map[data-morphing] .sm-filterbox,
 .stakeholder-map[data-morphing] .sm-qpanel,
+.stakeholder-map[data-morphing] .sm-skip,
 .stakeholder-map[data-morphing] .sm-pop {
   opacity: var(--sm-fade, 1);
+  pointer-events: none;
+}
+
+/* The other end: while the small map that opens the page grows into this
+ * one as it rises into the window (src/components/HpIntro.tsx), the drawing
+ * and the panels wait, and come in under it over the last stretch
+ * (--sm-handoff, 0 to 1). */
+.stakeholder-map[data-handoff] .sm-svg,
+.stakeholder-map[data-handoff] .sm-head,
+.stakeholder-map[data-handoff] .sm-filterbox,
+.stakeholder-map[data-handoff] .sm-qpanel,
+.stakeholder-map[data-handoff] .sm-skip,
+.stakeholder-map[data-handoff] .sm-pop {
+  opacity: var(--sm-handoff, 1);
   pointer-events: none;
 }
 
@@ -752,11 +785,14 @@ button.sm-tag:hover {
 
 @media (min-width: 48rem) {
   /* Full bleed: the section leaves the reading column entirely.
-   * --sm-pane-w is the write-up pane's width while a question is open; the
-   * fit effect in StakeholderMap.tsx overrides it on the frame when a long
-   * question needs more room. */
+   * --sm-pane-w is the write-up pane's width while a question is open, and
+   * --sm-hive-w its width once the HIVE write-up is unfolded: the right
+   * half of the window, so the stages have room to read at the summary's
+   * size. Capped on very wide screens, where half would set lines too long
+   * to follow, and never narrower than the folded pane. */
   .stakeholder-map {
     --sm-pane-w: clamp(24rem, 32vw, 36rem);
+    --sm-hive-w: max(var(--sm-pane-w), min(50vw - 1.25rem, 60rem));
     width: 100vw;
     margin-inline: calc(50% - 50vw);
     margin-block: 3rem;
@@ -764,13 +800,18 @@ button.sm-tag:hover {
   }
 
   /* The pin: the stage is sticky inside a taller wrapper, so the whole map
-   * holds briefly and then releases. The hold is short because a reader
-   * who stops near the map is settled onto it or past it (StakeholderMap.tsx);
-   * the extra 35vh is what scrolling feels as the hold. The stage neither
-   * fades nor shrinks on the way in or out. The nav bar hides itself on the
-   * way down, so the stage gets the full viewport. */
+   * holds while the reader scrolls through it and then releases. The hold
+   * is a ride through the questions: everyone at the top, then each
+   * question --sm-step further on (--sm-steps of them, set by
+   * StakeholderMap.tsx), the last one where the stage starts to leave. A
+   * reader who stops between two is settled onto one (the deck rests in
+   * StakeholderMap.tsx). The stage neither fades nor shrinks on the way in
+   * or out. The nav bar hides itself on the way down, so the stage gets the
+   * full viewport. */
   .sm-pin {
-    height: 135vh;
+    --sm-step: 50vh;
+    position: relative;
+    height: calc(100vh + var(--sm-steps, 0) * var(--sm-step));
   }
 
   .sm-stage {
@@ -800,6 +841,13 @@ button.sm-tag:hover {
    * svg letterboxes, so the whole world stays in view, only smaller. */
   .sm-frame.has-pane .sm-canvas {
     right: calc(var(--sm-pane-w) + 2rem);
+  }
+
+  /* The HIVE write-up unfolded: the pane takes the right half and the map
+   * shrinks further into the left. The glide between the two widths is in
+   * StakeholderMap.tsx (the FLIP effect). */
+  .sm-frame.has-hive {
+    --sm-pane-w: var(--sm-hive-w);
   }
 
   .sm-svg {
@@ -885,6 +933,54 @@ button.sm-tag:hover {
     margin: 0;
   }
 
+  /* Past the map in one go (skipMap in StakeholderMap.tsx). Small, at the
+   * foot of the stage, in the honey and ink of the two links that already
+   * cross between the map and the interviews ("Read full interview" and "Go
+   * back to main map"). The bottom centre is free whatever the stage shows:
+   * the question list holds the bottom-left corner, the comb switch the
+   * bottom-right, and the write-up pane stops 4.1rem short of the bottom
+   * edge. Centred by auto margins rather than a transform, so its offsets
+   * are its real place for the panel measuring. */
+  .stakeholder-map .sm-skip {
+    position: absolute;
+    right: 0;
+    bottom: 1.25rem;
+    left: 0;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    gap: 0.45em;
+    width: fit-content;
+    margin-inline: auto;
+    padding: 0.35em 0.75em;
+    border: 1px solid var(--ink);
+    border-radius: var(--radius);
+    background: var(--honey);
+    color: var(--ink);
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.2;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .stakeholder-map .sm-skip:hover,
+  .stakeholder-map .sm-skip:focus-visible {
+    background: var(--ink);
+    color: var(--honey);
+  }
+
+  /* Under 75rem the centre is too near the question list, which is a fixed
+   * width, so the button sits just to its right instead. */
+  @media (max-width: 75rem) {
+    .stakeholder-map .sm-skip {
+      right: auto;
+      left: calc(2rem + min(28rem, 42vw));
+      margin-inline: 0;
+    }
+  }
+
   /* The write-up pane, down the right-hand side, beside the shrunken map
    * rather than over it. As tall as its text, up to the room between the
    * top of the stage and the comb switch (CombBands.css: fixed 1.25rem off
@@ -921,10 +1017,13 @@ button.sm-tag:hover {
    * edge, hung 18px below the menu, which is hidden while the stage is up)
    * sits over this corner of the pane and keeps its own clicks. The title
    * keeps to its left, and the stages start below it. In rem, not em, so
-   * the clearance holds whatever size the type is fitted to. */
+   * the clearance holds whatever size the type is fitted to. It never
+   * gives up height to a long summary: squeezed, it would push the title
+   * up out of the pane's top edge, and the column below scrolls instead. */
   .stakeholder-map .sm-qpanel-head {
     display: flex;
     flex-direction: column;
+    flex-shrink: 0;
     justify-content: flex-end;
     min-height: 4.3rem;
     padding-right: 7.5rem;

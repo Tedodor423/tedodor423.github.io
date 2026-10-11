@@ -127,6 +127,8 @@ export interface Evidence {
   claim: string;
   detail?: string;
   source: Run[];
+  /** What the photograph over the evidence shows, for a screen reader. */
+  alt?: string;
 }
 
 const LAMAS_2025 = "https://doi.org/10.1101/2025.05.28.656706";
@@ -134,7 +136,7 @@ const TANG_2021 = "https://doi.org/10.1038/s41561-021-00712-5";
 
 export const TREATMENTS = {
   /** "Existing treatments are ineffective and toxic", each charge a word
-   * that opens its evidence. */
+   * with a line down to its evidence. */
   lead: "Existing treatments",
   are: "are",
   and: "and",
@@ -162,10 +164,11 @@ export const TREATMENTS = {
         { text: ", 92 pesticides mapped across 168 countries " },
         tag("LIT"),
       ],
+      alt: "A farm worker in a face mask sprays a green rice field from a long boom, a mist of pesticide drifting over the crop.",
     },
   } as Record<Charge, Evidence>,
   solution: "The solution is",
-  answer: "RNA interference",
+  answer: "NECTAR",
 };
 
 export const treatmentsTitle = () =>
@@ -194,14 +197,6 @@ export interface DemandCopy {
 
 export const CHALLENGES = {
   title: "…This technology faces numerous challenges",
-  barriers: [
-    "Rational target selection",
-    "Off-target screening",
-    "Single-target resistance",
-    "Manufacturing cost",
-    "Environmental degradation",
-    "Inefficient delivery",
-  ],
   requiring: "Requiring us to do",
   demands: [
     {

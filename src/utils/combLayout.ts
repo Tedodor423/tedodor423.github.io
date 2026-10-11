@@ -60,9 +60,12 @@ export interface Seat {
 }
 
 /* One cell per overarching cycle, ten of them at the time of writing. Five across on
- * a wide screen, which puts them at about 290px: small enough to read as a comb
- * rather than as a row of panels, and still wide enough for a label, because a
- * flat-top hexagon only offers about half its width as a rectangle to set text in. */
+ * a wide screen, which puts them at about 290px on a laptop: small enough to read
+ * as a comb rather than as a row of panels, and still wide enough for a label,
+ * because a flat-top hexagon only offers about half its width as a rectangle to set
+ * text in. Never more than five: the comb spans the whole window, so a bigger
+ * screen gets bigger cells (and bigger type in them, DbtlGallery.css) rather than
+ * more of them. */
 export function columnsFor(width: number): number {
   if (width >= 1000) return 5;
   if (width >= 760) return 4;
@@ -70,26 +73,22 @@ export function columnsFor(width: number): number {
   return 2;
 }
 
-/* How tall the opened cell is, from its width. Three numbers, because one does
- * not hold at every screen size.
- *
- * SHARE is the height it wants: well under 1, so it comes out wider than tall,
- * and low enough that the panel inside very nearly fills it. A flat-top hexagon
- * wastes only its two side triangles once the panel takes the full height, and
- * the taller the hexagon the bigger those triangles get.
+/* How tall the opened cell is. It wants the whole window: it is already the full
+ * width, and at the window's height it is the screen, with its flat top and bottom
+ * on the window's edges (DbtlGallery glides it there). Two limits on that.
  *
  * FLOOR is the least height the panel needs for a heading, a stage of text and
- * the dial beside it. CEILING is the other end of the same argument: the side
- * triangles are SLANT × height wide each, so past about 0.62 of the width they
- * eat more of the middle than the text can spare. On a narrow screen the ceiling
- * wins and the panel is shorter than the floor asks for; the one stage on show
- * scrolls inside itself, which is what makes that survivable.
+ * the dial beside it, for a window shorter than that. CEILING is the other end:
+ * the side triangles are SLANT × height wide each, so past about 0.62 of the width
+ * they eat more of the middle than the text can spare. A landscape screen never
+ * gets near it. A portrait one does, and there the hexagon is shorter than the
+ * window, because no hexagon fills a tall screen and leaves room to read in; the
+ * one stage on show scrolls inside itself, which is what makes that survivable.
  *
  * The height is NOT snapped to the row pitch. Snapping made it jump by a whole
  * cell at a time, which meant either a third of the hexagon was blank or the
  * panel had no room at all. The packer places the rest of the comb by geometry,
  * so it does not care. */
-const OPEN_SHARE = 0.42;
 const OPEN_FLOOR = 430;
 const OPEN_CEILING = 0.62;
 
@@ -156,9 +155,11 @@ export function overlaps(a: Box, b: Box): boolean {
   return true;
 }
 
+/** `screen` is the window's height, which the opened cell fills where it can. */
 export function layOutComb(
   ids: string[],
   width: number,
+  screen: number,
   openId: string | null,
 ): { seats: Seat[]; height: number } {
   const cols = columnsFor(width);
@@ -197,10 +198,7 @@ export function layOutComb(
       x: 0,
       y: 0,
       w: width,
-      h: Math.min(
-        Math.max(OPEN_SHARE * width, OPEN_FLOOR),
-        OPEN_CEILING * width,
-      ),
+      h: Math.min(Math.max(screen, OPEN_FLOOR), OPEN_CEILING * width),
     };
   }
 

@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { findFlowerSpots, type FlowerSpot } from "../utils/flowerSpots";
+import {
+  findFlowerSpots,
+  isShown,
+  type FlowerSpot,
+} from "../utils/flowerSpots";
 import { BEE_FRAMES, RESET_EVENT, beesAvailable } from "../utils/bees";
 import "./BeeScene.css";
 
@@ -149,6 +153,8 @@ const FLOWER_RETRY_MS = 2500;
 const FLOWER_MIN_APART = 90;
 /** How often a flower goes mid-text rather than out in a margin. */
 const INLINE_SHARE = 0.45;
+/** Spots drawn and hit-tested per attempt before giving up until the next. */
+const SPOT_TRIES = 8;
 /** Bee centre to bloom centre, px, before the bloom's own radius is added. A
  *  bee parks STOP_RADIUS from the cursor, so this is "put the cursor on it". */
 const POLLINATE_RADIUS = 58;
@@ -180,8 +186,6 @@ const rand = (min: number, max: number) => min + Math.random() * (max - min);
 const randIn = ([min, max]: [number, number]) => rand(min, max);
 const clamp = (n: number, min: number, max: number) =>
   Math.min(Math.max(n, min), max);
-const pick = <T,>(items: T[]) =>
-  items[Math.floor(Math.random() * items.length)];
 
 /** The tally survives navigation and reloads. Storage can be unavailable or
  *  throw outright (private windows, blocked site data), and a decoration is
@@ -243,8 +247,9 @@ interface Bee {
   frame: number;
 }
 
-/** One grain, in flight or landed. Document coordinates throughout, so that
- *  scrolling mid-flight keeps it glued to the page rather than the screen. */
+/** One grain, in flight or landed. Measured from its flower's stem throughout,
+ *  so that whatever moves the flower mid-flight, scrolling or a pinned stage
+ *  sliding, carries the grain with it. */
 interface Grain {
   el: HTMLImageElement;
   from: Vec;
@@ -257,13 +262,19 @@ interface Grain {
 
 interface Flower {
   el: HTMLDivElement;
-  /** Document coordinates of the artwork's top left corner. */
-  x: number;
-  y: number;
+  /** The block whose text the flower grows out of. The flower rides on it,
+   *  so one on a pinned stage stays on its word instead of scrolling off. */
+  anchor: Element;
+  /** Where the stem grows from, measured from the anchor's top left, px. */
+  offset: Vec;
   width: number;
-  /** Document coordinates of the point the stem grows from. */
+  height: number;
+  /** Where the stem meets the ground, as a fraction of the width, after any
+   *  mirroring. */
+  stemFrac: number;
+  /** Viewport coordinates of the stem, refreshed every frame. */
   stem: Vec;
-  /** Document coordinates of the centre of the bloom. */
+  /** The centre of the bloom, measured from the stem, px. */
   bloom: Vec;
   grains: Grain[];
   /** 0 until a bee reaches it. */
@@ -271,6 +282,10 @@ interface Flower {
   /** When the last grain lands. */
   coveredAt: number;
   fading: boolean;
+  /** When a fading flower is thrown away. */
+  removeAt: number;
+  /** Its anchor has left the page or stopped being drawn this frame. */
+  orphaned: boolean;
 }
 
 /**
@@ -392,6 +407,9 @@ export function BeeScene() {
      *  rides with it, so its live bottom edge is read every frame. Unlike the
      *  page body it is outside the routes, so this one element lasts. */
     const nav = document.querySelector<HTMLElement>(".site-nav");
+    /** Where flowers grow: everything a page puts on screen, from its title
+     *  to its last band. Also outside the routes, so it lasts too. */
+    const page = document.getElementById("content");
 
     /* ---------- state ---------- */
 
@@ -556,27 +574,20 @@ export function BeeScene() {
       // Measuring the page is not free, so a failed attempt waits rather than
       // retrying on the next frame.
       nextFlowerAt = now + FLOWER_RETRY_MS;
-      if (flowers.length >= MAX_FLOWERS) return;
-
-      // Looked up per spawn, not once: routing swaps the page body out from
-      // under us, and a node held from a previous page measures as nothing.
-      // A page without prose, such as the 404, simply grows no flowers.
-      const article = document.querySelector(".markdown-page");
-      if (!article) return;
+      if (flowers.length >= MAX_FLOWERS || !page) return;
 
       const height = randIn(FLOWER_HEIGHT);
       const width = height / FLOWER_ASPECT;
-      const scrollY = window.scrollY;
 
-      const usable = findFlowerSpots(article, {
+      const usable = findFlowerSpots(page, {
         width,
+        height,
         stemFrac: FLOWER_STEM_X,
         gap: FLOWER_GAP,
       }).filter((spot) => {
         // On screen, below the menu, and not on top of another flower.
-        const top = spot.stemY - height - scrollY;
-        if (top < navBottom + 4) return false;
-        if (spot.stemY - scrollY > window.innerHeight - 8) return false;
+        if (spot.stemY - height < navBottom + 4) return false;
+        if (spot.stemY > window.innerHeight - 8) return false;
         return !flowers.some(
           (other) =>
             Math.hypot(other.stem.x - spot.stemX, other.stem.y - spot.stemY) <
@@ -595,9 +606,20 @@ export function BeeScene() {
         (margins.length === 0 || Math.random() < INLINE_SHARE)
           ? inline
           : margins;
-      if (pool.length === 0) return;
+      // The spots have not been hit-tested yet, which is the costly part, so
+      // only the one drawn is. One that turns out to be covered is dropped
+      // and another drawn, a few times at most before waiting.
+      let spot: FlowerSpot | undefined;
+      for (let tries = 0; tries < SPOT_TRIES && pool.length > 0; tries++) {
+        const i = Math.floor(Math.random() * pool.length);
+        if (pool[i].confirm()) {
+          spot = pool[i];
+          break;
+        }
+        pool.splice(i, 1);
+      }
+      if (!spot) return;
 
-      const spot: FlowerSpot = pick(pool);
       // At the end of a line the flower is mirrored, so that the stem leans
       // away from the text instead of back across it. Mid-text it can go
       // either way.
@@ -606,8 +628,7 @@ export function BeeScene() {
 
       const stemFrac = mirrored ? 1 - FLOWER_STEM_X : FLOWER_STEM_X;
       const bloomFrac = mirrored ? 1 - BLOOM.x : BLOOM.x;
-      const x = spot.stemX - stemFrac * width;
-      const y = spot.stemY - height;
+      const anchorBox = spot.anchor.getBoundingClientRect();
 
       const el = document.createElement("div");
       el.className = mirrored ? "flower is-mirrored" : "flower";
@@ -626,15 +647,25 @@ export function BeeScene() {
 
       flowers.push({
         el,
-        x,
-        y,
+        anchor: spot.anchor,
+        offset: {
+          x: spot.stemX - anchorBox.left,
+          y: spot.stemY - anchorBox.top,
+        },
         width,
+        height,
+        stemFrac,
         stem: { x: spot.stemX, y: spot.stemY },
-        bloom: { x: x + bloomFrac * width, y: y + BLOOM.y * height },
+        bloom: {
+          x: (bloomFrac - stemFrac) * width,
+          y: (BLOOM.y - 1) * height,
+        },
         grains: [],
         hitAt: 0,
         coveredAt: 0,
         fading: false,
+        removeAt: 0,
+        orphaned: false,
       });
 
       nextFlowerAt = now + randIn(FLOWER_SPAWN_MS);
@@ -658,12 +689,11 @@ export function BeeScene() {
         pulseHive();
       }
 
-      // Bees are tracked in viewport coordinates, flowers in document ones.
-      // Pollen belongs to the page, so it launches from the bee's position
-      // on the page.
+      // Pollen belongs to the flower, so it launches from where the bee is
+      // relative to the stem.
       const origin: Vec = {
-        x: bee.pos.x + window.scrollX,
-        y: bee.pos.y + window.scrollY,
+        x: bee.pos.x - flower.stem.x,
+        y: bee.pos.y - flower.stem.y,
       };
 
       for (let i = 0; i < POLLEN_COUNT; i++) {
@@ -704,8 +734,19 @@ export function BeeScene() {
       flowers.splice(index, 1);
     };
 
-    /** Anchors are measured against the current layout, so a reflow invalidates
-     *  every one of them. Cheaper and more honest to clear and regrow. */
+    /** The flower closes up and its pollen goes with it, then it is thrown
+     *  away. Used once a pollinated one has been covered, and for one whose
+     *  text has disappeared from under it. */
+    const wilt = (flower: Flower, now: number) => {
+      flower.fading = true;
+      flower.removeAt = now + FLOWER_FADE_MS;
+      flower.el.classList.add("is-done");
+      flower.grains.forEach((grain) => (grain.el.style.opacity = "0"));
+    };
+
+    /** A flower rides on its anchor, but a reflow rewraps the words inside it,
+     *  so the spot it grew from is no longer a word boundary. Cheaper and more
+     *  honest to clear and regrow. */
     const clearFlowers = () => {
       for (let i = flowers.length - 1; i >= 0; i--) removeFlower(i);
     };
@@ -723,8 +764,23 @@ export function BeeScene() {
         ? Math.max(nav.getBoundingClientRect().bottom, 0)
         : 0;
       const hiveRect = hive.getBoundingClientRect();
-      const scrollX = window.scrollX;
-      const scrollY = window.scrollY;
+
+      // Each flower rides on the block its words belong to. Pinned stages
+      // and sliding panels move those without moving the page, so the page's
+      // scroll position is not enough to keep a flower on its word.
+      for (const flower of flowers) {
+        const box = flower.anchor.getBoundingClientRect();
+        // Text taken out of the page, hidden or faded out leaves its flower
+        // nothing to stand on. It closes up where it last stood rather than
+        // chasing an empty box to the corner of the screen.
+        flower.orphaned =
+          !flower.anchor.isConnected ||
+          (box.width === 0 && box.height === 0) ||
+          !isShown(flower.anchor);
+        if (flower.orphaned) continue;
+        flower.stem.x = box.left + flower.offset.x;
+        flower.stem.y = box.top + flower.offset.y;
+      }
 
       door = {
         x: hiveRect.left + hiveRect.width * HIVE_DOOR.x,
@@ -924,15 +980,19 @@ export function BeeScene() {
 
       for (let i = flowers.length - 1; i >= 0; i--) {
         const flower = flowers[i];
+        const { stem } = flower;
 
-        flower.el.style.transform = `translate3d(${(flower.x - scrollX).toFixed(
-          2,
-        )}px, ${(flower.y - scrollY).toFixed(2)}px, 0)`;
+        // Its text has gone, so it goes too, uncounted.
+        if (flower.orphaned && !flower.fading) wilt(flower, now);
 
-        if (flower.hitAt === 0) {
+        const left = stem.x - flower.stemFrac * flower.width;
+        const top = stem.y - flower.height;
+        flower.el.style.transform = `translate3d(${left.toFixed(2)}px, ${top.toFixed(2)}px, 0)`;
+
+        if (flower.hitAt === 0 && !flower.fading) {
           const reach = POLLINATE_RADIUS + BLOOM.r * flower.width;
-          const bx = flower.bloom.x - scrollX;
-          const by = flower.bloom.y - scrollY;
+          const bx = stem.x + flower.bloom.x;
+          const by = stem.y + flower.bloom.y;
           for (const bee of bees) {
             if (Math.hypot(bx - bee.pos.x, by - bee.pos.y) < reach) {
               pollinate(flower, bee, now);
@@ -958,23 +1018,19 @@ export function BeeScene() {
           const scale = 0.7 + 0.3 * eased;
 
           grain.el.style.transform =
-            `translate3d(${(x - scrollX - POLLEN_SIZE / 2).toFixed(2)}px, ` +
-            `${(y - scrollY - POLLEN_SIZE / 2).toFixed(2)}px, 0) ` +
+            `translate3d(${(stem.x + x - POLLEN_SIZE / 2).toFixed(2)}px, ` +
+            `${(stem.y + y - POLLEN_SIZE / 2).toFixed(2)}px, 0) ` +
             `scale(${scale.toFixed(3)})`;
           if (raw >= 0 && !flower.fading) grain.el.style.opacity = "1";
         }
 
-        if (flower.hitAt !== 0 && !flower.fading) {
-          if (now >= flower.coveredAt + FLOWER_HOLD_MS) {
-            flower.fading = true;
-            flower.el.classList.add("is-done");
-            flower.grains.forEach((grain) => (grain.el.style.opacity = "0"));
-          }
+        if (flower.fading) {
+          if (now >= flower.removeAt) removeFlower(i);
         } else if (
-          flower.fading &&
-          now >= flower.coveredAt + FLOWER_HOLD_MS + FLOWER_FADE_MS
+          flower.hitAt !== 0 &&
+          now >= flower.coveredAt + FLOWER_HOLD_MS
         ) {
-          removeFlower(i);
+          wilt(flower, now);
         }
       }
 

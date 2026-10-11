@@ -1,5 +1,5 @@
 ```component
-hive-corners
+hp-intro
 ```
 
 ```component

@@ -29,7 +29,7 @@ target, keep the manufacturing route.
 
 ## 3. Why RNAi is not already everywhere
 
-Six barriers, the same as on [the home page](/):
+Six barriers sit between RNAi and the field:
 
 1. **Rational target selection** — which gene to silence is the first hard problem.
 2. **Off-target screening** — a sequence that hits the pest may hit something else.

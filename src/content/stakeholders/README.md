@@ -84,3 +84,5 @@ not start a new bullet continues the previous one.
 
 Inline emphasis is `**bold**` and `*italic*` only, and the two cannot nest:
 keep an italic species name outside a bold run (`*S. alvi* **persists**`).
+A citation can be a link, `[Previous work](https://…)`, outside any bold or
+italic run.

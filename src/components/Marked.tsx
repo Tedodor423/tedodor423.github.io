@@ -50,19 +50,30 @@ export function Runs({ runs }: { runs: Run[] }) {
   );
 }
 
-/* `**bold**` and `*italic*`, the only inline Markdown the stakeholder files
- * use. A full Markdown renderer would wrap each field in a paragraph, and a
- * field already sits inside one. A marker with no partner stays as typed, so
- * a stray asterisk shows on the page rather than eating the rest of the line. */
-const EMPHASIS = /(\*\*[^*]+\*\*|\*[^*\s][^*]*\*)/;
+/* `**bold**`, `*italic*` and `[text](https://…)`, the only inline Markdown
+ * the stakeholder files use. A full Markdown renderer would wrap each field in
+ * a paragraph, and a field already sits inside one. A marker with no partner
+ * stays as typed, so a stray asterisk shows on the page rather than eating the
+ * rest of the line. */
+const EMPHASIS =
+  /(\*\*[^*]+\*\*|\*[^*\s][^*]*\*|\[[^\]]+\]\(https?:\/\/[^)\s]+\))/;
+const LINK = /^\[([^\]]+)\]\(([^)]+)\)$/;
 
-/** Like Marked, with `**bold**` and `*italic*` rendered. Searched-for words
- * are marked inside each run, so a match never straddles an emphasis edge. */
+/** Like Marked, with `**bold**`, `*italic*` and links rendered. Searched-for
+ * words are marked inside each run, so a match never straddles an edge. */
 export function MarkedInline({ text }: { text: string }) {
   return (
     <>
       {text.split(EMPHASIS).map((run, i) => {
         if (i % 2 === 0) return run && <Marked key={i} text={run} />;
+        const link = LINK.exec(run);
+        if (link) {
+          return (
+            <a key={i} href={link[2]} target="_blank" rel="noreferrer">
+              <Marked text={link[1]} />
+            </a>
+          );
+        }
         return run.startsWith("**") ? (
           <strong key={i}>
             <Marked text={run.slice(2, -2)} />

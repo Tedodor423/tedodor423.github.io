@@ -305,6 +305,12 @@
   pointer-events: none;
 }
 
+/* While the big map is still the map, the small one keeps out of sight in
+ * its column as the interviews come up, until the morph brings it. */
+.sr-where[data-waiting] > * {
+  visibility: hidden;
+}
+
 .sr-where-land {
   fill: var(--map-land);
 }

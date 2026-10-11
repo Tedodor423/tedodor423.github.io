@@ -1,18 +1,18 @@
 /* Slide four of the home page: the treatments, and the answer.
  *
- * Wax paper, ink, and the brand's display face. Three colours do work here
- * and nothing else does: violet is the arrow on a word that can be pointed
- * at (violet is the wiki's link colour, so it reads as "this answers you"),
- * honey is the block under the answer, and the bee brings its own. The
- * evidence sits in the wiki's panel: solid surface, hard ink border, no
- * shadow, as the menu's dropdowns do (brand.css).
+ * Wax paper, ink, and the brand's display face. Honey is the block under the
+ * answer, the bee and the evidence's clip and photograph bring their own, and
+ * everything else is ink. The evidence sits in the wiki's panel: solid
+ * surface, hard ink border, no shadow, as the menu's dropdowns do
+ * (brand.css). The line from each charge to its box is drawn in the same ink
+ * and the same 2px as that border, so word, line and box read as one stroke.
  *
  * The bee's clip sits above the claim with no pointer events, so it never
  * covers a letter or takes a hover or a tap from one.
  *
  * The ride is the scroll. TreatmentsSlide.tsx hands each step over as a
  * variable from 0 to 1: --solution ("The solution is" coming in) and
- * --answer ("RNA interference"), then, on into slide five, --leave
+ * --answer ("NECTAR"), then, on into slide five, --leave
  * (everything but the answer going) and --rise (the answer climbing to the
  * top). Stacked the first two run on a clock and the last two stay at 0.
  */
@@ -98,83 +98,144 @@
   font-size: 0.5em;
 }
 
-/* The two charges. A plain word in the claim, followed by an arrow: down
-   while its evidence is shut, up while it is open. */
-.ts-charge {
-  display: inline;
-  padding: 0;
-  margin: 0;
-  border: 0;
-  background: none;
-  font: inherit;
-  line-height: inherit;
-  color: inherit;
-  text-transform: inherit;
-  letter-spacing: inherit;
-  cursor: pointer;
-}
-
-.ts-charge:focus-visible {
-  outline: 3px solid var(--violet);
-  outline-offset: 0.06em;
-}
-
-/* A chevron drawn as heavy as Cubao's strokes, sitting at the middle of
-   the capitals. It turns over when the evidence opens, and that is its only
-   motion. */
-.ts-cue {
+/* The mark of no size on a charge's baseline, which the line under it is
+   measured from (TreatmentsSlide.tsx). */
+.ts-base {
   display: inline-block;
-  width: 0.42em;
-  height: 0.28em;
-  margin-left: 0.12em;
-  vertical-align: 0.22em;
-  overflow: visible;
-  fill: none;
-  stroke: var(--violet);
-  stroke-width: 2.6;
-  stroke-linecap: square;
-  transition: transform 200ms ease-out;
-}
-
-.ts-charge[data-open="true"] .ts-cue {
-  transform: rotate(180deg);
+  width: 0;
+  height: 0;
 }
 
 /* ---------- the evidence ---------- */
 
+/* The space between the claim and the boxes is where the lines come down. */
 .ts-evidence {
   display: grid;
-  gap: 1rem;
-  margin-top: 2rem;
+  gap: 1.5rem;
+  margin-top: 2.25rem;
 }
 
+/* A wide screen that does not pin (reduced motion, or a short window) still
+   sets the two boxes side by side, as the ride does, so each word's line
+   comes straight down into its own box. */
+@media (min-width: 48rem) {
+  .ts-evidence {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 60rem;
+  }
+}
+
+/* The picture across the top, the words under it. */
 .ts-fact {
-  padding: 1rem 1.15rem 0.9rem;
+  overflow: hidden;
   background: var(--surface);
   border: 2px solid var(--ink);
   border-radius: var(--radius);
 }
 
-/* A charge not yet opened keeps its room, so opening one never moves the
-   rest, and the solution stays below the fold until the reader scrolls to
-   it. */
-.ts-fact[data-open="false"] {
-  visibility: hidden;
-}
-
-.ts-fact[data-open="true"] {
-  animation: ts-in 500ms ease-out both;
-}
-
-@keyframes ts-in {
-  from {
-    opacity: 0;
-    transform: translateY(0.75rem);
-  }
+.ts-words {
+  padding: 1rem 1.15rem 0.9rem;
 }
 
 .treatments-slide .ts-fact p {
   margin: 0;
+}
+
+/* The clip and the photograph share one frame, so the two boxes match. The
+   photograph is cut to it around the worker and the spray. */
+.ts-media {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-bottom: 2px solid var(--ink);
+  background: var(--surface-muted);
+}
+
+.ts-fact--toxic .ts-media {
+  object-position: 50% 58%;
+}
+
+/* A file not there yet: its frame, holding its name. */
+.treatments-slide .ts-media--missing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text);
+}
+
+/* The lines from the charges to their boxes, over the claim and the boxes,
+   taking no pointer. Each draws from the word to the box through its
+   dash offset (TreatmentsSlide.tsx). */
+.ts-wires {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: visible;
+  pointer-events: none;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+
+.ts-wires path {
+  stroke-dasharray: 1;
+}
+
+/* ---------- a charge and its evidence, pointed at ---------- */
+
+/* Hovering a charge or its box (or tabbing into the box) picks the pair out
+   in violet, the wiki's link colour, so it reads as "this answers that": the
+   word, its line drawn a little heavier, and the box's border, the box
+   grown a touch from its top edge so it stays on the end of its line. */
+.ts-charge,
+.ts-fact,
+.ts-media,
+.ts-wires path {
+  transition:
+    color 180ms ease-out,
+    border-color 180ms ease-out,
+    stroke 180ms ease-out,
+    stroke-width 180ms ease-out,
+    transform 180ms ease-out;
+}
+
+.ts-fact {
+  transform-origin: 50% 0;
+}
+
+.ts-charge[data-hot] {
+  color: var(--violet);
+}
+
+.ts-fact[data-hot] {
+  border-color: var(--violet);
+  transform: scale(1.03);
+}
+
+.ts-fact[data-hot] .ts-media {
+  border-bottom-color: var(--violet);
+}
+
+.ts-wires path[data-hot] {
+  stroke: var(--violet);
+  stroke-width: 3;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ts-charge,
+  .ts-fact,
+  .ts-media,
+  .ts-wires path {
+    transition: none;
+  }
+
+  .ts-fact[data-hot] {
+    transform: none;
+  }
 }
 
 .treatments-slide .ts-claim {
@@ -251,27 +312,17 @@
   max-width: 36rem;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .ts-fact[data-open="true"] {
-    animation: none;
-  }
-
-  .ts-cue {
-    transition: none;
-  }
-}
-
 /* ---------- the ride ---------- */
 
 @media (min-width: 48rem) and (min-height: 36rem) and (prefers-reduced-motion: no-preference) {
-  /* Six windows of travel: the stage pins at the top of the track and plays
+  /* Five windows of travel: the stage pins at the top of the track and plays
      out over the rest, this slide in the first two, slide five
-     (RnaiChallenges.css) in the other four. */
+     (RnaiChallenges.css) in the other three. */
   .ts-track {
     /* The landing markers (.ride-landing, brand.css) are placed in the
        track's own coordinates. */
     position: relative;
-    height: 700dvh;
+    height: 600dvh;
   }
 
   .ts-stage {
@@ -286,16 +337,17 @@
     padding: 0;
   }
 
-  /* The bee sits large on the claim's top right corner: the middle of its
-     frame is where the second line ends (arrow included, about 12.85 of
-     --ts-title) and half a line below the claim's top, so it wanders over
-     the end of the claim. It takes no pointer, so the arrows under it
-     still answer. Above the stage's top the frame is cut off, and the
-     clip's bee never reaches far enough right to meet the bee tally in the
-     screen's corner. */
+  /* The bee sits large off the claim's top right corner: the middle of its
+     frame is 12.85 of --ts-title and 16vw in from the claim's left, well
+     past where the second line ends (about 11.7), and half a line plus 4dvh
+     below the claim's top, so it wanders in the open space right of the
+     claim, over the last letters at most. Above the stage's top the frame
+     is cut off, and the clip's bee never reaches far enough right to meet
+     the bee tally in the screen's corner: checked at 1280x720, 1440x900
+     and 1920x1080, it comes closest at 1280x720. */
   .ts-bee {
-    top: calc(9dvh + 0.5 * var(--ts-title) - 0.28125 * var(--ts-bee));
-    left: calc(6vw + 12.85 * var(--ts-title) - 0.5 * var(--ts-bee));
+    top: calc(13dvh + 0.5 * var(--ts-title) - 0.28125 * var(--ts-bee));
+    left: calc(22vw + 12.85 * var(--ts-title) - 0.5 * var(--ts-bee));
   }
 
   /* The claim, upper left, with its evidence straight under it. */
@@ -312,11 +364,16 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 2vw;
     max-width: 62vw;
-    margin-top: 3.5dvh;
+    margin-top: 4.5dvh;
   }
 
-  .ts-fact {
+  .ts-words {
     padding: 2dvh 1.6vw 1.8dvh;
+  }
+
+  /* On a short screen the frame gives up height before the words do. */
+  .ts-media {
+    max-height: 24dvh;
   }
 
   .treatments-slide .ts-claim {

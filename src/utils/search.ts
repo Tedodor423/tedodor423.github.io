@@ -11,10 +11,11 @@
  * app loads, and all that is missing is the reading of it. That is this file:
  * no dependencies, no generated index, no build step.
  *
- * The index is built once, on the first query, and kept for the session.
- * Thirty pages is a few hundred kilobytes of text and parses in a few
- * milliseconds; doing it lazily keeps it off the first paint of the home
- * page, which most visitors never search from.
+ * The index is built once and kept for the session: on the first query, or
+ * earlier, once the browser is idle after the page loads, because the link
+ * preview names sections from it (prepareIndex). Thirty pages is a few
+ * hundred kilobytes of text and parses in some tens of milliseconds; doing it
+ * lazily or idly keeps it off the first paint of the home page.
  *
  * WHAT IT SEARCHES
  *
@@ -30,7 +31,7 @@
  *
  * Not only Markdown, either. Some of the wiki's text reaches the page through
  * a component rather than the page's own file, and much of that sits behind a
- * click: the stakeholder interviews and the seven HIVE questions on the map, the
+ * click: the stakeholder interviews and the HIVE questions on the map, the
  * dated timeline, the engineering cycles and their workstreams behind the
  * comb, the home deck's slides, the colony-loss map's caption and panel. Each
  * is read from the same data the component renders (see SLOT_PASSAGES), and
@@ -71,7 +72,8 @@ import {
   THREAD_NAMES,
   fullDate,
 } from "../data/timeline";
-import { HIVE_CORNERS } from "../data/hiveCorners";
+import { HP_INTRO } from "../data/hpIntro";
+import { HIVE_FRAMEWORK } from "../data/hiveFramework";
 import {
   BEES,
   CHALLENGES,
@@ -338,7 +340,9 @@ function stakeholderPassages(path: string, page: PageEntry): Passage[] {
     ]
       .filter(Boolean)
       .join(" ")
-      // The fields carry **bold** and *italic*; a snippet shows neither.
+      // The fields carry **bold**, *italic* and the odd [link](url); a
+      // snippet shows the link's words and neither emphasis.
+      .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
       .replace(/\*+/g, "");
 
     return {
@@ -435,7 +439,7 @@ function cyclePassages(path: string, page: PageEntry): Passage[] {
 }
 
 /**
- * The seven HIVE questions, as passages: one for each question's summary and
+ * The HIVE questions, as passages: one for each question's summary and
  * one for each stage of its write-up.
  *
  * They live in src/content/questions/ and reach the page through the
@@ -479,34 +483,41 @@ function questionPassages(path: string, page: PageEntry): Passage[] {
 }
 
 /**
- * The hive-corners figure that opens the human practices page: the team's
- * account of how the work was done, in a component rather than the page's
- * Markdown (src/data/hiveCorners.ts). It is the top of the page, so the
- * passage has no heading, and the anchor is the one the timeline already
- * links to. The HIVE framework in the hive's window is a passage of its
- * own; landing on its anchor opens the window.
+ * The opening of the human practices page: the team's account of what the
+ * work reached and what it fed, in a component rather than the page's
+ * Markdown (src/data/hpIntro.ts), with the TODOs its map shows while its
+ * data is a stand-in. It is the top of the page, so the passage has no
+ * heading, and the anchor is the one the timeline already links to. The
+ * HIVE framework in the window its button opens is a passage of its own
+ * (src/data/hiveFramework.ts); landing on its anchor opens the window.
  */
-function hiveCornersPassages(path: string, page: PageEntry): Passage[] {
-  const plain = (parts: string[]) => parts.join(" ").replace(/\*+/g, "");
-  const { framework } = HIVE_CORNERS;
+function hpIntroPassages(path: string, page: PageEntry): Passage[] {
+  const plain = (parts: string[]) => toPlainText(parts.join("\n\n"));
   return [
     passage(
       path,
       page,
       "",
-      HIVE_CORNERS.anchor,
+      HP_INTRO.anchor,
       plain([
-        ...HIVE_CORNERS.copy,
-        HIVE_CORNERS.onwardLead,
-        ...HIVE_CORNERS.onward.map((link) => link.label),
+        `${HP_INTRO.interviews.value} ${HP_INTRO.interviews.label}`,
+        HP_INTRO.reach,
+        `${HP_INTRO.survey.value} ${HP_INTRO.survey.label} ${HP_INTRO.surveyWhere}`,
+        HP_INTRO.usesLead,
+        ...HP_INTRO.uses.map((use) => use.text),
+        HP_INTRO.temperatureTitle,
+        ...Object.values(HP_INTRO.todos).map((todo) => `TODO ${todo}`),
       ]),
     ),
     passage(
       path,
       page,
-      framework.heading,
-      framework.anchor,
-      plain([framework.lead, ...framework.stages.map((stage) => stage.text)]),
+      HIVE_FRAMEWORK.heading,
+      HIVE_FRAMEWORK.anchor,
+      plain([
+        HIVE_FRAMEWORK.lead,
+        ...HIVE_FRAMEWORK.stages.map((stage) => stage.text),
+      ]),
     ),
   ];
 }
@@ -530,10 +541,9 @@ function familyPassages(path: string, page: PageEntry): Passage[] {
 
 /**
  * The home deck, read from src/data/homeDeck.ts, which the slides render
- * from. One passage per claim, and one per piece of evidence a charge opens,
- * so a result can land on the evidence rather than the claim above it. The
- * anchors are DECK_ANCHORS: each slide carries its own, and TreatmentsSlide
- * opens the evidence a fragment names.
+ * from. One passage per claim, and one per charge's piece of evidence, so a
+ * result can land on the evidence rather than the claim above it. The
+ * anchors are DECK_ANCHORS: each slide carries its own.
  */
 function deckPassages(path: string, page: PageEntry): Passage[] {
   const treatments = treatmentsTitle();
@@ -589,11 +599,7 @@ function deckPassages(path: string, page: PageEntry): Passage[] {
       page,
       CHALLENGES.title,
       DECK_ANCHORS.challenges,
-      [
-        ...CHALLENGES.barriers,
-        CHALLENGES.requiring,
-        ...CHALLENGES.demands.map(demandText),
-      ].join(" "),
+      [CHALLENGES.requiring, ...CHALLENGES.demands.map(demandText)].join(" "),
     ),
   ];
 }
@@ -658,7 +664,7 @@ const SLOT_PASSAGES: Record<
     ...familyPassages(path, page),
     ...cyclePassages(path, page),
   ],
-  "hive-corners": hiveCornersPassages,
+  "hp-intro": hpIntroPassages,
   "treatments-slide": deckPassages,
   "varroa-map": colonyLossPassages,
 };
@@ -681,6 +687,28 @@ function corpus(): Passage[] {
     }
   }
   return index;
+}
+
+/**
+ * Builds the index now rather than on first use, for a caller that knows it
+ * will be wanted: the link preview, which builds it once the browser is idle
+ * so that the first card opens as fast as the rest.
+ */
+export function prepareIndex(): void {
+  corpus();
+}
+
+/**
+ * The heading a link's fragment lands on, read from the index, or undefined
+ * when the fragment names nothing the index knows. The link preview uses it
+ * to say which part of a page a link opens: a cycle, a HIVE question or a
+ * section. It reads the same passages a search does, so a withheld
+ * stakeholder's name is no more reachable here than there.
+ */
+export function headingAt(path: string, anchor: string): string | undefined {
+  if (!anchor) return undefined;
+  const hit = corpus().find((p) => p.path === path && p.anchor === anchor);
+  return hit?.heading || undefined;
 }
 
 let vocabulary: Map<string, number> | null = null;

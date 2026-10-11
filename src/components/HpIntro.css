@@ -1,0 +1,643 @@
+/* The opening of the human practices page (HpIntro.tsx).
+ *
+ * The team's mockup and their notes on it: words down the left, one small
+ * world map down the right. At the top, the reach, set big: the interview
+ * count with the faces of people we spoke to beside it, the survey count
+ * over the map. Straight under the reach, what the work fed, as one slide
+ * set as large as the window allows, which holds at the top while its
+ * lines are highlighted one at a time by a honey block with an ink rule
+ * (the picked question's look on the map below) that slides from line to
+ * line. The map scrolls up with the reach, holds at the top, and changes
+ * from the survey's picture to each line's.
+ *
+ * Type is ink, as the page title is. The map is the stakeholder map's
+ * lattice in its colours (wax land, honey for people), so it can turn into
+ * that map below it. Navy dots for the survey, the mite's red for Varroa,
+ * honey with an ink rim for the two case-study regions and for the people,
+ * as on the big map. Nothing moves but what the words are about: the faces,
+ * the highlight, the map's picture changing, and the spread.
+ */
+
+.hp-intro {
+  /* Breaks the reading measure, as the map below it does: words beside a
+   * figure need the room. Out of the centred column symmetrically. */
+  width: min(80rem, calc(100vw - 4rem));
+  max-width: none;
+  margin-inline: calc((100% - min(80rem, calc(100vw - 4rem))) / 2);
+  margin-block: 0.5rem 0;
+  color: var(--ink);
+  /* Where the slide and the map hold, under the menu. */
+  --hpi-top: 5.5rem;
+}
+
+/* Words on the left, the survey's count and the map on the right. The two
+ * counts open their columns, so they stand level. */
+.hpi-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: 0 3.5rem;
+}
+
+.hpi-copy,
+.hpi-side {
+  min-width: 0;
+}
+
+/* ---------- the reach ---------- */
+
+.hp-intro .hpi-stat {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  line-height: 1.12;
+}
+
+/* One size for both headline counts, so they read as a pair. */
+.hpi-stat-value {
+  font-family: var(--font-display);
+  font-size: clamp(3.5rem, 6.8vw, 6rem);
+  line-height: 0.9;
+}
+
+.hpi-stat-label {
+  font-size: clamp(1.7rem, 2.9vw, 2.6rem);
+}
+
+.hp-intro .hpi-lede {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* The count, with the faces beside it. */
+.hpi-hero-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1.25rem;
+  align-items: start;
+  margin-bottom: 1.75rem;
+}
+
+.hpi-side > .hpi-stat {
+  margin-bottom: 1.25rem;
+}
+
+.hp-intro .hpi-where {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-heading);
+  font-size: clamp(1.6rem, 2.7vw, 2.4rem);
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: right;
+}
+
+/* ---------- the faces ---------- */
+
+.hpi-faces {
+  display: block;
+  width: clamp(10rem, 16vw, 14.5rem);
+  height: auto;
+}
+
+/* Honey under each picture, so a cell still loading, or waiting for the
+ * next picture, reads as a cell. The ink rim over it, as on the map. */
+.hpi-face-cell {
+  fill: var(--honey);
+}
+
+.hpi-face-rim {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2.5;
+}
+
+.hpi-face image.is-fresh {
+  animation: hpi-face-in 500ms ease both;
+}
+
+@keyframes hpi-face-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ---------- the slide ---------- */
+
+/* Straight under the reach. It holds at the top beside the map while the
+ * window rides through it: the empty .hpi-ride under it is the ride, a
+ * line every --hpi-step (set by HpIntro.tsx). Its type is as large as fits
+ * the window (--hpi-slide-fs, fitted by HpIntro.tsx); the lead and the
+ * lines are set relative to it. */
+.hpi-pin {
+  margin-top: clamp(3rem, 9vh, 6rem);
+}
+
+.hpi-slide {
+  position: sticky;
+  top: var(--hpi-top);
+  font-family: var(--font-heading);
+  font-size: var(--hpi-slide-fs, 1.6rem);
+  font-weight: 600;
+  line-height: 1.3;
+  /* Fades out of the way as the map starts to grow into the stakeholder
+   * map, which follows straight after it (--hpi-leave, from HpIntro.tsx).
+   * Above the stakeholder map's stage while it does, since that stage
+   * rises under the slide's last line. */
+  z-index: 6;
+  opacity: calc(1 - var(--hpi-leave, 0));
+}
+
+/* Once the stakeholder map has taken over, this section keeps out of its
+ * way, the end of it lying under that map (HpIntro.tsx sets data-left). */
+.hp-intro[data-left] .hpi-slide,
+.hp-intro[data-left] .hpi-figure {
+  visibility: hidden;
+}
+
+/* The stakeholder map starts rising under the slide as its last line
+ * lights, rather than after the slide has gone, so the map arrives most of
+ * a window sooner. 45vh is the slide's --hpi-step: the map's top meets the
+ * window's bottom just after the last line lights. Only where the
+ * hand-off plays; elsewhere the two simply follow each other. */
+@media (min-width: 56.0625rem) and (prefers-reduced-motion: no-preference) {
+  .hp-intro + .stakeholder-map {
+    margin-top: calc(8rem - 45vh);
+  }
+}
+
+.hpi-ride {
+  height: calc(4 * var(--hpi-step, 45vh));
+}
+
+.hp-intro .hpi-uses-lead {
+  max-width: none;
+  margin: 0;
+  font-size: 1em;
+  line-height: 1.3;
+}
+
+/* The highlight is one block behind the list that moves with the scroll
+ * itself (HpIntro.tsx sets its place and size every frame, and each line's
+ * brightness by how much of it the block covers), rather than each line
+ * lighting on its own. No easing of its own: it moves as the page does. */
+.hpi-uses-wrap {
+  position: relative;
+  margin-top: 0.45em;
+  padding-left: 1.4em;
+}
+
+.hpi-mark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--honey);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms linear;
+}
+
+.hpi-mark.is-on {
+  opacity: 1;
+}
+
+/* Restated at .hp-intro depth so the page's list rules do not reach it.
+ * Close together: the four are read as one. */
+.hp-intro .hpi-uses {
+  position: static;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1em;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Each line can be pressed. */
+.hp-intro .hpi-use {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.3em minmax(0, 1fr);
+  gap: 0.3em;
+  margin: 0;
+  padding: 0.25em 0.45em 0.3em 0.2em;
+  font-size: 0.86em;
+  line-height: 1.3;
+  cursor: pointer;
+}
+
+.hpi-pick {
+  display: grid;
+  place-items: center;
+  width: 1.3em;
+  height: 1.3em;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.hpi-pick:focus-visible {
+  outline: 3px solid var(--violet);
+  outline-offset: 0;
+}
+
+.hpi-arrow {
+  width: 0.95em;
+  height: 0.95em;
+}
+
+.hpi-arrow path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------- the figure ---------- */
+
+/* The map and what goes under it. It scrolls up with the reach, then holds
+ * beside the slide with the map's middle at the window's middle (its height
+ * is --hpi-map-h, measured by HpIntro.tsx), never under the menu. Above
+ * what follows it (the stakeholder map's stage), so the map can fly over
+ * that stage at the hand-off. */
+.hpi-figure {
+  position: sticky;
+  top: max(var(--hpi-top), calc(50vh - var(--hpi-map-h, 16rem) / 2));
+  z-index: 5;
+}
+
+/* The hive, for the framework's line, in place of the map: centred where
+ * the map is, larger than it, over the words under it, which are empty
+ * then. Hidden, not just faded, otherwise, so it neither takes a click nor
+ * flies into the window from nowhere. */
+.hpi-figure .hpi-mapbox {
+  transition: opacity 300ms linear;
+}
+
+.hp-intro[data-state="hive"] .hpi-figure .hpi-mapbox {
+  opacity: 0;
+}
+
+.hpi-hive {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: var(--hpi-map-h, 16rem);
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 300ms linear,
+    visibility 0s linear 300ms;
+}
+
+.hpi-hive.is-on {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 300ms linear;
+}
+
+.hpi-hive .hf-page {
+  width: min(100%, 27rem);
+}
+
+/* Under the map, a slot: every picture's words stacked in the one place,
+ * the current picture's shown. A fixed height, so a change of picture
+ * never moves the map. */
+.hpi-slot {
+  display: grid;
+}
+
+.hpi-slot > * {
+  grid-area: 1 / 1;
+  opacity: 0;
+  transition: opacity 300ms linear;
+}
+
+.hpi-slot > .is-on {
+  opacity: 1;
+}
+
+/* The spread's year, counting, in the empty South Pacific at the map's
+ * bottom left, as a strategy game keeps its date. Tabular, so the counter
+ * does not jitter. */
+.hp-intro .hpi-year {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.4vw, 3rem);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms linear;
+}
+
+.hp-intro .hpi-year.is-on {
+  opacity: 1;
+}
+
+/* ---------- the map ---------- */
+
+.hpi-mapbox {
+  position: relative;
+  aspect-ratio: 1852 / 733;
+}
+
+.hpi-fly {
+  width: 100%;
+  aspect-ratio: 1852 / 733;
+}
+
+/* At the hand-off the map leaves its box and is drawn over the page, its
+ * place and width set frame by frame (HpIntro.tsx); the box keeps the room. */
+.hpi-fly[data-flying] {
+  position: fixed;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.hpi-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* The land. Each country is a group, so the spread can colour it as one;
+ * its colour eases between years and between pictures. */
+.hpi-land {
+  fill: var(--map-land);
+}
+
+.hpi-land > g {
+  transition: fill 400ms linear;
+}
+
+.hpi-svg[data-state="spread"] .hpi-land > g {
+  transition-duration: 160ms;
+}
+
+.hpi-svg[data-state="regions"] .is-region {
+  fill: var(--honey);
+  stroke: var(--ink);
+  stroke-width: 1.1;
+}
+
+.hpi-dots,
+.hpi-labels,
+.hpi-people {
+  opacity: 0;
+  transition: opacity 400ms linear;
+}
+
+.hpi-svg[data-state="survey"] .hpi-dots,
+.hpi-svg[data-state="regions"] .hpi-labels,
+.hpi-svg[data-state="people"] .hpi-people {
+  opacity: 1;
+}
+
+.hpi-dots {
+  fill: var(--oxford-navy);
+}
+
+/* Set in the drawing's own units: about the page's small label size at the
+ * map's usual width. A paper halo keeps them legible over land. */
+.hpi-labels {
+  fill: var(--ink);
+  font-family: var(--font-heading);
+  font-size: 46px;
+  font-weight: 600;
+  paint-order: stroke;
+  stroke: var(--surface);
+  stroke-width: 10px;
+  stroke-linejoin: round;
+}
+
+/* As the stakeholder map draws a person at rest: .sm-cell and .sm-rim. */
+.hpi-people polygon {
+  fill: var(--honey);
+  stroke: var(--ink);
+  stroke-width: 1.1;
+}
+
+/* ---------- under the map ---------- */
+
+.hpi-foot {
+  align-items: start;
+  min-height: 14.5rem;
+  margin-top: 0.75rem;
+}
+
+/* The chart's part holds a link, so it is out of reach while unseen, once
+ * it has faded. */
+.hpi-foot-spread {
+  visibility: hidden;
+  transition:
+    opacity 300ms linear,
+    visibility 0s linear 300ms;
+}
+
+.hpi-foot-spread.is-on {
+  visibility: visible;
+  transition: opacity 300ms linear;
+}
+
+/* The page's TODO, smaller, under the figure it is about. */
+.markdown-page .hp-intro .hpi-todo {
+  margin: 0.75rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.hp-intro .hpi-chart-title {
+  margin: 0 0 0.25rem;
+  color: var(--ink);
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.hpi-chart svg {
+  display: block;
+  overflow: visible;
+  touch-action: pan-y;
+}
+
+/* Recessive grid; the zero line, the baseline average, a step darker. */
+.hpi-chart-grid line {
+  stroke: var(--rule);
+  stroke-width: 1;
+}
+
+.hpi-chart-grid line.is-zero {
+  stroke: var(--wax-deep);
+}
+
+.hpi-chart-grid text,
+.hpi-chart-value {
+  fill: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.hpi-chart-value {
+  fill: var(--ink);
+  font-weight: 700;
+  paint-order: stroke;
+  stroke: var(--surface);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+
+/* The whole series faint, the years so far over it in navy: one series, so
+ * the title names it and no legend is needed. Navy rather than the map's
+ * red, which means Varroa and nothing else. */
+.hpi-chart-all {
+  fill: none;
+  stroke: var(--map-land);
+  stroke-width: 1.5;
+}
+
+.hpi-chart-now {
+  fill: none;
+  stroke: var(--oxford-navy);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.hpi-chart-dot {
+  fill: var(--oxford-navy);
+  stroke: var(--surface);
+  stroke-width: 2;
+}
+
+.hpi-chart-cross {
+  stroke: var(--text-muted);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+}
+
+.hp-intro .hpi-chart-source {
+  margin: 0.15rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hpi-face image.is-fresh {
+    animation: none;
+  }
+
+  .hpi-mark,
+  .hpi-slot > *,
+  .hpi-land > g,
+  .hpi-dots,
+  .hpi-labels,
+  .hpi-people {
+    transition: none;
+  }
+}
+
+/* ---------- narrow screens ---------- */
+
+/* One column, in reading order: the reach's words, the survey's count, the
+ * map, the slide. The two columns step aside (display: contents) so their
+ * parts can be ordered as one list, and the map then holds at the top of
+ * the window over the whole of it, paper behind it so the slide scrolls
+ * under it rather than through it. The slide and the map cannot both fit,
+ * so the slide does not pin: its lines are spaced out and each lights as
+ * it passes a reading line under the map (READ_AT_NARROW in HpIntro.tsx),
+ * at a fixed size. */
+@media (max-width: 56rem) {
+  .hp-intro {
+    width: auto;
+    margin-inline: 0;
+  }
+
+  .hpi-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hpi-copy,
+  .hpi-side {
+    display: contents;
+  }
+
+  .hpi-hero {
+    order: 1;
+  }
+
+  .hpi-side > .hpi-stat {
+    order: 2;
+    margin: 2rem 0 0.75rem;
+  }
+
+  .hpi-figure {
+    order: 3;
+    top: 0;
+    margin-inline: -1rem;
+    padding: 0.5rem 1rem 0.25rem;
+    border-bottom: 1px solid var(--rule);
+    background: var(--surface);
+  }
+
+  .hpi-pin {
+    order: 4;
+    padding-bottom: 16vh;
+  }
+
+  .hpi-stat-value {
+    font-size: 2.75rem;
+  }
+
+  .hpi-stat-label {
+    font-size: 1.35rem;
+  }
+
+  .hp-intro .hpi-lede {
+    font-size: 1.3rem;
+  }
+
+  .hp-intro .hpi-where {
+    font-size: 1.2rem;
+  }
+
+  .hpi-faces {
+    width: 8.5rem;
+  }
+
+  .hpi-foot {
+    min-height: 12.5rem;
+    margin-top: 0.4rem;
+  }
+
+  .hpi-slide {
+    position: static;
+    font-size: 1.3rem;
+  }
+
+  .hpi-ride {
+    display: none;
+  }
+
+  .hp-intro .hpi-uses {
+    gap: 22vh;
+  }
+}

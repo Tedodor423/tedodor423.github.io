@@ -1,4 +1,4 @@
-/* The stakeholder record and the seven HIVE questions, loaded from Markdown.
+/* The stakeholder record and the HIVE questions, loaded from Markdown.
  *
  * The content lives where the team can edit it without touching code:
  *
@@ -7,6 +7,7 @@
  *     interviewed them, what we learned, the verbatim quote and how we
  *     implemented the advice);
  *   - one file per question in `src/content/questions/q1.md` … `q7.md`
+ *     (plus `q6.5.md`)
  *     (frontmatter for the title and the per-stage people, sections for the
  *     summary and each stage of the cycle panel).
  *
@@ -22,8 +23,17 @@
  * ignored on purpose.
  */
 
-/** The HIVE questions the page is organised around. */
-export type QuestionId = "Q1" | "Q2" | "Q3" | "Q4" | "Q5" | "Q6" | "Q7";
+/** The HIVE questions the page is organised around. Q6.5 is the team's own
+ * numbering for the question they added between Q6 and Q7. */
+export type QuestionId =
+  | "Q1"
+  | "Q2"
+  | "Q3"
+  | "Q4"
+  | "Q5"
+  | "Q6"
+  | "Q6.5"
+  | "Q7";
 
 export const QUESTION_IDS: QuestionId[] = [
   "Q1",
@@ -32,6 +42,7 @@ export const QUESTION_IDS: QuestionId[] = [
   "Q4",
   "Q5",
   "Q6",
+  "Q6.5",
   "Q7",
 ];
 
@@ -476,7 +487,7 @@ export function parseHiveAnchor(
   } catch {
     return null;
   }
-  const m = /^hive-(q\d)(?:-([a-z]+))?$/.exec(id);
+  const m = /^hive-(q\d+(?:\.\d+)?)(?:-([a-z]+))?$/.exec(id);
   if (!m) return null;
   const q = m[1].toUpperCase() as QuestionId;
   if (!QUESTION_IDS.includes(q)) return null;

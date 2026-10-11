@@ -21,6 +21,13 @@
  * shown by filling the face rather than with an outline: an outline would be
  * clipped away and the hexagon would look unfocusable.
  *
+ * SIZE FOLLOWS THE CELL. The comb spans the window, so a bigger screen gets
+ * bigger hexagons, and everything inside a hexagon is sized in `em` off one base
+ * set from its --slant: .dbtl-shut-body for a closed cell, the face for the open
+ * one. Each base has a floor at the old fixed size, so up to a laptop nothing
+ * changes and past it the type, the icon, the dial and the rule round the cell all
+ * grow in step with the hexagon.
+ *
  * WHAT IS ANIMATED, and why only this. The cell's box transitions, so opening one
  * glides it open and slides its neighbours down in the same motion. The dial
  * turns, and the marker beside it grows into the dial while the last one shrinks
@@ -30,11 +37,13 @@
  */
 
 .dbtl {
-  /* Out of the 36rem reading measure: the comb needs the band, not the column.
-   * Same escape the other full-width components use. */
-  width: min(74rem, calc(100vw - 3rem));
+  /* Out of the 36rem reading measure and across the whole window, less a gutter:
+   * the opened cell is meant to be the screen, so the comb takes every pixel of
+   * width there is, however wide the screen. Same escape the other full-width
+   * components use, without their cap. */
+  width: calc(100vw - 3rem);
   max-width: none;
-  margin-inline: calc((100% - min(74rem, calc(100vw - 3rem))) / 2);
+  margin-inline: calc((100% - (100vw - 3rem)) / 2);
   margin-block: 1.5rem 2.5rem;
   /* The connector (.dbtl-link) is positioned against this. */
   position: relative;
@@ -191,9 +200,10 @@
 /* The face. The inset is the thickness of the lab's rule showing round it, and
    the inner hexagon's own slant is pulled in with it: a box 2r shorter wants a
    slant r/√3 smaller, which is what keeps the rule an even width all the way
-   round instead of pinching at the left and right points. */
+   round instead of pinching at the left and right points. The rule thickens with
+   the cell past the 14px it is at laptop size. */
 .dbtl-face {
-  --rule-width: 14px;
+  --rule-width: max(14px, var(--slant) * 0.196);
   position: absolute;
   inset: var(--rule-width);
   clip-path: polygon(
@@ -228,12 +238,16 @@
 /* A flat-top hexagon is full height between the two slants, so the text box is
    inset by the slant and can use nearly all the height. That also means the box is
    only about half the cell's width, whatever the cell's size, which is why what
-   goes in it is a short label rather than the question. */
+   goes in it is a short label rather than the question.
+
+   The font size is the closed cell's base (see the note at the top): 1rem on a
+   laptop, where a cell is about 250px tall, and in proportion past that. */
 .dbtl-shut-body {
+  font-size: max(1rem, var(--slant) * 0.224);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 0.3rem;
+  gap: 0.3em;
   position: absolute;
   inset: 8% calc(var(--slant) * 0.45);
 }
@@ -246,11 +260,11 @@
 .dbtl .dbtl-shut-icon {
   display: block;
   align-self: center;
-  height: 2.8rem;
+  height: 2.8em;
   width: auto;
   max-width: 80%;
   object-fit: contain;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.25em;
   transition:
     height 0.22s ease,
     margin 0.22s ease,
@@ -271,7 +285,7 @@
 .dbtl-shut-num {
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 0.6rem;
+  font-size: 0.6em;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--lab);
@@ -280,7 +294,7 @@
 .dbtl-shut-q {
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 0.86rem;
+  font-size: 0.86em;
   line-height: 1.25;
   color: var(--ink);
 }
@@ -301,7 +315,7 @@
 .dbtl-comb[data-open="no"]
   .dbtl-cell:has(.dbtl-shut:focus-visible)
   > .dbtl-face {
-  --rule-width: 18px;
+  --rule-width: max(18px, var(--slant) * 0.252);
 }
 
 /* Focus, without an outline: the clip-path would eat it. Keyboard focus only, as
@@ -329,7 +343,7 @@
 .dbtl-comb[data-open="no"]
   .dbtl-cell:has(.dbtl-shut:focus-visible)
   .dbtl-shut-more {
-  max-height: 12rem;
+  max-height: 12em;
   opacity: 1;
 }
 
@@ -338,10 +352,10 @@
 .dbtl-shut-ask {
   display: block;
   font-family: var(--font-mono);
-  font-size: 0.64rem;
+  font-size: 0.64em;
   line-height: 1.35;
   color: var(--text-muted);
-  padding-top: 0.3rem;
+  padding-top: 0.47em;
   border-top: 1px solid var(--rule);
 }
 
@@ -350,10 +364,10 @@
   display: block;
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 0.58rem;
+  font-size: 0.58em;
   letter-spacing: 0.06em;
   color: var(--lab);
-  padding-top: 0.3rem;
+  padding-top: 0.52em;
 }
 
 /* ---------- the opened cell ---------- */
@@ -362,8 +376,13 @@
   z-index: 6;
 }
 
+/* The opened cell's base, which everything in the panel is sized off in `em`:
+   1rem until the hexagon is about 790px tall, then in proportion to it, so on a
+   desktop screen, where it is the height of the window, the text is read from
+   arm's length at the size the screen invites. The rule grows on the same curve. */
 .dbtl-cell[data-state="open"] > .dbtl-face {
-  --rule-width: 16px;
+  --rule-width: max(16px, var(--slant) * 0.07);
+  font-size: max(1rem, var(--slant) * 0.07);
   background: var(--surface);
 }
 
@@ -372,15 +391,16 @@
    text that a stray click does not close the panel. */
 .dbtl-close {
   position: absolute;
-  bottom: 0.2rem;
+  bottom: 0.2em;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
+  width: 2em;
+  height: 2em;
   padding: 0;
+  font-size: inherit;
   color: var(--lab);
   background: none;
   border: 0;
@@ -396,8 +416,8 @@
 }
 
 .dbtl-close-cross {
-  width: 1.05rem;
-  height: 1.05rem;
+  width: 1.05em;
+  height: 1.05em;
   fill: none;
   stroke: currentColor;
   stroke-width: 2.2;
@@ -425,7 +445,7 @@
   --w: calc(var(--icon) * clamp(1, var(--aspect, 1) * 0.55, 1.7));
   --h: min(var(--icon), var(--w) / var(--aspect, 1));
   position: absolute;
-  left: calc(var(--slant) - var(--w) - 0.35rem);
+  left: calc(var(--slant) - var(--w) - 0.35em);
   top: calc(50% - var(--h) / 2);
   width: var(--w);
   height: var(--h);
@@ -444,10 +464,10 @@
    The bottom margin is for the close cross. */
 .dbtl-panel {
   position: absolute;
-  inset: 0.5rem calc(var(--slant) + 0.5rem) 2.1rem;
+  inset: 0.5em calc(var(--slant) + 0.5em) 2.1em;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.5em;
   animation: dbtl-rise 0.34s 0.16s ease-out both;
 }
 
@@ -464,9 +484,9 @@
 .dbtl-panel-head h3,
 [data-comb="on"] [data-band="comb"] .dbtl-panel-head h3 {
   margin: 0 auto;
-  max-width: 44rem;
+  max-width: 30em;
   font-family: var(--font-heading);
-  font-size: clamp(1.1rem, 1.8vw, 1.45rem);
+  font-size: 1.45em;
   font-weight: 600;
   line-height: 1.25;
   color: var(--ink);
@@ -479,7 +499,7 @@
   min-height: 0;
   display: flex;
   align-items: stretch;
-  gap: 1rem;
+  gap: 1em;
 }
 
 /* Allowed to shrink both ways, so that once the controls stack under it on a
@@ -490,7 +510,7 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.4em;
 }
 
 /* Everything that moves you about, in one column on the right: the two steps, the
@@ -501,14 +521,14 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.6rem;
+  gap: 0.6em;
 }
 
 .dbtl-steps {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1.2rem;
+  gap: 1.2em;
 }
 
 /* PREVIOUS and NEXT. The words and a chevron, nothing drawn round them: the panel
@@ -517,11 +537,11 @@
 .dbtl-step {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.2rem 0;
+  gap: 0.53em;
+  padding: 0.3em 0;
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 0.66rem;
+  font-size: 0.66em;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--lab);
@@ -553,8 +573,8 @@
 
 .dbtl-step-chevron {
   flex: none;
-  width: 0.5rem;
-  height: 0.85rem;
+  width: 0.76em;
+  height: 1.29em;
   fill: none;
   stroke: currentColor;
   stroke-width: 2.5;
@@ -573,8 +593,8 @@
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  padding-right: 0.7rem;
-  font-size: 0.95rem;
+  padding-right: 0.7em;
+  font-size: 1em;
   line-height: 1.6;
   /* Keyed on the stop in the component, so this replays on every step and the
      new stage arrives rather than appearing. */
@@ -591,15 +611,15 @@
    heavier rule than the Question beat below it, because it introduces all of the
    cycles rather than this one. */
 .dbtl-stage-blurb {
-  padding-bottom: 0.6rem;
-  margin-bottom: 0.6rem;
+  padding-bottom: 0.6em;
+  margin-bottom: 0.6em;
   border-bottom: 2px solid var(--rule);
   color: var(--text-muted);
 }
 
 .dbtl-stage-framing {
-  padding-bottom: 0.6rem;
-  margin-bottom: 0.6rem;
+  padding-bottom: 0.6em;
+  margin-bottom: 0.6em;
   border-bottom: 1px solid var(--rule);
   color: var(--text-muted);
 }
@@ -607,14 +627,14 @@
 .dbtl-stage p,
 .dbtl-stage ul,
 .dbtl-stage ol {
-  margin: 0 0 0.6rem;
+  margin: 0 0 0.6em;
 }
 
 /* Wide enough for "1." in the mono face: the box scrolls, so anything left of
    it is cut off rather than hanging into the margin. */
 .dbtl-stage ul,
 .dbtl-stage ol {
-  padding-left: 1.6rem;
+  padding-left: 1.7em;
 }
 
 .dbtl-stage > :last-child {
@@ -630,8 +650,8 @@
  * them with a honey left stripe; here they take a full hairline instead, because
  * the stripe is the page'''s language and this is not the page. */
 .dbtl-stage blockquote {
-  margin: 0 0 0.6rem;
-  padding: 0.45rem 0.65rem;
+  margin: 0 0 0.6em;
+  padding: 0.45em 0.65em;
   border: 1px solid var(--rule);
   background: var(--surface-muted);
   font-size: 0.95em;
@@ -643,23 +663,23 @@
 
 .dbtl-stage-table {
   overflow-x: auto;
-  margin: 0 0 0.6rem;
+  margin: 0 0 0.6em;
 }
 
 .dbtl-stage table {
   border-collapse: collapse;
-  font-size: 0.72rem;
+  font-size: 0.76em;
   line-height: 1.45;
   min-width: 100%;
 }
 
 .dbtl-stage th,
 .dbtl-stage td {
-  padding: 0.28rem 0.45rem;
+  padding: 0.39em 0.62em;
   border: 1px solid var(--rule);
   text-align: left;
   vertical-align: top;
-  min-width: 7rem;
+  min-width: 9.7em;
 }
 
 .dbtl-stage th {
@@ -677,8 +697,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding-left: 0.4rem;
+  gap: 0.5em;
+  padding-left: 0.4em;
 }
 
 /* Dots under a phone screen: one per turn, the current one grown into the dial,
@@ -687,7 +707,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.35rem;
+  gap: 0.35em;
 }
 
 /* The dial has to be about 240px across for DESIGN to be legible in its band,
@@ -698,18 +718,19 @@
    size of the active marker and, with it, the width of this whole column. */
 .dbtl-mark {
   flex: none;
-  width: 1.2rem;
-  height: 1.04rem;
+  width: 1.2em;
+  height: 1.04em;
   transition:
     width 0.34s cubic-bezier(0.22, 0.61, 0.36, 1),
     height 0.34s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 /* Square once it holds the dial, which needs room to turn: see .dbtl-dial. The
-   drawn hexagon inside is still 1 : √3/2, so it reads the same as the dots. */
+   drawn hexagon inside is still 1 : √3/2, so it reads the same as the dots. In
+   `em` like the rest of the panel, so the dial grows with the text beside it. */
 .dbtl-mark[data-active="yes"] {
-  width: 15rem;
-  height: 15rem;
+  width: 15em;
+  height: 15em;
 }
 
 /* An inactive marker is a plain hexagon, and the whole of it is the target. At
@@ -743,7 +764,7 @@
   margin: 0;
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  font-size: 1.2em;
   line-height: 1.25;
   text-align: center;
   color: var(--ink);
@@ -756,10 +777,10 @@
 /* Roughly when it ran: "September". */
 .dbtl-marks-when {
   display: block;
-  margin-top: 0.35rem;
+  margin-top: 0.5em;
   font-family: var(--font-mono);
   font-weight: 400;
-  font-size: 0.7rem;
+  font-size: 0.58em;
   color: var(--text-muted);
 }
 
@@ -885,19 +906,19 @@
 /* ---------- narrow screens ---------- */
 
 /* The dial shrinks once, and only once. Its words are set in viewBox units, so they
-   scale with it: at 12rem they are about 15px, and much below that they stop being
+   scale with it: at 12em they are about 15px, and much below that they stop being
    readable and the dial stops being worth its column. The wet lab's measuring
    cycle has eight turns, so this column is the widest thing competing with the
    text. */
 @media (max-width: 74rem) {
   .dbtl-mark[data-active="yes"] {
-    width: 12rem;
-    height: 12rem;
+    width: 12em;
+    height: 12em;
   }
 
   .dbtl-mark {
-    width: 1rem;
-    height: 0.87rem;
+    width: 1em;
+    height: 0.87em;
   }
 }
 
@@ -912,7 +933,7 @@
 @media (max-width: 62rem) {
   .dbtl-panel-main {
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.5em;
   }
 
   .dbtl-marks {
@@ -925,7 +946,7 @@
 
   .dbtl-marks-now {
     order: -1;
-    font-size: 0.95rem;
+    font-size: 0.95em;
   }
 
   .dbtl-steps {
@@ -941,7 +962,7 @@
     clip-path: none;
     font-family: var(--font-heading);
     font-weight: 600;
-    font-size: 0.7rem;
+    font-size: 0.7em;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--ink);
@@ -950,11 +971,11 @@
 
 @media (max-width: 52rem) {
   .dbtl-panel-head h3 {
-    font-size: 1rem;
+    font-size: 1em;
   }
 
   .dbtl-stage {
-    font-size: 0.86rem;
+    font-size: 0.86em;
   }
 
   /* A phone has no room for a cell to swell by an eighth without covering its

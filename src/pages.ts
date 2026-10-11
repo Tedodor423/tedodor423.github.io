@@ -195,7 +195,7 @@ const Pages: MenuEntry[] = [
     children: [
       {
         name: "RNA design",
-        title: "RNA Design",
+        title: "Designing Our dsRNA Construct",
         path: "/software", // iGEM standard URL
         content: software,
         lead: "NectarDesigner: how we choose the sequence that silences the mite.",
@@ -285,8 +285,8 @@ const Pages: MenuEntry[] = [
         title: "NECTAR in the Real World",
         path: "/human-practices", // iGEM standard URL
         content: humanPractices,
-        // No lead: the page opens straight onto the approach + HIVE figure.
-        // That figure is a wide band, so the title is centred over it.
+        // No lead: the page opens straight onto the HpIntro band (reach, map,
+        // what the work fed), which is wide, so the title is centred over it.
         centredTitle: true,
       },
       {

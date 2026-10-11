@@ -172,6 +172,13 @@
   --loss-tolerated: #a8c2b0; /* present, no economic damage */
   --loss-free: #6f9c86; /* no varroa on record */
 
+  /* The mite itself, reddish brown: Varroa present, on the spread map that
+   * opens the human practices page, mixed into --map-land as a country has
+   * had the mite for longer. Its own token, apart from the loss scale above:
+   * presence is not loss, and the two must not read as one measure. Passes
+   * 3:1 against --surface (dataviz validator). */
+  --mite: #9b2a1e;
+
   /* Honey darkened until it can carry a rule and small type: #ffcb2f reads
    * 1.6:1 on white, which the palette note above restricts to fills, while this
    * reads 5.0:1 and passes AA as text. It is the hive colour the engineering
@@ -303,6 +310,15 @@ body {
   font-size: 0.95rem;
   color: var(--text);
   background: var(--surface);
+}
+
+/* What is read, a step up from that. The body size stays for the menu and the
+ * footer; the page itself, which is every Markdown file wherever it is
+ * rendered (the page column, the experiment write-ups, the SDG cards, the
+ * stakeholder records), reads at 1.05rem. Anything that sets its own size is
+ * unaffected. */
+main {
+  font-size: 1.05rem;
 }
 
 a {
@@ -959,7 +975,7 @@ pre {
 .sr-entry[id],
 .tl-entry[id],
 .dbtl-cell[id],
-.hc-copy[id],
+.hp-intro[id],
 .vm-heading[id],
 .vm-featured [id],
 .vm-limits[id],
@@ -995,14 +1011,14 @@ pre {
 
 .markdown-page h2 {
   margin-top: 2.75rem;
-  font-size: 1.5rem;
+  font-size: 1.65rem;
   padding-bottom: 0.25rem;
   border-bottom: 3px solid var(--honey);
 }
 
 .markdown-page h3 {
   margin-top: 2rem;
-  font-size: 1.15rem;
+  font-size: 1.25rem;
 }
 
 .markdown-page blockquote {

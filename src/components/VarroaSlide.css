@@ -1,16 +1,17 @@
 /* Slide three of the home page: the mite.
  *
  * Everything sits straight on the footage, which runs with no coat over it.
- * The footage is a light grey ground with the mite dark in the middle. How
- * the large type sits on it, plain in one colour or on a rectangle, is still
- * being tried: see "the type trial" below. Small type, the references, sits
- * on a strip of wax paper in every treatment.
+ * The footage is a light grey ground with the mite dark in the middle. The
+ * large type is ink on a honey rectangle, one per line; the chart is drawn
+ * in honey with no ground of its own. Small type, the references, sits on a
+ * strip of wax paper.
  *
  * Red is the mite and nothing else: the word "Varroa" and its chart line.
  *
  * The ride is the scroll. VarroaSlide.tsx works out how far through it the
  * reader is and hands each step over as a variable from 0 to 1: --shrink
- * (the claim going up), --toll, --trend and --verdict (each piece coming in).
+ * (the claim going up), --toll and --trend (each piece coming in; the
+ * closing line comes in with the chart).
  * Stacked they stand at their ends and the page simply flows.
  */
 
@@ -29,7 +30,6 @@
   --shrink: 0;
   --toll: 1;
   --trend: 1;
-  --verdict: 1;
   /* The claim, large and once shrunk. */
   --lead-big: clamp(1.4rem, 3.3vw, 3.1rem);
   --lead-small: clamp(1.05rem, 2vw, 1.85rem);
@@ -71,94 +71,27 @@
   position: relative;
 }
 
-/* ---------- the type trial ---------- */
+/* ---------- the type ---------- */
 
-/* How the words sit on the footage, one treatment for every line at once.
- * --ink-fg is the type, --ink-bg the rectangle behind each line (none in the
- * plain treatments). EXPERIMENT: VarroaSlide.tsx sets data-ink from a
- * dev-only switcher; once the team has chosen, keep that one block. */
-.ms-stage[data-ink="black"] {
-  --ink-fg: var(--ink);
-}
-
-.ms-stage[data-ink="white"] {
-  --ink-fg: var(--surface);
-}
-
-.ms-stage[data-ink="honey"] {
-  --ink-fg: var(--honey);
-}
-
-.ms-stage[data-ink="on-white"] {
-  --ink-fg: var(--ink);
-  --ink-bg: var(--surface);
-}
-
-.ms-stage[data-ink="on-black"] {
-  --ink-fg: var(--surface);
-  --ink-bg: var(--ink);
-}
-
-.ms-stage[data-ink="on-honey"] {
-  --ink-fg: var(--ink);
-  --ink-bg: var(--honey);
-}
-
-.ms-stage[data-ink="honey-on-black"] {
-  --ink-fg: var(--honey);
-  --ink-bg: var(--ink);
-}
-
-.ms-stage[data-ink^="on-"],
-.ms-stage[data-ink="honey-on-black"] {
-  --ink-pad: 0.06em 0.3em;
-}
-
+/* Every line of large type is ink on its own honey rectangle, which reads
+   wherever on the footage the line falls. */
 .ms-ink {
-  color: var(--ink-fg);
-  background: var(--ink-bg, transparent);
-  padding: var(--ink-pad, 0);
+  color: var(--ink);
+  background: var(--honey);
+  padding: 0.06em 0.3em;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
 }
 
-/* The face for the lines that are not the claim or a number; those two are
-   always Cubao. */
-.ms-stage[data-face="cubao"] :is(.ms-when, .ms-lost, .ms-verdict) {
-  font-family: var(--font-display);
-  font-weight: 400;
+/* A searched-for word would vanish into the honey, so here the mark turns
+   over: honey on ink. */
+.varroa-slide .ms-ink mark {
+  color: var(--honey);
+  background: var(--ink);
 }
 
 .ms-red {
   color: var(--mite-red);
-}
-
-/* The switcher itself: a plain control on paper, out of the way in the
-   corner. Development builds only. */
-.ms-trial {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.4rem 1rem;
-  inline-size: max-content;
-  margin: 1rem 0 0 auto;
-  padding: 0.4rem 0.75rem 0.6rem;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--text);
-  background: var(--surface-muted);
-  border: 1px solid var(--rule);
-  border-radius: var(--radius);
-}
-
-.ms-trial legend {
-  float: left;
-  width: auto;
-  margin: 0;
-  font-size: inherit;
-  font-weight: 700;
 }
 
 /* ---------- the claim ---------- */
@@ -274,21 +207,12 @@
   --series: var(--mite-red);
 }
 
-/* The chart follows the type trial: its type and rules take the treatment's
-   colour, and a boxed treatment puts the whole plot on its rectangle. */
-.ms-chart {
-  background: var(--ink-bg, transparent);
-}
-
-.ms-stage[data-ink^="on-"] .ms-chart,
-.ms-stage[data-ink="honey-on-black"] .ms-chart {
-  padding: 0.5rem 0.75rem;
-}
-
+/* The chart's type and rules are honey, straight on the footage with no
+   ground; only the two lines and their scales keep their series' colours. */
 .ms-chart text {
   font-family: var(--font-mono);
   font-size: 13px;
-  fill: var(--ink-fg);
+  fill: var(--honey);
 }
 
 .ms-chart .ms-legend {
@@ -316,13 +240,13 @@
 }
 
 .ms-grid {
-  stroke: var(--ink-fg);
+  stroke: var(--honey);
   stroke-opacity: 0.2;
   stroke-width: 1;
 }
 
 .ms-axis {
-  stroke: var(--ink-fg);
+  stroke: var(--honey);
   stroke-width: 1.25;
 }
 
@@ -334,29 +258,17 @@
 }
 
 /* The line is drawn a little heavier than a chart on paper would be, so it
-   holds up where it crosses the mite. The casing, the rectangle's colour
-   round the line, only shows in a boxed treatment. */
-.ms-casing,
+   holds up where it crosses the mite. */
 .ms-line {
   fill: none;
+  stroke: var(--series);
+  stroke-width: 3;
   stroke-linejoin: round;
   stroke-linecap: round;
 }
 
-.ms-casing {
-  stroke: var(--ink-bg, transparent);
-  stroke-width: 7;
-}
-
-.ms-line {
-  stroke: var(--series);
-  stroke-width: 3;
-}
-
 .ms-head circle {
   fill: var(--series);
-  stroke: var(--ink-bg, transparent);
-  stroke-width: 2.5;
 }
 
 .ms-chart .ms-head text,
@@ -365,7 +277,7 @@
 }
 
 .ms-now line {
-  stroke: var(--ink-fg);
+  stroke: var(--honey);
   stroke-opacity: 0.5;
   stroke-dasharray: 3 4;
 }
@@ -465,18 +377,6 @@
   .ms-chart {
     flex: 0 1 auto;
     min-height: 0;
-  }
-
-  .varroa-slide .ms-verdict {
-    opacity: var(--verdict);
-    transform: translateY(calc(1.5rem * (1 - var(--verdict))));
-  }
-
-  .ms-trial {
-    position: absolute;
-    right: 1rem;
-    bottom: 1rem;
-    margin: 0;
   }
 
   /* A piece not yet in is out of the tab order too. */

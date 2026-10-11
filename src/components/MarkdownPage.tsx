@@ -9,7 +9,7 @@ import { MarksContext } from "../utils/marksContext";
 import { StakeholderMap } from "./StakeholderMap";
 import { StakeholderRecord } from "./StakeholderRecord";
 import { HoneyLoop } from "./HoneyLoop";
-import { HiveCorners } from "./HiveCorners";
+import { HpIntro } from "./HpIntro";
 import { HpStats } from "./HpStats";
 import { VarroaMap } from "./VarroaMap";
 import { ProjectTimeline } from "./ProjectTimeline";
@@ -45,7 +45,7 @@ const SLOTS: Record<string, () => ReactNode> = {
   "stakeholder-map": () => <StakeholderMap />,
   "stakeholder-record": () => <StakeholderRecord />,
   "honey-loop": () => <HoneyLoop />,
-  "hive-corners": () => <HiveCorners />,
+  "hp-intro": () => <HpIntro />,
   "hp-stats": () => <HpStats />,
   "varroa-map": () => <VarroaMap />,
   "project-timeline": () => <ProjectTimeline />,

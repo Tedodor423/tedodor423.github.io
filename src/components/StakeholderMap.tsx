@@ -6,8 +6,10 @@ import {
   useMemo,
   useRef,
   useState,
+  type CSSProperties,
+  type MouseEvent as ReactMouseEvent,
 } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { HEXES, HEX_R, hexPoints, MAP_H, MAP_W } from "../utils/worldHexes";
 import { assignCells, type XY } from "../utils/stakeholderCells";
 import Markdown from "react-markdown";
@@ -36,6 +38,7 @@ import { MarksContext } from "../utils/marksContext";
 import { rehypeMark } from "../utils/markTree";
 import { HpStats } from "./HpStats";
 import { Marked, MarkedInline } from "./Marked";
+import { glideTo } from "../utils/glide";
 import { rideToRecord } from "../utils/mapMorph";
 import { chainWheel } from "../utils/wheelChain";
 import { RecordLink } from "./StakeholderRecord";
@@ -54,13 +57,15 @@ import "./StakeholderMap.css";
  * Y > H". The loop has since become HIVE (Hear, Investigate, Verdict,
  * Evaluate), the 8 October write-up. So:
  *
- *   - On a wide screen the map takes the whole viewport and pins briefly,
- *     so the world is seen at once, easing in on the way in and out on the
- *     way past. Scrolling is never intercepted: the pin is position:sticky,
- *     and only once the reader stops with the map part on screen does the
- *     window ease on, to the map whole or to the page either side of it,
- *     whichever way they were going (src/utils/deck.ts). Both the easing
- *     and the settling are dropped under prefers-reduced-motion. While the
+ *   - On a wide screen the map takes the whole viewport and pins while the
+ *     reader scrolls through it: everyone first, then each question in
+ *     turn (SEQUENCE), so nobody scrolls past the map without being shown
+ *     every question. Scrolling is never intercepted: the pin is
+ *     position:sticky, and only once the reader stops with the map part on
+ *     screen, or between two questions, does the window ease on to the
+ *     nearest rest the way they were going (src/utils/deck.ts). Picking a
+ *     question moves the window to its rest, so scrolling carries on from
+ *     there. The settling is dropped under prefers-reduced-motion. While the
  *     stage covers the viewport the site menu keeps out of the way (the
  *     html[data-map-stage] rule), because it re-shows itself on any upward
  *     scroll and would sit over the map's top edge.
@@ -148,7 +153,34 @@ const CARD_MAX_REM = 46;
 const HOVER_GRACE = 260;
 const HOVER_SWITCH = 140;
 
+/** The fold and unfold of a question's HIVE write-up: one movement for the
+ * letters, the column and the pane's width (see the FLIP effect). */
+const FOLD_MS = 650;
+const FOLD_EASE = "cubic-bezier(0.22, 0.8, 0.25, 1)";
+
 const dist = (a: XY, b: XY) => Math.hypot(a.x - b.x, a.y - b.y);
+
+/** What the stage shows as the reader scrolls through it on a wide screen:
+ * everyone first, then each question in turn. */
+const SEQUENCE: (QuestionId | null)[] = [null, ...QUESTION_IDS];
+
+/** The pin's ride through SEQUENCE, in document coordinates: where everyone
+ * rests (the pin's top) and how far apart the questions' rests are. The pin
+ * is a window taller than the ride (StakeholderMap.css), so the last
+ * question rests exactly where the stage starts to leave. */
+function rideOf(pin: HTMLElement) {
+  const top = pin.getBoundingClientRect().top + window.scrollY;
+  const step = (pin.offsetHeight - window.innerHeight) / QUESTION_IDS.length;
+  return { top, step };
+}
+
+const restOf = (q: QuestionId | null, ride: ReturnType<typeof rideOf>) =>
+  ride.top + SEQUENCE.indexOf(q) * ride.step;
+
+/** The id of the page's "Stakeholder interviews" heading, just after the
+ * map (src/content/human-practices.md, through src/utils/headingId.ts): where
+ * the skip button's link goes when it is opened in a new tab. */
+const INTERVIEWS_HEADING = "stakeholder-interviews";
 
 /** A no-go rectangle for faces, in viewBox units, margins included. */
 interface Block {
@@ -452,6 +484,7 @@ export function StakeholderMap() {
   const canvasRef = useRef<HTMLDivElement>(null);
   const headRef = useRef<HTMLElement>(null);
   const filterboxRef = useRef<HTMLDivElement>(null);
+  const skipRef = useRef<HTMLAnchorElement>(null);
   const qpanelRef = useRef<HTMLElement>(null);
   const popRef = useRef<HTMLDivElement>(null);
   // The small card stays up while the pointer crosses from the face to it,
@@ -501,10 +534,19 @@ export function StakeholderMap() {
   // Where the four letters, the summary and the heading sat just before a
   // fold or an unfold, so the layout effect below can glide them from there.
   const flipFrom = useRef<{
+    pane: DOMRect;
     letters: Map<string, DOMRect>;
     summary: DOMRect | null;
     head: DOMRect | null;
   } | null>(null);
+  // The pane's change of width in flight, if one is (see the FLIP effect):
+  // stopping it lets go of the pane and of what it held at the new width.
+  const paneGlide = useRef<(() => void) | null>(null);
+  const stopPaneGlide = () => {
+    paneGlide.current?.();
+    paneGlide.current = null;
+  };
+  useEffect(() => stopPaneGlide, [filter]);
 
   const toggleHive = (open: boolean) => {
     const pane = qpanelRef.current;
@@ -519,27 +561,56 @@ export function StakeholderMap() {
         pane.querySelector(".sm-qsummary")?.getBoundingClientRect() ?? null;
       const head =
         pane.querySelector(".sm-qpanel-head")?.getBoundingClientRect() ?? null;
-      flipFrom.current = { letters, summary, head };
+      flipFrom.current = {
+        pane: pane.getBoundingClientRect(),
+        letters,
+        summary,
+        head,
+      };
     }
+    // Measured as it stood, mid-glide or not; let go only now, so the
+    // layout effect measures where everything settles.
+    stopPaneGlide();
     setUnfolded(open ? filter : null);
   };
 
-  /* Folding and unfolding, as one movement. Unfolded, the pane scrolls so
-   * the HIVE stages start near its top with the last lines of the summary
-   * still showing above them; folded, it goes back to the top. Then the
-   * letters glide from where they were (in the button, or in the stage
-   * headings) to where they now are, while the whole column glides by as
-   * far as the summary moved, so it reads as one scroll rather than text
-   * jumping. Measured before the change and after it, and animated back
-   * from the difference. Both share one easing, so each letter is offset by
-   * its own move less the column's, which the column's transform adds
-   * back. Skipped under prefers-reduced-motion. */
+  /* Folding and unfolding, as one movement. Unfolded, the pane widens to
+   * half the window (the has-hive rule in StakeholderMap.css), the map
+   * shrinking into the other half, and scrolls so the HIVE stages start near
+   * its top with the last lines of the summary still showing above them;
+   * folded, it narrows back and goes back to the top. Then the letters glide
+   * from where they were (in the button, or in the stage headings) to where
+   * they now are, while the whole column glides by as far as the summary
+   * moved, so it reads as one scroll rather than text jumping. Measured
+   * before the change and after it, and animated back from the difference.
+   *
+   * The pane's width goes the same way: its box is animated from the old
+   * width to the new, right edge fixed, while the heading and the column
+   * are held at the new width, so the text inside is laid out once and
+   * rides the left edge instead of re-wrapping on every frame. Everything
+   * shares one easing, so each letter is offset by its own move less the
+   * column's and the edge's, which their own motion adds back, and the map
+   * is given the same timing to keep beside the edge. Skipped under
+   * prefers-reduced-motion. */
   useLayoutEffect(() => {
     const from = flipFrom.current;
     flipFrom.current = null;
     const pane = qpanelRef.current;
     const scroller = qscrollRef.current;
     if (!from || !pane || !scroller) return;
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    // Before anything is measured: the measuring starts the map's move to
+    // its new width, and it takes the transition it finds then.
+    const canvas = canvasRef.current;
+    if (canvas && !reduced) {
+      canvas.style.transition = `right ${FOLD_MS}ms ${FOLD_EASE}`;
+      window.setTimeout(
+        () => canvas.style.removeProperty("transition"),
+        FOLD_MS,
+      );
+    }
     const summary = pane.querySelector<HTMLElement>(".sm-qsummary");
     if (hiveOpen) {
       const fold = pane.querySelector<HTMLElement>(".sm-qfold");
@@ -557,14 +628,26 @@ export function StakeholderMap() {
     } else {
       scroller.scrollTop = 0;
     }
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (reduced) return;
+    const timing = { duration: FOLD_MS, easing: FOLD_EASE };
+    const head = pane.querySelector<HTMLElement>(".sm-qpanel-head");
+    const paneNow = pane.getBoundingClientRect();
+    // How far the left edge, and so everything the pane holds, still has to
+    // travel: the old edge less the new.
+    const resized = Math.abs(paneNow.width - from.pane.width) > 0.5;
+    const edge = resized ? from.pane.left - paneNow.left : 0;
     const sumNow = summary?.getBoundingClientRect();
     const shift = sumNow && from.summary ? from.summary.top - sumNow.top : 0;
-    const glide = (el: HTMLElement, was: DOMRect, off: number) => {
+    const glide = (
+      el: HTMLElement,
+      was: DOMRect,
+      offY: number,
+      scale: boolean,
+    ) => {
       const now = el.getBoundingClientRect();
-      const dx = was.left - now.left;
-      const dy = was.top - now.top - off;
-      const s = now.width ? was.width / now.width : 1;
+      const dx = was.left - now.left - edge;
+      const dy = was.top - now.top - offY;
+      const s = scale && now.width ? was.width / now.width : 1;
       if (!dx && !dy && s === 1) return;
       el.animate(
         [
@@ -574,24 +657,44 @@ export function StakeholderMap() {
           },
           { transformOrigin: "0 0", transform: "none" },
         ],
-        { duration: 650, easing: "cubic-bezier(0.22, 0.8, 0.25, 1)" },
+        timing,
       );
     };
     pane.querySelectorAll<HTMLElement>("[data-hive-letter]").forEach((el) => {
       const was = from.letters.get(el.dataset.hiveLetter!);
-      if (was) glide(el, was, shift);
+      if (was) glide(el, was, shift, true);
     });
     const flow = pane.querySelector<HTMLElement>(".sm-qflow");
     if (flow && shift) {
       flow.animate(
         [{ transform: `translateY(${shift}px)` }, { transform: "none" }],
-        { duration: 650, easing: "cubic-bezier(0.22, 0.8, 0.25, 1)" },
+        timing,
       );
     }
     // The heading sits with the summary while folded and at the top once
-    // the stages are out, so it rides the same movement.
-    const head = pane.querySelector<HTMLElement>(".sm-qpanel-head");
-    if (head && from.head) glide(head, from.head, 0);
+    // the stages are out, so it rides the same movement. It changes width
+    // with the pane rather than size, so it is moved, not scaled.
+    if (head && from.head) glide(head, from.head, 0, false);
+    // Last, because every glide above measures where things settle, and from
+    // here on the pane is drawn at its old width.
+    if (resized) {
+      const held = [head, scroller].filter((el): el is HTMLElement => !!el);
+      const widths = held.map((el) => el.offsetWidth);
+      held.forEach((el, i) => (el.style.width = `${widths[i]}px`));
+      const anim = pane.animate(
+        [{ width: `${from.pane.width}px` }, { width: `${paneNow.width}px` }],
+        timing,
+      );
+      const release = () => {
+        anim.cancel();
+        held.forEach((el) => el.style.removeProperty("width"));
+      };
+      anim.onfinish = () => {
+        release();
+        if (paneGlide.current === release) paneGlide.current = null;
+      };
+      paneGlide.current = release;
+    }
   }, [hiveOpen]);
 
   // Wide screens get the fullscreen stage and the box beside the face;
@@ -634,9 +737,13 @@ export function StakeholderMap() {
       setLayout({
         w: canvas.clientWidth,
         h: canvas.clientHeight,
-        panels: [rect(headRef.current), rect(filterboxRef.current)].filter(
-          (r): r is PanelRect => r !== null,
-        ),
+        // The skip button counts as a panel too, small as it is: no face
+        // or card should come to rest over the way past the map.
+        panels: [
+          rect(headRef.current),
+          rect(filterboxRef.current),
+          rect(skipRef.current),
+        ].filter((r): r is PanelRect => r !== null),
       });
     };
     // The canvas narrows while the write-up pane opens, and the question
@@ -688,21 +795,21 @@ export function StakeholderMap() {
 
   /* Settling around the stage. The map's rests go to the deck
    * (src/utils/deck.ts), the same one the home page's slides use: the screen
-   * just above the map, the map filling the screen, and the screen just
-   * after it. Scrolling stays native the whole way; a reader who stops
-   * while the map is part on screen is eased on to whichever of those they
-   * were heading for. Narrow screens sit it out, and the deck itself stands
-   * still under prefers-reduced-motion. If content ever grows directly
-   * above this section, the first rest still reads it whole. */
+   * just above the map, the map filling the screen with everyone on it,
+   * each question in turn (SEQUENCE), and the screen just after it.
+   * Scrolling stays native the whole way; a reader who stops while the map
+   * is part on screen, or between two questions, is eased on to whichever
+   * of those they were heading for. Narrow screens sit it out, and the deck
+   * itself stands still under prefers-reduced-motion. If content ever grows
+   * directly above this section, the first rest still reads it whole. */
   const rests = useCallback(() => {
     const wrap = pinRef.current;
     if (!wide || !wrap) return [];
-    const r = wrap.getBoundingClientRect();
-    const top = r.top + window.scrollY;
+    const ride = rideOf(wrap);
     return [
-      Math.max(0, top - window.innerHeight),
-      top,
-      r.bottom + window.scrollY,
+      Math.max(0, ride.top - window.innerHeight),
+      ...SEQUENCE.map((q) => restOf(q, ride)),
+      wrap.getBoundingClientRect().bottom + window.scrollY,
     ];
   }, [wide]);
   useDeckRests(rests);
@@ -997,11 +1104,39 @@ export function StakeholderMap() {
     return () => document.removeEventListener("pointerdown", onDown);
   }, [pinned]);
 
+  /* While the window is on its way to a question the reader asked for (a
+   * pick, or a fragment), the questions it passes on the way are not shown:
+   * the stage holds the one asked for until the window arrives at its rest,
+   * the reader takes the scroll back, or `until` runs out. */
+  const steer = useRef<{
+    q: QuestionId | null;
+    until: number;
+    /** Where the window is going, when that is not the question's rest. */
+    at?: number;
+  } | null>(null);
+
   const pick = (q: QuestionId | null) => {
     setFilter(q);
     setPinned(null);
     setHovered(null);
     setStageHover(null);
+    // On a wide screen the question is a place on the pin as well, so the
+    // window goes there, and scrolling on carries on from it. While the
+    // stage fills the window that is a jump nobody sees, the stage being
+    // sticky; from part way on or off, a glide.
+    const wrap = pinRef.current;
+    if (!wide || !wrap) return;
+    const ride = rideOf(wrap);
+    const to = restOf(q, ride);
+    const y = window.scrollY;
+    if (Math.abs(to - y) < 1) return;
+    steer.current = { q, until: performance.now() + 2000 };
+    const end = ride.top + QUESTION_IDS.length * ride.step;
+    if (y >= ride.top - 1 && y <= end + 1) {
+      window.scrollTo({ top: to, behavior: "instant" });
+    } else {
+      glideTo(to);
+    }
   };
 
   /* Landing on a fragment. A search result, or a link from another page,
@@ -1010,9 +1145,10 @@ export function StakeholderMap() {
    * is named, and ScrollToHash puts the window on it. On a narrow screen the
    * pane and its stages carry the ids themselves, in the page's flow. On a
    * wide one the stage is pinned and the pane scrolls on its own, so the ids
-   * sit on markers at the top of the pin (the window lands with the stage
-   * filling the screen) and the pane's column is scrolled to the stage here,
-   * once per fragment, after the render that put the stage in it. */
+   * sit on markers at the question's own rest on the pin (the window lands
+   * with the stage filling the screen on that question) and the pane's
+   * column is scrolled to the stage here, once per fragment, after the
+   * render that put the stage in it. */
   useEffect(() => {
     const landing = parseHiveAnchor(hash);
     if (!landing) return;
@@ -1021,7 +1157,95 @@ export function StakeholderMap() {
     setHovered(null);
     setStageHover(null);
     setUnfolded(landing.stage ? landing.q : null);
+    // ScrollToHash's ride from wherever the reader was can be long, and can
+    // cross the other questions' rests on the way.
+    steer.current = { q: landing.q, until: performance.now() + 4000 };
   }, [hash]);
+
+  /* Scrolling through the stage, on a wide screen: the question on show is
+   * the one whose rest the window is nearest, everyone before the first,
+   * the last after it, so a reader who scrolls past the map has been shown
+   * every question on the way. Read once a frame. A pinned card or a
+   * pointed-at face belongs to the question it was opened on, so a new
+   * question lets go of them, as a pick does. */
+  const filterNow = useRef(filter);
+  useEffect(() => {
+    filterNow.current = filter;
+  }, [filter]);
+  useEffect(() => {
+    const wrap = pinRef.current;
+    if (!wide || !wrap) return;
+    let raf = 0;
+    const read = () => {
+      raf = 0;
+      const ride = rideOf(wrap);
+      const s = steer.current;
+      if (s) {
+        const away = Math.abs(window.scrollY - (s.at ?? restOf(s.q, ride))) > 2;
+        if (away && performance.now() < s.until) return;
+        steer.current = null;
+      }
+      const i =
+        ride.step > 0 ? Math.round((window.scrollY - ride.top) / ride.step) : 0;
+      const q = SEQUENCE[Math.min(Math.max(i, 0), SEQUENCE.length - 1)];
+      if (q === filterNow.current) return;
+      filterNow.current = q;
+      setFilter(q);
+      setPinned(null);
+      setHovered(null);
+      setStageHover(null);
+    };
+    const schedule = () => {
+      if (!raf) raf = requestAnimationFrame(read);
+    };
+    // The reader's own wheel, finger or key takes the window back.
+    const letGo = () => {
+      steer.current = null;
+    };
+    schedule();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    for (const type of ["wheel", "touchstart", "keydown"]) {
+      window.addEventListener(type, letGo, { passive: true });
+    }
+    return () => {
+      if (raf) cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      for (const type of ["wheel", "touchstart", "keydown"]) {
+        window.removeEventListener(type, letGo);
+      }
+    };
+  }, [wide]);
+
+  /* "See full stakeholder interviews": past the map in one go, to the
+   * screen after it, where the deck would settle a reader who scrolled on
+   * past it. While the stage fills the window the window first jumps to the
+   * end of the questions, which nobody sees, so the ride is one screen of
+   * the stage leaving rather than every question going by; the question on
+   * show is held until it is off the screen. Still a real link underneath,
+   * so a modified click opens the interviews' heading in a new tab. */
+  const skipMap = (e: ReactMouseEvent<HTMLAnchorElement>) => {
+    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
+      return;
+    }
+    const wrap = pinRef.current;
+    if (!wrap) return;
+    e.preventDefault();
+    const ride = rideOf(wrap);
+    const end = ride.top + QUESTION_IDS.length * ride.step;
+    const to = wrap.getBoundingClientRect().bottom + window.scrollY;
+    steer.current = {
+      q: filterNow.current,
+      at: to,
+      until: performance.now() + 2000,
+    };
+    const y = window.scrollY;
+    if (y >= ride.top - 1 && y < end) {
+      window.scrollTo({ top: end, behavior: "instant" });
+    }
+    glideTo(to);
+  };
 
   const landed = useRef<string | null>(null);
   useEffect(() => {
@@ -1086,19 +1310,32 @@ export function StakeholderMap() {
         ref={pinRef}
         // The menu steps aside while the stage fills the screen (Navbar.tsx).
         data-fullscreen={wide || undefined}
+        // How many questions the pin rides through (rideOf).
+        style={{ "--sm-steps": QUESTION_IDS.length } as CSSProperties}
       >
-        {/* Where a result lands on a wide screen: see the landing effects. */}
-        {wide && filter && (
+        {/* Where a result lands on a wide screen, each at its question's
+         * rest: see the landing effects. */}
+        {wide && (
           <div className="sm-landing" aria-hidden>
-            <span id={questionAnchor(filter)} />
-            {QUESTION_CYCLES[filter].stages.map((st) => (
-              <span key={st.stage} id={stageAnchor(filter, st.stage)} />
+            {QUESTION_IDS.map((q, i) => (
+              <div
+                key={q}
+                className="sm-landing-at"
+                style={{ top: `calc(var(--sm-step) * ${i + 1})` }}
+              >
+                <span id={questionAnchor(q)} />
+                {QUESTION_CYCLES[q].stages.map((st) => (
+                  <span key={st.stage} id={stageAnchor(q, st.stage)} />
+                ))}
+              </div>
             ))}
           </div>
         )}
         <div className="sm-stage">
           <div
-            className={`sm-frame${filter ? " has-pane" : ""}`}
+            className={`sm-frame${filter ? " has-pane" : ""}${
+              hiveOpen ? " has-hive" : ""
+            }`}
             ref={frameRef}
             onPointerLeave={() => {
               holdHover();
@@ -1335,6 +1572,22 @@ export function StakeholderMap() {
                 ))}
               </div>
             </div>
+
+            {/* Past the map in one go, for a reader who came for the
+             * interviews: see skipMap. The stage only. */}
+            {wide && (
+              <Link
+                to={{ hash: INTERVIEWS_HEADING }}
+                className="sm-skip"
+                ref={skipRef}
+                onClick={skipMap}
+              >
+                See full stakeholder interviews
+                <svg className="sm-qarrow" viewBox="0 0 16 16" aria-hidden>
+                  <path d="M 8 2 V 13 M 3.5 8.5 L 8 13 L 12.5 8.5" />
+                </svg>
+              </Link>
+            )}
 
             {/* The question in the pane down the right-hand side, from its
              * own file (src/content/questions). Folded, it is the title, the
