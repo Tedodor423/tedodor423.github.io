@@ -628,3 +628,41 @@ export const CAVEATS: string[] = [
   "US figures for 2008 to 2010 are winter-loss based. The annual survey began in 2010-11.",
   "Latin America, the Middle East, Central Asia, Russia, Turkey and North Africa outside Egypt and Algeria are regional approximations, tagged FLAG.",
 ];
+
+/** The countries this wiki argues from, in the order the map's picks list them. */
+export const FEATURED: string[] = [
+  "United States of America",
+  "California",
+  "United Kingdom",
+  "Australia",
+  "New Zealand",
+];
+
+/**
+ * The words on the full map (the case studies page), kept here so the search
+ * index reads what the figure shows. The anchors are what a result lands on:
+ * `vm-australia` for a featured country, written out in the caption and put
+ * in the panel when the page opens on it.
+ */
+export const COLONY_LOSSES = {
+  anchor: "colony-losses",
+  heading: "Reported honey-bee colony losses, 2008 to 2025",
+  standfirst:
+    "Each hexagon is about 4.7 degrees of the world, shaded by the share of managed colonies its country reported losing that year. This is loss, not the spread of the mite: a country appears when its survey starts, and for most of Europe that is 2008. Australia is the exception, where the first detection in June 2022 and the first survey are a year apart.",
+  howto: {
+    lead: "How to read it.",
+    text: "Darker is a heavier reported loss. The two hatched states are not points on that scale: one is a country where varroa is present and tolerated, the other is a country with no varroa on record. Plain wax is a country whose survey has not started in the year shown, or which the dataset does not carry at all.",
+  },
+  limitsAnchor: "vm-limits",
+  limits: "What this map cannot show",
+  /** The one caveat that is about the drawing rather than the data. */
+  drawn:
+    "A hexagon spans about 4.7 degrees and takes the country that holds most of the land under it, so 47 countries in the dataset are smaller than one cell and are not drawn at all. Belgium, Switzerland, Czechia, Slovakia, Latvia and Israel are among them. Every one of them is in the table below.",
+};
+
+/** The fragment for a featured country's entry in the caption. */
+export const countryAnchor = (name: string) =>
+  `vm-${name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")}`;

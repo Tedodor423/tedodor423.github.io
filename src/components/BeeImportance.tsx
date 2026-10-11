@@ -10,7 +10,8 @@ import { BEE_FRAMES } from "../utils/bees";
 import { useMedia } from "../utils/useMedia";
 import { DECK_MEDIA, useDeckRests } from "../utils/deck";
 import { useScrolledIn } from "../utils/useScrolledIn";
-import { Marked } from "./Marked";
+import { BEES, DECK_ANCHORS } from "../data/homeDeck";
+import { Marked, Runs } from "./Marked";
 import "./BeeImportance.css";
 
 /* Slide two of the home page: why bees matter, in two numbers.
@@ -248,34 +249,34 @@ function FoodHalf({
   drawn: number;
   figure: RefObject<HTMLElement | null>;
 }) {
-  const count = Math.round(50 * drawn);
+  const count = Math.round(BEES.food.figure * drawn);
 
+  // The words are BEES in src/data/homeDeck.ts, where the search index reads
+  // them too; <Marked> and <Runs> put a honey background on the ones a
+  // reader searched for.
   return (
     <div className="bi-half">
       <h3 className="bi-claim">
         <span className="bi-when">
           <span>
-            by 2050, humanity
+            <Marked text={BEES.food.when[0]} />
             <br />
-            will require
+            <Marked text={BEES.food.when[1]} />
           </span>
         </span>
         <span className="bi-figure">{count}%</span>
         <span className="bi-words">
-          <Marked text="more food" />
+          <Marked text={BEES.food.words} />
         </span>
       </h3>
       <figure className="bi-visual bi-visual--food" ref={figure}>
         <FoodLine drawn={drawn} />
         <figcaption className="bi-food-caption">
-          World population times food supply per head, 1960 to 2020; dashed, our
-          projection to 9.7 billion people at 3,050 kcal a head in 2050.{" "}
-          <code>[CALC]</code>
+          <Runs runs={BEES.food.caption} />
         </figcaption>
       </figure>
       <p className="bi-ref">
-        FAO 2017, The future of food and agriculture: Trends and challenges.
-        Rome: FAO. <code>[LIT]</code>
+        <Runs runs={BEES.food.ref} />
       </p>
     </div>
   );
@@ -284,7 +285,7 @@ function FoodHalf({
 /* ---------- the harvest ---------- */
 
 /** The share of global crop production volume from pollinator-dependent crops. */
-const SHARE = 0.35;
+const SHARE = BEES.harvest.figure / 100;
 const DISC = 100;
 
 /* The crops are the team's own Excalidraw drawings, an apple and a pear,
@@ -568,22 +569,23 @@ function BeesHalf({
       <h3 className="bi-claim">
         <span className="bi-when">
           <HoverBee />
-          <span>pollinators account for</span>
+          <span>
+            <Marked text={BEES.harvest.when} />
+          </span>
         </span>
         <span className="bi-figure">{percent}%</span>
         <span className="bi-words">
-          <Marked text="of the world's crop production" />
+          <Marked text={BEES.harvest.words} />
         </span>
       </h3>
       <div className="bi-visual" ref={figure}>
         <Harvest sweep={sweep} />
       </div>
       <p className="bi-note">
-        <Marked text="Of global production by volume, counting every crop that depends on animal pollination. Honeybees are the most valuable of those pollinators." />
+        <Marked text={BEES.harvest.note} />
       </p>
       <p className="bi-ref">
-        Klein et al. 2007, Proc. R. Soc. B 274: 303-313.
-        doi:10.1098/rspb.2006.3721 <code>[LIT]</code>
+        <Runs runs={BEES.harvest.ref} />
       </p>
     </div>
   );
@@ -592,8 +594,8 @@ function BeesHalf({
 /* ---------- the slide ---------- */
 
 /* The slide shows no title, by the team's choice: the two claims are the
- * slide. The name stays on the section for screen readers. */
-const TITLE = "Why bees matter";
+ * slide. The name (BEES.title) stays on the section for screen readers, and
+ * the section's id is where a search result for either claim lands. */
 
 export function BeeImportance() {
   // Where the slide is a screen of its own, its top and bottom are rests
@@ -618,7 +620,8 @@ export function BeeImportance() {
   return (
     <section
       className="bee-importance"
-      aria-label={TITLE}
+      id={DECK_ANCHORS.bees}
+      aria-label={BEES.title}
       ref={section}
       // As a slide it fills the screen: the menu steps aside (Navbar.tsx).
       data-fullscreen={slide || undefined}

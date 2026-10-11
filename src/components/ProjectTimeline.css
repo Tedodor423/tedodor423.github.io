@@ -1,329 +1,46 @@
-/* The project timeline.
+/* The project timeline: one line running sideways, a row per workstream.
  *
- * Tokens only, from src/styles/brand.css. Honey fills a turning point, violet
- * rims something that broke, wax tints an open entry, navy rules everything
- * else. Colour is doing work in all three cases: nothing here is coloured to
- * look interesting.
+ * Tokens only, from src/styles/brand.css. Each row's axis, leaders and marks
+ * take its --lane-* colour, and nothing else does: type stays in --text, the
+ * way the rest of the wiki letters a figure. Honey fills the label of a
+ * turning point and rules the acts across the top, as it did on the grid this
+ * replaced. Colour is doing work in every case.
  *
- * Surfaces are solid and separated by 1px rules, corners take the single
- * --radius the wiki uses, and there is no transition on anything except the
- * border under the pointer, which tells you what you are about to open.
+ * The stage is wax paper (--surface-muted) under a white control bar, the
+ * same pairing as the stakeholder map's stage. Labels carry the paper as their
+ * own background, so a month rule or another row's leader passing behind one
+ * never runs through its words. Surfaces are solid and separated by 1px rules,
+ * the one --radius is the only rounding, and nothing moves except the chart
+ * itself, which moves because the reader is scrolling.
  *
- * ONE DOM, TWO LAYOUTS. Events are written in date order and placed into a
- * lane with grid-column. Above 62rem that reads as five parallel workstreams
- * with time running down; below it the columns collapse to one and the same
- * markup is an ordinary chronological list, with the workstream name moving
- * from the column heading onto each entry. There is no second rendering and no
- * JavaScript breakpoint.
+ * TWO MODES, ONE DOM. Pinned (.is-pinned on .tl-ride), the stage sticks to the
+ * top of the window inside a track as much taller than the window as the chart
+ * is wider, and the chart is translated from the page's scroll. Otherwise the
+ * chart's window is an ordinary box that scrolls sideways. The component picks
+ * the mode; this file only styles them.
  */
 
+/* The timeline opens its page: no header band above it, and nothing between
+ * the menu and the stage. */
 .project-timeline {
-  margin-block: 2.5rem;
-  /* Five lanes will not fit the 36rem measure. Like the stakeholder map, this
-   * breaks out of the centred column symmetrically, staying on its axis. */
-  width: min(72rem, calc(100vw - 4rem));
-  margin-inline: calc((100% - min(72rem, calc(100vw - 4rem))) / 2);
-  font-family: var(--font-mono);
-
-  /* A plate, for the same reason the colony-loss map is one: a `##` section
-   * lands on a wax band or a comb band depending only on how many sections
-   * precede it, and this figure is built out of hairline rules, muted labels
-   * and a honey fill that means something. None of those survive being laid
-   * over a dark photograph. Its own paper keeps it readable wherever the
-   * section ends up, and keeps honey meaning "turning point" rather than
-   * meaning "this part is lit". */
-  padding: 1.1rem 1.25rem 1.25rem;
-  border: 1px solid var(--rule);
-  border-radius: var(--radius);
-  background: var(--surface);
-  color: var(--text);
+  margin-block: 0 2.5rem;
 }
 
 /* CombBands inverts type for a dark band, which is right for the page and
- * wrong inside a plate that brought its own paper. Same treatment as the
+ * wrong on a stage that brings its own paper. Same treatment as the
  * colony-loss map; drop this block when that file goes. */
-[data-comb="on"] [data-band="comb"] .project-timeline h3,
-[data-comb="on"] [data-band="comb"] .project-timeline h4,
-[data-comb="on"] [data-band="comb"] .project-timeline h5,
-[data-comb="on"] [data-band="comb"] .project-timeline h6,
-[data-comb="on"] [data-band="comb"] .project-timeline strong,
-[data-comb="on"] [data-band="comb"] .project-timeline summary {
+[data-comb="on"] [data-band="comb"] .tl-stage h1,
+[data-comb="on"] [data-band="comb"] .tl-stage strong {
   color: var(--ink);
 }
 
-[data-comb="on"] [data-band="comb"] .project-timeline a {
+[data-comb="on"] [data-band="comb"] .tl-stage a {
   color: var(--link);
 }
 
-[data-comb="on"] [data-band="comb"] .project-timeline a:hover {
-  color: var(--ink);
-}
-
-.tl-heading {
-  margin: 0 0 0.35rem;
-  font-size: 1.15rem;
-}
-
-.tl-standfirst {
-  max-width: var(--measure);
-  margin: 0 0 1rem;
-  color: var(--text-muted);
-  font-size: 0.85rem;
-  line-height: 1.6;
-}
-
-/* ---------- the two filters ---------- */
-
-/* Workstream and turning points in the first group, threads in the second.
- * Honey marks a chosen workstream, violet a chosen thread, because those are
- * two different questions: one is "show me the bee lab", the other is "show me
- * this argument wherever it went". */
-
-.tl-controls {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  margin-bottom: 0.6rem;
-}
-
-.tl-filter {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.3rem;
-}
-
-.tl-filter button {
-  padding: 0.15rem 0.6rem;
-  border: 1px solid var(--rule);
-  border-radius: var(--radius);
-  background: var(--surface);
-  color: var(--text);
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-}
-
-.tl-filter button:hover {
-  border-color: var(--ink);
-}
-
-.tl-filter button.is-on {
-  border-color: var(--ink);
-  background: var(--honey);
-  color: var(--ink);
-}
-
-.tl-filter button.is-thread {
-  border-style: dotted;
-}
-
-.tl-filter button.is-thread.is-on {
-  border-style: solid;
-  border-color: var(--ink);
-  background: var(--violet);
-  color: var(--surface);
-}
-
-.tl-focus-line {
-  max-width: var(--measure);
-  margin: 0 0 0.4rem;
-  font-size: 0.82rem;
-  line-height: 1.6;
-}
-
-.tl-focus-line strong {
-  font-family: var(--font-heading);
-  color: var(--ink);
-}
-
-.tl-key {
-  max-width: var(--measure);
-  margin: 0 0 0.5rem;
-  color: var(--text-muted);
-  font-size: 0.74rem;
-  line-height: 1.6;
-}
-
-/* ---------- acts, months, lanes ---------- */
-
-.tl-act {
-  margin: 2.25rem 0 0;
-  padding-top: 1rem;
-  border-top: 3px solid var(--honey);
-}
-
-.tl-act-name {
-  margin: 0;
-  font-family: var(--font-heading);
-  font-size: 1.05rem;
-  color: var(--ink);
-}
-
-.tl-act-line {
-  max-width: var(--measure);
-  margin: 0.15rem 0 0;
-  color: var(--text-muted);
-  font-size: 0.82rem;
-  line-height: 1.6;
-}
-
-/* Repeated once per act rather than made sticky: the site menu is already
- * sticky at the top of the viewport, and a second sticky bar underneath it
- * fights with it on every scroll. Two or three months is a short enough run
- * to remember five column headings. */
-.tl-lanehead {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 0 0.5rem;
-  margin-top: 1rem;
-  padding-bottom: 0.3rem;
-  border-bottom: 1px solid var(--ink);
-}
-
-.tl-lanehead span {
-  font-family: var(--font-heading);
-  font-size: 0.8rem;
-  color: var(--ink);
-}
-
-.tl-month-name {
-  margin: 0;
-  padding: 0.55rem 0 0;
-  border-top: 1px solid var(--rule);
-  font-family: var(--font-heading);
-  font-size: 0.82rem;
-  font-weight: 400;
-  color: var(--text-muted);
-}
-
-/* The month that opens an act already has the act rule above it. */
-.tl-lanehead + .tl-month-name {
-  border-top: 0;
-  padding-top: 0.5rem;
-}
-
-.tl-lanes {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 0.35rem 0.5rem;
-  align-items: start;
-  padding: 0.4rem 0 0.8rem;
-}
-
-/* Four hairlines behind the entries, so a lane still reads as a lane in a
- * month where only one or two of them have anything in it. */
-.tl-guides {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 0 0.5rem;
-  pointer-events: none;
-}
-
-.tl-guides span {
-  border-left: 1px solid var(--rule);
-}
-
-.tl-guides span:first-child {
-  border-left-color: transparent;
-}
-
-/* ---------- one entry ---------- */
-
-/* Positioned, so that the guide hairlines behind the grid stay behind them.
- * .tl-guides is absolutely positioned and therefore paints above anything in
- * normal flow; taking part in the same pass puts these back on top, because
- * they come later in the document. */
-.tl-chip,
-.tl-detail {
-  position: relative;
-}
-
-.tl-chip {
-  display: block;
-  width: 100%;
-  text-align: left;
-  padding: 0.4rem 0.55rem;
-  border: 1px solid var(--rule);
-  border-radius: var(--radius);
-  background: var(--surface);
-  color: var(--text);
-  font-family: var(--font-mono);
-  font-size: 0.76rem;
-  line-height: 1.45;
-  transition: border-color 120ms linear;
-}
-
-.tl-chip:hover {
-  border-color: var(--ink);
-}
-
-.tl-chip-date {
-  display: block;
-  color: var(--text-muted);
-  font-size: 0.68rem;
-  letter-spacing: 0.04em;
-}
-
-.tl-chip-title {
-  display: block;
-}
-
-/* The column heading carries this above the breakpoint. */
-.tl-chip-track {
-  display: none;
-}
-
-.tl-chip.is-turn {
-  border-color: var(--ink);
-  background: var(--honey);
-  color: var(--ink);
-}
-
-.tl-chip.is-turn .tl-chip-date {
-  color: var(--ink);
-}
-
-.tl-chip.is-setback {
-  border-color: var(--violet);
-}
-
-.tl-chip.is-ahead {
-  border-style: dashed;
-}
-
-.tl-chip.is-open {
-  outline: 2px solid var(--ink);
-  outline-offset: 1px;
-}
-
-.tl-chip:focus-visible {
-  outline: 2px solid var(--ink);
-  outline-offset: 1px;
-}
-
-/* Outside the current focus. The entry keeps its place and its date, so the
- * shape of the months a thread crosses stays visible, and the title stays in
- * the document for anyone reading with a screen reader. */
-.tl-chip.is-ghost,
-.tl-chip.is-ghost.is-turn {
-  padding: 0.1rem 0.55rem;
-  border-color: transparent;
-  background: none;
-  color: var(--text-muted);
-}
-
-.tl-chip.is-ghost .tl-chip-date {
-  color: var(--text-muted);
-}
-
-.tl-chip.is-ghost:hover {
-  border-color: var(--rule);
-}
-
-.tl-chip.is-ghost .tl-chip-title,
-.tl-chip.is-ghost .tl-chip-track {
+/* Read by a screen reader, not drawn: the date and workstream a label's
+ * position already shows. */
+.tl-sr {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -334,65 +51,612 @@
   white-space: nowrap;
 }
 
-/* ---------- the panel an entry opens ---------- */
+/* ---------- the ride ---------- */
 
-.tl-detail {
-  /* Spans the lanes and sits directly under the entry that opened it. */
-  grid-column: 1 / -1;
-  margin: 0.15rem 0 0.5rem;
-  padding: 0.85rem 1rem;
-  border: 1px solid var(--ink);
-  border-radius: var(--radius);
-  background: var(--surface-muted);
+/* Full bleed: a timeline wants every pixel of width it can get. 100vw
+ * includes the scrollbar, which is why the band hosting it clips sideways
+ * below. Clip rather than hidden, so the band does not become a scroll
+ * container and the sticky stage keeps sticking to the window. */
+.tl-ride {
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
 }
 
-.tl-detail-head {
+.page-band:has(> .container > .markdown-page > .project-timeline) {
+  overflow-x: clip;
+}
+
+.tl-stage {
+  --tl-gutter: 8.5rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-muted);
+  border-block: 1px solid var(--rule);
+  color: var(--text);
+  font-family: var(--font-mono);
+}
+
+.tl-ride.is-pinned .tl-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: clip;
+}
+
+/* Opening its page, the pinned ride is pulled up under the menu to the very
+ * top of the document, so the stage is the whole window from the first frame
+ * and there is no stretch of plain scrolling before it pins. The stage keeps
+ * the menu's height clear at its top while the menu shows, and gives it up
+ * as the menu slides away, on the same 0.25s as the menu's own slide
+ * (.site-nav in brand.css). --tl-nav-h is the menu's height, measured by the
+ * component. */
+.tl-ride.opens-page {
+  margin-top: calc(-1 * var(--tl-nav-h, 0px));
+}
+
+.tl-ride.opens-page .tl-stage {
+  padding-top: var(--tl-nav-h, 0px);
+  transition: padding-top 0.25s ease;
+}
+
+body:has(.site-nav.is-hidden) .tl-ride.opens-page .tl-stage {
+  padding-top: 0;
+}
+
+/* ---------- the bar: what to show, and the key ---------- */
+
+/* The right-hand padding keeps the key out from under the hive, which rides
+ * the window's top right corner over everything once the menu has gone
+ * (.hive-cluster in BeeScene.css). */
+.tl-bar {
+  flex: none;
+  padding: 0.55rem 8rem 0.45rem 1rem;
+  border-bottom: 1px solid var(--rule);
+  background: var(--surface);
+}
+
+/* With the page's title in it, the bar is two columns: the title standing
+ * the height of both rows, and the controls and the focus line beside it. */
+.tl-bar.has-title {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas:
+    "title controls"
+    "title focus";
+  align-items: center;
+  column-gap: 1.25rem;
+}
+
+.tl-bar.has-title .tl-title {
+  grid-area: title;
+}
+
+.tl-bar.has-title .tl-controls {
+  grid-area: controls;
+}
+
+.tl-bar.has-title .tl-focus-line {
+  grid-area: focus;
+}
+
+/* Set as every page title is, in Cubao and upper case, at the size two rows
+ * of controls leave room for. */
+.tl-title {
+  margin: 0;
+  font-size: 2rem;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.tl-controls {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.5rem;
-  padding-bottom: 0.35rem;
-  border-bottom: 2px solid var(--honey);
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem 1rem;
 }
 
-.tl-detail-meta {
-  margin: 0;
-  color: var(--text-muted);
-  font-size: 0.72rem;
+.tl-filter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem;
 }
 
-.tl-close {
-  margin-left: auto;
-  padding: 0.1rem 0.45rem;
+.tl-filter button,
+.tl-follow select {
+  padding: 0.15rem 0.6rem;
   border: 1px solid var(--rule);
   border-radius: var(--radius);
   background: var(--surface);
   color: var(--text);
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.78rem;
 }
 
-.tl-close:hover {
+.tl-filter button:hover,
+.tl-follow select:hover {
+  border-color: var(--ink);
+}
+
+.tl-filter button.is-on {
+  border-color: var(--ink);
   background: var(--honey);
-}
-
-.tl-detail-title {
-  max-width: var(--measure);
-  margin: 0.5rem 0 0;
-  font-family: var(--font-heading);
-  font-size: 0.95rem;
   color: var(--ink);
 }
 
-.tl-detail-body {
-  max-width: var(--measure);
-  margin: 0.3rem 0 0;
-  font-size: 0.82rem;
-  line-height: 1.65;
+.tl-follow {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-left: 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  white-space: nowrap;
 }
 
-.tl-detail-foot {
-  margin: 0.5rem 0 0;
+/* Capped, or the longest thread name sets the width and pushes the key onto
+ * a second row on a laptop, which the chart pays for in height. */
+.tl-follow select {
+  max-width: 12rem;
+}
+
+/* A chosen thread is violet, as it was on the grid: "show me this argument
+ * wherever it went" is a different question from "show me the bee lab". */
+.tl-follow select:has(option:checked:not([value=""])) {
+  border-color: var(--ink);
+  background: var(--violet);
+  color: var(--surface);
+}
+
+.tl-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 0.85rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+
+.tl-legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* The key's marks are the chart's own, in the text colour: the shape is what
+ * it explains, not the row. */
+.tl-legend-mark {
+  --lane: var(--text);
+  width: 22px;
+  height: 12px;
+  overflow: visible;
+}
+
+.tl-legend-turn {
+  padding: 0 0.3rem;
+  background: var(--honey);
+  color: var(--ink);
+}
+
+/* Two lines tall, always. The bar's height is part of the sum that decides
+ * whether the chart pins, so it must not change with the focus, and it must
+ * not change with the pinning either, or the chart would flip between the
+ * two for ever on a window right at the edge. */
+.tl-focus-line {
+  min-height: 3.1em;
+  max-width: 64rem;
+  margin: 0.35rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.55;
+}
+
+/* Pinned, it is also held to two lines. Unpinned, a phone lets it run on. */
+.tl-ride.is-pinned .tl-focus-line {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+.tl-focus-line strong {
+  font-family: var(--font-heading);
+  color: var(--ink);
+}
+
+/* ---------- the chart ---------- */
+
+.tl-chart {
+  flex: none;
+  display: grid;
+  grid-template-columns: var(--tl-gutter) minmax(0, 1fr);
+}
+
+/* Pinned, the chart sits in the middle of the room under the bar, and moves
+ * with the bar as the menu comes and goes. */
+.tl-ride.is-pinned .tl-chart {
+  margin-block: auto;
+}
+
+/* The row names, level with their axes, and above them where the chart has
+ * got to. It does not move; the chart slides under its right-hand rule. */
+.tl-gutter {
+  position: relative;
+  z-index: 1;
+  border-right: 1px solid var(--rule);
+  background: var(--surface-muted);
+}
+
+.tl-now {
+  position: absolute;
+  top: 0;
+  left: 0.75rem;
+  right: 0.5rem;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.tl-now-month {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 0.82rem;
+  color: var(--ink);
+}
+
+.tl-now-act {
+  display: block;
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: 0.66rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.tl-lane {
+  position: absolute;
+  left: 0.5rem;
+  right: 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.15rem 0.3rem;
+  transform: translateY(-50%);
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  background: none;
+  color: var(--ink);
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  line-height: 1.2;
+  text-align: left;
+}
+
+/* The row's colour, as a short run of its own axis. */
+.tl-lane::before {
+  content: "";
+  flex: none;
+  width: 0.9rem;
+  height: 3px;
+  background: var(--lane);
+}
+
+.tl-lane:hover {
+  border-color: var(--rule);
+}
+
+.tl-lane.is-on {
+  border-color: var(--ink);
+  background: var(--honey);
+}
+
+.tl-view {
+  position: relative;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+}
+
+.tl-ride.is-pinned .tl-view {
+  overflow: clip;
+}
+
+.tl-canvas {
+  position: relative;
+}
+
+.tl-ride.is-pinned .tl-canvas {
+  will-change: transform;
+}
+
+.tl-svg {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* The head: acts on a honey rule, months under them. */
+.tl-act-rule {
+  stroke: var(--honey);
+  stroke-width: 3;
+}
+
+.tl-act-name,
+.tl-month,
+.tl-record-end-label {
+  position: absolute;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.tl-act-name {
+  top: 5px;
+  font-family: var(--font-heading);
+  font-size: 0.74rem;
+  color: var(--ink);
+}
+
+.tl-month,
+.tl-record-end-label {
+  top: 23px;
+  color: var(--text-muted);
+  font-size: 0.68rem;
+}
+
+.tl-grid {
+  stroke: var(--rule);
+  stroke-width: 1;
+}
+
+/* Everything after this has not happened yet. */
+.tl-record-end {
+  stroke: var(--text-muted);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+}
+
+.tl-axis {
+  stroke: var(--lane);
+  stroke-width: 1;
+}
+
+.tl-leader {
+  stroke: var(--lane);
+  stroke-width: 1;
+}
+
+/* A dot sits in a ring of the paper, so it reads as a mark on the axis rather
+ * than a bead threaded on it. */
+.tl-dot {
+  fill: var(--lane);
+  stroke: var(--surface-muted);
+  stroke-width: 2;
+}
+
+.tl-dot.is-ahead {
+  fill: var(--surface-muted);
+  stroke: var(--lane);
+  stroke-width: 1.5;
+  stroke-dasharray: 2 1.6;
+}
+
+.tl-cross-back {
+  fill: var(--surface-muted);
+}
+
+.tl-cross path {
+  fill: none;
+  stroke: var(--lane);
+  stroke-width: 2;
+  stroke-linecap: square;
+}
+
+.tl-range {
+  fill: var(--lane);
+}
+
+.tl-range.is-ahead {
+  fill: var(--surface-muted);
+  stroke: var(--lane);
+  stroke-width: 1.2;
+  stroke-dasharray: 3 2;
+}
+
+/* Bigger than the mark, so a 9px dot is not a 9px target. */
+.tl-hit {
+  fill: transparent;
+  pointer-events: all;
+  cursor: pointer;
+}
+
+/* A followed thread, from mark to mark. Ink, dashed, and under the labels,
+ * whose paper interrupts it wherever one is in the way. */
+.tl-thread-path {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.5;
+  stroke-dasharray: 5 3;
+}
+
+/* Outside the current focus. It keeps its place, so the shape of the months a
+ * thread crosses stays visible, and its label stays in the document. */
+.tl-item.is-ghost .tl-leader,
+.tl-item.is-ghost .tl-cross path,
+.tl-item.is-ghost .tl-dot.is-ahead,
+.tl-item.is-ghost .tl-range.is-ahead {
+  stroke: var(--rule);
+}
+
+.tl-item.is-ghost .tl-dot:not(.is-ahead),
+.tl-item.is-ghost .tl-range:not(.is-ahead) {
+  fill: var(--rule);
+}
+
+/* ---------- a label ---------- */
+
+/* Sized by the component to the width the layout counted, one line of the
+ * mono face, with a rule in the row's colour along the edge its leader meets. */
+.tl-label {
+  position: absolute;
+  box-sizing: border-box;
+  height: var(--tl-label-h);
+  padding: 0 var(--tl-label-pad);
+  border: 0;
+  border-radius: 0;
+  background: var(--surface-muted);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--tl-label-size);
+  line-height: calc(var(--tl-label-h) - 1px);
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.tl-label.is-up {
+  border-bottom: 1px solid var(--lane);
+}
+
+.tl-label.is-down {
+  border-top: 1px solid var(--lane);
+}
+
+.tl-label.is-turn {
+  background: var(--honey);
+  color: var(--ink);
+}
+
+.tl-label:hover,
+.tl-label.is-shown {
+  outline: 1px solid var(--lane);
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.tl-label.is-turn:hover,
+.tl-label.is-turn.is-shown {
+  outline-color: var(--ink);
+  background: var(--honey);
+}
+
+.tl-label:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+
+.tl-label.is-ghost {
+  border-color: var(--rule);
+  background: var(--surface-muted);
+  color: var(--text-muted);
+  opacity: 0.4;
+}
+
+.tl-label.is-ghost:hover,
+.tl-label.is-ghost.is-shown {
+  opacity: 1;
+}
+
+/* ---------- the card ---------- */
+
+.tl-card {
+  position: absolute;
+  z-index: 5;
+  width: min(24rem, calc(100% - 1rem));
+  padding: 0.7rem 0.9rem 0.75rem;
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+.tl-card:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.tl-card-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 2px solid var(--lane);
+}
+
+.tl-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 0.4rem;
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+}
+
+.tl-card-swatch {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--lane);
+}
+
+/* A cross drawn in two strokes, with square caps like the search field's
+ * glass: every hard edge on the wiki is square. The button is bigger than
+ * the cross, so it is a fair target. */
+.tl-close {
+  flex: none;
+  align-self: center;
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-left: auto;
+  padding: 0;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.tl-close svg {
+  width: 0.6rem;
+  height: 0.6rem;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.6;
+  stroke-linecap: square;
+}
+
+.tl-close:hover {
+  border-color: var(--ink);
+  background: var(--honey);
+}
+
+.tl-close:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+
+.tl-card-title {
+  margin: 0.45rem 0 0;
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.tl-card-body {
+  margin: 0.3rem 0 0;
+}
+
+.tl-card-foot {
+  margin: 0.45rem 0 0;
   font-size: 0.72rem;
 }
 
@@ -414,8 +678,8 @@
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 0.3rem 0.5rem;
-  margin: 0.5rem 0 0;
+  gap: 0.2rem 0.5rem;
+  margin: 0.45rem 0 0;
   font-size: 0.74rem;
 }
 
@@ -447,9 +711,20 @@
 }
 
 .tl-record summary {
-  font-family: var(--font-heading);
-  font-size: 0.85rem;
   cursor: pointer;
+}
+
+/* An <h2> for the outline, set as the small label it was before: the page's
+ * own h2 rule (honey underline, display face) belongs to its sections. */
+.tl-record .tl-record-heading {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0;
 }
 
 .tl-record-note {
@@ -460,7 +735,7 @@
   line-height: 1.6;
 }
 
-.tl-record-month h4 {
+.tl-record .tl-record-month h3 {
   margin: 1.25rem 0 0;
   font-size: 0.95rem;
 }
@@ -499,52 +774,46 @@
   margin: 0.2rem 0 0;
 }
 
-/* ---------- narrow: the same markup as one chronological column ---------- */
+/* ---------- narrow ---------- */
 
-@media (max-width: 62rem) {
-  .project-timeline {
-    width: 100%;
-    /* The breakout margin centres a plate wider than the column. Here the
-     * plate is the column, and that margin would only push it off the right
-     * edge of the screen. */
-    margin-inline: 0;
+/* A phone gets the same chart in a box that scrolls sideways, with a gutter
+ * just wide enough for the row names on two lines. */
+@media (max-width: 47.99rem) {
+  .tl-stage {
+    --tl-gutter: 5.75rem;
   }
 
-  .tl-lanehead,
-  .tl-guides {
-    display: none;
+  .tl-bar {
+    padding-inline: 1rem;
   }
 
-  .tl-lanes {
-    grid-template-columns: 1fr;
-    gap: 0.3rem;
+  .tl-bar.has-title {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "title"
+      "controls"
+      "focus";
+    row-gap: 0.4rem;
   }
 
-  /* The inline style that puts an entry in its lane has to give way; on one
-   * column every entry belongs to the same one. */
-  .tl-chip {
-    grid-column: 1 !important;
+  .tl-title {
+    font-size: 1.8rem;
   }
 
-  /* The workstream moves from the column heading onto the entry, on the same
-   * line as the date, because with one column the date alone no longer says
-   * which thread of work an entry belongs to. */
-  .tl-chip-date {
-    display: inline;
+  .tl-follow {
+    margin-left: 0;
   }
 
-  .tl-chip-track {
-    display: inline;
-    color: var(--text-muted);
-    font-size: 0.68rem;
-    letter-spacing: 0.04em;
+  .tl-legend {
+    gap: 0.2rem 0.75rem;
   }
 
-  .tl-chip-track::before {
-    content: " · ";
+  .tl-lane {
+    left: 0.35rem;
+    font-size: 0.74rem;
   }
 
-  .tl-chip.is-turn .tl-chip-track {
-    color: var(--ink);
+  .tl-now {
+    left: 0.5rem;
   }
 }

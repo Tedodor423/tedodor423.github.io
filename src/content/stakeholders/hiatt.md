@@ -4,6 +4,7 @@ name: Chris Hiatt
 role: Commercial beekeeper and almond grower
 place: California, North Dakota and Washington
 region: United States
+group: Beekeepers
 lat: 36.75
 lon: -119.77
 photo: hiatt
@@ -11,6 +12,16 @@ date: 30 July 2026
 questions: Q1, Q2, Q5
 anchors: Q6
 ---
+
+## Key points
+
+- Chris uniquely is both a commercial beekeeper, **managing 18,000 hives**, and the owner of a **46 acre almond farm**
+- His family has been managing Varroa for around 20 years. Treatments such as coumaphos organophosphate that initially worked extremely well eventually **lost effectiveness, resulting in 55% colony loss**
+- Their current approach combines multiple controls, including amitraz, oxalic acid, formic acid and brood breaks, yet some of their worst years have still resulted in **50–60% colony losses**
+- Severe colony losses have left his operation **without enough hives to fulfil almond-pollination contracts**, forcing him to source colonies from other beekeepers while also paying to rebuild his own
+- Existing novel treatments such as Norroa **aren’t available on a commercial scale** - Chris highlighted that a useful solution must be able to be used on **thousands of colonies**
+- He **strongly supported using pollen patties** because patties are already highly used by commercial beekeepers, and combining treatment with feeding could **avoid an additional trip to each hive**
+- For commercial beekeepers, efficacy must therefore be combined with **low labour requirements, simple administration, long-lasting protection, scalability and affordability**
 
 ## Why we interviewed
 

@@ -1,6 +1,7 @@
 import { Fragment, useContext } from "react";
 import { highlight, type Segment } from "../utils/search";
 import { MarksContext } from "../utils/marksContext";
+import type { Run } from "../utils/runs";
 
 /** Runs of text, with the matched ones marked. */
 export function Segments({ segments }: { segments: Segment[] }) {
@@ -24,6 +25,29 @@ export function Marked({ text }: { text: string }) {
   const marks = useContext(MarksContext);
   if (!marks.length) return <>{text}</>;
   return <Segments segments={highlight(text, marks)} />;
+}
+
+/**
+ * A caption or citation line built from runs (src/utils/runs.ts): a link
+ * stays a link, a tag stays in code and out of the marks, and the rest is
+ * marked like any other text.
+ */
+export function Runs({ runs }: { runs: Run[] }) {
+  return (
+    <>
+      {runs.map((run, i) =>
+        run.code ? (
+          <code key={i}>{run.text}</code>
+        ) : run.href ? (
+          <a key={i} href={run.href} target="_blank" rel="noreferrer">
+            <Marked text={run.text} />
+          </a>
+        ) : (
+          <Marked key={i} text={run.text} />
+        ),
+      )}
+    </>
+  );
 }
 
 /* `**bold**` and `*italic*`, the only inline Markdown the stakeholder files

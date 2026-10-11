@@ -4,12 +4,20 @@ name: Oxfordshire Natural Beekeeping Group
 role: Around 20 hobbyist beekeepers practising low-intervention, chemical-free beekeeping
 place: Garsington, Oxfordshire
 region: United Kingdom
+group: Beekeepers
 lat: 51.71
 lon: -1.17
 photo: oxnatbees
 date: 30 May 2026
 questions: Q1, Q6
 ---
+
+## Key points
+
+- Many of the treatment-free beekeepers have actually used chemical treatments in the past before transitioning to treatment-free beekeeping practices, and **reported lower Varroa counts after this change**
+- Given their successes with the treatment-free approach, this led us to **reconsider whether our project was the best solution** to tackle Varroa
+- They discussed the nuances, suggesting that their **small apiary size and varied genetics** enabled treatment-free approaches, whereas **treatments were likely necessary for large-scale beekeeping operations** with largely uniform genetics
+- This led us to **adjust our project’s target audience** from beekeepers in general **to commercial beekeepers specifically**, and guided our future outreach strategy as we reached out to more commercial beekeepers and honey companies moving forward
 
 ## Why we interviewed
 

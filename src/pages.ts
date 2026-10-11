@@ -56,7 +56,6 @@ import software from "./content/software.md?raw";
 import economicModelling from "./content/economic-modelling.md?raw";
 import ecologicalModelling from "./content/ecological-modelling.md?raw";
 import measurement from "./content/measurement.md?raw";
-import parts from "./content/parts.md?raw";
 import safety from "./content/project-safety.md?raw";
 import humanPractices from "./content/human-practices.md?raw";
 import caseStudies from "./content/case-studies.md?raw";
@@ -96,6 +95,18 @@ export interface Page {
    * folded into a card.
    */
   layout?: "experiments" | "sdg";
+  /**
+   * Centre the title (and lead) instead of hanging it from the reading
+   * column's left edge. For a page that opens on a band wider than that
+   * column, where a left-hung title looks off-centre against it.
+   */
+  centredTitle?: boolean;
+  /**
+   * The page opens straight onto a figure that carries the <h1> itself, so
+   * the standard header band (breadcrumbs, title, lead) is left out, as it is
+   * on Home. The lead is still read by search. The timeline uses it.
+   */
+  titleInBody?: boolean;
   /**
    * The children are views of this one page rather than pages of their own.
    * The page opens with a switch between them (ViewSwitch) and shows the
@@ -176,13 +187,6 @@ const Pages: MenuEntry[] = [
         content: measurement,
         lead: "Quantifying dsRNA in bee material, and the methods we had to build to do it.",
       },
-      {
-        name: "Timeline",
-        title: "Timeline",
-        path: "/timeline",
-        content: timeline,
-        lead: "Eight months, five workstreams running at once, and the dates each one turned.",
-      },
     ],
   },
   {
@@ -195,13 +199,6 @@ const Pages: MenuEntry[] = [
         path: "/software", // iGEM standard URL
         content: software,
         lead: "NectarDesigner: how we choose the sequence that silences the mite.",
-      },
-      {
-        name: "Parts",
-        title: "Parts",
-        path: "/parts", // iGEM standard URL
-        content: parts,
-        lead: "The modular loop-ended dsRNA part collection.",
       },
       {
         // Was /experiments, an iGEM standard URL. Re-pathed per
@@ -240,6 +237,7 @@ const Pages: MenuEntry[] = [
         path: "/bee-lab-experiments",
         content: beeLabExperiments,
         lead: "The bee-lab methods, written to be followed.",
+        layout: "experiments",
       },
       {
         name: "Safety",
@@ -288,6 +286,8 @@ const Pages: MenuEntry[] = [
         path: "/human-practices", // iGEM standard URL
         content: humanPractices,
         // No lead: the page opens straight onto the approach + HIVE figure.
+        // That figure is a wide band, so the title is centred over it.
+        centredTitle: true,
       },
       {
         name: "Outreach and Education",
@@ -338,6 +338,15 @@ const Pages: MenuEntry[] = [
         path: "/partners",
         content: partners,
         lead: "Who supported this project, and how.",
+      },
+      {
+        name: "Project Timeline",
+        title: "Timeline",
+        path: "/timeline",
+        content: timeline,
+        lead: "Eight months, five workstreams running at once, and the dates each one turned.",
+        // The timeline opens the page and carries the title in its own bar.
+        titleInBody: true,
       },
     ],
   },

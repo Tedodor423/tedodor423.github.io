@@ -4,6 +4,8 @@ import { easeOut, useClock } from "../utils/useClock";
 import { REDUCED_MOTION } from "../utils/glide";
 import { useMedia } from "../utils/useMedia";
 import { DECK_MEDIA, useRide, within, type Span } from "../utils/deck";
+import { DECK_ANCHORS, MITE, miteTitle } from "../data/homeDeck";
+import { Marked, Runs } from "./Marked";
 import "./VarroaSlide.css";
 
 /* Slide three of the home page: the mite.
@@ -54,14 +56,9 @@ import "./VarroaSlide.css";
  * footage holds its first frame.
  */
 
-const TITLE_LEAD = "The world is facing a silent epidemic,";
+/* The words and the numbers are MITE in src/data/homeDeck.ts, where the
+ * search index reads them too. */
 const VIDEO = `${import.meta.env.BASE_URL}local/mite_back_new.mp4`;
-
-const COLONIES_MILLION = 1.6;
-const LOSS_BILLION = 2;
-
-const ARS_2025 =
-  "https://www.ars.usda.gov/news-events/news/research-news/2025/usda-researchers-find-viruses-from-miticide-resistant-parasitic-mites-are-cause-of-recent-honey-bee-colony-collapses/";
 
 type Point = [year: number, value: number];
 
@@ -395,12 +392,18 @@ export function VarroaSlide() {
     "--verdict": steps.verdict,
   } as CSSProperties;
 
-  const id = headingId(`${TITLE_LEAD} the Varroa mite`);
+  const id = headingId(miteTitle());
 
   // Each line's words sit in an .ms-ink span: that span is what carries the
-  // rectangle in the boxed treatments.
+  // rectangle in the boxed treatments. <Marked> puts a honey background on
+  // the words a reader searched for; the section's id is where their result
+  // lands.
   return (
-    <section className="varroa-slide" aria-labelledby={id}>
+    <section
+      className="varroa-slide"
+      id={DECK_ANCHORS.mite}
+      aria-labelledby={id}
+    >
       <div
         className="ms-track"
         ref={track}
@@ -429,49 +432,54 @@ export function VarroaSlide() {
 
           <h2 className="ms-title" id={id}>
             <span className="ms-lead">
-              <span className="ms-ink">{TITLE_LEAD}</span>
+              <span className="ms-ink">
+                <Marked text={MITE.lead} />
+              </span>
             </span>{" "}
             <span className="ms-mite">
               <span className="ms-ink">
-                the <span className="ms-red">Varroa mite</span>
+                <Marked text={MITE.subject.before} />
+                <span className="ms-red">
+                  <Marked text={MITE.subject.red} />
+                </span>
               </span>
             </span>
           </h2>
 
           <div className="ms-toll" ref={toll} data-shown={steps.toll > 0}>
             <p className="ms-when">
-              <span className="ms-ink">Every year in the US alone:</span>
+              <span className="ms-ink">
+                <Marked text={MITE.when} />
+              </span>
             </p>
             <p className="ms-count">
               <span className="ms-ink" aria-hidden="true">
-                {(COLONIES_MILLION * count).toFixed(1)} million colonies
+                {(MITE.colonies * count).toFixed(1)} million colonies
               </span>
               <span className="visually-hidden">
-                {COLONIES_MILLION} million colonies
+                {MITE.colonies} million colonies
               </span>
             </p>
             <p className="ms-count">
               <span className="ms-ink" aria-hidden="true">
-                ${(LOSS_BILLION * count).toFixed(1)} billion
+                ${(MITE.dollars * count).toFixed(1)} billion
               </span>
-              <span className="visually-hidden">${LOSS_BILLION.toFixed(1)} billion</span>
+              <span className="visually-hidden">
+                ${MITE.dollars.toFixed(1)} billion
+              </span>
             </p>
             <p className="ms-lost">
               <span className="ms-ink">
-                are lost to <span className="ms-red">Varroa</span>
-                -associated colony collapse
+                <Marked text={MITE.lost.before} />
+                <span className="ms-red">
+                  <Marked text={MITE.lost.red} />
+                </span>
+                <Marked text={MITE.lost.after} />
               </span>
             </p>
             <p className="ms-refs">
               <span>
-                Colonies: Project Apis m., US colony loss survey, June 2024 to
-                March 2025 <code>[LIT]</code>; the viruses varroa carries as the
-                cause:{" "}
-                <a href={ARS_2025} target="_blank" rel="noreferrer">
-                  USDA ARS, June 2025
-                </a>{" "}
-                <code>[LIT]</code>. Dollars: team jamboree deck, source still
-                to be traced <code>[FLAG]</code>.
+                <Runs runs={MITE.refs} />
               </span>
             </p>
           </div>
@@ -481,14 +489,13 @@ export function VarroaSlide() {
               <TrendChart drawn={drawn} />
               <figcaption className="ms-refs">
                 <span>
-                  Estimated values, not yet data <code>[FLAG]</code>.
+                  <Runs runs={MITE.chart} />
                 </span>
               </figcaption>
             </figure>
             <p className="ms-verdict">
               <span className="ms-ink">
-                With unstoppable climate change effects, the problem Will
-                get worse
+                <Marked text={MITE.verdict} />
               </span>
             </p>
           </div>

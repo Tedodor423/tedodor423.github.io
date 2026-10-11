@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { headingId } from "../utils/headingId";
 import { REDUCED_MOTION } from "../utils/glide";
 import { clamp01, easeOut } from "../utils/useClock";
+import { CHALLENGES, DECK_ANCHORS } from "../data/homeDeck";
+import { Marked } from "./Marked";
 import "./RnaiChallenges.css";
 
 /* Slide five of the home page: what RNA interference is up against, and
@@ -60,72 +62,14 @@ export type ChallengeSteps = {
   vivo: number;
 };
 
-const TITLE = "…This technology faces numerous challenges";
+/* The words are CHALLENGES in src/data/homeDeck.ts, where the search index
+ * reads them too. */
 const LOCAL = `${import.meta.env.BASE_URL}local/`;
 /** The numbers count up with the scroll, done well before their proof is
  *  fully in: at this multiple of the proof's own step. */
 const COUNT_PACE = 1.6;
 /** Each demand's word is fully in by this multiple of its proof's step. */
 const WORD_PACE = 2;
-
-const BARRIERS = [
-  "Rational target selection",
-  "Off-target screening",
-  "Single-target resistance",
-  "Manufacturing cost",
-  "Environmental degradation",
-  "Inefficient delivery",
-];
-
-type Demand = "model" | "design" | "vivo";
-
-const DEMANDS: {
-  key: Demand;
-  joint?: string;
-  word: string;
-  /** The proof, with its number (if any) between `lead` and `tail`. */
-  lead?: string;
-  count?: number;
-  tail: string;
-  /** A clip beside the proof, from public/local/ for now. */
-  clip?: string;
-  /** How much faster than the file the clip plays. */
-  rate?: number;
-  to: string;
-  page: string;
-  flag?: boolean;
-}[] = [
-  {
-    key: "model",
-    word: "Modelling,",
-    count: 6,
-    tail: " different models and a novel dsRNA-design pipeline",
-    clip: "vdchibin_fold.mp4",
-    to: "/model",
-    page: "The models",
-  },
-  {
-    key: "design",
-    word: "Design",
-    tail: "Hundreds of experiments, an infinite amount of time in the wet lab",
-    to: "/wet-lab-experiments",
-    page: "The wet lab",
-    flag: true,
-  },
-  {
-    key: "vivo",
-    joint: "and",
-    word: "In-vivo measurement",
-    lead: "Unprecedented scale of honeybee testing: ",
-    count: 1200,
-    tail: "+ hours in our bee lab",
-    clip: "beehive_work.mp4",
-    rate: 2,
-    to: "/bee-lab",
-    page: "The bee lab",
-    flag: true,
-  },
-];
 
 /** A proof's clip, running only while its proof is on screen. */
 function Clip({
@@ -176,45 +120,59 @@ export function RnaiChallenges({
   steps: ChallengeSteps;
   pinned: boolean;
 }) {
-  const id = headingId(TITLE);
+  const id = headingId(CHALLENGES.title);
   const style = {
     "--claim": steps.claim,
     "--draw": steps.draw,
     "--demands": steps.demands,
   } as CSSProperties;
 
+  // <Marked> puts a honey background on the words a reader searched for.
+  // Stacked, their result lands on this section; pinned, on the marker
+  // TreatmentsSlide puts at the right point of the ride under the same id.
   return (
-    <section className="rc" aria-labelledby={id} style={style}>
+    <section
+      className="rc"
+      id={pinned ? undefined : DECK_ANCHORS.challenges}
+      aria-labelledby={id}
+      style={style}
+    >
       <h2 className="rc-claim" id={id} data-shown={steps.claim > 0}>
-        {TITLE}
+        <Marked text={CHALLENGES.title} />
       </h2>
 
       <div className="rc-arrow" data-shown={steps.draw > 0}>
         <span className="rc-shaft" aria-hidden="true" />
         <ol className="rc-barriers">
-          {BARRIERS.map((barrier, i) => (
+          {CHALLENGES.barriers.map((barrier, i) => (
             <li
               key={barrier}
-              style={{ "--at": (i + 0.5) / BARRIERS.length } as CSSProperties}
+              style={{ "--at": (i + 0.5) / CHALLENGES.barriers.length } as CSSProperties}
             >
-              {barrier}
+              <Marked text={barrier} />
             </li>
           ))}
         </ol>
       </div>
 
       <div className="rc-demands" data-shown={steps.demands > 0}>
-        <p className="rc-requiring">Requiring us to do</p>
+        <p className="rc-requiring">
+          <Marked text={CHALLENGES.requiring} />
+        </p>
         <dl className="rc-rows">
-          {DEMANDS.map(({ key, joint, word, lead, count, tail, clip, rate, to, page, flag }) => (
+          {CHALLENGES.demands.map(({ key, joint, word, lead, count, tail, clip, rate, to, page, flag }) => (
             <div key={key} className="rc-row" data-clip={clip ? true : undefined}>
               <dt
                 className="rc-word"
                 data-shown={steps[key] > 0}
                 style={{ "--in": clamp01(steps[key] * WORD_PACE) } as CSSProperties}
               >
-                {joint && <span className="rc-joint">{joint} </span>}
-                {word}
+                {joint && (
+                  <span className="rc-joint">
+                    <Marked text={joint} />{" "}
+                  </span>
+                )}
+                <Marked text={word} />
               </dt>
               <dd
                 className="rc-proof"
@@ -222,7 +180,7 @@ export function RnaiChallenges({
                 style={{ "--in": steps[key] } as CSSProperties}
               >
                 <p className="rc-says">
-                  {lead}
+                  {lead && <Marked text={lead} />}
                   {count !== undefined && (
                     <>
                       <span className="rc-count" aria-hidden="true">
@@ -231,13 +189,15 @@ export function RnaiChallenges({
                       <span className="visually-hidden">{count}</span>
                     </>
                   )}
-                  {tail}
+                  <Marked text={tail} />
                 </p>
                 {clip && (
                   <Clip src={clip} rate={rate} playing={pinned ? steps[key] > 0 : true} />
                 )}
                 <p className="rc-more">
-                  <Link to={to}>{page}</Link>
+                  <Link to={to}>
+                    <Marked text={page} />
+                  </Link>
                   {flag && (
                     <>
                       {" "}

@@ -22,8 +22,9 @@ import { MarkdownChunk } from "./MarkdownPage";
  *
  * A `##` section without an `### Experiments` part (Yeast production, Where
  * this connects) renders as plain prose and is listed in the menu by its
- * heading alone. Nothing here depends on the word "Block": the menu label is
- * split off only when the heading has one.
+ * heading alone. Nothing here depends on the word "Block": when a heading
+ * carries one, the write-up keeps it as a label over the name and the menu
+ * shows just the number, as "1. <name>".
  */
 
 interface Experiment {
@@ -45,6 +46,8 @@ interface Section {
   id: string;
   /** "Block 1", when the heading carries one. */
   label?: string;
+  /** The "1" of that label, which is all the menu shows of it. */
+  number?: string;
   /** The heading with the label taken off. */
   name: string;
   /** The heading as written, for search marks and the accessible name. */
@@ -70,7 +73,7 @@ function parse(content: string) {
   const page = splitAt(content, 2);
 
   const sections = page.chunks.map((chunk): Section => {
-    const labelled = /^(Block\s+\d+)\s*:\s*(.+)$/i.exec(chunk.title);
+    const labelled = /^(Block\s+(\d+))\s*:\s*(.+)$/i.exec(chunk.title);
     const id = idFor(chunk.title);
     const split = splitAt(chunk.body, 3);
 
@@ -95,7 +98,8 @@ function parse(content: string) {
     return {
       id,
       label: labelled?.[1],
-      name: labelled?.[2] ?? chunk.title,
+      number: labelled?.[2],
+      name: labelled?.[3] ?? chunk.title,
       title: chunk.title,
       intro: split.intro,
       parts,
@@ -185,9 +189,12 @@ export function ExperimentsPage({ content, marks }: ExperimentsPageProps) {
                   className="xp-menu-block"
                   aria-current={current === section.id ? "location" : undefined}
                 >
-                  {section.label && (
-                    <span className="xp-menu-label">{section.label}</span>
+                  {section.number && (
+                    <span className="xp-menu-number">{section.number}.</span>
                   )}
+                  {/* A real space, so it reads "1. <name>" aloud and when
+                      copied; the grid draws the visible gap. */}
+                  {section.number && " "}
                   {section.name}
                 </Link>
                 {section.experiments.length > 0 && (

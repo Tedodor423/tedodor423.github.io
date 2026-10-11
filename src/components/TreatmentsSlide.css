@@ -268,6 +268,9 @@
      out over the rest, this slide in the first two, slide five
      (RnaiChallenges.css) in the other four. */
   .ts-track {
+    /* The landing markers (.ride-landing, brand.css) are placed in the
+       track's own coordinates. */
+    position: relative;
     height: 700dvh;
   }
 
@@ -283,15 +286,16 @@
     padding: 0;
   }
 
-  /* The bee sits large at the claim's top right corner. The claim's second
-     line, arrow included, runs to about 12.85 of --ts-title, and the frame
-     starts just past it, so even at the far left of its wander (the end of
-     the clip) the bee stops short of "toxic" and its arrow. The frame runs
-     off the right edge, where the clip is empty. Its top stays under the
-     bee tally in the screen's corner (BeeScene, about 5.5rem deep). */
+  /* The bee sits large on the claim's top right corner: the middle of its
+     frame is where the second line ends (arrow included, about 12.85 of
+     --ts-title) and half a line below the claim's top, so it wanders over
+     the end of the claim. It takes no pointer, so the arrows under it
+     still answer. Above the stage's top the frame is cut off, and the
+     clip's bee never reaches far enough right to meet the bee tally in the
+     screen's corner. */
   .ts-bee {
-    top: max(calc(9dvh - 0.08 * var(--ts-bee)), 6rem);
-    left: calc(6vw + 12.85 * var(--ts-title) + 0.02 * var(--ts-bee));
+    top: calc(9dvh + 0.5 * var(--ts-title) - 0.28125 * var(--ts-bee));
+    left: calc(6vw + 12.85 * var(--ts-title) - 0.5 * var(--ts-bee));
   }
 
   /* The claim, upper left, with its evidence straight under it. */

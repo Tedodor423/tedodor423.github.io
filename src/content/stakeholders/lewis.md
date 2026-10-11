@@ -4,6 +4,7 @@ name: Josette Lewis
 role: Chief Executive Officer, Sustainable Conservation; former Vice President and Chief Scientific Officer, Almond Board of California
 place: California
 region: United States
+group: Industry
 lat: 37.77
 lon: -122.42
 photo: lewis
@@ -11,6 +12,16 @@ date: 24 July 2026
 questions: Q1, Q5
 anchors: Q6
 ---
+
+## Key points
+
+- California's almond industry is **highly dependent on managed honey bees**, with enormous numbers of colonies transported into the state for the February–March almond bloom.
+- Almond growers and commercial beekeepers are **economically codependent**: growers need bees for pollination, while almond pollination provides the main source of income for many commercial beekeepers.
+- Josette estimated that **almost 100% of commercial beekeepers are affected by varroa** in the sense that nearly all actively treat for it
+- Varroa has **increased the cost of maintaining healthy colonies** and has reduced bee supply causing **pollination prices to increase** and subsequently raising almond prices
+- Any treatments must be **simple, inexpensive, and scalable across thousands of colonies** in order for it to be useful for commercial beekeepers
+- Josette considered administration through something like a **pollen patty particularly scalable** because it could integrate into existing beekeeping practices.
+- From her experience in agricultural biotechnology, she expected **a living GMO to face a longer and more expensive route to market** than a non-living alternative
 
 ## Why we interviewed
 

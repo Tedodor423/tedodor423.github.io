@@ -4,6 +4,7 @@ name: Danny Le Feuvre
 role: Chief Executive Officer, Australian Honey Bee Industry Council
 place: Adelaide, South Australia
 region: Australia
+group: Industry
 lat: -34.93
 lon: 138.6
 photo: le-feuvre
@@ -11,6 +12,13 @@ date: 28 May 2026
 questions: Q2, Q3
 anchors: Q1, Q6
 ---
+
+## Key points
+
+- History of Varroa in Australia - **declared endemic** after it could not be eradicated within 15 months. Reports last year providing evidence for **emerging acaricide resistance** in mites in Australia.
+- Socioeconomic consequences - New South Wales **lost about 35% of its beekeepers**, with 40% of beekeepers citing profitability in Varroa control as the main reason for resigning; affect Australia's ability to meet its pollination demand as honeybees contribute to about **14-15% of Australia's agricultural industry** (one of their main exports).
+- Ideal solution for Varroa: **Cost-effective, perceived as natural, with no negative impacts on bee health, leaving behind no residues, and where one time feeding is sufficient**.
+- Stated a preference for *S. alvi* treatment leading us to **interview regulatory advisors** to understand the realities of developing a GMO solution
 
 ## Why we interviewed
 

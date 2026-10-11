@@ -4,12 +4,22 @@ name: Professor Brittney Goodrich
 role: Assistant Professor, Department of Agricultural and Consumer Economics, University of Illinois Urbana-Champaign
 place: Urbana-Champaign, Illinois
 region: United States
+group: Academics
 lat: 40.11
 lon: -88.21
 photo: goodrich
 date: 7 August 2026
 anchors: Q5, Q6
 ---
+
+## Key points
+
+- Professor Goodrich models the costs and revenues of commercial beekeeping operations, including **pollination, honey production, labor, treatment, and colony losses**
+- Her modeled operation manages **8,500 colonies**, with around **5,000 sent to California** each year for almond pollination
+- Approximately **27% of total costs are capital recovery and equipment, 21% is labor, and 9% is Varroa treatment products alone** – this doesn’t include the labor for administering treatments, or the cost of replacing lost hives so **actual cost is more expensive**
+- The model assumes **two amitraz treatments, one oxalic acid treatment and one formic acid treatment** each year.
+- **Labor-intensive treatments are difficult at commercial scale**; the model works out to roughly **700 colonies per worker**.
+- Almond pollination generates approximately **$195 per colony** in the model and honey production is modelled at around **70 lb per hive** – colony losses therefore create **both additional costs and lost revenue**, as fewer colonies are available for valuable pollination contracts and honey production
 
 ## Why we interviewed
 

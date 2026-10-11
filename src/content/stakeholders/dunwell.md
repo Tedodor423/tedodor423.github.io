@@ -4,6 +4,7 @@ name: Professor Jim Dunwell
 role: Chair, Advisory Committee on Releases to the Environment (ACRE)
 place: Reading
 region: United Kingdom
+group: Regulators
 lat: 51.44
 lon: -0.94
 photo: dunwell
@@ -11,6 +12,13 @@ date: 4 August 2026
 questions: Q3, Q6
 anchors: Q4
 ---
+
+## Key points
+
+- ACRE evaluates the risks of releasing GMOs in the UK, mainly determining **whether the release could cause harm to human health or the environment**
+- Evidence needs to be provided that **no harm would be caused**, including that there are **no off-target effects**
+- From a UK regulatory standpoint, **the delivery method is secondary to the endpoint**: regulators care more about where the treatment goes and what effects it has rather than how it’s administered
+- If components entered honey or other bee products, this could introduce **additional food-safety regulation**
 
 ## Why we interviewed
 

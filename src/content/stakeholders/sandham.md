@@ -4,12 +4,22 @@ name: Mark Sandham
 role: Treatment-free beekeeper, Oxford
 place: Oxford
 region: United Kingdom
+group: Beekeepers
 lat: 51.75
 lon: -1.26
 date: 29 May 2026
 questions: Q1, Q5, Q6
 provisional: Q3
 ---
+
+## Key points
+
+- Mark is a **treatment-free beekeeper**, meaning he uses no chemical treatments on his bees
+- Varroa has **not caused significant problems in his own colonies**, although he has seen signs consistent with Varroa-associated disease in colonies he received from another beekeeper
+- He believes that not using treatments **allows bees to naturally adapt** to pests and diseases, whereas continually using treatments may interfere with this process
+- His opposition to treatment is **not absolute**: if Varroa seriously threatened his colonies and the bees were unable to adapt, the argument for intervention would be different
+- He raised concerns about **the ability to control a living engineered bacterium**; he wondered if interaction between bees of different colonies could transmit it and make spread difficult to control
+- His perspective encouraged us to consider whether we should aim for **continuous protection with a living bacterium** or whether **a repeated treatment could be safer**
 
 ## Why we interviewed
 

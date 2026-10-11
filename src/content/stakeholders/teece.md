@@ -4,11 +4,18 @@ name: Melanie Teece
 role: Head of Technical, Hilltop Honey
 place: Newtown, Powys
 region: United Kingdom
+group: Industry
 lat: 52.51
 lon: -3.31
 date: 20 August 2026
 provisional: Q4, Q5, Q6
 ---
+
+## Key points
+
+- Looking beyond our two case studies, she shared that **Varroa has not majorly affected their honey supply** which largely originates from China and South America
+- She suggested that the key factor we should prioritise for our project should be **cost-effectiveness**, as costs for other parts of the production process including transport and testing are already high, so their beekeepers would likely **choose the lowest cost option**
+- Additionally, she highlighted that our solution should be **widely accepted by consumers**, and that **dsRNA residues should not contaminate honey** and affect its purity testing results
 
 ## Why we interviewed
 

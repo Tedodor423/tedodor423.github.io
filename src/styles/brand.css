@@ -211,6 +211,28 @@
   --lab-wet-fill: #f0e9f5;
   --lab-bee-fill: #f7ecdd;
 
+  /* ---------- the five workstreams ---------- */
+
+  /* Which workstream a dated event belongs to, on the timeline: one row each,
+   * and the row's axis, leaders and markers in its colour. The three labs keep
+   * their family from the tokens above (violet wet, burnt honey bee, navy dry),
+   * with violet and navy lifted to the step a 1px leader and a 9px marker
+   * need: the kit's own values sit too dark to read as a line (see the regimen
+   * note below). Human practices takes an olive and the team a teal, found by
+   * search against the three fixed ones rather than picked by eye.
+   *
+   * Checked with the dataviz validator as neighbouring rows, in the order the
+   * timeline draws them, on white and on wax: worst CVD ΔE 17.2 (deutan,
+   * human practices against team), worst normal-vision ΔE 17.7, all five over
+   * 3:1. Not checked all-pairs, where wet and dry converge under deuteranopia
+   * as the lab note says; every row prints its name, so colour is never the
+   * only key. Type stays in --text: these mark, they do not letter. */
+  --lane-wet: #7a32a6;
+  --lane-bee: var(--burnt-honey);
+  --lane-dry: #2a5a8f;
+  --lane-hp: #42601d;
+  --lane-team: #14938d;
+
   /* ---------- the three treatment regimens ---------- */
 
   /* When in the year a treatment is applied, on the ecological-modelling
@@ -911,6 +933,14 @@ pre {
   margin-inline: auto;
 }
 
+/* A page that opens on a band wider than the column (Page.centredTitle in
+ * src/pages.ts): the title centres over the band instead. */
+.page-header.is-centred .breadcrumbs,
+.page-header.is-centred h1,
+.page-header.is-centred .lead {
+  text-align: center;
+}
+
 /* ---------- content ---------- */
 
 .markdown-page {
@@ -926,10 +956,41 @@ pre {
 .markdown-page h2,
 .markdown-page h3,
 .markdown-page h4,
-.sm-profile[id],
+.sr-entry[id],
 .tl-entry[id],
-.dbtl-cell[id] {
+.dbtl-cell[id],
+.hc-copy[id],
+.vm-heading[id],
+.vm-featured [id],
+.vm-limits[id],
+.bee-importance[id],
+.varroa-slide[id],
+.treatments-slide[id],
+.ts-fact[id],
+.rc[id] {
   scroll-margin-top: 7rem;
+}
+
+/* The home deck's slides, where they pin: the menu steps aside, so a result
+ * lands with the slide filling the screen and no clearance. The query is
+ * DECK_MEDIA in src/utils/deck.ts. */
+@media (min-width: 48rem) and (min-height: 36rem) and (prefers-reduced-motion: no-preference) {
+  .bee-importance[id],
+  .varroa-slide[id],
+  .treatments-slide[id] {
+    scroll-margin-top: 0;
+  }
+}
+
+/* A search result's landing inside a ride: a zero-sized marker carrying the
+ * id, placed in the track at the point of the ride the result is about
+ * (TreatmentsSlide.tsx). The track is position: relative. */
+.ride-landing {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
 }
 
 .markdown-page h2 {

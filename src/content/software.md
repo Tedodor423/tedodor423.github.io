@@ -378,7 +378,7 @@ Anything held back is marked as held back on the page where it would otherwise
 appear.
 
 > **TODO —** Agree the final disclosure line and apply it identically here, in
-> the repository README and on [parts](/parts). Owner: dry lab with the IP
+> the repository README and on [parts](/results#parts). Owner: dry lab with the IP
 > holder. Three specific calls are open and this page has taken a provisional
 > position on each, which the IP holder has to confirm or reverse before the
 > freeze:
@@ -426,6 +426,6 @@ tool versions so that it can be repeated rather than taken on trust.
 ## Where this connects
 
 [Dry lab and modelling](/model) · [Description](/project-description) ·
-[Safety and security](/project-safety) · [Parts](/parts) ·
+[Safety and security](/project-safety) · [Parts](/results#parts) ·
 [Experiments and protocols](/wet-lab-experiments) · [Attributions](/attributions) ·
 [Contribution](/contribution) · [Engineering](/engineering) · [Results](/results)

@@ -4,12 +4,21 @@ name: Laura Bowden
 role: GM manager, Science and Advice for Scottish Agriculture (SASA)
 place: Edinburgh
 region: United Kingdom
+group: Regulators
 lat: 55.95
 lon: -3.19
 photo: bowden
 date: 12 August 2026
 provisional: Q3
 ---
+
+## Key points
+
+- Helped us understand the **Scottish regulatory pathway** that could apply to NECTAR.
+- NECTAR occupies a **regulatory grey area** because our therapeutic is produced using a genetically modified organism, but the final yeast is killed and unable to reproduce.
+- **Heat-inactivating the yeast could potentially reduce some of the regulatory challenges** associated with releasing a living GMO.
+- The novelty of the technology means its **final classification would need to be determined with the relevant regulatory authorities**.
+- Highlighted the importance of **providing regulators with as much evidence as possible**, reinforcing the value of our modelling and safety work.
 
 ## Why we interviewed
 

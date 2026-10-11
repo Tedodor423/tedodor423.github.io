@@ -209,6 +209,10 @@ export interface TimelineEvent {
   until?: string;
   track: TrackId;
   title: string;
+  /** The words drawn on the timeline itself, where `title` is too long for
+   *  one line of 22 characters. A handle, not a summary: the full title and
+   *  the detail are in the card the label opens and in the written record. */
+  short?: string;
   /** One or two sentences. Longer belongs on the page in `links`. */
   detail?: string;
   /** A turning point: the entries a reader short of time should see. */
@@ -249,6 +253,7 @@ export const EVENTS: TimelineEvent[] = [
     until: "2026-03-03",
     track: "team",
     title: "One-to-one idea chats with the supervisor",
+    short: "Supervisor idea chats",
     detail:
       "A standing Tuesday meeting begins, and the fundraising channel opens alongside it.",
     threads: ["money"],
@@ -266,6 +271,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-03-16",
     track: "dry",
     title: "First project vote, and the wrong winner",
+    short: "First project vote",
     detail:
       "A Deinococcus-based space project takes eight first preferences. Work and fundraising start behind it.",
     turn: true,
@@ -275,6 +281,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-03-20",
     track: "team",
     title: "£5,450 needed by 1 April",
+    short: "£5,450 by 1 April",
     detail:
       "The registration fee sets the project's first hard deadline. A fundraising spreadsheet, industry-specific email templates and a Monday outreach cadence follow within the week.",
     threads: ["money"],
@@ -285,6 +292,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-03-29",
     track: "dry",
     title: "The supervisor rejects the chosen project",
+    short: "Project rejected",
     detail:
       "Five objections: a multi-year scope, little visible synthetic biology for judges, no method for separating or connecting the layered organisms, trial and error rather than directed design, and no holistic vision. A quantitative feasibility study is asked for instead.",
     turn: true,
@@ -296,6 +304,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-03-30",
     track: "team",
     title: "Emergency project meeting",
+    short: "Emergency meeting",
     detail:
       "A written response follows on 2 April. The project does not survive it, and nothing had been built yet.",
   },
@@ -304,6 +313,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-04-03",
     track: "dry",
     title: "The bee and dsRNA idea comes back",
+    short: "Bee dsRNA idea returns",
     detail:
       "One of the original seven pitches is identified as both feasible and within the competition's remit. Three finalists go forward.",
   },
@@ -312,6 +322,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-04-06",
     track: "dry",
     title: "Final vote: Varroa, nine to two",
+    short: "Final vote: Varroa",
     detail: "The carbon-to-protein idea takes two, the space project none.",
     turn: true,
     links: [{ label: "Project description", href: "/project-description" }],
@@ -321,6 +332,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-04-09",
     track: "hp",
     title: "A Varroa specialist joins as an advisor",
+    short: "Varroa advisor joins",
     detail:
       "The first external expert on the project, and the first of roughly thirty conversations.",
     links: [{ label: "The conversation", href: "/human-practices#sm-budge" }],
@@ -330,6 +342,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-04-19",
     track: "dry",
     title: "Bioreactor, or an engineered gut symbiont",
+    short: "Bioreactor or symbiont",
     detail:
       "The objection that decides the project five months later is already on the table: making dsRNA costs the bacterium energy, so it may not compete in the bee gut. Deferred to a hackathon.",
     threads: ["chassis"],
@@ -342,6 +355,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-04-28",
     track: "team",
     title: "A £10,000 donation lands",
+    short: "£10,000 donation",
     detail: "Registration is covered, and a research hackathon is called.",
     threads: ["money"],
   },
@@ -360,6 +374,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-05-07",
     track: "dry",
     title: "Promoter ladder work begins",
+    short: "Promoter ladder begins",
     detail:
       "A shortlist of symbiont promoters that might beat the existing ones for dsRNA expression, matched against published transcriptomics in R. Without the expression data the team is, in its own words, shooting in the dark.",
     threads: ["chassis"],
@@ -369,6 +384,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-05-08",
     track: "bee",
     title: "First meeting with the Oxford Bee Lab",
+    short: "First Bee Lab meeting",
     detail:
       "The meeting that makes live bee work possible at all, and that the whole bee-lab track hangs on.",
     turn: true,
@@ -379,12 +395,14 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-05-12",
     track: "hp",
     title: "First human practices meeting",
+    short: "First HP meeting",
   },
   {
     id: "repeat-or-two-promoters",
     date: "2026-05-14",
     track: "dry",
     title: "Inverted repeat, or two promoters",
+    short: "Repeat or two promoters",
     detail:
       "The open design question that eventually becomes the loop-ended construct, and with it the problem that no vendor will synthesise the molecule.",
     threads: ["build"],
@@ -400,6 +418,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-05-15",
     track: "wet",
     title: "Protocols signed off, and a promoter shortlist",
+    short: "Protocols signed off",
     detail:
       "The top seven promoters are expected to give about a five-fold expression range in the gut, already wider than the existing toolkit. Four of roughly 29 target sequences are screened.",
     threads: ["chassis", "target"],
@@ -411,6 +430,7 @@ export const EVENTS: TimelineEvent[] = [
     until: "2026-05-21",
     track: "wet",
     title: "Protocol-writing sprint",
+    short: "Protocol sprint",
     detail:
       "Nearly three pages of protocols and assays, numbered and claimed individually across the team.",
     links: [{ label: "Protocol library", href: "/wet-lab-experiments" }],
@@ -420,6 +440,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-05-18",
     track: "wet",
     title: "The shortcut that unlocked the summer",
+    short: "T7 kit shortcut",
     detail:
       "Candidate targets can be tested with a T7 transcription kit before anything is engineered, so weak ones can be dropped before they cost a cloning round.",
     turn: true,
@@ -430,6 +451,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-05-20",
     track: "team",
     title: "Scope discipline imposed",
+    short: "Scope discipline",
     detail:
       "A conference trip is cut. Effort goes to human practices, parts design and characterisation instead.",
   },
@@ -438,6 +460,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-05-22",
     track: "team",
     title: "A consumables budget sponsored",
+    short: "Consumables sponsored",
     detail:
       "Negotiated down further in August. It is what pays for most of what follows.",
     threads: ["money"],
@@ -448,6 +471,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-05-27",
     track: "bee",
     title: "The GMO question reaches the safety office",
+    short: "GMO safety approvals",
     detail:
       "Testing an engineered organism in the bee lab needs its own approvals, moving one between labs needs more, and the risk assessment needs an animal form because bees count as higher invertebrates.",
     threads: ["chassis"],
@@ -458,12 +482,14 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-05-28",
     track: "team",
     title: "Registered as team 6391",
+    short: "Registered: team 6391",
   },
   {
     id: "promoter-spec",
     date: "2026-06-01",
     track: "dry",
     title: "The promoter library, specified",
+    short: "Promoter library spec",
     detail:
       "Three lengths per promoter, with transcription start sites mapped from raw transcriptomics rather than predicted, giving at least fifty promoters to test.",
     threads: ["chassis"],
@@ -481,6 +507,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-06-07",
     track: "dry",
     title: "Off-target screening, before anything is ordered",
+    short: "Off-target screening",
     detail:
       "Every candidate runs against the honeybee, three bumblebee species and human sequence, and one major off-target match disqualifies it. A check for illegal restriction sites is added the next day.",
     turn: true,
@@ -492,6 +519,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-06-07",
     track: "dry",
     title: "Twenty-six mite sequences split across the team",
+    short: "Mite sequences split",
     detail:
       "Roughly five each, for the five members not sitting exams, due that Friday. The candidates come from the published Varroa RNAi literature.",
     threads: ["target"],
@@ -501,6 +529,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-06-08",
     track: "team",
     title: "A call with last year's winners",
+    short: "Call with past winners",
     detail:
       "Three things came back: everything that can go wrong in a lab will, so keep the goals simple; motivation is the limiting resource; and when you need an answer, contact every single person who might have it.",
     threads: ["story"],
@@ -510,6 +539,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-06-11",
     track: "dry",
     title: "The whole project, explained once, on the record",
+    short: "Project explained",
     detail:
       "A recorded session so that everybody knows the system and the first experiments. From here on it is assumed knowledge.",
   },
@@ -518,12 +548,14 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-06-12",
     track: "bee",
     title: "First bee lab induction at the field station",
+    short: "Bee lab induction",
   },
   {
     id: "name",
     date: "2026-06-16",
     track: "team",
     title: "NECTAR, and the Agriculture village",
+    short: "Named NECTAR",
     detail:
       "Novel Engineered Colony Therapy for Apiary Resilience, after two rounds of voting. Agriculture takes the village poll with six.",
   },
@@ -532,6 +564,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-06-18",
     track: "bee",
     title: "Almost no mites in the frames",
+    short: "Almost no mites",
     detail:
       "Collecting enough Varroa for mite assays before August turns out to be impossible. The plan inverts: dose live bees first, use the result to cut the target list, and test on mites later with more statistical power.",
     turn: true,
@@ -544,6 +577,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-06-22",
     track: "dry",
     title: "The target list is cut from thirty-three to about fifteen",
+    short: "Target list cut to ~15",
     detail:
       "Bee-lab capacity, not sequence quality, is what decides the size of the list.",
     threads: ["target"],
@@ -553,6 +587,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-06-23",
     track: "wet",
     title: "The dsRNA arithmetic does not work",
+    short: "dsRNA arithmetic fails",
     detail:
       "Adult assays across every treatment would need about 140 mg of dsRNA; transcription yields about 45 mg from 250 reactions. Larval studies need about 20 mg, so larvae become the route.",
     turn: true,
@@ -574,6 +609,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-06-29",
     track: "bee",
     title: "Bee lab work begins, and the lab journal opens",
+    short: "Bee lab work begins",
     detail: "The first entry is sucrose preparation.",
     threads: ["story"],
     links: [{ label: "Bee lab notebook", href: "/bee-lab-labbook" }],
@@ -585,6 +621,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-07-01",
     track: "hp",
     title: "A schools session arranged",
+    short: "Schools session",
     detail:
       "A careers and synthetic biology talk, also used to collect the students' own views on genetic modification. Delivered mid-July; a second session was cancelled for lack of people.",
     links: [{ label: "Public outreach", href: "/education" }],
@@ -601,6 +638,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-07-03",
     track: "bee",
     title: "The bee lab group is formed",
+    short: "Bee lab group formed",
     detail:
       "Ten members, protective equipment and first aid in place, and a haemolymph extraction demonstrated.",
   },
@@ -609,6 +647,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-07-03",
     track: "hp",
     title: "Australia case study, and the first survey draft",
+    short: "Australia case study",
     detail:
       "Feedback on the draft asks for beekeeper location and operation scale, so that answers line up with the hive profiles in the model.",
     links: [
@@ -620,6 +659,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-07-06",
     track: "bee",
     title: "Training in larval staging and haemolymph extraction",
+    short: "Larval staging training",
     detail:
       "The team commits to keeping the journal detailed enough to write the wiki from.",
     threads: ["story"],
@@ -629,6 +669,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-07-06",
     track: "hp",
     title: "Environmental risk interview",
+    short: "Ecotox risk interview",
     detail:
       "A former government consultant in environmental chemistry and ecotoxicological risk assessment.",
     links: [{ label: "The conversation", href: "/human-practices#sm-lam" }],
@@ -638,6 +679,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-07-08",
     track: "wet",
     title: "Sequencing credit secured",
+    short: "Sequencing credit",
     detail:
       "A discount later in the month brings the per-reaction cost down by roughly two thirds, which is what makes repeated sequencing rounds affordable in September.",
     threads: ["money", "build"],
@@ -648,6 +690,7 @@ export const EVENTS: TimelineEvent[] = [
     until: "2026-07-21",
     track: "bee",
     title: "Feeding hardware, printed in house",
+    short: "Feeders printed",
     // Hardware moved off /bee-lab onto its own page; the section headings there
     // carry status labels, so link the page rather than a status-bearing anchor.
     detail:
@@ -660,6 +703,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-07-13",
     track: "wet",
     title: "Only two of six ordered fragments are the right ones",
+    short: "2 of 6 fragments right",
     setback: true,
     threads: ["build"],
   },
@@ -668,6 +712,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-07-14",
     track: "bee",
     title: "The first harnessing attempt fails",
+    short: "Harnessing fails",
     detail:
       "Bees slip out of the tape and feed poorly. They were older, already-fed foragers rather than newly emerged bees, which is the fix.",
     setback: true,
@@ -681,6 +726,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-07-15",
     track: "bee",
     title: "The four-hundred-bee assay is designed",
+    short: "400-bee assay designed",
     detail:
       "Four constructs, five concentrations, five replicates and two collection points, to ask whether construct length changes what reaches the haemolymph.",
     threads: ["dose", "quantify"],
@@ -690,6 +736,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-07-16",
     track: "bee",
     title: "Extraction tubes improvised",
+    short: "Tubes improvised",
     detail:
       "Purpose-made tubes are unavailable, so PCR tubes with a punctured base sit inside Eppendorfs. Four hundred and fifty proper ones are needed before the real assay.",
     setback: true,
@@ -700,6 +747,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-07-18",
     track: "bee",
     title: "Throughput measured: twenty bees per person per hour",
+    short: "20 bees/person/hour",
     detail:
       "The number that decides how large any bee experiment on this project is allowed to be.",
     threads: ["dose"],
@@ -710,6 +758,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-07-19",
     track: "wet",
     title: "The first quantitative comparison of constructs",
+    short: "Constructs compared",
     detail:
       "Yields split three ways across the length series, and the diagnosis is sequence errors in the promoter region of two of the templates. Of roughly eleven primer iterations, one pairing works.",
     threads: ["build"],
@@ -726,6 +775,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-07-19",
     track: "wet",
     title: "A 700 bp amplicon cannot be quantified by qPCR",
+    short: "No qPCR at 700 bp",
     detail:
       "Cycling is too fast for complete extension, and the practical ceiling is around 150 bp. The interim readout becomes reverse transcription and conventional PCR against a ladder, with gel staining as the route to a number.",
     turn: true,
@@ -742,6 +792,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-07-22",
     track: "bee",
     title: "First adult feeding, haemolymph two hours later",
+    short: "First adult feeding",
     detail:
       "Thirty nurse bees, dosed with dsRNA carried over from the wet lab.",
     threads: ["dose"],
@@ -751,6 +802,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-07-22",
     track: "bee",
     title: "A hive frame measured for the insert",
+    short: "Frame measured",
     links: [{ label: "The hive insert", href: "/hardware" }],
   },
   {
@@ -758,6 +810,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-07-23",
     track: "hp",
     title: "The interview that moved the project",
+    short: "Honey company interview",
     detail:
       "A honey company's science and regulatory leads. Two things came back: a strict national ban makes the engineered-organism route unusable in that market while a yeast-extract route is feasible, and price rather than efficacy decides what a beekeeper buys, because honey is a low-margin business.",
     turn: true,
@@ -774,6 +827,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-07-24",
     track: "hp",
     title: "Almond industry interview",
+    short: "Almond interview",
     links: [{ label: "The conversation", href: "/human-practices#sm-lewis" }],
   },
   {
@@ -781,6 +835,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-07-25",
     track: "wet",
     title: "Overlap-extension assembly adopted",
+    short: "Overlap extension",
     detail:
       "Three reactions per fragment, and only two targets carried forward rather than the fifty-one a full panel would need.",
     threads: ["build"],
@@ -790,6 +845,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-07-25",
     track: "hp",
     title: "The human practices gap review",
+    short: "HP gap review",
     detail:
       "Stakeholders had been collected but not connected to each other, markets and the public were under-explored, and misuse was unaddressed. The stakeholder map, the profiles and the debate podcast all come out of this meeting.",
     turn: true,
@@ -801,6 +857,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-07-26",
     track: "wet",
     title: "The week plan written as a cycle",
+    short: "Week plan as a cycle",
     detail:
       "Validate the primers, make enough dsRNA at each length for both assays, then spike haemolymph with known concentrations and compare recovery against buffer. It is the first plan on the project written as design, build and test rather than as a task list.",
     threads: ["quantify", "dose"],
@@ -811,6 +868,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-07-27",
     track: "hp",
     title: "Field testing scope fixed",
+    short: "Field scope fixed",
     detail:
       "Testing stays in Oxford, and the engineered gut symbiont will not be field tested at all. It is described in the team's own words as a regulation landmine.",
     turn: true,
@@ -838,6 +896,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-07-29",
     track: "hp",
     title: "Reading on resistance, to acaricides and to dsRNA",
+    short: "Reading on resistance",
     detail:
       "Pests evolve resistance to RNA interference too. It becomes a stewardship question rather than a footnote.",
     links: [
@@ -853,6 +912,7 @@ export const EVENTS: TimelineEvent[] = [
     until: "2026-08-03",
     track: "team",
     title: "A project website, and a redesigned summary",
+    short: "Project website",
     threads: ["story"],
   },
   {
@@ -861,6 +921,7 @@ export const EVENTS: TimelineEvent[] = [
     until: "2026-08-03",
     track: "hp",
     title: "Prototypes for Humanity application",
+    short: "Prototypes for Humanity",
     detail:
       "Human practices supplies the problem definition, the existing products, and the economic case. Submitted on deadline day.",
     threads: ["story"],
@@ -871,6 +932,7 @@ export const EVENTS: TimelineEvent[] = [
     until: "2026-08-04",
     track: "bee",
     title: "Intact dsRNA recovered from larvae at 24 hours",
+    short: "dsRNA intact at 24 h",
     detail:
       "Whole larvae extracted a day after a 1 µg dose. Reverse transcription and PCR show the construct still intact, and plenty of it. It is the project's first real result.",
     turn: true,
@@ -888,6 +950,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-08-05",
     track: "wet",
     title: "The water controls produce clean bands",
+    short: "Bands in water controls",
     detail:
       "Traced to primer stocks carrying template DNA. In the same week the team mandates backdating the journal with every gel image and reading, because only two gels existed in a form anyone else could look at.",
     turn: true,
@@ -902,6 +965,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-08-07",
     track: "wet",
     title: "Why the denaturing gel shows nothing",
+    short: "Denaturing gel restain",
     detail:
       "Denaturation removes the structure the dye binds to, so the dye never stays in the gel. Soaking the gel after the run brings the bands back within half an hour.",
     threads: ["quantify"],
@@ -917,6 +981,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-08-07",
     track: "dry",
     title: "Concatenating the best windows makes the design worse",
+    short: "Concatenation backfires",
     detail:
       "A single 200 bp window yields around 176 perfectly matching small RNAs. Eight concatenated best 24-mers of similar total length yield eight, because the products spanning the junctions mismatch. The scoring has to penalise junctions.",
     turn: true,
@@ -934,6 +999,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-08-07",
     track: "wet",
     title: "Sucrose hides single strands, not double ones",
+    short: "Sucrose hides ssRNA",
     detail:
       "Single-stranded RNA in sucrose never leaves the well; correctly annealed dsRNA in sucrose runs normally. The feeding vehicle is therefore fine for the product, but standard curves have to be made without it.",
     threads: ["quantify", "dose"],
@@ -943,6 +1009,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-08-07",
     track: "hp",
     title: "Route to market mapped across six jurisdictions",
+    short: "Route to market mapped",
     detail:
       "Written for both the yeast-extract and the engineered-organism route, side by side. It is the document the chassis decision is eventually made on.",
     turn: true,
@@ -956,6 +1023,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-08-08",
     track: "bee",
     title: "Controls tightened after suspected carryover",
+    short: "Controls tightened",
     detail:
       "Ethanol preserves nucleic acid rather than removing it. Every batch now carries five sucrose-only negative controls, and the bleach and dry-ice steps are written down in order.",
     setback: true,
@@ -966,6 +1034,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-08-09",
     track: "wet",
     title: "The chronic weak bands were heat",
+    short: "Weak bands were heat",
     detail:
       "The dye degrades above about 50 °C, which a gel passes after twenty minutes at 100 V. Run shorter and cooler, or run at the recommended field strength and wait longer.",
     turn: true,
@@ -977,6 +1046,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-08-11",
     track: "bee",
     title: "Adult stability time course",
+    short: "Stability time course",
     detail:
       "Forty holders prepared, equipment bleached daily, and haemolymph taken at one, three, six and twenty-four hours.",
     threads: ["dose"],
@@ -986,6 +1056,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-08-12",
     track: "wet",
     title: "Transcription runs for at least six hours, from here on",
+    short: "Six-hour transcription",
     detail:
       "Two poor yields traced back to a two-hour reaction rather than an overnight one. It becomes a standing rule.",
     threads: ["build"],
@@ -1001,6 +1072,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-08-12",
     track: "team",
     title: "Promotional video released",
+    short: "Promo video released",
     detail: "With original music written by a member of the team.",
     threads: ["story"],
   },
@@ -1018,6 +1090,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-08-14",
     track: "hp",
     title: "Integrated human practices reassessed",
+    short: "Integrated HP rethink",
     detail:
       "So many design changes had come out of stakeholder conversations that the team stops treating integrated work as a secondary target and pursues both.",
     threads: ["chassis", "story"],
@@ -1030,6 +1103,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-08-15",
     track: "hp",
     title: "A public description corrected",
+    short: "Blog wording corrected",
     detail:
       "A beekeeping group's blog had described the project as an mRNA vaccine. The team asks for RNA-based biopesticide instead, and uses the same wording everywhere afterwards.",
     threads: ["story"],
@@ -1039,6 +1113,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-08-16",
     track: "wet",
     title: "The kit wants GGG, not G",
+    short: "Kit wants GGG, not G",
     detail:
       "The awkward transcription yields trace back to the transcription start site. The advice taken is to stop optimising around a single base and order promoter flaps that match the kit.",
     setback: true,
@@ -1052,6 +1127,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-08-17",
     track: "dry",
     title: "A directly competing paper publishes",
+    short: "Competing paper out",
     detail:
       "Loop-ended dsRNA in Varroa, from a preprint the team had been following. External validation of the design premise, arriving mid-project.",
     threads: ["build"],
@@ -1061,6 +1137,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-08-18",
     track: "hp",
     title: "The HONEY framework adopted",
+    short: "HONEY framework",
     detail:
       "Hear, Observe, Navigate, Evaluate, Yield. It gives the human practices work the same shape as a design cycle, with the chassis decision sitting inside Navigate.",
     turn: true,
@@ -1076,6 +1153,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-08-18",
     track: "bee",
     title: "An entire assay arm is lost",
+    short: "Assay arm lost",
     detail:
       "The bees escaped, the wrong tape having been used, and could no longer be identified. The twenty-four hour arm was never repeated.",
     setback: true,
@@ -1086,6 +1164,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-08-20",
     track: "wet",
     title: "Eighteen fragments ordered",
+    short: "18 fragments ordered",
     detail:
       "Six assemblies, each split into three pieces so that a vendor would synthesise them at all. Quoted at two days, they arrive in twelve.",
     threads: ["build"],
@@ -1101,6 +1180,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-08-24",
     track: "team",
     title: "Mini jamboree at Imperial",
+    short: "Mini jamboree",
     detail:
       "The feedback shaped this wiki: keep one story running throughout, show the cycle rather than the conclusion, use numbers including how many people you spoke to, and say plainly what is novel.",
     turn: true,
@@ -1111,6 +1191,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-08-25",
     track: "wet",
     title: "The fluorescent ligand arrives",
+    short: "Fluorescent ligand",
     detail: "It unlocks the whole aptamer-based quantification arm.",
     threads: ["quantify"],
   },
@@ -1119,6 +1200,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-08-26",
     track: "hp",
     title: "Convention on Biological Diversity interview",
+    short: "CBD interview",
     detail:
       "A scientist who assesses synthetic biology solutions, with dsRNA experience.",
     links: [
@@ -1133,6 +1215,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-08-27",
     track: "bee",
     title: "A haemolymph bank for calibration",
+    short: "Haemolymph bank",
     detail:
       "Untreated haemolymph from forty bees, most giving five to ten microlitres. Yield turned out to depend on exactly where the antenna is cut, which the protocol had never specified.",
     threads: ["quantify"],
@@ -1162,6 +1245,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-09-01",
     track: "team",
     title: "A £5,000 donation from a livery company",
+    short: "£5,000 donation",
     detail:
       "It covers the remaining wet lab costs and pays for additional people to travel.",
     threads: ["money"],
@@ -1172,6 +1256,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-09-01",
     track: "wet",
     title: "Five parallel workstreams assigned",
+    short: "Five workstreams set",
     detail:
       "Assembly, transcription, standard curves, calibration, and RNA extraction, with the extraction taught to a second person so it does not sit with one pair of hands.",
   },
@@ -1180,6 +1265,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-09-01",
     track: "wet",
     title: "The calibration plate designed as a one-person job",
+    short: "Calibration plate",
     detail:
       "Twenty dilutions across ninety-six wells, deliberately run by a single person so that handling error stays constant across the curve.",
     threads: ["quantify"],
@@ -1189,6 +1275,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-09-01",
     track: "hp",
     title: "Stakeholder profiles started",
+    short: "Stakeholder profiles",
     detail:
       "Key takeaways per interview, and what each one led the team to do differently.",
     threads: ["story"],
@@ -1199,6 +1286,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-09-01",
     track: "bee",
     title: "The mite soaking protocol designed",
+    short: "Mite soak protocol",
     detail:
       "Six hours in solution, turned every half hour, then into capsules with pupae. Built from three published methods.",
     threads: ["mite"],
@@ -1208,6 +1296,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-09-02",
     track: "bee",
     title: "No mites from the most infested hive",
+    short: "No mites, worst hive",
     setback: true,
     threads: ["mite"],
   },
@@ -1216,6 +1305,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-09-03",
     track: "bee",
     title: "First mites collected, first pilot run",
+    short: "First mite pilot",
     detail:
       "About sixty mites by sieve. None of them move once dry after the soak, which is either slow recovery or death, and the pilot cannot tell which.",
     setback: true,
@@ -1226,6 +1316,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-09-03",
     track: "wet",
     title: "An insect RNA extraction protocol adopted",
+    short: "RNA extraction protocol",
     detail:
       "With one check that matters more than the rest: a reading is only trustworthy if a tenfold dilution of the sample scales linearly, because the cleanup chemistry inflates absorbance on its own.",
     threads: ["quantify"],
@@ -1241,6 +1332,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-09-03",
     track: "hp",
     title: "A design requirement nobody had asked for",
+    short: "Recorded debate",
     detail:
       "Recorded as a debate between a researcher on natural mite resistance and a commercial beekeeper. Both supported the project, and both pointed out that current treatments cannot be used while honey supers are on the hive. If NECTAR can be, beekeepers could treat at the right moment and less often.",
     turn: true,
@@ -1257,6 +1349,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-09-04",
     track: "bee",
     title: "Washing the mites kills them",
+    short: "Washing kills mites",
     setback: true,
     threads: ["mite"],
   },
@@ -1265,6 +1358,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-09-05",
     track: "wet",
     title: "First assembly round: no colonies at all",
+    short: "Assembly 1: no colonies",
     setback: true,
     threads: ["build"],
   },
@@ -1273,6 +1367,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-09-05",
     track: "dry",
     title: "The economic model turns into a specification",
+    short: "Economic model as spec",
     detail:
       "Four hive profiles, and a landscape module deleted because beekeepers' landscape data was too coarse to use. Its next output is the treatment efficacy the lab has to reach, per profile.",
     turn: true,
@@ -1283,6 +1378,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-09-07",
     track: "bee",
     title: "Four ways of housing a mite, compared",
+    short: "Mite housing compared",
     detail:
       "Forty mites soaked, then split between capped cells in the frame, capsules with pupae, capsules with larvae, and capsules alone.",
     threads: ["mite"],
@@ -1292,6 +1388,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-09-07",
     track: "bee",
     title: "Haemolymph autofluorescence characterised",
+    short: "Autofluorescence mapped",
     detail:
       "Absorbance and emission mapped from 300 to 700 nm, to measure how much the matrix itself glows inside each dye's window. The whole quantification strategy rests on this control.",
     threads: ["quantify"],
@@ -1307,6 +1404,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-09-08",
     track: "bee",
     title: "A mite on its own does not survive",
+    short: "Mites need a host",
     detail:
       "At twenty-four hours: four of ten in capped cells, three of five on pupae, two of five on larvae, and none of the eighteen kept alone, soaked or not. Every subsequent design keeps the mite on a host.",
     turn: true,
@@ -1319,6 +1417,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-09-10",
     track: "bee",
     title: "A stain dilution series, logged",
+    short: "Stain dilution series",
     detail:
       "A tenfold series gives signal at the low end of the range. The calibrated detection and quantification limits described in cycle 4.3, with blanks and replicates, have still to be run.",
     threads: ["quantify"],
@@ -1335,6 +1434,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-09-11",
     track: "wet",
     title: "Second assembly round: two plates of four",
+    short: "Assembly 2: two of four",
     detail:
       "Colonies on two. One of the remaining two grows the following day, and one never does.",
     setback: true,
@@ -1345,6 +1445,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-09-12",
     track: "bee",
     title: "The soak method is abandoned",
+    short: "Soak method dropped",
     detail:
       "Three findings force it: the delivered dose was far below what was intended, the mites were still not awake five hours later, and most of the controls did not survive. The replacement spikes larvae, lets the hive cap them, then inserts live mites into the cells and scores survival at seventy-two hours.",
     turn: true,
@@ -1357,6 +1458,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-09-12",
     track: "wet",
     title: "Two instruments disagree, so build a correction",
+    short: "Instruments disagree",
     detail:
       "Read on one, read on the other, treat with nuclease, read both again. The disagreement is resolved by measurement rather than by picking a favourite.",
     turn: true,
@@ -1370,6 +1472,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-09-14",
     track: "wet",
     title: "The decision rule written before the experiment",
+    short: "Decision rule first",
     detail:
       "A twofold dilution series, with the interpretation fixed in advance: a flat line means the conversion reflects real chemistry, and readings that rise on dilution mean the instrument is compressing its range.",
     threads: ["quantify"],
@@ -1382,6 +1485,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-09-14",
     track: "team",
     title: "The lab journal splits in three",
+    short: "Journal splits in three",
     detail:
       "Wet lab, bee lab and standard operating procedures. The single file had outgrown itself.",
     threads: ["story"],
@@ -1392,6 +1496,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-09-16",
     track: "wet",
     title: "First sequencing round reads as failure",
+    short: "Sequencing 1: failure?",
     detail:
       "Every assembly appears to have failed, but the diagnosis is muddled: the gel band had been the right size and some sequence features matched.",
     setback: true,
@@ -1402,6 +1507,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-09-18",
     track: "team",
     title: "The wiki plan, with page-level owners",
+    short: "Wiki plan",
     detail:
       "A functional wiki by 7 October, two weeks before the freeze, and a standing rule: cite every claim, and make clear what is our result and what is literature.",
     threads: ["story"],
@@ -1411,6 +1517,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-09-20",
     track: "wet",
     title: "The miniprep had been shearing the reads",
+    short: "Miniprep shearing",
     detail:
       "The provider reports heavy shearing and almost nothing usable. Reducing one handling step fixes it, and twenty-five plasmids go out the next day.",
     threads: ["build"],
@@ -1420,6 +1527,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-09-20",
     track: "hp",
     title: "The wiki restructured around the questions",
+    short: "Wiki around questions",
     detail:
       "Each design question gets its own cycle: an anchor interview, the research behind it, how the answer changed the design, the modelling, and one paragraph on what the product became.",
     threads: ["story"],
@@ -1435,6 +1543,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-09-21",
     track: "wet",
     title: "Clean reads, and apparently no insert",
+    short: "Clean reads, no insert?",
     detail:
       "The miniprep fix worked and the reads are good. The first reading is that none of the plasmids carry the fragment, partly walked back on re-examination because the reported lengths suggest otherwise. Unresolved at the end of the record.",
     setback: true,
@@ -1445,6 +1554,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-09-22",
     track: "wet",
     title: "A route into the yeast plasmid, as a fallback",
+    short: "Yeast plasmid fallback",
     detail:
       "One ribozyme-flanked fragment either side of a bidirectional promoter, in two sequential assembly rounds. A yeast titre is needed whichever route reaches it first.",
     turn: true,
@@ -1456,6 +1566,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-09-22",
     track: "team",
     title: "Safety check-in submitted",
+    short: "Safety check-in",
     links: [{ label: "Safety and security", href: "/project-safety" }],
   },
   {
@@ -1463,6 +1574,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-09-22",
     track: "team",
     title: "The beekeeping experience named as the thing to publish",
+    short: "Beekeeping contribution",
     detail:
       "No other team found has worked with live bees at this depth, so the experimental beekeeping methods become a contribution in their own right rather than a means to an end.",
     threads: ["story"],
@@ -1473,6 +1585,7 @@ export const EVENTS: TimelineEvent[] = [
     date: "2026-09-23",
     track: "wet",
     title: "Gel evidence gathered for the wiki",
+    short: "Gels for the wiki",
     detail:
       "Including the contaminated-primer gels. The failures go on the wiki next to the results.",
     threads: ["story"],
@@ -1566,6 +1679,10 @@ export function fullDate(event: TimelineEvent): string {
     ? `${long(event.date)} to ${long(event.until)}`
     : long(event.date);
 }
+
+/** What the timeline draws for an event. */
+export const labelOf = (event: TimelineEvent): string =>
+  event.short ?? event.title;
 
 /** Chronological, and stable where two things happened on the same day. */
 export const EVENTS_BY_DATE = [...EVENTS].sort(

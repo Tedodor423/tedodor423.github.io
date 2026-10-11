@@ -1,7 +1,9 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import Markdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Link } from "react-router-dom";
+import { MarksContext } from "../utils/marksContext";
+import { rehypeMark } from "../utils/markTree";
 import {
   STAGE_NAME,
   STAGE_ORDER,
@@ -51,12 +53,41 @@ const MD: Components = {
   },
 };
 
+/** The panel's Markdown, with the words a search result carried here marked,
+ * as MarkdownPage marks the page's own. */
 function Prose({ children }: { children: string }) {
+  const marks = useContext(MarksContext);
+  const rehypePlugins = useMemo(
+    () => (marks.length ? [rehypeMark(marks)] : []),
+    [marks],
+  );
   return (
-    <Markdown remarkPlugins={[remarkGfm]} components={MD}>
+    <Markdown
+      remarkPlugins={[remarkGfm]}
+      rehypePlugins={rehypePlugins}
+      components={MD}
+    >
       {children}
     </Markdown>
   );
+}
+
+/** A one-line title, which may carry an italic species name
+ * ("Should _E. coli_ be the production host?") and nothing else. */
+function Inline({ children }: { children: string }) {
+  return (
+    <Markdown allowedElements={["em", "strong", "code"]} unwrapDisallowed>
+      {children}
+    </Markdown>
+  );
+}
+
+/** A turn's title without its ordinal. The files write "Third DBTL — proboscis-
+ * extension assay testing" or "Iteration 2 — rt-qPCR", and the ordinal only
+ * repeats the "Cycle 3 of 4" set in front of it. A title that is a question
+ * carries no ordinal and is kept whole. */
+function turnTitle(question: string): string {
+  return question.replace(/^(?:iteration\s+\d+|\w+\s+dbtl)\s+—\s+/i, "");
 }
 
 /** A chevron, drawn rather than borrowed from an icon set. */
@@ -131,7 +162,12 @@ export function DbtlFamilyPanel({ family, startAt, onClose }: PanelProps) {
    * colour of the rule round the panel. A family with no question written yet
    * (the family file carries a TODO for it) falls back to its name. */
   const asked = Boolean(family.question);
+  const heading = asked ? family.question : splitName(family.name).rest;
   const turn = family.cycles.findIndex((one) => one.id === stop.cycle);
+  const several = family.cycles.length > 1;
+  /* A family of one turn already asks that turn's question in the heading. */
+  const title = turnTitle(cycle.question);
+  const named = title && title !== heading;
 
   return (
     <>
@@ -150,20 +186,11 @@ export function DbtlFamilyPanel({ family, startAt, onClose }: PanelProps) {
 
       <div className="dbtl-panel">
         <header className="dbtl-panel-head">
-          <h3>{asked ? family.question : splitName(family.name).rest}</h3>
+          <h3>{heading}</h3>
         </header>
 
         <div className="dbtl-panel-main">
           <div className="dbtl-reader">
-            {/* Which turn of the cycle this is, and roughly when it ran. */}
-            <p className="dbtl-reader-now">
-              <span className="dbtl-reader-num">{cycle.number}</span>
-              <span className="dbtl-reader-q">{cycle.question}</span>
-              {cycle.when ? (
-                <span className="dbtl-reader-when">{cycle.when}</span>
-              ) : null}
-            </p>
-
             {/* Keyed on the stop, so React replaces the box rather than editing
                 it in place and the new stage can fade in. */}
             <div
@@ -181,11 +208,6 @@ export function DbtlFamilyPanel({ family, startAt, onClose }: PanelProps) {
                   <Prose>{family.blurb}</Prose>
                 </div>
               ) : null}
-
-              <h4 className="dbtl-stage-name">
-                {STAGE_NAME[stop.stage]}
-                <span className="dbtl-stage-status">{cycle.status}</span>
-              </h4>
 
               {/* The Question beat frames the whole turn, so it sits over the
                   turn's first stage and not over each of them. */}
@@ -225,6 +247,13 @@ export function DbtlFamilyPanel({ family, startAt, onClose }: PanelProps) {
                 <Chevron back />
                 <span className="dbtl-step-words">Previous</span>
               </button>
+              {/* The stage on show, in words. The dial says it with a filled
+                  quarter, but the dial is drawing only (aria-hidden) and is
+                  gone on a narrow screen, so this is what says it to a screen
+                  reader always and to everyone there. */}
+              <span className="dbtl-steps-stage" aria-live="polite">
+                {STAGE_NAME[stop.stage]}
+              </span>
               <button
                 type="button"
                 className="dbtl-step"
@@ -254,14 +283,13 @@ export function DbtlFamilyPanel({ family, startAt, onClose }: PanelProps) {
                         onPick={(stage) =>
                           goTo(first + STAGE_ORDER.indexOf(stage))
                         }
-                        label={one.number}
                       />
                     ) : (
                       <button
                         type="button"
                         className="dbtl-mark-hit"
-                        title={`${one.number} ${one.question}`}
-                        aria-label={`Go to cycle ${one.number}: ${one.question}`}
+                        title={`Cycle ${index + 1}: ${turnTitle(one.question)}`}
+                        aria-label={`Go to cycle ${index + 1}: ${turnTitle(one.question)}`}
                         onClick={() => goTo(first)}
                       />
                     )}
@@ -269,10 +297,21 @@ export function DbtlFamilyPanel({ family, startAt, onClose }: PanelProps) {
                 );
               })}
             </div>
-            {/* Only worth saying when there is more than one. */}
-            {family.cycles.length > 1 ? (
-              <p className="dbtl-marks-count">
-                Cycle {turn + 1} of {family.cycles.length}
+            {/* Which turn this is, said once and large, under the dial that
+                counts it; then roughly when it ran. */}
+            {several || named || cycle.when ? (
+              <p className="dbtl-marks-now">
+                {several ? (
+                  <span className="dbtl-marks-of">
+                    Cycle {turn + 1} of {family.cycles.length}
+                    {named ? ":" : ""}
+                  </span>
+                ) : null}
+                {several && named ? " " : null}
+                {named ? <Inline>{title}</Inline> : null}
+                {cycle.when ? (
+                  <span className="dbtl-marks-when">{cycle.when}</span>
+                ) : null}
               </p>
             ) : null}
           </div>

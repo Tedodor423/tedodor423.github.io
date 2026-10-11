@@ -1,0 +1,115 @@
+/* What the project produced, by area. See ProjectOutputs.tsx for what the
+ * three bands are and why colour carries the area.
+ *
+ * Every colour, radius and face here is a token from brand.css. The one
+ * measurement of its own is the band width, which is the escape the HIVE
+ * figure uses to sit wider than the reading column.
+ */
+
+.project-outputs {
+  margin-block: 2.75rem 3rem;
+}
+
+/* Which colour the band's rule takes. The three labs are brand tokens the
+ * engineering comb already uses; human practices takes its timeline lane. */
+.project-outputs__band[data-area="bee"] {
+  --area: var(--lab-bee);
+}
+
+.project-outputs__band[data-area="lab"] {
+  --area: var(--lab-wet);
+}
+
+.project-outputs__band[data-area="hp"] {
+  --area: var(--lane-hp);
+}
+
+/* The label keeps the page's h2 treatment and swaps the honey rule for the
+ * area's colour. Two classes, so it beats .markdown-page h2 on specificity
+ * rather than on source order. */
+.project-outputs .project-outputs__band h2 {
+  margin-top: 0;
+  border-bottom-color: var(--area);
+}
+
+.project-outputs__band + .project-outputs__band {
+  margin-top: 2.25rem;
+}
+
+/* One row, equal columns, however many tiles the area has: five for the bee
+ * lab, four for the others. */
+.project-outputs .project-outputs__row {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 0.6rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.project-outputs .project-outputs__row li {
+  display: flex;
+  margin: 0;
+}
+
+/* A tile is the whole link, so the target is the rectangle and not the words
+ * inside it. The title sits on the floor of the tile: the titles are one, two
+ * and three lines long, and hanging them from the top would leave the row
+ * ragged along the line a reader actually follows. */
+.project-outputs .project-outputs__row a {
+  display: flex;
+  align-items: flex-end;
+  flex: 1;
+  min-height: 4.75rem;
+  padding: 0.8rem 0.85rem;
+  background: var(--surface-muted);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1.3;
+  color: var(--text);
+  text-decoration: none;
+}
+
+/* Fill, border and underline. Nothing moves and nothing fades: the row holds
+ * still while a reader runs along it. */
+.project-outputs .project-outputs__row a:hover,
+.project-outputs .project-outputs__row a:focus-visible {
+  background: var(--surface);
+  border-color: var(--area);
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+/* Below the reading column the row becomes two columns, then one. A title is
+ * short enough to read on one line at phone width, so the tiles lose their
+ * floor-aligned height and close up. */
+@media (max-width: 52rem) {
+  .project-outputs .project-outputs__row {
+    grid-auto-flow: row;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Two to a row, so a tile is wide enough to hold its title on one line and
+   * tall enough without the floor the five-column row needs. */
+  .project-outputs .project-outputs__row a {
+    min-height: 3.75rem;
+  }
+}
+
+@media (max-width: 30rem) {
+  .project-outputs .project-outputs__row {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+  }
+
+  .project-outputs .project-outputs__row a {
+    align-items: center;
+    min-height: 0;
+    padding: 0.7rem 0.8rem;
+  }
+}

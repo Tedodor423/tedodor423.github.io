@@ -1,0 +1,459 @@
+/* Every interview in full (StakeholderRecord.tsx).
+ *
+ * Solid paper, like the map's panels: the record is long reading, and the
+ * section can land on a dark comb band (CombBands.css), so it carries its
+ * own surface and restates its colours at component depth, where the comb
+ * band's light-on-dark rules for headings, strong and links cannot reach.
+ *
+ * Brand tokens only. Honey is a fill, never type on white (brand.css): the
+ * group headings are underlined in it, and the interview being read is the
+ * honey row in the list, as the pressed question is in the map's picker.
+ *
+ * Mobile first: the list of people above the record, in two columns. From
+ * 48rem the record leaves the reading column, the list moves to the left
+ * and stays in view while the interviews scroll past it. From 64rem there is
+ * room on the right as well, and the stakeholder map, shrunk, holds the
+ * middle of it the same way, marking where the interview being read took
+ * place.
+ */
+
+.stakeholder-record {
+  --sr-menu-clear: 7rem;
+  margin-block: 1.5rem 0;
+  padding: 1.1rem 1rem 1.25rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+}
+
+/* The page heading the record sits under ("Stakeholder interviews" on the
+ * human practices page). It opens the second half of the page, so it is set
+ * well above the ordinary h2 size, still under the page title, and without
+ * the h2's honey rule: the record's own group headings carry that rule, and
+ * two stacked rules read as one heading too many. */
+.markdown-page h2:has(+ .stakeholder-record) {
+  font-size: clamp(1.9rem, 4.5vw, 2.75rem);
+  line-height: 1.1;
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+/* ---------- the list of people ---------- */
+
+.sr-nav {
+  columns: 2 10rem;
+  column-gap: 1.25rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--rule);
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+.sr-nav-group {
+  break-inside: avoid;
+  padding-bottom: 0.75rem;
+}
+
+.stakeholder-record .sr-nav .sr-nav-head {
+  margin: 0 0 0.2rem;
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.sr-nav ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stakeholder-record .sr-nav .sr-nav-link {
+  display: block;
+  padding: 0.2rem 0.45rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.stakeholder-record .sr-nav .sr-nav-link:hover,
+.stakeholder-record .sr-nav .sr-nav-link:focus-visible {
+  border-color: var(--rule);
+  color: var(--ink);
+}
+
+.stakeholder-record .sr-nav .sr-nav-link[aria-current] {
+  border-color: var(--ink);
+  background: var(--honey);
+  color: var(--ink);
+}
+
+/* ---------- the interviews ---------- */
+
+.stakeholder-record .sr-body .sr-group-head {
+  margin: 0;
+  padding-bottom: 0.2rem;
+  border-bottom: 3px solid var(--honey);
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  color: var(--ink);
+}
+
+.sr-group + .sr-group {
+  margin-top: 2.5rem;
+}
+
+.sr-entry {
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.sr-entry:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.sr-entry-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+}
+
+/* The map's cell, pointy-top, so a face here is the face on the map. */
+.sr-photo {
+  flex: none;
+  width: 3.4rem;
+  aspect-ratio: 0.866;
+  object-fit: cover;
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  background: var(--surface-muted);
+}
+
+.sr-who {
+  min-width: 0;
+}
+
+.stakeholder-record .sr-entry .sr-name {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--ink);
+}
+
+.stakeholder-record .sr-entry .sr-name--withheld {
+  color: var(--text-muted);
+}
+
+.sr-people,
+.sr-role {
+  margin: 0.15rem 0 0;
+  line-height: 1.45;
+}
+
+.sr-meta {
+  margin: 0.2rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.sr-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin: 0.4rem 0 0;
+}
+
+/* Each opens its question on the map, and reads like the map's tags. */
+.stakeholder-record .sr-tags .sr-tag {
+  padding: 0.05rem 0.3rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--surface-muted);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  line-height: 1.5;
+  text-decoration: none;
+}
+
+.stakeholder-record .sr-tags .sr-tag:hover,
+.stakeholder-record .sr-tags .sr-tag:focus-visible {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+/* The write-up's own headings, small caps over each part. */
+.sr-sec {
+  margin-top: 1.1rem;
+}
+
+.stakeholder-record .sr-sec .sr-sec-head {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.sr-sec p {
+  margin: 0.4rem 0 0;
+}
+
+.sr-points {
+  margin: 0.4rem 0 0;
+  padding-left: 1.1rem;
+}
+
+.sr-points li + li {
+  margin-top: 0.35rem;
+}
+
+/* The phrases the team marked as the point. */
+.stakeholder-record .sr-entry .sr-sec strong {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* Verbatim, as the team transcribed it, the marks in the text. */
+.sr-quote {
+  font-style: italic;
+  color: var(--ink);
+}
+
+/* ---------- the small map ---------- */
+
+/* Drawn only where there is a right-hand side for it (64rem up). The big
+ * map's colours: wax land, honey for a cell with someone on it. The mark is
+ * that cell grown, ink-rimmed, inside a navy ring, so it reads over a
+ * cluster of honey cells such as Oxford's. */
+.sr-where {
+  display: none;
+}
+
+/* Back up to the full-size map. The honey fill and ink rule of the map
+ * card's "Read full interview", the link this one answers; colours restated
+ * at depth against the comb band's link rules. */
+.stakeholder-record .sr-where .sr-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  margin-bottom: 0.5rem;
+  padding: 0.45em 0.8em;
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--honey);
+  color: var(--ink);
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.stakeholder-record .sr-where .sr-back:hover,
+.stakeholder-record .sr-where .sr-back:focus-visible {
+  background: var(--ink);
+  color: var(--honey);
+}
+
+.sr-back-icon {
+  flex: none;
+  width: 1em;
+  height: 1em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.sr-where-map {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1852 / 733;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--surface-muted);
+  transition: border-color 200ms linear;
+}
+
+/* The frame the big map is flown into and out of (src/utils/mapMorph.ts),
+ * by a transform from its top-left corner. In flight its rule would scale
+ * up with it into a heavy border round the world, so it goes, and comes
+ * back as the map lands; the button above takes no pointer until it has
+ * faded in. */
+.sr-where-fly {
+  transform-origin: 0 0;
+}
+
+.sr-where[data-flying] .sr-where-map {
+  border-color: transparent;
+}
+
+.sr-where[data-flying] .sr-back {
+  pointer-events: none;
+}
+
+.sr-where-land {
+  fill: var(--map-land);
+}
+
+.sr-where-people {
+  fill: var(--honey);
+}
+
+/* In flight, --sr-morph runs from 1, the world as the big map draws it, to
+ * 0, landed. At 1 a person's cell is back to the big map's size (the small
+ * map draws them PEOPLE_SCALE, 1.35, times larger, so 1 / 1.35 here) and
+ * wears its ink rim; both ease to this map's own on the way down. */
+.sr-where-people polygon {
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(calc(1 - var(--sr-morph, 0) * 0.26));
+}
+
+/* The rim only exists in flight. A calc() that comes to zero is not taken
+ * as no stroke, so at rest there is none at all. */
+.sr-where[data-flying] .sr-where-people polygon {
+  stroke: var(--ink);
+  stroke-width: calc(var(--sr-morph, 0) * 1.1px);
+}
+
+/* The glide from one place to the next is the movement between interviews,
+ * so it is the one motion here. */
+.sr-where-mark {
+  transition:
+    transform 600ms ease,
+    opacity 200ms linear;
+}
+
+.sr-where-mark.is-off {
+  opacity: 0;
+}
+
+.sr-where-ring {
+  fill: none;
+  stroke: var(--oxford-navy);
+  stroke-width: 7;
+}
+
+.sr-where-cell {
+  fill: var(--honey);
+  stroke: var(--ink);
+  stroke-width: 6;
+}
+
+.sr-where-caption {
+  margin-top: 0.6rem;
+}
+
+.stakeholder-record .sr-where .sr-where-name {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.sr-where-place {
+  margin: 0.15rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+/* ---------- from 48rem: the list beside the record ---------- */
+
+@media (min-width: 48rem) {
+  .stakeholder-record {
+    display: grid;
+    grid-template-columns: 13.5rem minmax(0, 1fr);
+    align-items: start;
+    gap: 0 2.5rem;
+    width: min(68rem, calc(100vw - 4rem));
+    margin-inline: calc((100% - min(68rem, calc(100vw - 4rem))) / 2);
+    padding: 1.75rem 2rem 2rem;
+  }
+
+  /* Held in view while the interviews scroll past. The site menu hides on
+   * the way down and comes back on the way up; the list keeps clear of it
+   * while it is showing. Taller than the window, it scrolls on its own,
+   * and a wheel that has taken it to its end goes on to scroll the page
+   * (src/utils/wheelChain.ts). */
+  .sr-nav {
+    position: sticky;
+    top: 1.25rem;
+    max-height: calc(100vh - 2.5rem);
+    overflow-y: auto;
+    columns: auto;
+    margin: 0;
+    padding: 0 0.25rem 0 0;
+    border-bottom: 0;
+    transition:
+      top 0.25s ease,
+      max-height 0.25s ease;
+  }
+
+  body:has(.site-nav:not(.is-hidden)) .sr-nav {
+    top: var(--sr-menu-clear);
+    max-height: calc(100vh - var(--sr-menu-clear) - 1.25rem);
+  }
+
+  .sr-body {
+    max-width: 46rem;
+  }
+
+  .sr-photo {
+    width: 4.25rem;
+  }
+}
+
+/* ---------- from 64rem: the small map on the right ---------- */
+
+/* Three columns, so the record widens to keep the interviews at a reading
+ * measure between the list and the map. */
+@media (min-width: 64rem) {
+  .stakeholder-record {
+    grid-template-columns:
+      clamp(11rem, 14vw, 13.5rem) minmax(0, 1fr)
+      clamp(13rem, 22vw, 22rem);
+    gap: 0 clamp(1.5rem, 2.5vw, 2.5rem);
+    width: min(92rem, calc(100vw - 4rem));
+    margin-inline: calc((100% - min(92rem, calc(100vw - 4rem))) / 2);
+  }
+
+  /* Held in view half way down the window, clear of both right-hand
+   * corners: the top one belongs to the hive, which hangs off the menu at
+   * the window's right edge (BeeScene.css), and the bottom one to the comb
+   * switch when it is shown (CombBands.css). The box is a window tall and
+   * sticks at the top; what it holds sits in the middle of it. At the last
+   * interview it rides up with the record. */
+  .sr-where {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100dvh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sr-nav,
+  .sr-where-mark {
+    transition: none;
+  }
+}

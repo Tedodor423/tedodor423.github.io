@@ -408,6 +408,32 @@
   stroke-width: 3.2;
 }
 
+/* The cell's icon, moved out to the hexagon's left point. It sits in the left
+   side triangle, which the panel leaves empty (see .dbtl-panel), so it costs the
+   text nothing: its right edge stops at the panel's margin and it is centred on
+   the height, level with the point, where the triangle is widest. Its size
+   comes from --slant, which is the triangle's width, so the icon scales with
+   the opened cell and fits at every width.
+
+   The drawings run from a tall syringe to a DNA ladder three times wider than
+   it is high, and in a square box the wide ones shrink to a sliver. So the box
+   follows the drawing: up to 1.7 times wider for a wide one (--aspect, set from
+   the image once it loads), and only as tall as the drawing then needs. Every
+   drawing keeps the same right edge, next to the text. */
+.dbtl .dbtl-open-icon {
+  --icon: calc(var(--slant) * 0.42);
+  --w: calc(var(--icon) * clamp(1, var(--aspect, 1) * 0.55, 1.7));
+  --h: min(var(--icon), var(--w) / var(--aspect, 1));
+  position: absolute;
+  left: calc(var(--slant) - var(--w) - 0.35rem);
+  top: calc(50% - var(--h) / 2);
+  width: var(--w);
+  height: var(--h);
+  object-fit: contain;
+  object-position: right center;
+  pointer-events: none;
+}
+
 /* The largest rectangle this hexagon holds. A flat-top hexagon's top and bottom
    sides each run from `slant` to `width - slant`, so the rectangle of that width
    at the FULL height is exactly inscribed: no vertical inset at all, and the only
@@ -456,9 +482,12 @@
   gap: 1rem;
 }
 
+/* Allowed to shrink both ways, so that once the controls stack under it on a
+   narrow screen the text scrolls inside its box instead of pushing them out. */
 .dbtl-reader {
   flex: 1;
   min-width: 0;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
@@ -532,55 +561,20 @@
   stroke-linecap: square;
 }
 
-/* Which cycle this is, and roughly when it ran. It changes as you step, so it is
-   the one line that always answers "where am I". */
-.dbtl-reader-now {
-  flex: none;
-  display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
-  margin: 0;
-  padding-bottom: 0.35rem;
-  border-bottom: 2px solid var(--lab);
-  font-family: var(--font-heading);
-  font-weight: 600;
-  font-size: 0.82rem;
-  line-height: 1.3;
-}
-
-.dbtl-reader-num {
-  flex: none;
-  padding: 0.05rem 0.4rem;
-  color: var(--surface);
-  background: var(--lab);
-  border-radius: var(--radius);
-}
-
-.dbtl-reader-q {
-  flex: 1;
-  min-width: 0;
-  color: var(--ink);
-}
-
-.dbtl-reader-when {
-  flex: none;
-  font-size: 0.78em;
-  font-weight: 400;
-  color: var(--text-muted);
-  white-space: nowrap;
-}
-
 /* ---------- one stage at a time ---------- */
 
 /* The stage on show. Only its own text scrolls, and only when a single beat runs
    longer than the panel, which a few of them do (3.4's Learn is three thousand
-   characters). Nothing scrolls past a heading. */
+   characters). Nothing scrolls past a heading.
+
+   The text has the whole height of the panel under its heading: the stage is
+   named by the dial and the turn under it, so nothing sits over it. */
 .dbtl-stage {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
   padding-right: 0.7rem;
-  font-size: 0.82rem;
+  font-size: 0.95rem;
   line-height: 1.6;
   /* Keyed on the stop in the component, so this replays on every step and the
      new stage arrives rather than appearing. */
@@ -590,33 +584,6 @@
 .dbtl-stage:focus-visible {
   outline: 2px solid var(--lab);
   outline-offset: 2px;
-}
-
-/* Which beat this is. Sticky, so it stays legible while a long one scrolls. */
-.dbtl-stage-name {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.25rem 0.7rem;
-  margin: 0 0 0.6rem;
-  padding: 0.2rem 0.5rem;
-  font-size: 0.78rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ink);
-  background: var(--lab-fill);
-}
-
-.dbtl-stage-status {
-  font-family: var(--font-mono);
-  font-size: 0.72em;
-  font-weight: 400;
-  letter-spacing: 0;
-  text-transform: none;
-  color: var(--text-muted);
 }
 
 /* The Question beat, over the turn'''s first stage only. */
@@ -643,9 +610,11 @@
   margin: 0 0 0.6rem;
 }
 
+/* Wide enough for "1." in the mono face: the box scrolls, so anything left of
+   it is cut off rather than hanging into the margin. */
 .dbtl-stage ul,
 .dbtl-stage ol {
-  padding-left: 1.1rem;
+  padding-left: 1.6rem;
 }
 
 .dbtl-stage > :last-child {
@@ -764,14 +733,45 @@
   outline: none;
 }
 
-.dbtl-marks-count {
+/* The turn on show, under the dial: "Cycle 3 of 4: proboscis-extension assay
+   testing", large, because it is the one line that always answers "where am I".
+   It must not widen the column (the dial and its dots set that), so it is given
+   no width of its own and wraps to whatever the column already is. */
+.dbtl-marks-now {
+  width: 0;
+  min-width: 100%;
   margin: 0;
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 0.62rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  line-height: 1.25;
+  text-align: center;
+  color: var(--ink);
+}
+
+.dbtl-marks-of {
+  color: var(--lab);
+}
+
+/* Roughly when it ran: "September". */
+.dbtl-marks-when {
+  display: block;
+  margin-top: 0.35rem;
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 0.7rem;
   color: var(--text-muted);
+}
+
+/* The stage in words, between the two steps. Read out, not shown, while the dial
+   is there to show it; shown once the dial goes (see the narrow screens below). */
+.dbtl-steps-stage {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 /* ---------- the dial ---------- */
@@ -829,29 +829,6 @@
 /* Honey is legible on all three lab colours; ink is not, on navy or violet. */
 .dbtl-dial-seg.is-now .dbtl-dial-word {
   fill: var(--honey);
-}
-
-.dbtl-dial-step {
-  fill: none;
-  stroke: var(--text-muted);
-  stroke-width: 2.5;
-  stroke-linecap: square;
-  pointer-events: none;
-}
-
-/* Upright whatever the dial is doing, because it is not part of the drawing. The
-   hole inside the inner hexagon is 116 units across and the longest number is four
-   characters, so this has room. */
-.dbtl-dial-label {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-display);
-  font-size: 1.6rem;
-  color: var(--ink);
-  pointer-events: none;
 }
 
 /* ---------- motion ---------- */
@@ -922,10 +899,6 @@
     width: 1rem;
     height: 0.87rem;
   }
-
-  .dbtl-dial-label {
-    font-size: 1.3rem;
-  }
 }
 
 /* Below this the dial goes rather than shrinking further, and the controls move
@@ -933,9 +906,9 @@
    
    The two steps STAY. They live in this column, and hiding the column outright
    would leave no way to reach the next stage at all. What goes is the dial and the
-   dots; nothing is lost with them, because the stage the dial points at is the
-   heading over the text and the cycle you are on is named in the line above it and
-   counted below. */
+   dots, and what they said moves into words: the stage name shows between the two
+   steps, and the turn's line moves up over the text. The column itself dissolves
+   (display: contents) so its pieces can be placed either side of the text. */
 @media (max-width: 62rem) {
   .dbtl-panel-main {
     flex-direction: column;
@@ -943,15 +916,35 @@
   }
 
   .dbtl-marks {
-    flex: none;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 100%;
-    gap: 1rem;
+    display: contents;
   }
 
   .dbtl-marks-row {
     display: none;
+  }
+
+  .dbtl-marks-now {
+    order: -1;
+    font-size: 0.95rem;
+  }
+
+  .dbtl-steps {
+    order: 1;
+    justify-content: space-between;
+  }
+
+  .dbtl-steps-stage {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink);
   }
 }
 
@@ -961,7 +954,7 @@
   }
 
   .dbtl-stage {
-    font-size: 0.76rem;
+    font-size: 0.86rem;
   }
 
   /* A phone has no room for a cell to swell by an eighth without covering its

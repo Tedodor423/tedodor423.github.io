@@ -1,43 +1,44 @@
 import {
   useCallback,
+  useContext,
   useEffect,
   useLayoutEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
-import {
-  HEXES,
-  HEX_R,
-  hexPoints,
-  latToY,
-  lonToX,
-  MAP_H,
-  MAP_W,
-  ORIGIN_X,
-  ORIGIN_Y,
-  COL_W,
-  ROW_H,
-} from "../utils/worldHexes";
+import { useLocation } from "react-router-dom";
+import { HEXES, HEX_R, hexPoints, MAP_H, MAP_W } from "../utils/worldHexes";
+import { assignCells, type XY } from "../utils/stakeholderCells";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import {
+  MAP_ANCHOR,
   QUESTION_CYCLES,
   QUESTION_IDS,
   QUESTION_TITLES,
   STAGE_NAMES,
   STAGE_ORDER,
   STAKEHOLDERS,
+  cardPointsOf,
   isKeyTo,
+  parseHiveAnchor,
+  questionAnchor,
   questionsOf,
+  stageAnchor,
   stageOf,
   type HiveStage,
   type QuestionId,
   type Stakeholder,
 } from "../data/stakeholders";
 import { useDeckRests } from "../utils/deck";
+import { MarksContext } from "../utils/marksContext";
+import { rehypeMark } from "../utils/markTree";
 import { HpStats } from "./HpStats";
 import { Marked, MarkedInline } from "./Marked";
+import { rideToRecord } from "../utils/mapMorph";
+import { chainWheel } from "../utils/wheelChain";
+import { RecordLink } from "./StakeholderRecord";
 import "./StakeholderMap.css";
 
 /* Who we spoke to, and where.
@@ -66,9 +67,10 @@ import "./StakeholderMap.css";
  *   - Every conversation is one cell. Pointing at a cell grows it into the
  *     person's photograph, with a small box beside the face (fixed per face,
  *     never chasing the pointer): name, place, date and the questions they
- *     fed, each of which opens that question. Selecting opens the full
- *     record in the same place, in the team's three sections, sized so it
- *     never scrolls, until a click away, Escape, or another selection.
+ *     fed, each of which opens that question. Selecting opens the
+ *     write-up's key points in the same place, sized so it never scrolls,
+ *     with a link on to the whole interview at the foot of the page
+ *     (StakeholderRecord), until a click away, Escape, or another selection.
  *   - Picking a question (the list in the bottom corner) turns everyone who
  *     fed it into large faces and draws that question's HIVE loop through
  *     them: curved arrows run Hear > Investigate > Verdict > Evaluate and
@@ -91,27 +93,18 @@ import "./StakeholderMap.css";
  * PLACEMENT. At rest each stakeholder sits on their own lattice cell: the
  * stated `hex` override, or the nearest free cell to their coordinates,
  * preferring land but accepting a sea cell when the honest position is far
- * from any land hex (New Zealand). In a question view the faces are large,
+ * from any land hex (a small island with no cell). The assignment is in
+ * src/utils/stakeholderCells.ts, which the small map beside the interviews
+ * shares. In a question view the faces are large,
  * so they relax apart from their cells until none overlap: a face is "near
  * its country", nothing more precise, and the card states the real place.
  *
- * Nothing here is the only route to its content. The roster below the map
- * carries every profile in the page source, because the wiki rules forbid
- * putting a result or a citation behind a hover, and because a judge reading
- * with a keyboard or a screen reader has to reach all of it.
+ * Nothing here is the only route to its content. The record at the foot of
+ * the page (StakeholderRecord) carries every interview in full, key points
+ * included, because the wiki rules forbid putting a result or a citation
+ * behind a hover, and because a judge reading with a keyboard or a screen
+ * reader has to reach all of it.
  */
-
-interface MapNode {
-  s: Stakeholder;
-  /** Assigned cell centre, in viewBox units. */
-  x: number;
-  y: number;
-}
-
-interface XY {
-  x: number;
-  y: number;
-}
 
 /** A floating panel's box, in canvas pixels. */
 interface PanelRect {
@@ -135,12 +128,6 @@ const FACE_R = HEX_R * FACE_SCALE;
 /** Centre distance that keeps two enlarged faces apart with room for arrows. */
 const FACE_MIN_DIST = 92;
 
-/**
- * A cell in open water costs this much extra distance, so land is preferred
- * unless the honest position is genuinely offshore of every land hexagon.
- */
-const SEA_PENALTY = 30;
-
 /** The smallest type, in px, the selected card is shrunk to. */
 const FIT_MIN = 10.5;
 
@@ -161,67 +148,7 @@ const CARD_MAX_REM = 46;
 const HOVER_GRACE = 260;
 const HOVER_SWITCH = 140;
 
-const cellKey = (col: number, row: number) => `${col}:${row}`;
-const LAND = new Set(HEXES.map((h) => cellKey(h.col, h.row)));
-
-function centreOf(col: number, row: number): XY {
-  return { x: ORIGIN_X + COL_W * col, y: ORIGIN_Y + ROW_H * row };
-}
-
 const dist = (a: XY, b: XY) => Math.hypot(a.x - b.x, a.y - b.y);
-
-/**
- * One cell per stakeholder. Overrides claim their cell first; everyone else
- * takes the nearest unclaimed lattice position to their coordinates, land
- * preferred. Deterministic: array order, ties broken by row then column.
- */
-function assignCells(): MapNode[] {
-  const claimed = new Set<string>();
-  const byId = new Map<string, MapNode>();
-
-  for (const s of STAKEHOLDERS) {
-    if (!s.hex) continue;
-    const [col, row] = s.hex;
-    claimed.add(cellKey(col, row));
-    byId.set(s.id, { s, ...centreOf(col, row) });
-  }
-
-  for (const s of STAKEHOLDERS) {
-    if (s.hex) continue;
-    const tx = lonToX(s.lon);
-    const ty = latToY(s.lat);
-    const c0 = Math.round((tx - ORIGIN_X) / COL_W);
-    const r0 = Math.round((ty - ORIGIN_Y) / ROW_H);
-    let best: { col: number; row: number; score: number } | null = null;
-    for (let row = r0 - 8; row <= r0 + 8; row++) {
-      if (row < 0 || row > 34) continue;
-      for (let col = c0 - 8; col <= c0 + 8; col++) {
-        // Only every other (col, row) pair is a lattice position: see PACKED.
-        if (col < 0 || col > 151 || (col + row) % 2 === 0) continue;
-        if (claimed.has(cellKey(col, row))) continue;
-        const c = centreOf(col, row);
-        const score =
-          Math.hypot(c.x - tx, c.y - ty) +
-          (LAND.has(cellKey(col, row)) ? 0 : SEA_PENALTY);
-        if (
-          !best ||
-          score < best.score ||
-          (score === best.score &&
-            (row < best.row || (row === best.row && col < best.col)))
-        ) {
-          best = { col, row, score };
-        }
-      }
-    }
-    // The window holds hundreds of cells and there are 26 people, so a free
-    // cell always exists; the fallback is only for the type system.
-    const cell = best ?? { col: c0, row: r0 + ((c0 + r0) % 2 === 0 ? 1 : 0) };
-    claimed.add(cellKey(cell.col, cell.row));
-    byId.set(s.id, { s, ...centreOf(cell.col, cell.row) });
-  }
-
-  return STAKEHOLDERS.map((s) => byId.get(s.id)!);
-}
 
 /** A no-go rectangle for faces, in viewBox units, margins included. */
 interface Block {
@@ -357,40 +284,34 @@ function Silhouette() {
 const tagsOf = (s: Stakeholder) =>
   QUESTION_IDS.filter((q) => questionsOf(s).includes(q));
 
-/* The questions a person fed. On the map each one is a button that opens
- * that question in the picker; in the roster they are plain labels. */
+/* The questions a person fed, each a button that opens that question in the
+ * picker. */
 function QuestionTags({
   s,
   filter,
   onPick,
 }: {
   s: Stakeholder;
-  filter?: QuestionId | null;
-  onPick?: (q: QuestionId) => void;
+  filter: QuestionId | null;
+  onPick: (q: QuestionId) => void;
 }) {
   const tags = tagsOf(s);
   if (!tags.length) return null;
   return (
     <p className="sm-tags">
-      {tags.map((q) =>
-        onPick ? (
-          <button
-            key={q}
-            type="button"
-            className={`sm-tag${filter === q ? " is-on" : ""}`}
-            title={QUESTION_TITLES[q]}
-            aria-label={`${q}: ${QUESTION_TITLES[q]}`}
-            aria-pressed={filter === q}
-            onClick={() => onPick(q)}
-          >
-            {q}
-          </button>
-        ) : (
-          <span key={q} className="sm-tag" title={QUESTION_TITLES[q]}>
-            {q}
-          </span>
-        ),
-      )}
+      {tags.map((q) => (
+        <button
+          key={q}
+          type="button"
+          className={`sm-tag${filter === q ? " is-on" : ""}`}
+          title={QUESTION_TITLES[q]}
+          aria-label={`${q}: ${QUESTION_TITLES[q]}`}
+          aria-pressed={filter === q}
+          onClick={() => onPick(q)}
+        >
+          {q}
+        </button>
+      ))}
     </p>
   );
 }
@@ -410,99 +331,18 @@ function Meta({ s }: { s: Stakeholder }) {
   );
 }
 
-/* The three sections of a record, under the team's own headings. Each
- * heading shows even when its section is still empty: the write-up is not
- * finished, and nothing is put in its place. The quote is part of what we
- * learnt. `level` keeps the heading order right wherever the record sits. */
-function RecordSections({ s, level }: { s: Stakeholder; level: 3 | 5 }) {
-  const H = `h${level}` as "h3" | "h5";
-  return (
-    <>
-      <section className="sm-sec">
-        <H className="sm-sec-head">Why we interviewed</H>
-        {s.why && (
-          <p>
-            <MarkedInline text={s.why} />
-          </p>
-        )}
-      </section>
-      <section className="sm-sec">
-        <H className="sm-sec-head">What we learned</H>
-        {s.quote && (
-          <p className="sm-quote">
-            &ldquo;
-            <MarkedInline text={s.quote} />
-            &rdquo;
-          </p>
-        )}
-        {s.learntIsList && s.learnt.length > 0 && (
-          <ul className="sm-learnt">
-            {s.learnt.map((l) => (
-              <li key={l}>
-                <MarkedInline text={l} />
-              </li>
-            ))}
-          </ul>
-        )}
-        {!s.learntIsList &&
-          s.learnt.map((l) => (
-            <p key={l}>
-              <MarkedInline text={l} />
-            </p>
-          ))}
-      </section>
-      <section className="sm-sec">
-        <H className="sm-sec-head">
-          How we implemented the advice to change NECTAR
-        </H>
-        {s.changed && (
-          <p>
-            <MarkedInline text={s.changed} />
-          </p>
-        )}
-      </section>
-    </>
-  );
-}
-
-/* A profile appears twice: in the box beside the face and in the roster
- * below the map. Only the roster copy is given an id, so a search result has
- * one place to land and the document has no duplicate ids.
- *
- * <Marked> is what puts a honey background on the words a reader searched for
- * when they arrive here from a result. It renders plain text otherwise. */
-function Profile({ s }: { s: Stakeholder }) {
-  return (
-    <li className="sm-profile" id={`sm-${s.id}`}>
-      {s.consent ? (
-        <>
-          <p className="sm-name sm-name--withheld">Interview withheld</p>
-          <p className="sm-role">{s.consent.note}</p>
-        </>
-      ) : (
-        <>
-          <p className="sm-name">
-            <Marked text={s.name} />
-          </p>
-          <p className="sm-role">
-            <Marked text={s.role} />
-          </p>
-          <Meta s={s} />
-          <QuestionTags s={s} />
-          <RecordSections s={s} level={5} />
-        </>
-      )}
-    </li>
-  );
-}
-
 /* The box beside the face. Anchored to the face, never to the pointer.
  *
  * Pointing at a face opens the small version: who, where, when, and the
  * questions they fed, each of which opens that question. Selecting opens the
- * full record in the same place, sized so it never scrolls (see the fit
- * effect). The photograph is not repeated: the selected face is already
- * showing it. Withheld entries show the withholding note and nothing else. */
+ * write-up's key points in the same place, sized so it never scrolls (see
+ * the fit effect), and a link down to the whole interview in the record at
+ * the foot of the page. The photograph is not repeated: the selected face is
+ * already showing it. Withheld entries show the withholding note and nothing
+ * else.
+ *
+ * <Marked> is what puts a honey background on the words a reader searched
+ * for when they arrive from a result. It renders plain text otherwise. */
 function PersonCard({
   s,
   filter,
@@ -520,6 +360,7 @@ function PersonCard({
   onClose: () => void;
 }) {
   const withheld = Boolean(s.consent);
+  const points = cardPointsOf(s);
   return (
     <div className="sm-pop-profile">
       {pinned && (
@@ -547,23 +388,54 @@ function PersonCard({
       {pinned && !withheld && photoNote && (
         <p className="sm-meta">Photo: {photoNote}</p>
       )}
-      {pinned && !withheld && <RecordSections s={s} level={3} />}
+      {pinned && !withheld && points.length > 0 && (
+        <ul className="sm-points">
+          {points.map((p) => (
+            <li key={p}>
+              <MarkedInline text={p} />
+            </li>
+          ))}
+        </ul>
+      )}
+      {pinned && !withheld && (
+        <p className="sm-more">
+          {/* Where it can, the map shrinks into the small one beside the
+           * interviews on the way (src/utils/mapMorph.ts). */}
+          <RecordLink
+            id={s.id}
+            className="sm-read"
+            onFollow={() => rideToRecord(s.id)}
+          >
+            Read full interview
+            <svg className="sm-qarrow" viewBox="0 0 16 16" aria-hidden>
+              <path d="M 8 2 V 13 M 3.5 8.5 L 8 13 L 12.5 8.5" />
+            </svg>
+          </RecordLink>
+        </p>
+      )}
     </div>
   );
 }
 
 export function StakeholderMap() {
   const nodes = useMemo(assignCells, []);
-  const regions = useMemo(() => {
-    const byRegion = new Map<string, Stakeholder[]>();
-    for (const s of STAKEHOLDERS) {
-      byRegion.set(s.region, [...(byRegion.get(s.region) ?? []), s]);
-    }
-    return [...byRegion.entries()].map(([name, people]) => ({ name, people }));
-  }, []);
 
-  const [filter, setFilter] = useState<QuestionId | null>(null);
+  // A fragment can name a question, or a stage of its write-up, which is how
+  // a search result opens the pane on what it matched (parseHiveAnchor, and
+  // the landing effects below). Read during the first render, so the pane is
+  // there for the fragment to land on rather than a frame later.
+  const { hash } = useLocation();
+  const [filter, setFilter] = useState<QuestionId | null>(
+    () => parseHiveAnchor(hash)?.q ?? null,
+  );
   const [hovered, setHovered] = useState<string | null>(null);
+  // The words a search result carried here, marked in the pane's Markdown as
+  // MarkdownPage marks the page's own.
+  const marks = useContext(MarksContext);
+  const rehypePlugins = useMemo(
+    () => (marks.length ? [rehypeMark(marks)] : []),
+    [marks],
+  );
   const [pinned, setPinned] = useState<string | null>(null);
   // How many of each entry's photograph URLs have failed to load: the
   // static.igem.wiki copy first, then the preview's local fallbacks. Once
@@ -613,14 +485,25 @@ export function StakeholderMap() {
   // The open question's HIVE write-up stays folded under its summary until
   // the reader asks for it. Remembered per question, so a new pick opens
   // folded.
-  const [unfolded, setUnfolded] = useState<QuestionId | null>(null);
+  const [unfolded, setUnfolded] = useState<QuestionId | null>(() => {
+    const landing = parseHiveAnchor(hash);
+    return landing?.stage ? landing.q : null;
+  });
   const hiveOpen = filter !== null && unfolded === filter;
   const qscrollRef = useRef<HTMLDivElement>(null);
-  // Where the four letters and the summary sat just before a fold or an
-  // unfold, so the layout effect below can glide them from there.
+  // A wheel over the write-up goes on to scroll the page once the write-up
+  // is at its end (src/utils/wheelChain.ts). The column is keyed on the
+  // question, so it is a new element each pick.
+  useEffect(() => {
+    const scroller = qscrollRef.current;
+    return scroller ? chainWheel(scroller) : undefined;
+  }, [filter]);
+  // Where the four letters, the summary and the heading sat just before a
+  // fold or an unfold, so the layout effect below can glide them from there.
   const flipFrom = useRef<{
     letters: Map<string, DOMRect>;
     summary: DOMRect | null;
+    head: DOMRect | null;
   } | null>(null);
 
   const toggleHive = (open: boolean) => {
@@ -634,7 +517,9 @@ export function StakeholderMap() {
         );
       const summary =
         pane.querySelector(".sm-qsummary")?.getBoundingClientRect() ?? null;
-      flipFrom.current = { letters, summary };
+      const head =
+        pane.querySelector(".sm-qpanel-head")?.getBoundingClientRect() ?? null;
+      flipFrom.current = { letters, summary, head };
     }
     setUnfolded(open ? filter : null);
   };
@@ -703,6 +588,10 @@ export function StakeholderMap() {
         { duration: 650, easing: "cubic-bezier(0.22, 0.8, 0.25, 1)" },
       );
     }
+    // The heading sits with the summary while folded and at the top once
+    // the stages are out, so it rides the same movement.
+    const head = pane.querySelector<HTMLElement>(".sm-qpanel-head");
+    if (head && from.head) glide(head, from.head, 0);
   }, [hiveOpen]);
 
   // Wide screens get the fullscreen stage and the box beside the face;
@@ -761,16 +650,15 @@ export function StakeholderMap() {
     return () => ro.disconnect();
   }, []);
 
-  /* The pin-and-move-on scroll treatment. The stage is position:sticky, so
-   * scrolling never stops working; this only eases the stage in while it
-   * arrives and out while the reader moves past, and does nothing on narrow
-   * screens or under prefers-reduced-motion. */
+  /* The pin. The stage is position:sticky, so scrolling never stops working.
+   * It does not fade or shrink on the way in or out: it holds, then scrolls
+   * off like any other section (the fade it used to have went on 10 Oct
+   * 2026, as too slow). All this does is keep the site menu out of the way
+   * while the stage covers the viewport, on wide screens. */
   useEffect(() => {
     const wrap = pinRef.current;
-    const frame = frameRef.current;
-    if (!wrap || !frame) return;
+    if (!wrap) return;
     const wideMq = window.matchMedia("(min-width: 48rem)");
-    const stillMq = window.matchMedia("(prefers-reduced-motion: reduce)");
     let raf = 0;
     const paint = () => {
       raf = 0;
@@ -783,18 +671,6 @@ export function StakeholderMap() {
         "data-map-stage",
         wideMq.matches && r.top <= 1 && r.bottom >= vh - 1,
       );
-      if (!wideMq.matches || stillMq.matches) {
-        frame.style.opacity = "";
-        frame.style.transform = "";
-        return;
-      }
-      // The ramps match the pin's short hold (see .sm-pin), so the fade
-      // plays out inside the glide past the map rather than before it.
-      const enter = Math.min(Math.max((vh - r.top) / (vh * 0.35), 0), 1);
-      const exit = Math.min(Math.max((r.bottom - vh) / (vh * 0.35), 0), 1);
-      const t = Math.min(enter, exit);
-      frame.style.opacity = (0.3 + 0.7 * t).toFixed(3);
-      frame.style.transform = `scale(${(0.93 + 0.07 * t).toFixed(4)})`;
     };
     const schedule = () => {
       if (!raf) raf = requestAnimationFrame(paint);
@@ -1128,6 +1004,54 @@ export function StakeholderMap() {
     setStageHover(null);
   };
 
+  /* Landing on a fragment. A search result, or a link from another page,
+   * names a question (`hive-q3`) or a stage of its write-up
+   * (`hive-q3-verdict`): the question opens, the write-up unfolds if a stage
+   * is named, and ScrollToHash puts the window on it. On a narrow screen the
+   * pane and its stages carry the ids themselves, in the page's flow. On a
+   * wide one the stage is pinned and the pane scrolls on its own, so the ids
+   * sit on markers at the top of the pin (the window lands with the stage
+   * filling the screen) and the pane's column is scrolled to the stage here,
+   * once per fragment, after the render that put the stage in it. */
+  useEffect(() => {
+    const landing = parseHiveAnchor(hash);
+    if (!landing) return;
+    setFilter(landing.q);
+    setPinned(null);
+    setHovered(null);
+    setStageHover(null);
+    setUnfolded(landing.stage ? landing.q : null);
+  }, [hash]);
+
+  const landed = useRef<string | null>(null);
+  useEffect(() => {
+    const landing = parseHiveAnchor(hash);
+    if (!landing?.stage || !wide || landed.current === hash) return;
+    // Not until the pane shows that question with its write-up unfolded:
+    // the column is keyed on the question, and scrolling the previous
+    // question's column would be undone by the swap. The commit that opens
+    // it runs this again.
+    if (filter !== landing.q || !hiveOpen) return;
+    const frame = requestAnimationFrame(() => {
+      const scroller = qscrollRef.current;
+      const stage = scroller?.querySelector<HTMLElement>(
+        `[data-stage="${landing.stage}"]`,
+      );
+      if (!scroller || !stage) return;
+      const top = scroller.getBoundingClientRect().top;
+      // A title that runs to two lines overhangs the column's top; the stage
+      // starts below it, not under it.
+      const title = qpanelRef.current?.querySelector(".sm-qpanel-title");
+      const clear = title
+        ? Math.max(0, title.getBoundingClientRect().bottom - top)
+        : 0;
+      scroller.scrollTop =
+        stage.getBoundingClientRect().top - top + scroller.scrollTop - clear;
+      landed.current = hash;
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [hash, wide, filter, hiveOpen]);
+
   // Land never changes, and the stage re-renders on every frame of the
   // canvas narrowing for the write-up pane, so the lattice is built once.
   const land = useMemo(
@@ -1152,13 +1076,26 @@ export function StakeholderMap() {
   );
 
   return (
-    <section className="stakeholder-map" aria-labelledby="sm-heading">
+    <section
+      className="stakeholder-map"
+      id={MAP_ANCHOR}
+      aria-labelledby="sm-heading"
+    >
       <div
         className="sm-pin"
         ref={pinRef}
         // The menu steps aside while the stage fills the screen (Navbar.tsx).
         data-fullscreen={wide || undefined}
       >
+        {/* Where a result lands on a wide screen: see the landing effects. */}
+        {wide && filter && (
+          <div className="sm-landing" aria-hidden>
+            <span id={questionAnchor(filter)} />
+            {QUESTION_CYCLES[filter].stages.map((st) => (
+              <span key={st.stage} id={stageAnchor(filter, st.stage)} />
+            ))}
+          </div>
+        )}
         <div className="sm-stage">
           <div
             className={`sm-frame${filter ? " has-pane" : ""}`}
@@ -1409,7 +1346,8 @@ export function StakeholderMap() {
              * out on the map. */}
             {filter && (
               <aside
-                className="sm-qpanel"
+                className={`sm-qpanel${hiveOpen ? " is-open" : ""}`}
+                id={wide ? undefined : questionAnchor(filter)}
                 ref={qpanelRef}
                 aria-labelledby="sm-qpanel-title"
               >
@@ -1429,7 +1367,10 @@ export function StakeholderMap() {
                     <div className="sm-qintro">
                       {QUESTION_CYCLES[filter].summary && (
                         <div className="sm-qsummary">
-                          <Markdown remarkPlugins={[remarkGfm]}>
+                          <Markdown
+                            remarkPlugins={[remarkGfm]}
+                            rehypePlugins={rehypePlugins}
+                          >
                             {QUESTION_CYCLES[filter].summary}
                           </Markdown>
                         </div>
@@ -1490,6 +1431,12 @@ export function StakeholderMap() {
                             return (
                               <section
                                 key={st.stage}
+                                id={
+                                  wide
+                                    ? undefined
+                                    : stageAnchor(filter, st.stage)
+                                }
+                                data-stage={st.stage}
                                 className={`sm-qstage${
                                   stageHover === st.stage ? " is-hover" : ""
                                 }`}
@@ -1535,7 +1482,10 @@ export function StakeholderMap() {
                                 </h4>
                                 {st.body && (
                                   <div className="sm-qstage-body">
-                                    <Markdown remarkPlugins={[remarkGfm]}>
+                                    <Markdown
+                                      remarkPlugins={[remarkGfm]}
+                                      rehypePlugins={rehypePlugins}
+                                    >
                                       {st.body}
                                     </Markdown>
                                   </div>
@@ -1586,22 +1536,6 @@ export function StakeholderMap() {
           </div>
         </div>
       </div>
-
-      <details className="sm-roster">
-        <summary>
-          The full record, as text ({STAKEHOLDERS.length} conversations)
-        </summary>
-        {regions.map((r) => (
-          <div key={r.name} className="sm-roster-region">
-            <h4>{r.name}</h4>
-            <ul className="sm-list">
-              {r.people.map((s) => (
-                <Profile key={s.id} s={s} />
-              ))}
-            </ul>
-          </div>
-        ))}
-      </details>
     </section>
   );
 }

@@ -3,8 +3,10 @@ import { STAGE_NAME, STAGE_ORDER, type StageKey } from "../utils/dbtlCycles";
 /* The DBTL dial: a thick flat-top hexagonal ring cut into four.
  *
  * Two hexagons, one inside the other, leaving a band wide enough to set a word in.
- * The band is quartered, one quarter per stage, with a chevron on each boundary so
- * the ring reads as a cycle and not as a pie chart.
+ * The band is quartered, one quarter per stage. The current quarter is drawn as an
+ * arrow piece, pointed at the end that hands on to the next stage and notched at
+ * the end it takes over from, so the ring reads as a cycle and not as a pie chart
+ * without any marks of its own on the boundaries.
  *
  * IT STAYS STILL. Design is always at the top, Build on the right, Test at the
  * bottom and Learn on the left, and the current stage is shown by filling its
@@ -19,8 +21,7 @@ import { STAGE_NAME, STAGE_ORDER, type StageKey } from "../utils/dbtlCycles";
  * its own slot. Four stages will not divide a six-sided shape evenly, so the top
  * and bottom quarters span two corners each and the side ones a single point.
  *
- * The number in the middle is an HTML span over the top, not part of the
- * drawing.
+ * The middle is left empty: the cycle's number and title are under the dial.
  */
 
 /* Geometry, in viewBox units. A flat-top hexagon of circumradius R is 2R wide and
@@ -36,22 +37,28 @@ const HOLE = 0.58;
 
 const n = (v: number) => v.toFixed(1);
 
+type Point = [number, number];
+
+const path = (points: Point[]) =>
+  points.map(([x, y]) => `${n(x)},${n(y)}`).join(" ");
+
 /**
  * One quarter of the band. The top and bottom quarters each span two vertices of
  * the hexagon and the left and right ones span a single vertex, because four
  * quarters cannot divide six corners evenly.
+ *
+ * Every quarter is listed the same way round: along the outer edge from the
+ * boundary with the stage before to the boundary with the stage after, then back
+ * along the inner edge. arrowed() relies on that.
  */
-function quarter(stage: number): string {
+function quarter(stage: number): Point[] {
   const k = HOLE;
   const c = CROSS;
   const h = HALF;
 
-  const path = (points: [number, number][]) =>
-    points.map(([x, y]) => `${n(x)},${n(y)}`).join(" ");
-
   switch (stage) {
     case 0: // the top
-      return path([
+      return [
         [-c, -c],
         [-R / 2, -h],
         [R / 2, -h],
@@ -60,18 +67,18 @@ function quarter(stage: number): string {
         [(k * R) / 2, -k * h],
         [(-k * R) / 2, -k * h],
         [-k * c, -k * c],
-      ]);
+      ];
     case 1: // the right
-      return path([
+      return [
         [c, -c],
         [R, 0],
         [c, c],
         [k * c, k * c],
         [k * R, 0],
         [k * c, -k * c],
-      ]);
+      ];
     case 2: // the bottom
-      return path([
+      return [
         [c, c],
         [R / 2, h],
         [-R / 2, h],
@@ -80,17 +87,49 @@ function quarter(stage: number): string {
         [(-k * R) / 2, k * h],
         [(k * R) / 2, k * h],
         [k * c, k * c],
-      ]);
+      ];
     default: // the left
-      return path([
+      return [
         [-c, c],
         [-R, 0],
         [-c, -c],
         [-k * c, -k * c],
         [-k * R, 0],
         [-k * c, k * c],
-      ]);
+      ];
   }
+}
+
+/** How far the current quarter's point reaches into the next quarter, and its
+ * notch into itself, in viewBox units. The band is about 38 across at a
+ * boundary, so this makes an arrowhead of about a hundred degrees. */
+const ARROW = 15;
+
+/**
+ * A quarter as an arrow piece. Its leading boundary (outer point m-1 to inner
+ * point m) comes to a point at the middle of the band, pushed clockwise, the way
+ * the cycle runs; its trailing boundary (last point back to the first) is notched
+ * by the same shape.
+ *
+ * The current quarter gets both. The one before it gets the point alone, which
+ * fills the current one's notch, so the notch shows that quarter's grey and not
+ * the paper behind the dial.
+ */
+function arrowed(points: Point[], notched = true): Point[] {
+  const m = points.length / 2;
+  const tip = (outer: Point, inner: Point): Point => {
+    const x = (outer[0] + inner[0]) / 2;
+    const y = (outer[1] + inner[1]) / 2;
+    const r = Math.hypot(x, y);
+    // Clockwise along the ring: the radius turned a quarter.
+    return [x - (y / r) * ARROW, y + (x / r) * ARROW];
+  };
+  return [
+    ...points.slice(0, m),
+    tip(points[m - 1], points[m]),
+    ...points.slice(m),
+    ...(notched ? [tip(points[0], points[points.length - 1])] : []),
+  ];
 }
 
 /* Where each word sits: the middle of the band along its quarter's own centre
@@ -110,9 +149,6 @@ const SEAT: Array<{ x: number; y: number }> = [
   { x: -OVER_POINT, y: 0 },
 ];
 
-/* The four boundaries, on the diagonals, at the middle of the band there. */
-const CORNER = (CROSS * Math.SQRT2 * (1 + HOLE)) / 2;
-
 interface DialProps {
   /** Which stage is current. Its quarter is filled. */
   current: StageKey;
@@ -120,11 +156,23 @@ interface DialProps {
   lit: StageKey | null;
   onLight: (stage: StageKey | null) => void;
   onPick: (stage: StageKey) => void;
-  /** Shown in the middle. */
-  label: string;
 }
 
-export function DbtlDial({ current, lit, onLight, onPick, label }: DialProps) {
+/* The current quarter is drawn last, so its point lies over the next quarter
+ * rather than under it. The order changes only when a click has already
+ * finished (see the StakeholderMap note on reordering under the pointer). */
+export function DbtlDial({ current, lit, onLight, onPick }: DialProps) {
+  const now = STAGE_ORDER.indexOf(current);
+  const before = (now + STAGE_ORDER.length - 1) % STAGE_ORDER.length;
+  const outline = (i: number) =>
+    i === now
+      ? arrowed(quarter(i))
+      : i === before
+        ? arrowed(quarter(i), false)
+        : quarter(i);
+  const order = [...STAGE_ORDER.keys()].sort(
+    (a, b) => Number(a === now) - Number(b === now),
+  );
   return (
     <div className="dbtl-dial">
       {/* Pointer-driven and hidden from assistive technology on purpose: every
@@ -135,7 +183,8 @@ export function DbtlDial({ current, lit, onLight, onPick, label }: DialProps) {
         viewBox="-104 -104 208 208"
         aria-hidden="true"
       >
-        {STAGE_ORDER.map((stage, i) => {
+        {order.map((i) => {
+          const stage = STAGE_ORDER[i];
           const seat = SEAT[i];
           return (
             <g
@@ -147,7 +196,7 @@ export function DbtlDial({ current, lit, onLight, onPick, label }: DialProps) {
               onPointerLeave={() => onLight(null)}
               onClick={() => onPick(stage)}
             >
-              <polygon className="dbtl-dial-band" points={quarter(i)} />
+              <polygon className="dbtl-dial-band" points={path(outline(i))} />
               <text
                 className="dbtl-dial-word"
                 textAnchor="middle"
@@ -163,24 +212,7 @@ export function DbtlDial({ current, lit, onLight, onPick, label }: DialProps) {
             </g>
           );
         })}
-
-        {/* A chevron on each boundary, pointing the way the cycle runs. */}
-        {[45, 135, 225, 315].map((angle) => {
-          const a = (Math.PI / 180) * angle;
-          return (
-            <path
-              key={angle}
-              className="dbtl-dial-step"
-              d="M-4,-5 L4,0 L-4,5"
-              transform={`translate(${n(CORNER * Math.cos(a))} ${n(
-                CORNER * Math.sin(a),
-              )}) rotate(${angle + 90})`}
-            />
-          );
-        })}
       </svg>
-
-      <span className="dbtl-dial-label">{label}</span>
     </div>
   );
 }

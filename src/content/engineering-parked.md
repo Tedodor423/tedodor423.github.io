@@ -192,7 +192,7 @@ in week one. They feed directly into [Contribution](/contribution).
 
 [Results](/results) · [Experiments and protocols](/wet-lab-experiments) ·
 [Bee lab](/bee-lab) ·
-[Yeast](/wet-lab-experiments#yeast-production) · [Measurement](/measurement) · [Parts](/parts) ·
+[Yeast](/wet-lab-experiments#yeast-production) · [Measurement](/measurement) · [Parts](/results#parts) ·
 [Dry lab and modelling](/model) · [RNA design](/software) ·
 [Human practices](/human-practices) · [Contribution](/contribution)
 

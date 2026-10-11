@@ -7,17 +7,20 @@ import {
   type CSSProperties,
   type ReactNode,
 } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { HEXES, HEX_R, hexPoints, type Hex } from "../utils/worldHexes";
 import { HEX_COUNTRY, cellKey } from "../utils/hexCountries";
 import {
   CAVEATS,
+  COLONY_LOSSES,
+  FEATURED,
   FEATURED_CONTEXT,
   LOSS_COUNTRIES,
   NOTES,
   SOURCES,
   YEARS,
   categoryOf,
+  countryAnchor,
   lossAt,
   metricOf,
   provenanceOf,
@@ -33,9 +36,9 @@ import "./VarroaMap.css";
  * this wiki are the same map. What is new is identity: worldHexes.ts knows
  * where its cells are but not what they are, and hexCountries.ts adds the
  * country behind each one. Read the note at the top of that file before
- * trusting a cell: the source drawing is stylised, fifty countries in the
- * dataset are smaller than a cell and never appear, and Iceland is not drawn
- * at all.
+ * trusting a cell: the drawing is stylised, each cell takes the country that
+ * holds most of its land, and 47 countries in the dataset are smaller than a
+ * cell and never appear.
  *
  * WHAT IT SHOWS. Reported colony loss, not the arrival of the mite. The
  * distinction matters enough that it is stated on the page, in the data file,
@@ -66,8 +69,8 @@ import "./VarroaMap.css";
 /** The two forms the figure takes. See the note above. */
 export type VarroaMapVariant = "full" | "slide";
 
-/** Viewport of the lattice, as the stakeholder map crops it. */
-const VIEW = { x: 12, y: 1, w: 1808, h: 729 };
+/** Viewport of the lattice: the drawn cells plus a hair of margin. */
+const VIEW = { x: 12, y: 1, w: 1812, h: 729 };
 
 /** Milliseconds per year while the animation is running. */
 const STEP_MS = 850;
@@ -75,15 +78,8 @@ const STEP_MS = 850;
 /** How long the animation waits after the reader stops interacting. */
 const RESUME_MS = 2600;
 
-/** The countries this wiki argues from, reachable without a pointer. */
-const FEATURED = [
-  "United States of America",
-  "California",
-  "United Kingdom",
-  "Australia",
-  "New Zealand",
-] as const;
-
+/* The countries this wiki argues from, reachable without a pointer, are
+ * FEATURED in src/data/varroa.ts, where the search index reads them too. */
 const FEATURED_SET = new Set<string>(FEATURED);
 
 const SHORT: Record<string, string> = {
@@ -358,6 +354,16 @@ export function VarroaMap({ variant = "full" }: { variant?: VarroaMapVariant }) 
     [hold],
   );
 
+  /* A search result for a featured country (src/utils/search.ts) opens the
+   * page on that country's entry in the caption. The panel shows the same
+   * country, its caveats and sources included, so everything the result
+   * matched is on screen rather than behind a pick. */
+  const { hash } = useLocation();
+  useEffect(() => {
+    const named = FEATURED.find((name) => hash === `#${countryAnchor(name)}`);
+    if (named) select(named);
+  }, [hash, select]);
+
   /* The full form: whatever is under the pointer fills the panel. */
   const onPointer = useCallback(
     (event: React.PointerEvent<SVGSVGElement>) => {
@@ -599,13 +605,14 @@ export function VarroaMap({ variant = "full" }: { variant?: VarroaMapVariant }) 
 
   return (
     <figure className="varroa-map">
-      <h3 className="vm-heading">Reported honey-bee colony losses, 2008 to 2025</h3>
+      {/* The figure's words are COLONY_LOSSES in src/data/varroa.ts, so the
+          search index reads what the page shows; the ids are where a result
+          lands. */}
+      <h3 className="vm-heading" id={COLONY_LOSSES.anchor}>
+        <Marked text={COLONY_LOSSES.heading} />
+      </h3>
       <p className="vm-standfirst">
-        Each hexagon is about 4.7 degrees of the world, shaded by the share of
-        managed colonies its country reported losing that year. This is loss,
-        not the spread of the mite: a country appears when its survey starts,
-        and for most of Europe that is 2008. Australia is the exception, where
-        the first detection in June 2022 and the first survey are a year apart.
+        <Marked text={COLONY_LOSSES.standfirst} />
       </p>
 
       <div className="vm-layout">
@@ -618,12 +625,10 @@ export function VarroaMap({ variant = "full" }: { variant?: VarroaMapVariant }) 
               beside the map is the taller column and this is what fills the
               space it leaves. */}
           <p className="vm-howto">
-            <strong>How to read it.</strong> Darker is a heavier reported loss.
-            The two hatched states are not points on that scale: one is a
-            country where varroa is present and tolerated, the other is a
-            country with no varroa on record. Plain wax is a country whose
-            survey has not started in the year shown, or which the dataset does
-            not carry at all.
+            <strong>
+              <Marked text={COLONY_LOSSES.howto.lead} />
+            </strong>{" "}
+            <Marked text={COLONY_LOSSES.howto.text} />
           </p>
         </div>
 
@@ -642,7 +647,7 @@ export function VarroaMap({ variant = "full" }: { variant?: VarroaMapVariant }) 
           {FEATURED.map((name) => {
             const provenance = provenanceOf(name);
             return (
-              <div key={name}>
+              <div key={name} id={countryAnchor(name)}>
                 <dt>
                   <Marked text={name} />{" "}
                   <span className="vm-featured-value">
@@ -668,8 +673,10 @@ export function VarroaMap({ variant = "full" }: { variant?: VarroaMapVariant }) 
           })}
         </dl>
 
-        <details className="vm-limits">
-          <summary>What this map cannot show</summary>
+        <details className="vm-limits" id={COLONY_LOSSES.limitsAnchor}>
+          <summary>
+            <Marked text={COLONY_LOSSES.limits} />
+          </summary>
           <ul>
             {CAVEATS.map((caveat) => (
               <li key={caveat}>
@@ -677,11 +684,7 @@ export function VarroaMap({ variant = "full" }: { variant?: VarroaMapVariant }) 
               </li>
             ))}
             <li>
-              A hexagon spans about 4.7 degrees, so 50 countries in the dataset
-              are smaller than one cell and are not drawn at all. Belgium,
-              Switzerland, Denmark, Slovakia, Latvia and Israel are among them.
-              Every one of them is in the table below. Iceland is missing for a
-              different reason: the source drawing does not include it.
+              <Marked text={COLONY_LOSSES.drawn} />
             </li>
           </ul>
         </details>

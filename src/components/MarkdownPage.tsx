@@ -7,6 +7,7 @@ import { headingId } from "../utils/headingId";
 import { rehypeMark } from "../utils/markTree";
 import { MarksContext } from "../utils/marksContext";
 import { StakeholderMap } from "./StakeholderMap";
+import { StakeholderRecord } from "./StakeholderRecord";
 import { HoneyLoop } from "./HoneyLoop";
 import { HiveCorners } from "./HiveCorners";
 import { HpStats } from "./HpStats";
@@ -17,6 +18,7 @@ import { DbtlGallery } from "./DbtlGallery";
 import { BeeReset } from "./BeeReset";
 import { NectarConstruct } from "./NectarConstruct";
 import { NectarPipeline } from "./NectarPipeline";
+import { ProjectOutputs } from "./ProjectOutputs";
 import { BeeImportance } from "./BeeImportance";
 import { VarroaSlide } from "./VarroaSlide";
 import { TreatmentsSlide } from "./TreatmentsSlide";
@@ -41,6 +43,7 @@ import { BeehaveCost } from "./BeehaveCost";
  */
 const SLOTS: Record<string, () => ReactNode> = {
   "stakeholder-map": () => <StakeholderMap />,
+  "stakeholder-record": () => <StakeholderRecord />,
   "honey-loop": () => <HoneyLoop />,
   "hive-corners": () => <HiveCorners />,
   "hp-stats": () => <HpStats />,
@@ -50,6 +53,7 @@ const SLOTS: Record<string, () => ReactNode> = {
   "dbtl-cycles": () => <DbtlGallery />,
   "bee-reset": () => <BeeReset />,
   "nectar-pipeline": () => <NectarPipeline />,
+  "project-outputs": () => <ProjectOutputs />,
   "nectar-construct": () => <NectarConstruct />,
   "bee-importance": () => <BeeImportance />,
   "varroa-slide": () => <VarroaSlide />,

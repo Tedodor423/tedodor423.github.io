@@ -5,6 +5,7 @@ import {
   useRef,
   useState,
   type CSSProperties,
+  type RefObject,
 } from "react";
 import { useLocation } from "react-router-dom";
 import {
@@ -43,20 +44,102 @@ import "./DbtlGallery.css";
  * the cell would snap to its new size while its neighbours glided.
  */
 
+/** Where a hexagon's drawing was on screen just before its cell opened or
+ * closed: the centre and size of the drawing itself, which is not always the
+ * img's box (the opened one is contained in a box of its own). */
+interface Flight {
+  x: number;
+  y: number;
+  w: number;
+  /** False when the cell was being hovered, which folds the icon away. */
+  shown: boolean;
+  at: number;
+}
+
+function measure(img: HTMLImageElement): Flight {
+  const box = img.getBoundingClientRect();
+  const fit =
+    img.naturalWidth && img.naturalHeight
+      ? Math.min(box.width / img.naturalWidth, box.height / img.naturalHeight)
+      : 0;
+  return {
+    x: box.left + box.width / 2,
+    y: box.top + box.height / 2,
+    w: fit ? img.naturalWidth * fit : box.width,
+    shown: box.height > 2,
+    at: performance.now(),
+  };
+}
+
+/** The src that worked for each family, so a remounted icon (the cell opening
+ * or closing) does not try static.igem.wiki again and flicker while it fails,
+ * and the drawing's proportions, which size its box in the opened cell. */
+const WORKING = new Map<string, { src: string; aspect: number }>();
+
 /** A hexagon's drawn icon. Decorative: the name under it says the same thing,
  * so it carries no alt text. Falls back once to the local copy while the
  * upload is pending (see cycleIcons.ts), then hides rather than show a broken
- * image. */
-function CycleIcon({ familyId }: { familyId: string }) {
+ * image.
+ *
+ * The same drawing sits in the middle of a closed cell and in the top-left
+ * corner of an opened one, and it travels between the two with the cell. The
+ * two are different elements, so the travel is a FLIP: the gallery measures
+ * the old one just before the state changes, and the new one starts out drawn
+ * there and eases to where it belongs, on the same curve and in the same time
+ * as the cell's own box. Skipped under prefers-reduced-motion. */
+function CycleIcon({
+  familyId,
+  className,
+  flights,
+}: {
+  familyId: string;
+  className: string;
+  flights: RefObject<Map<string, Flight>>;
+}) {
   const icon = cycleIcon(familyId);
-  const [src, setSrc] = useState(icon?.src);
+  const [src, setSrc] = useState(() => WORKING.get(familyId)?.src ?? icon?.src);
+  const [aspect, setAspect] = useState(() => WORKING.get(familyId)?.aspect);
+  const img = useRef<HTMLImageElement>(null);
+
+  useLayoutEffect(() => {
+    const from = flights.current?.get(familyId);
+    const node = img.current;
+    /* Read but never deleted: StrictMode runs this twice on mount, and the
+       second run has to find it too. The timestamp is what retires it. */
+    if (!from || !node || performance.now() - from.at > 250) return;
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const to = measure(node);
+    if (!to.shown || to.w === 0) return;
+    const scale = from.shown && from.w > 0 ? from.w / to.w : 0.4;
+    const flight = node.animate(
+      [
+        {
+          transform: `translate(${from.x - to.x}px, ${from.y - to.y}px) scale(${scale})`,
+          opacity: from.shown ? 1 : 0,
+        },
+        { transform: "none", opacity: 1 },
+      ],
+      { duration: 400, easing: "cubic-bezier(0.22, 0.61, 0.36, 1)" },
+    );
+    return () => flight.cancel();
+  }, [familyId, flights]);
+
   if (!icon || !src) return null;
   return (
     <img
-      className="dbtl-shut-icon"
+      ref={img}
+      className={className}
+      data-icon={familyId}
       src={src}
       alt=""
       draggable={false}
+      style={aspect ? ({ "--aspect": aspect } as CSSProperties) : undefined}
+      onLoad={(event) => {
+        const { naturalWidth: w, naturalHeight: h } = event.currentTarget;
+        const known = h ? w / h : 1;
+        WORKING.set(familyId, { src, aspect: known });
+        setAspect(known);
+      }}
       onError={() => setSrc(src === icon.fallback ? undefined : icon.fallback)}
     />
   );
@@ -99,6 +182,14 @@ export function DbtlGallery() {
   } | null>(null);
   /** The cell a close came from, so its hexagon gets the focus back. */
   const handBack = useRef<string | null>(null);
+  /** Where each icon was just before its cell opened or closed (CycleIcon). */
+  const flights = useRef(new Map<string, Flight>());
+  const takeOff = (id: string) => {
+    const icon = frame.current?.querySelector<HTMLImageElement>(
+      `[data-icon="${id}"]`,
+    );
+    if (icon) flights.current.set(id, measure(icon));
+  };
 
   useEffect(() => {
     const node = frame.current;
@@ -136,6 +227,7 @@ export function DbtlGallery() {
   }, [openId]);
 
   const shut = (id: string) => {
+    takeOff(id);
     handBack.current = id;
     setTarget(null);
     setOpenId(null);
@@ -151,6 +243,7 @@ export function DbtlGallery() {
       if (spot?.closest('[data-state="open"]') || spot?.closest(".dbtl-shut")) {
         return;
       }
+      takeOff(openId);
       handBack.current = openId;
       setTarget(null);
       setOpenId(null);
@@ -338,13 +431,20 @@ export function DbtlGallery() {
             >
               <div className="dbtl-face">
                 {open ? (
-                  <DbtlFamilyPanel
-                    family={family}
-                    startAt={
-                      target?.family === family.id ? target.cycle : undefined
-                    }
-                    onClose={() => shut(family.id)}
-                  />
+                  <>
+                    <CycleIcon
+                      familyId={family.id}
+                      className="dbtl-open-icon"
+                      flights={flights}
+                    />
+                    <DbtlFamilyPanel
+                      family={family}
+                      startAt={
+                        target?.family === family.id ? target.cycle : undefined
+                      }
+                      onClose={() => shut(family.id)}
+                    />
+                  </>
                 ) : (
                   <button
                     type="button"
@@ -355,12 +455,18 @@ export function DbtlGallery() {
                       /* Opening a cell the filter has greyed out drops the
                          filter, so the open panel is never shown dimmed. */
                       if (lab !== null && lab !== family.lab) setLab(null);
+                      if (openId) takeOff(openId);
+                      takeOff(family.id);
                       setTarget(null);
                       setOpenId(family.id);
                     }}
                   >
                     <span className="dbtl-shut-body">
-                      <CycleIcon familyId={family.id} />
+                      <CycleIcon
+                        familyId={family.id}
+                        className="dbtl-shut-icon"
+                        flights={flights}
+                      />
                       {splitName(family.name).lead ? (
                         <span className="dbtl-shut-num">
                           {splitName(family.name).lead}

@@ -4,12 +4,21 @@ name: Professor Giles Budge
 role: Director of Research and Innovation, School of Natural and Environmental Sciences, Newcastle University
 place: Newcastle
 region: United Kingdom
+group: Academics
 lat: 54.98
 lon: -1.61
 photo: budge
 date: 9 April and 13 July 2026
 questions: Q1, Q2
 ---
+
+## Key points
+
+- Confirmed that **Varroa feeding on bee fat bodies should still expose mites to haemolymph containing dsRNA**, supporting the feasibility of our delivery pathway.
+- His advice gave us confidence to **continue with our planned adult-bee dsRNA feeding assays**.
+- Supported using the **Mango aptamer fluorescence assay** to quantify dsRNA concentration, which we subsequently tested successfully.
+- Recommended testing **different dsRNA lengths (300, 500 and 700 bp)** to investigate whether length affects haemolymph uptake.
+- Overall, his advice **validated and directly shaped our bee-lab experimental design**.
 
 ## Why we interviewed
 

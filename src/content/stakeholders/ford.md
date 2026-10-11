@@ -4,14 +4,23 @@ name: Wade Ford
 role: Beekeeper Services Manager, Hive & Wellness Australia
 place: Queensland
 region: Australia
+group: Industry
 lat: -27.47
 lon: 153.03
-hex: 137, 26
 date: 13 August 2026
 questions: Q1, Q6
 anchors: Q5
 provisional: Q4
 ---
+
+## Key points
+
+- He described that Varroa has had a huge impact on Australia, and **regional disparities** exist within Australia regarding its effects, for example, beekeepers in New South Wales have **lost over 1200 hives** and experienced about a **50% decrease in honey production**; this affirmed our idea of **constructing hive profiles** to predict the efficacy of our treatment for different regions
+- He shared the mainstream chemical treatments and the key challenges that they face, such as **off-label use, limited temperature ranges, pesticide resistance, and leaving a bitter taste in honey**
+- These **Varroa management costs were substantial** for commercial operations, including costs for the treatment itself and costs for additional labour, and extra costs add up when accounting for instances where additional treatments had to be purchased due to **mite resistance** or where **colonies had to be replaced**
+- He recommended that **the top factor we should prioritise is cost**, followed by other factors like effectiveness, time and labour required, and ease of use; this confirmed our idea of **using economic modelling** to compare the estimated cost of our product to existing treatments
+- Between the two potential delivery methods, he **preferred pollen patties** over *S. alvi* as their beekeepers regularly feed bees with the supplements already, and considering possible **negative attitudes towards living GMOs**
+- He advised us to **be transparent about our biotechnology** and test how honey composition may vary upon using our treatment (before and after honey processing techniques, as well as whether this varies with temperature), and this inspired us to **test the biodegradability of dsRNA in honey**
 
 ## Why we interviewed
 

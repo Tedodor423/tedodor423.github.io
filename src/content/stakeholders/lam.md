@@ -4,12 +4,21 @@ name: Professor Paul Lam
 role: President and Chair Professor of Environmental Chemistry, Hong Kong Metropolitan University
 place: Hong Kong
 region: Hong Kong
+group: Academics
 lat: 22.32
 lon: 114.17
 photo: lam
 date: 6 July 2026
 anchors: Q2, Q4
 ---
+
+## Key points
+
+- He shared the major environmental impacts of chemical pesticides, including **toxicity to non-target species, bioaccumulation and biomagnification**, as well as **development of pesticide resistance**
+- This supported our idea to develop an **RNAi-based biopesticide** instead of another chemical, as it is **inherently biodegradable**, overcoming most major challenges with current chemical pesticides
+- While he felt that **off-target effects** remains a key environmental concern for our biopesticide, he agreed that bioinformatics tools could be used to screen for off-target effects against representative species and minimise this risk, thus **we decided to leverage BLAST searches** for this purpose
+- He encouraged us to use the term **‘risk-benefit analysis’** instead of ‘cost-benefit analysis’ and outlined the process of handling risks (**identify, assess, manage, and communicate**)
+- He emphasised the importance of **communicating risks to our stakeholders and public** in this process, which **changed our public outreach strategy**, inspiring us to engage in more balanced discussions in our outreach activities and transparently address our project’s potential risks to build trust
 
 ## Why we interviewed
 

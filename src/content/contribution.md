@@ -78,7 +78,7 @@ commercial gene synthesis refuses and standard cloning strains recombine out.
 than re-solve that per construct, a team can take the backbone and change the
 loop.
 
-**Where to get it.** [Parts](/parts), with the two-step Gibson route on
+**Where to get it.** [Parts](/results#parts), with the two-step Gibson route on
 [cycle 1.2](/engineering#cycle-1-2).
 
 > **TODO —** Registry part numbers, once deposited, and Sanger sequence across
@@ -95,7 +95,7 @@ IVT now and in-cell expression later, **at no marginal cost**.
 material need a blot or a chemically labelled nucleotide, both of which cost money
 per sample and neither of which survives into a production construct.
 
-**Where to get it.** [Parts](/parts). Read it together with the account of
+**Where to get it.** [Parts](/results#parts). Read it together with the account of
 what the tag does and does not report, below.
 
 ## Measurement
@@ -396,7 +396,7 @@ See [experiments and lab book](/wet-lab-experiments).
 
 ## Where this connects
 
-[Parts](/parts) · [Measurement](/measurement) ·
+[Parts](/results#parts) · [Measurement](/measurement) ·
 [Experiments and lab book](/wet-lab-experiments) ·
 [Working with bees](/working-with-bees) ·
 [Bee lab notebook](/bee-lab-labbook) · [RNA design](/software) ·

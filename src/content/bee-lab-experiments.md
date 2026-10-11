@@ -15,9 +15,18 @@ carries its own experimental limitations.**
 > **TODO —** PDF: Complete bee-lab protocol set, uploaded to `static.igem.wiki` and
 > linked here. Owner: bee lab.
 
-## Working with adult bees
+## Block 1: Working with adult bees
 
-### Protocol: adult honeybee cage-feeding sucrose assay
+### Aim
+
+> **TODO —** Aim, from the team's goal for this block: quantify adult bee feeding
+> behaviour to deliver a known dsRNA dose. Owner: bee lab.
+
+### Experiments
+
+#### Delivering a known dose to adult bees
+
+##### Adult honeybee cage-feeding sucrose assay
 
 **Purpose and rationale.** This assay measures how much feed caged adult honeybees
 consume, and how many die, when given 1 M sucrose alone or sucrose containing 50, 100
@@ -171,7 +180,7 @@ per treatment.
 [doi:10.3389/finsc.2026.1868457](https://doi.org/10.3389/finsc.2026.1868457) ·
 Garbian et al. (2012), _PLoS Pathogens_ 8(12): e1003035.
 
-### Protocol: adult honeybee cage-feeding adapter pilot
+##### Adult honeybee cage-feeding adapter pilot
 
 The down-scaled version: a PCR tube in a 3D-printed adaptor in place of the 2 ml
 Eppendorf, to cut the volume of dsRNA needed per cage. Five tube forms were
@@ -196,7 +205,7 @@ were judged sufficient for testing, but this was noted as a factor that **may ha
 introduced variability** into the evaporation and spillage measurements between
 nominally identical tube replicates.
 
-### Protocol: proboscis extension response (PER) feeding assay
+##### Proboscis extension response (PER) feeding assay
 
 **Purpose and rationale.** This assay delivers a precise oral dose (5 µl) of a test
 solution to individual adult honeybees, by exploiting the proboscis extension
@@ -296,7 +305,9 @@ dsRNA in sucrose directly to the proboscis to avoid contaminating the body surfa
 
 **References.** Garbian et al. (2012), _PLoS Pathogens_ 8(12): e1003035.
 
-### Protocol: adult honeybee haemolymph extraction
+#### Haemolymph extraction and dissection
+
+##### Adult honeybee haemolymph extraction
 
 **Purpose and rationale.** This protocol collects haemolymph from adult honeybees
 after feeding, to test whether ingested dsRNA reaches the haemolymph. Haemolymph is
@@ -398,7 +409,7 @@ unavailable, so our tubes are custom — see [hardware](/hardware).
 
 **References.** Garbian et al. (2012), _PLoS Pathogens_ 8(12): e1003035.
 
-### Adult bee dissection
+##### Adult bee dissection
 
 Logged 8 July 2026.
 
@@ -411,9 +422,30 @@ Logged 8 July 2026.
 Fat-body extraction was **judged unnecessary**: dsRNA stability can be read from
 adult haemolymph, which the centrifugal method already delivers.
 
-## Working with larvae
+### Discussion
 
-### Protocol: honeybee larval feeding
+> **TODO —** Discuss the results, and the next steps. Owner: bee lab.
+
+## Block 2: Working with larvae
+
+### Aim
+
+> **TODO —** Aim, from the team's goal for this block: a larval feeding experiment
+> to assay dose stability. Owner: bee lab.
+
+### Experiments
+
+#### Delivering a known dose to larvae
+
+> **TODO —** Figure: Photos of dosed larvae, including the cells after capping.
+> Owner: bee lab.
+
+##### Larval feeding: 5 µl dose
+
+> **TODO —** Protocol and results for the 5 µl pilot dose, the first iteration
+> of the larval feeding assay. Owner: bee lab.
+
+##### Larval feeding: 20 µl dose
 
 **Purpose and rationale.** This protocol doses individual 5th instar honeybee larvae
 with 20 µl of a test solution, delivered directly into the cell. It is used to test
@@ -484,7 +516,9 @@ throughout the capped period.
   the centre. Spreading treatments across the frame reduces, but does not remove,
   this bias.
 
-### Protocol: larval and pupal extraction from brood frames
+#### Sampling larvae and pupae
+
+##### Larval and pupal extraction from brood frames
 
 **Purpose and rationale.** These steps remove fed larvae, and the pupae that develop
 from them, from their cells intact, for later dsRNA detection. **Larvae are
@@ -550,7 +584,7 @@ directly.
 - **Mapping errors.** Wrongly identified cells mean a sample is assigned to the wrong
   treatment. Cross-check against photos taken at feeding.
 
-### Larval haemolymph extraction
+##### Larval haemolymph extraction
 
 Established 8 July 2026. Yield around 10 µl per larva. **Superseded as the primary
 sampling route by whole-larva processing** — see [cycle L2](/engineering#cycle-l2) —
@@ -569,7 +603,7 @@ need.
 Stage matters: 5th instar works, 6th instar is too soft and bursts, and pupal
 stages have lost the osmotic pressure that makes haemolymph ooze out at all.
 
-### Larval RNA extraction
+##### Larval RNA extraction
 
 1. Place Eppendorf tubes containing larvae on dry ice.
 2. Dip the tube and a metal rod in liquid nitrogen.
@@ -614,55 +648,21 @@ volume and drying with the lid open.
 > variance, and our own write-up of it breaks off after the chloroform step. Write it
 > out in full beside the phenol-chloroform version above. Owner: wet lab.
 
-## Downstream processing
+### Discussion
 
-### Adult haemolymph RNA processing
+> **TODO —** Discuss the results, and the next steps. Owner: bee lab.
 
-RNA extracted from pooled haemolymph with Vazyme Vezol under the manufacturer's
-**blood** protocol (fluid, not tissue), spin-column purified, quantified by
-Nanodrop. Purified RNA is then heated to 95 °C and crash-cooled on ice to
-denature the duplex so primers can anneal, reverse transcribed with random
-hexamers, and the cDNA amplified with construct-specific primers. Amplicons run
-on a 1.5% agarose gel against a no-dsRNA water negative and a known-GFP
-positive. The gel is the readout: a band at the anticipated size is **qualitative
-evidence of dsRNA persistence** in the adult haemolymph at that timepoint, and
-nothing more than qualitative.
+## Block 3: Working with mites
 
-### Reverse transcription
+### Aim
 
-1. Put 5 µl Vazyme 4× All-in-One Ultra qRT Supermix into a PCR tube.
-2. Add template RNA and make up to 20 µl with RNase-free ddH₂O.
-3. Mix gently with a pipette.
-4. Run: 50 °C for 10 min, then 85 °C for 5 s, then hold at 4–16 °C.
+> **TODO —** Aim, from the team's goal for this block: develop an experimental
+> setup for a mortality and knockdown screen of NECTAR-designed targets in mites.
+> Owner: bee lab.
 
-### qPCR
+### Experiments
 
-Vazyme 2× Taq Pro Universal SYBR qPCR master mix, stored away from light at
-2–8 °C. Per 20 µl well, in technical triplicate:
-
-| Component | Volume |
-| --- | --- |
-| Master mix | 10 µl |
-| Each primer (10 µM) | 0.4 µl |
-| cDNA (relative qPCR) | 2 µl |
-| ddH₂O | to 20 µl |
-
-Run a housekeeping-gene primer pair in parallel for relative qPCR. For absolute
-qPCR on haemolymph, build a standard curve by spiking haemolymph with a known
-RNA concentration, 1:10 serial dilution, reverse transcribe as above, triplicate
-each point.
-
-Cycle: 95 °C 30 s (1×); then 40× [95 °C 10 s, annealing ~60 °C 30 s]; then a
-melt step at the machine's default settings.
-
-Practical notes: pipetting error in qPCR setup was high enough to need a
-technique fix (shallow tip immersion) plus extra replicate wells; suspected
-primer dimers around 100 bp needed a dedicated investigation; some runs failed
-with "no amplification" and were redone.
-
-## Working with mites
-
-### Protocol: Varroa sugar shake
+#### Collecting mites by sugar shake
 
 Dusting brood frames with icing sugar makes _Varroa_ mites lose their grip on bees
 and drop onto a tray below the hive, where they can be counted or collected.
@@ -696,7 +696,9 @@ suit and gloves.
 - It **fails outright in the wet**: on 2 September the sugar clumped and stuck to bees
   and frames rather than shaking off.
 
-### Protocol: mite soaking, reacclimatisation and pupal rearing
+#### Iteration 1: Artificial incubation
+
+##### Mite soaking, reacclimatisation and pupal rearing
 
 **Purpose and rationale.** This assay exposes _Varroa_ mites directly to dsRNA by
 soaking them in solution, then measures their survival after 24 h on a host pupa.
@@ -778,7 +780,14 @@ in gelatin capsules.
 [doi:10.1371/journal.ppat.1009075](https://doi.org/10.1371/journal.ppat.1009075) ·
 Campbell EM, Budge GE, Bowman AS (2010), _Parasites & Vectors_ 3: 73.
 
-### Protocol: brood-frame rearing mite death assay
+#### Iteration 2: Artificial infestation
+
+> **TODO —** Protocol for soaking mites in dsRNA and inserting them into live
+> larval cells, the method of [cycle V2](/engineering#cycle-v2). Owner: bee lab.
+
+#### Iteration 3: Feeding larvae a dose, then infesting with mites
+
+##### Brood-frame rearing mite death assay
 
 **Purpose and rationale.** This assay tests whether dsRNA fed to honeybee larvae kills
 _Varroa_ mites that then feed on those larvae. Each 5th instar larva is dosed with
@@ -875,9 +884,60 @@ relative humidity, in the dark, for the planned assay period. **The main assay u
   knowledge, an established protocol, so **there are no published baseline mortality
   figures to compare against.**
 
-> **TODO —** Protocols still owed as written documents: the mite drying step and the
-> baseline post-soak survival estimate; mite RNA extraction; and larval dsRNA storage.
-> Owner: bee lab.
+### Discussion
+
+> **TODO —** Discuss the results, and the next steps. Owner: bee lab.
+
+## Protocols still owed
+
+> **TODO —** The mite drying step and the baseline post-soak survival estimate;
+> mite RNA extraction; and larval dsRNA storage. Owner: bee lab.
+
+## Downstream processing
+
+### Adult haemolymph RNA processing
+
+RNA extracted from pooled haemolymph with Vazyme Vezol under the manufacturer's
+**blood** protocol (fluid, not tissue), spin-column purified, quantified by
+Nanodrop. Purified RNA is then heated to 95 °C and crash-cooled on ice to
+denature the duplex so primers can anneal, reverse transcribed with random
+hexamers, and the cDNA amplified with construct-specific primers. Amplicons run
+on a 1.5% agarose gel against a no-dsRNA water negative and a known-GFP
+positive. The gel is the readout: a band at the anticipated size is **qualitative
+evidence of dsRNA persistence** in the adult haemolymph at that timepoint, and
+nothing more than qualitative.
+
+### Reverse transcription
+
+1. Put 5 µl Vazyme 4× All-in-One Ultra qRT Supermix into a PCR tube.
+2. Add template RNA and make up to 20 µl with RNase-free ddH₂O.
+3. Mix gently with a pipette.
+4. Run: 50 °C for 10 min, then 85 °C for 5 s, then hold at 4–16 °C.
+
+### qPCR
+
+Vazyme 2× Taq Pro Universal SYBR qPCR master mix, stored away from light at
+2–8 °C. Per 20 µl well, in technical triplicate:
+
+| Component | Volume |
+| --- | --- |
+| Master mix | 10 µl |
+| Each primer (10 µM) | 0.4 µl |
+| cDNA (relative qPCR) | 2 µl |
+| ddH₂O | to 20 µl |
+
+Run a housekeeping-gene primer pair in parallel for relative qPCR. For absolute
+qPCR on haemolymph, build a standard curve by spiking haemolymph with a known
+RNA concentration, 1:10 serial dilution, reverse transcribe as above, triplicate
+each point.
+
+Cycle: 95 °C 30 s (1×); then 40× [95 °C 10 s, annealing ~60 °C 30 s]; then a
+melt step at the machine's default settings.
+
+Practical notes: pipetting error in qPCR setup was high enough to need a
+technique fix (shallow tip immersion) plus extra replicate wells; suspected
+primer dimers around 100 bp needed a dedicated investigation; some runs failed
+with "no amplification" and were redone.
 
 ## Where this connects
 

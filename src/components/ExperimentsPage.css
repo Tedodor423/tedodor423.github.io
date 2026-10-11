@@ -95,27 +95,30 @@
   font-size: 0.95rem;
 }
 
-.xp-menu-label {
-  /* A label, so it always starts its own line above the block name. */
-  display: block;
-  width: fit-content;
-  margin-bottom: 0.15rem;
+/* A numbered block reads "1. <name>", the name hanging off the number so a
+   name that wraps lines up under its own first word, not under the number. */
+.xp-menu-block:has(.xp-menu-number) {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 0.4rem;
+  align-items: baseline;
+}
+
+.xp-menu-number {
   padding: 0 0.3rem;
   border-radius: var(--radius);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
 }
 
-/* The block being read. Honey as a fill behind its label, which is the one
+/* The block being read. Honey as a fill behind its number, which is the one
    way the palette note in brand.css allows honey near text. */
 .xp-menu-block[aria-current] {
   color: var(--ink);
 }
 
-.xp-menu-block[aria-current] .xp-menu-label {
+.xp-menu-block[aria-current] .xp-menu-number {
   background: var(--honey);
 }
 

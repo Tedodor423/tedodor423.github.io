@@ -4,12 +4,22 @@ name: Professor Jeff Barrick
 role: Hannah Distinguished Professor of Microbiology, Genetics & Immunology and Entomology, Michigan State University
 place: East Lansing, Michigan
 region: United States
+group: Academics
 lat: 42.73
 lon: -84.48
+hex: 37, 10
 photo: barrick
 date: 27 May 2026
 provisional: Q3
 ---
+
+## Key points
+
+- Having engineered *S. alvi* to protect honeybees from Varroa, he provided valuable information on how we might approach **optimising dsRNA yield** in *S. alvi* and **control the T7 system**
+- He highlighted methods that could be used to quantify dsRNA, such as a split YFP system, but we decided against this method due to its **low specificity**. This encouraged us to look further into **developing an aptamer-based method of detection**.
+- As RNase III would degrade the dsRNA, he discussed strategies for maximising dsRNA accumulation and uptake, such as **knocking out the gene encoding RNase III**, utilising dsRNA that can fold into **paper clip RNA**, or **targeting dsRNA to extracellular vesicles**
+- Relating the laboratory work to the real world, commercially kept bees were often regularly supplemented with sugar, thus inducers like **vanillic acid** would be very suitable as they could be **incorporated into the feed**
+- He shared **regulatory constraints** associated with the live *S. alvi* therapeutic, which encouraged us to adopt the more feasible **heat inactivated and dried yeast** option instead
 
 ## Why we interviewed
 

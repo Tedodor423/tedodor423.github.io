@@ -57,13 +57,19 @@ Four things follow for how you write:
   words we have actually written, which means a term spelled two ways across
   two pages is findable under both, and a term misspelled everywhere is
   findable only by the misspelling.
-- **The stakeholder profiles are searched too**, by name, role, place, quote
-  and what we learnt, and a result links to the profile itself. The four
-  interviews carrying `consent` in `src/data/stakeholders.ts` are left out of
-  the index entirely, so they cannot be found by typing the name the page is
-  withholding. Delete a `consent` field when the review lands and that profile
-  renders and becomes searchable in the same move; add one and it disappears
-  from both.
+- **What the components hold is searched too.** The stakeholder interviews
+  (name, role, place, key points, quote, what we learnt), the seven HIVE questions and
+  their write-ups, the timeline, the engineering cycles and the workstreams
+  behind the comb, the home deck's slides and the colony-loss map's caption
+  are all read from the same data the components render, and a result opens
+  what it matched: the question with its write-up unfolded at the stage, the
+  interview in the record at the foot of the page, the hexagon, the evidence under a charge. The rule
+  is that nothing is indexed that a reader cannot then see on the page the
+  result points at. Interviews carrying `consent-status` in
+  `src/content/stakeholders/` are left out of the index entirely, so they
+  cannot be found by typing the name the page is withholding. Delete that
+  field when the review lands and the profile renders and becomes searchable
+  in the same move; add one and it disappears from both.
 - **TODOs are searchable too.** `> **TODO —** ...` blocks show up in
   results like any other text. That is deliberate: it is the same honesty as
   showing them on the page. It is also a second reason to delete them as they
@@ -91,8 +97,9 @@ stakeholder-map
 The names that exist are listed in `SLOTS` in `src/components/MarkdownPage.tsx`;
 a name that is not there renders as an ordinary code block, so a typo is visible
 on the page rather than silently blank. Any content a component shows must also
-be reachable as text on the page — the stakeholder map, for instance, renders its
-full record underneath itself. Nothing may exist only behind a hover.
+be reachable as text on the page — the stakeholder map's cards, for instance, are
+all in the `stakeholder-record` at the foot of the same page. Nothing may exist
+only behind a hover.
 
 **Images are not in the repo.** Every image is uploaded to `static.igem.wiki` via
 [the uploads tool](https://teams.igem.org/go/deliverables/wiki/uploads) and

@@ -30,6 +30,8 @@ export interface PageEntry {
   content: string;
   lead?: string;
   layout?: Page["layout"];
+  centredTitle?: boolean;
+  titleInBody?: boolean;
   switcher?: SwitchInfo;
 }
 
@@ -50,6 +52,8 @@ export const getPathMapping = (): Record<string, PageEntry> => {
       content: page.content,
       lead: page.lead,
       layout: page.layout,
+      centredTitle: page.centredTitle,
+      titleInBody: page.titleInBody,
     };
     page.children?.forEach(addPage);
 

@@ -1,9 +1,11 @@
 ---
 order: 210
 name: Susan Curran, Luis Molero and Claire Gill
+label: Scottish Government Honey Bee Health Team
 role: Scottish Government Honey Bee Health Team
 place: Edinburgh
 region: United Kingdom
+group: Regulators
 lat: 55.95
 lon: -3.19
 photo: scottish-government--molero
@@ -11,6 +13,12 @@ date: 6 August 2026
 photo-shows: Luis Molero
 provisional: Q1, Q3, Q4, Q6
 ---
+
+## Key points
+
+- Varroa recognised as **top 3 threat to Scotland** → **global problem beyond our 2 main case studies**
+- Concern over **pesticide contamination in honey**
+- **Supported biocontrol therapeutic** but stated **complex regulations**
 
 ## Why we interviewed
 

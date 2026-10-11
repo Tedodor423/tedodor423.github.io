@@ -4,11 +4,19 @@ name: Tom Hartley
 role: Senior Certification Officer and Inspector, Soil Association Certification
 place: Bristol
 region: United Kingdom
+group: Regulators
 lat: 51.45
 lon: -2.59
 date: 27 July 2026
 questions: Q3, Q4, Q6
 ---
+
+## Key points
+
+- **GMOs are fundamentally incompatible with organic production standards**, including certain products produced using GMOs – if a GMO is used anywhere in the production pathway, a product can **lose its organic status**
+- Organic compatibility therefore depends on more than whether the final treatment contains a living GMO; **its production process and method of use also matter**.
+- A product could **satisfy conventional regulatory requirements while still being incompatible with organic certification**.
+- Hartley said that our **heat-killed yeast delivery method could potentially work**
 
 ## Why we interviewed
 

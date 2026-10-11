@@ -4,12 +4,23 @@ name: Office of the Gene Technology Regulator
 role: Australian Government agency
 place: Canberra
 region: Australia
+group: Regulators
 lat: -35.28
 lon: 149.13
 date: 24 July 2026
 questions: Q4, Q6
 anchors: Q3
 ---
+
+## Key points
+
+- A **non-living engineered yeast product would not be regulated by the OGTR**, but the living engineered *S. alvi* delivery method **would fall within its domain**
+- Constitutive and inducible *S. alvi* systems would both be regulated similarly by the OGTR; **an inducible switch would change aspects of the risk assessment but wouldn’t fundamentally change the regulatory route**.
+- One of the most important concerns would be **effects on non-target species**, including native bees, mites and other organisms that the bacterium or dsRNA might reach.
+- Regulators would want evidence addressing whether the engineered bacterium could **spread between colonies or colonize other insect species** and, if so, what consequences this could have
+- **The applicant is responsible for providing sufficient evidence of safety**; there is no one universal set of experiments because GM organisms and their potential risks vary substantially
+- If the engineered bacterium or its products were **found in honey**, then **additional assessment** would be needed
+- It is important to note that, unlike some other regulatory institutions, **OGTR does not look at potential benefits** of releasing GMO when conducting the assessment.
 
 ## Why we interviewed
 

@@ -1,7 +1,7 @@
 # The stakeholder record — one file per conversation
 
-Everything the map, the search index and the roster show about a
-conversation comes from these files. Edit the file, save, done: no code
+Everything the map, the search index and the interviews at the foot of
+the human practices page show about a conversation comes from these files. Edit the file, save, done: no code
 changes. The filename (without `.md`) is the conversation's id, which the
 question files in `../questions/` refer to.
 
@@ -27,10 +27,12 @@ question files in `../questions/` refer to.
 
 | Field            | Meaning                                                            |
 | ---------------- | ------------------------------------------------------------------ |
-| `order`          | Sort key for the roster and the map's cell assignment. Spaced by 10 so a new conversation can slot in between. |
+| `order`          | Sort key within a group of the interviews, and for the map's cell assignment. Spaced by 10 so a new conversation can slot in between. |
 | `name`, `role`   | As written in the source.                                          |
+| `label`          | Only for a group interview: what the write-up heads it with (`Comvita`). Shown as the heading and in the list, with `name` under it. |
 | `place`          | Human-readable place, shown on the card.                           |
-| `region`         | Country grouping for the roster.                                   |
+| `region`         | Country, shown instead of `place` for a withheld interview.        |
+| `group`          | `Academics`, `Industry`, `Beekeepers` or `Regulators`, as the write-up groups them. |
 | `lat`, `lon`     | A plotting position, not a claim about where a person was sitting. |
 | `hex`            | Only if the nearest map cell picks the wrong landmass: `col, row`. |
 | `photo`          | Basename of the photograph, no extension.                          |
@@ -44,14 +46,21 @@ question files in `../questions/` refer to.
 
 ## Body sections
 
-Four optional sections, these exact headings. Why, learn and impact are
-the three sections of the box that opens when a reader selects someone on
-the map, under the same headings; the quote is shown inside the learn
-section.
-A section left empty is shown with its heading and nothing under it, so
-write nothing rather than a placeholder.
+Five optional sections, these exact headings. The key points are what
+the box shows when a reader selects someone on the map, with a link down
+to the whole interview at the foot of the page, where all five appear
+under the same headings; the quote is shown inside the learn section. A
+file with no key points but a bulleted "What we learned" shows those
+bullets in the box instead.
+A section left empty (other than the key points) is shown with its heading
+and nothing under it, so write nothing rather than a placeholder.
 
 ```markdown
+## Key points
+
+- The write-up's bullet points, one per bullet, **bold** on the phrase
+  that matters.
+
 ## Why we interviewed
 
 Why we went to this person, where the team has written it down.

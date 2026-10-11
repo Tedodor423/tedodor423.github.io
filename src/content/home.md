@@ -94,7 +94,7 @@ against _Varroa_ is anticipated by prior patents, and we say so on
 | What we did                                     | Status  | Evidence            |
 | ----------------------------------------------- | ------- | ------------------- |
 | Designed candidate RNAs                          | TODO    | [RNA design](/software)       |
-| Built modular dsRNA constructs                   | TODO    | [Parts](/parts)               |
+| Built modular dsRNA constructs                   | TODO    | [Parts](/results#parts)               |
 | Measured dsRNA uptake and stability              | TODO    | [Measurement](/measurement)   |
 | Developed NectarDesigner                         | TODO    | [RNA design](/software)       |
 | Engineered and tested the yeast production system| TODO    | [Yeast](/wet-lab-experiments#yeast-production)               |

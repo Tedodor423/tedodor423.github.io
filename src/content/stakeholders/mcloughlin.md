@@ -4,8 +4,10 @@ name: Austein McLoughlin
 role: Secretariat of the Convention on Biological Diversity
 place: Montreal
 region: Canada
+group: Regulators
 lat: 45.5
 lon: -73.57
+hex: 43, 8
 photo: mcloughlin
 provisional: Q2, Q3
 ---

@@ -3,9 +3,9 @@
  * The content lives where the team can edit it without touching code:
  *
  *   - one file per conversation in `src/content/stakeholders/*.md`
- *     (frontmatter for the fields, sections for why we interviewed them,
- *     what we learned, the verbatim quote and how we implemented the
- *     advice);
+ *     (frontmatter for the fields, sections for the key points, why we
+ *     interviewed them, what we learned, the verbatim quote and how we
+ *     implemented the advice);
  *   - one file per question in `src/content/questions/q1.md` … `q7.md`
  *     (frontmatter for the title and the per-stage people, sections for the
  *     summary and each stage of the cycle panel).
@@ -55,16 +55,31 @@ const STAGE_KEYS: Record<HiveStage, string> = {
   E: "evaluate",
 };
 
+/** The kinds of stakeholder, in the order the team's write-up groups them. */
+export const GROUPS = [
+  "Academics",
+  "Industry",
+  "Beekeepers",
+  "Regulators",
+] as const;
+
+export type StakeholderGroup = (typeof GROUPS)[number];
+
 export interface Stakeholder {
   id: string;
   /** As written in the source. */
   name: string;
+  /** What the write-up heads a group interview with, where it is not the
+   * names: "Comvita", "United States Federal Regulators". */
+  label?: string;
   /** Role and institution, as written in the source. */
   role: string;
   /** Human-readable place, shown on the card. */
   place: string;
-  /** Grouping key for the roster. */
+  /** Country, shown instead of `place` for a withheld interview. */
   region: string;
+  /** Which kind of stakeholder, as the write-up groups them. */
+  group: StakeholderGroup;
   lat: number;
   lon: number;
   /** Interview date. Omitted where the source records none. */
@@ -75,6 +90,8 @@ export interface Stakeholder {
   anchors?: QuestionId[];
   /** Tags not stated in the table, inferred from profile content. */
   provisional?: QuestionId[];
+  /** The write-up's bullet points: what the card on the map shows. */
+  points: string[];
   /** Why the team chose this conversation, where the write-up says. */
   why?: string;
   /** What we learnt from them, transcribed: bullets or paragraphs. */
@@ -279,15 +296,24 @@ export const STAKEHOLDERS: Stakeholder[] = Object.entries(stakeholderFiles)
       warn(`${file}: photo on a withheld entry is ignored`);
     }
     const hex = list(f.hex).map(Number);
+    const group = GROUPS.find((g) => g === f.group);
+    if (!group) {
+      warn(
+        `${file}: group "${f.group ?? ""}" is not one of ${GROUPS.join(", ")}`,
+      );
+    }
     const learnt = withheld
       ? { items: [], list: false }
       : pointsOrParagraphs(parsed.sections["What we learned"]);
     const s: Stakeholder = {
       id,
       name: f.name,
+      label: f.label || undefined,
       role: f.role,
       place: f.place ?? f.region,
       region: f.region,
+      // Unknown or missing goes last rather than vanishing from the record.
+      group: group ?? "Regulators",
       lat: Number(f.lat),
       lon: Number(f.lon),
       date: f.date || undefined,
@@ -296,6 +322,7 @@ export const STAKEHOLDERS: Stakeholder[] = Object.entries(stakeholderFiles)
       provisional: f.provisional ? qids(f.provisional, file) : undefined,
       // The body of a withheld file is ignored on purpose: nothing from
       // that conversation may render until consent is resolved.
+      points: withheld ? [] : bullets(parsed.sections["Key points"]),
       why: withheld ? undefined : flow(parsed.sections["Why we interviewed"]),
       learnt: learnt.items,
       learntIsList: learnt.list,
@@ -332,6 +359,31 @@ export function questionsOf(s: Stakeholder): QuestionId[] {
     ...new Set([...(s.anchors ?? []), ...s.questions, ...(s.provisional ?? [])]),
   ];
 }
+
+/** What the card on the map lists: the write-up's bullet points, or, for a
+ * record written only as bullets, those (they are its key points). */
+export function cardPointsOf(s: Stakeholder): string[] {
+  if (s.points.length) return s.points;
+  return s.learntIsList ? s.learnt : [];
+}
+
+/** The heading a conversation goes under: the label for a group interview,
+ * otherwise the names. */
+export const titleOf = (s: Stakeholder) => s.label ?? s.name;
+
+/**
+ * Where a conversation's full write-up sits, at the foot of the human
+ * practices page (StakeholderRecord). The card's "Read full interview" link,
+ * the list beside the record and the search index all use this, so they
+ * cannot drift apart.
+ */
+export function recordAnchor(id: string): string {
+  return `sm-${id}`;
+}
+
+/** The stakeholder map itself, which the small map beside the interviews
+ * links back up to. */
+export const MAP_ANCHOR = "stakeholder-map";
 
 /* ---------- the questions ---------- */
 
@@ -396,4 +448,39 @@ export function stageOf(q: QuestionId, id: string): HiveStage {
 /** Whether the question file marks this conversation as central (`*`). */
 export function isKeyTo(q: QuestionId, id: string): boolean {
   return QUESTION_CYCLES[q].stages.some((st) => st.key.includes(id));
+}
+
+/* ---------- where a search result lands ---------- */
+
+/**
+ * The fragments that open a question on the map: `hive-q3` opens Q3 on its
+ * summary, `hive-q3-verdict` opens it with the HIVE write-up unfolded at
+ * Verdict. The search index builds results with these (src/utils/search.ts)
+ * and StakeholderMap answers to them, so the two cannot drift apart.
+ */
+export function questionAnchor(q: QuestionId): string {
+  return `hive-${q.toLowerCase()}`;
+}
+
+export function stageAnchor(q: QuestionId, stage: HiveStage): string {
+  return `${questionAnchor(q)}-${STAGE_KEYS[stage]}`;
+}
+
+/** What a fragment asks the map to open, or null for any other fragment. */
+export function parseHiveAnchor(
+  hash: string,
+): { q: QuestionId; stage: HiveStage | null } | null {
+  let id: string;
+  try {
+    id = decodeURIComponent(hash.replace(/^#/, ""));
+  } catch {
+    return null;
+  }
+  const m = /^hive-(q\d)(?:-([a-z]+))?$/.exec(id);
+  if (!m) return null;
+  const q = m[1].toUpperCase() as QuestionId;
+  if (!QUESTION_IDS.includes(q)) return null;
+  if (!m[2]) return { q, stage: null };
+  const stage = STAGE_ORDER.find((s) => STAGE_KEYS[s] === m[2]);
+  return stage ? { q, stage } : null;
 }

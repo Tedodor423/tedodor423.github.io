@@ -4,12 +4,21 @@ name: Michael Morrison
 role: Senior Researcher in Social Science, HeLEX (Centre for Health, Law and Emerging Technologies), University of Oxford
 place: Oxford
 region: United Kingdom
+group: Regulators
 lat: 51.75
 lon: -1.26
 photo: morrison
 date: 30 July 2026
 provisional: Q3
 ---
+
+## Key points
+
+- As not much social science research covers dsRNA and Varroa mites at the moment, aside from surveys, he suggested that we can refer to existing literature on **gene drives and other technologies to control mosquito populations** to gauge potential opinions towards our project
+- When extrapolating the data from social science studies not directly investigating bees and Varroa, we should be aware of **‘profiles’** as there are **differing attitudes towards different insects and arachnids**
+- He highlighted that **attitudes towards our GM-based biotechnology may not be as polarised as we expect**, influencing our survey design for beekeepers
+- He stated that we should **emphasise regulations towards dsRNA specifically**, regardless of which project direction we take
+- We were recommended to **build a glossary** aimed at beekeepers and members of the public
 
 ## Why we interviewed
 

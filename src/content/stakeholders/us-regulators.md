@@ -1,14 +1,23 @@
 ---
 order: 140
 name: Mike Mendelsohn and Alan Reynolds (EPA), Adam Moyer and Laura Epstein (FDA), Alan Pearson (USDA)
+label: United States Federal Regulators
 role: US Environmental Protection Agency, Food and Drug Administration, and Department of Agriculture
 place: Washington, DC
 region: United States
+group: Regulators
 lat: 38.9
 lon: -77.04
 date: 14 August 2026
 questions: Q2, Q3, Q4, Q6
 ---
+
+## Key points
+
+- The US regulatory framework involves **multiple federal agencies**, with jurisdiction changing based on how a biotechnology functions and is intended to be used.
+- Whether a treatment involves a living GMO or non-living engineered product **does not automatically determine whether its regulatory pathway will be easier or harder**, it just requires different evidence proving it’s safe
+- Regulators would consider **bee safety, environmental impacts, human/user safety** and **whether components enter honey or other food products**
+- Our proposed approach may be considered **an animal drug rather than a pesticide** because it’s intended to treat bees
 
 ## Why we interviewed
 

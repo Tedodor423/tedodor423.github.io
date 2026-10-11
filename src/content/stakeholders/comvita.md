@@ -1,9 +1,11 @@
 ---
 order: 70
 name: Dr Jackie Evans, Dr John Oliver, Sarah Kenyon
+label: Comvita
 role: Chief Science Officer, Head of Research, and Head of Quality and Regulatory Affairs, Comvita
 place: New Zealand
 region: New Zealand
+group: Industry
 lat: -37.79
 lon: 176.32
 photo: comvita--evans
@@ -12,6 +14,14 @@ date: 23 July 2026
 questions: Q5
 provisional: Q3
 ---
+
+## Key points
+
+- In New Zealand, Varroa resulted in about **10% of honeybee population decline**
+- As New Zealand has a **strict GMO ban**, we were suggested to investigate further in the **yeast extract direction** rather than delivery with *S. alvi*, which would be much more feasible from a regulatory standpoint
+- They suggested that **cost would be the main deciding factor** to determine whether to adopt our treatment, as honey is already rather lowly priced in stores, motivating us to **conduct economic modelling** to estimate costs of our project
+- Besides the effects of our project on honeybee populations, we were recommended to evaluate the **direct effects of our project on honey production**, since there has been some evidence that selective breeding programmes for Varroa resistant traits populations can result in lower honey production
+- They informed us that **gene drive in Varroa is poor** so it would not be a viable method of control for Varroa, thus alternative methods of control like our project would be increasingly important
 
 ## Why we interviewed
 

@@ -65,7 +65,10 @@ const App = () => {
             }
           />
           {Object.entries(pathMapping).map(
-            ([path, { title, lead, content, layout, switcher }]) => (
+            ([
+              path,
+              { title, lead, content, layout, switcher, centredTitle, titleInBody },
+            ]) => (
               <Route
                 key={path}
                 path={path}
@@ -73,13 +76,15 @@ const App = () => {
                   <>
                     {/* Home opens on the full-screen hero instead of the
                         standard header band; the hero carries the page's
-                        <h1>, so heading order stays semantic. */}
+                        <h1>, so heading order stays semantic. A page marked
+                        titleInBody opens on a figure that does the same. */}
                     {path === "/" ? (
                       <HomeHero />
-                    ) : (
+                    ) : titleInBody ? null : (
                       <Header
                         title={switcher ? switcher.title : title}
                         lead={switcher ? switcher.lead : lead}
+                        centred={centredTitle}
                       />
                     )}
                     <div className="container">

@@ -4,12 +4,20 @@ name: Lord John Krebs
 role: Zoologist and behavioural ecologist, member of the House of Lords; first Chairman of the UK Food Standards Agency (2000-2005); Principal of Jesus College, Oxford (2005-2015)
 place: Oxford
 region: United Kingdom
+group: Regulators
 lat: 51.75
 lon: -1.26
 photo: krebs
 date: 23 July 2026
 questions: Q3, Q4, Q6
 ---
+
+## Key points
+
+- Deployment of our product in the UK could interact with **three different regulatory areas: contained GMO use, environmental release, and food/feed safety**
+- Environmental release of an engineered organism would involve the **Advisory Committee on Releases to the Environment (ACRE)**, while potential impacts on honey and other bee products would involve the **Food Standards Agency (FSA)**
+- Even though our product is used for bees rather than the final food product, regulators would want to make sure **none of the components could impact honey, beeswax, pollen, or the environment**
+- Europe has generally **negative public perception surrounding GM technologies** with multiple countries explicitly banning them in agriculture - Krebs suggesting framing the discussion around **how our product will protect bees and contribute to sustainable food production**
 
 ## Why we interviewed
 

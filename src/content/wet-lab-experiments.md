@@ -397,7 +397,7 @@ Full-length hairpin RNA accumulates predominantly **intact** in
 _S. cerevisiae_ (~2 ng per µg total yeast RNA), is degraded in _E. coli_ HT115,
 and is processed in _N. benthamiana_ (Zhong et al. 2019, _Genes_ 10:458)
 `[LIT]`. Yeast has no Dicer, so nothing in the cell recognises and cleaves the
-loop that the [construct design](/parts) exists to build. **The chassis is chosen for the
+loop that the [construct design](/results#parts) exists to build. **The chassis is chosen for the
 absence of a machine, not the presence of one.**
 
 **2 · Fermentation at scale is a solved problem.** Industrial yeast
@@ -586,7 +586,7 @@ term is the design target the wet lab has to hit.
 ## Where this connects
 
 [Wet lab lab book](/wet-lab-labbook) ·
-[RNA design](/software) · [Parts](/parts) · [Measurement](/measurement) ·
+[RNA design](/software) · [Parts](/results#parts) · [Measurement](/measurement) ·
 [Bee lab experiments and protocols](/bee-lab-experiments) ·
 [Results](/results) · [Engineering](/engineering) ·
 [Contribution](/contribution) · [Timeline](/timeline)

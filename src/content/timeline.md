@@ -1,28 +1,10 @@
-Eight months, from a room of fourteen students with no project to a wiki with
-a deadline. The short version is that the team's first project was rejected by
-its own supervisor in March, the replacement was chosen by a vote in April, and
-the delivery platform at the centre of it was changed in July by a conversation
-about the price of honey **rather than by an experiment**.
-
-## The eight months
-
-The grid runs time down and workstreams across, because a single list of dates
-hides the thing that actually happened: five threads of work running at once
-and constantly redirecting each other. A mite shortage in the bee lab in June
-rewrote the wet lab's production arithmetic. An interview in July retired a
-chassis that had had three months of design behind it. Feedback at a mini
-jamboree in August rebuilt this wiki.
-
-Follow a thread to watch one question travel between the lanes. The full
-record, all of it, is written out as text underneath the grid.
-
 ```component
 project-timeline
 ```
 
 ## Month by month
 
-The same record as the grid, in order, with one line per milestone.
+The same record as the chart, in order, with one line per milestone.
 
 ### February 2026
 

@@ -4,12 +4,20 @@ name: Sarah Coy
 role: Responsible Exploitation and Translation Officer, Engineering Biology, University of Oxford
 place: Oxford
 region: United Kingdom
+group: Academics
 lat: 51.75
 lon: -1.26
 photo: coy
 date: 8 September 2026
 provisional: Q3
 ---
+
+## Key points
+
+- She emphasised the need to think about **what it takes for people to trust our technology** and be confident in our technology
+- She affirmed the **diversity of stakeholders** we approached, noting the importance of **consulting different regulatory agencies from different geographical locations**, and agreed with bundling stakeholders for presentation on our wiki page to outline how the conversations shaped our learning and decisions
+- It was important to consider the **affordability and scalability of the whole production process** were two important factors to take into account, and agreed with our decision to adopt the **heat-killed yeast approach** from this standpoint
+- For long term project development, we could consider speaking to the **Bioindustry Association and European Biosolutions Coalition** to advocate for and accelerate regulatory approval for our technology, as well as consider **exit strategies**
 
 ## Why we interviewed
 

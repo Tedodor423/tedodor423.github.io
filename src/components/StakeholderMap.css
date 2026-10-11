@@ -25,6 +25,10 @@
   margin-block: 2.5rem;
   width: min(68rem, calc(100vw - 4rem));
   margin-inline: calc((100% - min(68rem, calc(100vw - 4rem))) / 2);
+  /* Where "Go back to main map" lands (StakeholderRecord): under the menu
+   * here, and flush with the window from 48rem, where the stage fills it
+   * and the menu steps aside. */
+  scroll-margin-top: 7rem;
 }
 
 .sm-heading {
@@ -72,6 +76,20 @@
 
 .sm-pop {
   order: 5;
+}
+
+/* Where a search result lands (StakeholderMap.tsx). On a narrow screen the
+ * pane and its stages carry the ids, under the menu like any heading; on a
+ * wide one the markers at the top of the pin do, zero-sized so the stage
+ * sits exactly where it did. */
+.sm-qpanel[id],
+.sm-qstage[id] {
+  scroll-margin-top: 7rem;
+}
+
+.sm-landing {
+  height: 0;
+  overflow: hidden;
 }
 
 /* ---------- the question picker ---------- */
@@ -171,7 +189,7 @@
 
 .stakeholder-map .sm-qpanel .sm-qsummary {
   margin-bottom: 0.6em;
-  font-size: 1.35em;
+  font-size: 1.55em;
   line-height: 1.5;
   color: var(--ink);
 }
@@ -291,7 +309,7 @@
   align-items: center;
   gap: 0.45em;
   margin: 0;
-  font-size: 1.13em;
+  font-size: 1.25em;
   color: var(--ink);
 }
 
@@ -322,6 +340,7 @@
 
 .stakeholder-map .sm-qpanel .sm-qstage-body {
   margin-top: 0.2em;
+  font-size: 1.2em;
   color: var(--text);
 }
 
@@ -345,6 +364,20 @@
  * transition carries the slide. */
 html[data-map-stage] .site-nav {
   transform: translateY(-100%);
+}
+
+/* While the map is the small one beside the interviews (set by
+ * src/utils/mapMorph.ts once the stage starts to leave), the small map's
+ * frame is flown over this one: the drawing and the panels floating on it
+ * fade out from under it as the morph begins (--sm-fade, 1 to 0) and take no
+ * pointer until they come back. */
+.stakeholder-map[data-morphing] .sm-svg,
+.stakeholder-map[data-morphing] .sm-head,
+.stakeholder-map[data-morphing] .sm-filterbox,
+.stakeholder-map[data-morphing] .sm-qpanel,
+.stakeholder-map[data-morphing] .sm-pop {
+  opacity: var(--sm-fade, 1);
+  pointer-events: none;
 }
 
 /* ---------- the map itself ---------- */
@@ -560,8 +593,7 @@ html[data-map-stage] .site-nav {
 
 /* Inside the card the small type is sized off the card, in em, so the one
  * font-size the card fit sets (StakeholderMap.tsx) scales all of it. */
-.sm-pop .sm-meta,
-.stakeholder-map .sm-pop .sm-sec .sm-sec-head {
+.sm-pop .sm-meta {
   font-size: 0.92em;
 }
 
@@ -609,22 +641,6 @@ html[data-map-stage] .site-nav {
 }
 
 /* ---------- one profile ---------- */
-
-.sm-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.sm-profile {
-  padding: 0.55rem 0;
-  border-bottom: 1px solid var(--rule);
-}
-
-.sm-profile:last-child {
-  border-bottom: 0;
-  padding-bottom: 0;
-}
 
 .sm-name {
   margin: 0;
@@ -683,76 +699,53 @@ button.sm-tag:hover {
   color: var(--ink);
 }
 
-/* Verbatim, as the team transcribed it. Set in italic with the quotation marks
- * in the text, and no rule beside it: the words are the emphasis. */
-.sm-quote {
-  margin: 0.45rem 0 0;
-  font-style: italic;
-  color: var(--ink);
-}
-
-.sm-learnt {
-  margin: 0.3rem 0 0;
-  padding-left: 1rem;
-}
-
-.sm-learnt li {
-  margin-bottom: 0.25rem;
-}
-
-/* The record's three sections, under the team's headings, separated by a
- * rule. A heading with nothing under it is a section not yet written. */
-.sm-sec {
-  margin-top: 0.6rem;
-  padding-top: 0.45rem;
+/* The write-up's key points, the body of a selected card, under a rule. */
+.sm-points {
+  margin: 0.6rem 0 0;
+  padding: 0.5rem 0 0 1rem;
   border-top: 1px solid var(--rule);
 }
 
-.stakeholder-map .sm-sec .sm-sec-head {
-  margin: 0;
-  font-family: var(--font-heading);
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--ink);
+.sm-points li + li {
+  margin-top: 0.3rem;
 }
 
-.sm-sec p {
-  margin: 0.3rem 0 0;
-}
-
-/* The phrases the team marked as the point of each section. Restated at
- * .stakeholder-map depth so the comb band's light `strong` rule cannot
- * bleach them on the white card. */
-.stakeholder-map .sm-sec strong {
+/* The phrases the team marked as the point. Restated at .stakeholder-map
+ * depth so the comb band's light `strong` rule cannot bleach them on the
+ * white card. */
+.stakeholder-map .sm-points strong {
   font-weight: 700;
   color: var(--ink);
 }
 
-/* ---------- the text record ---------- */
-
-/* Not a duplicate of the map: it is the accessible and printable copy of the
- * same record, and the reason none of this is hover-only. */
-.sm-roster {
-  max-width: var(--measure);
-  margin-top: 1.25rem;
-  font-size: 0.82rem;
+/* On to the whole interview at the foot of the page: the honey fill the
+ * pressed question row and the HIVE button use, the arrow pointing down the
+ * page to where it goes. Colours restated at depth for the same comb reason,
+ * links included. */
+.sm-more {
+  margin: 0.75rem 0 0;
 }
 
-.sm-roster > summary {
-  padding: 0.4rem 0;
-  font-family: var(--font-heading);
-  font-weight: 600;
+.stakeholder-map .sm-pop .sm-read {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: 0.4em 0.8em;
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--honey);
   color: var(--ink);
-  cursor: pointer;
+  font-family: var(--font-heading);
+  font-size: 1.05em;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
 }
 
-.sm-roster-region h4 {
-  margin: 1.1rem 0 0.2rem;
-  padding-bottom: 0.15rem;
-  border-bottom: 2px solid var(--honey);
-  font-size: 0.95rem;
+.stakeholder-map .sm-pop .sm-read:hover,
+.stakeholder-map .sm-pop .sm-read:focus-visible {
+  background: var(--ink);
+  color: var(--honey);
 }
 
 /* ---------- the fullscreen stage, from 48rem ---------- */
@@ -767,14 +760,15 @@ button.sm-tag:hover {
     width: 100vw;
     margin-inline: calc(50% - 50vw);
     margin-block: 3rem;
+    scroll-margin-top: 0;
   }
 
   /* The pin: the stage is sticky inside a taller wrapper, so the whole map
    * holds briefly and then releases. The hold is short because a reader
    * who stops near the map is settled onto it or past it (StakeholderMap.tsx);
-   * the extra 35vh is what scrolling feels as the hold, and what the move
-   * past the map spends fading the stage out. The nav bar hides itself on
-   * the way down, so the stage gets the full viewport. */
+   * the extra 35vh is what scrolling feels as the hold. The stage neither
+   * fades nor shrinks on the way in or out. The nav bar hides itself on the
+   * way down, so the stage gets the full viewport. */
   .sm-pin {
     height: 135vh;
   }
@@ -792,11 +786,6 @@ button.sm-tag:hover {
     position: absolute;
     inset: 0;
     display: block;
-    /* Driven per scroll frame from StakeholderMap.tsx; the transition only
-     * smooths discrete wheel steps. */
-    transition:
-      transform 160ms linear,
-      opacity 160ms linear;
   }
 
   .sm-canvas {
@@ -916,13 +905,15 @@ button.sm-tag:hover {
     animation: sm-pane-in 380ms ease both;
   }
 
+  /* A wheel that has taken the write-up to either end goes on to scroll the
+   * page (src/utils/wheelChain.ts), so the pane never holds the reader on
+   * the map. */
   .stakeholder-map .sm-qpanel-scroll {
     display: flex;
     flex-direction: column;
     flex: 1 1 auto;
     min-height: 0;
     overflow-y: auto;
-    overscroll-behavior: contain;
     padding-right: 0.45rem;
   }
 
@@ -932,16 +923,27 @@ button.sm-tag:hover {
    * keeps to its left, and the stages start below it. In rem, not em, so
    * the clearance holds whatever size the type is fitted to. */
   .stakeholder-map .sm-qpanel-head {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
     min-height: 4.3rem;
     padding-right: 7.5rem;
   }
 
-  /* The pane slides in from the side it lives on, the map making way for it
-   * at the same pace. */
-  /* Folded, the summary and its button sit a little above the middle of
-   * the pane; auto margins give way to the top if the summary is long. */
+  /* Folded, the heading, the summary and its button sit together a little
+   * above the middle of the pane, the heading hard against the summary;
+   * auto margins give way to the top if the summary is long. Unfolded, the
+   * heading goes back to the top and the stages scroll beneath it. */
+  .stakeholder-map .sm-qpanel:not(.is-open) .sm-qpanel-head {
+    margin-top: auto;
+  }
+
+  .stakeholder-map .sm-qpanel-scroll:not(.is-open) {
+    flex: 0 1 auto;
+    margin-bottom: auto;
+  }
+
   .stakeholder-map .sm-qpanel-scroll:not(.is-open) .sm-qflow > .sm-qintro {
-    margin-block: auto;
     padding-bottom: 12%;
   }
 
@@ -983,7 +985,6 @@ button.sm-tag:hover {
   .sm-zoom,
   .sm-face,
   .sm-silhouette,
-  .sm-frame,
   .sm-canvas {
     transition: none;
   }

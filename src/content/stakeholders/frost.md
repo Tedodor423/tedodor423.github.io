@@ -4,12 +4,20 @@ name: Elizabeth Frost
 role: Technical Specialist Honey Bees, NSW Department of Primary Industries
 place: Paterson, New South Wales
 region: Australia
+group: Regulators
 lat: -32.69
 lon: 151.6
 photo: frost
 date: 12 August 2026
 provisional: Q1, Q5, Q6
 ---
+
+## Key points
+
+- Essentially **all of the legal synthetic miticide options would be unusable soon due to resistance**
+- There are some organic/non-synthetic treatment options but **not all of those can be used in the high temp. or very prolonged nectar flows**. Confirms that **oxalic acid is the most popular treatment** for people who have a dual resistant mite.
+- Compares our solution to Norroa, thinks that **our delivery method would fit better within the context of the Australian environment**.
+- Confirms that our NECTAR could also **work for other bee pests and diseases**.
 
 ## Why we interviewed
 

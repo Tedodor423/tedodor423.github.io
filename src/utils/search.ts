@@ -19,7 +19,7 @@
  * WHAT IT SEARCHES
  *
  * Not whole pages. A page is split into passages at its headings, so a result
- * can say "Parts, Characterisation" and link to `/parts#characterisation`
+ * can say "Results, Characterisation" and link to `/results#characterisation`
  * instead of dropping the reader at the top of four thousand words.
  *
  * Matching is substring, not whole-word: "titr" finds "titre" and "titration",
@@ -27,6 +27,16 @@
  * a word scores higher than one in the middle, so "rna" ranks "RNA design"
  * above "mRNA fragment". Several words are ANDed: each one has to appear
  * somewhere in the passage.
+ *
+ * Not only Markdown, either. Some of the wiki's text reaches the page through
+ * a component rather than the page's own file, and much of that sits behind a
+ * click: the stakeholder interviews and the seven HIVE questions on the map, the
+ * dated timeline, the engineering cycles and their workstreams behind the
+ * comb, the home deck's slides, the colony-loss map's caption and panel. Each
+ * is read from the same data the component renders (see SLOT_PASSAGES), and
+ * each result's anchor is one the component answers to, opening whatever the
+ * passage is folded inside. The rule for all of it: nothing is indexed that a
+ * reader cannot then see on the page the result points at.
  *
  * A term that appears nowhere at all is read again, twice over, in this
  * order. First with the punctuation put back, so "ecoli" finds "E. coli" and
@@ -43,14 +53,47 @@
 
 import { getPathMapping, type PageEntry } from "./getPathMapping";
 import { headingId } from "./headingId";
-import { CYCLES, LAB_NAME, cycleText } from "./dbtlCycles";
-import { STAKEHOLDERS } from "../data/stakeholders";
+import { runsText } from "./runs";
+import { CYCLES, FAMILIES, LAB_NAME, cycleText } from "./dbtlCycles";
+import {
+  QUESTION_CYCLES,
+  QUESTION_IDS,
+  STAGE_NAMES,
+  STAKEHOLDERS,
+  questionAnchor,
+  recordAnchor,
+  stageAnchor,
+  titleOf,
+} from "../data/stakeholders";
 import {
   EVENTS_BY_DATE,
   TRACK_NAMES,
   THREAD_NAMES,
   fullDate,
 } from "../data/timeline";
+import { HIVE_CORNERS } from "../data/hiveCorners";
+import {
+  BEES,
+  CHALLENGES,
+  DECK_ANCHORS,
+  MITE,
+  TREATMENTS,
+  demandText,
+  foodClaim,
+  harvestClaim,
+  miteTitle,
+  treatmentsTitle,
+} from "../data/homeDeck";
+import {
+  CAVEATS,
+  COLONY_LOSSES,
+  FEATURED,
+  FEATURED_CONTEXT,
+  NOTES,
+  SOURCES,
+  countryAnchor,
+  provenanceOf,
+} from "../data/varroa";
 
 /** One run of snippet text, either matched or not. */
 export interface Segment {
@@ -129,9 +172,11 @@ function fold(text: string): string {
 function toPlainText(markdown: string): string {
   return (
     markdown
-      // Images first: the alt text is content, the URL is not.
-      .replace(/!\[([^\]]*)\]\([^)]*\)/g, "$1")
-      .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+      // Images first: the alt text is content, the URL is not. A target may
+      // be written in angle brackets to carry a parenthesis of its own, as
+      // the question files' journal links do.
+      .replace(/!\[([^\]]*)\]\((?:<[^>]*>|[^)]*)\)/g, "$1")
+      .replace(/\[([^\]]+)\]\((?:<[^>]*>|[^)]*)\)/g, "$1")
       // Emphasis and inline code.
       .replace(/[*_~`]+/g, "")
       // Line-level markup: quote markers, list bullets, table rules.
@@ -147,7 +192,12 @@ function toPlainText(markdown: string): string {
 /** Splits one page of Markdown into passages, one per heading. */
 function passagesOf(
   path: string,
-  page: { title: string; lead?: string; content: string },
+  page: {
+    title: string;
+    lead?: string;
+    content: string;
+    layout?: PageEntry["layout"];
+  },
 ): Passage[] {
   const passages: Passage[] = [];
   const foldedTitle = fold(page.title);
@@ -156,6 +206,11 @@ function passagesOf(
   let anchor = "";
   let buffer: string[] = [];
   let fenced = false;
+  // The ids used so far on this page, with how often, and the anchor of each
+  // heading level still open above the current line: what a heading links to
+  // depends on both (see below).
+  const used = new Map<string, number>();
+  const open: { level: number; anchor: string }[] = [];
 
   const flush = () => {
     const text = toPlainText(buffer.join("\n"));
@@ -192,14 +247,58 @@ function passagesOf(
 
     flush();
     heading = toPlainText(match[2]);
-    // Only h2 to h4 carry ids in the rendered page (see MarkdownPage), so a
-    // deeper heading links to the section it sits in rather than to a
-    // fragment that does not exist.
-    if (match[1].length <= 4) anchor = headingId(heading);
+    const level = match[1].length;
+    while (open.length && open[open.length - 1].level >= level) open.pop();
+    const parent = open[open.length - 1]?.anchor ?? "";
+
+    if (level > 4) {
+      // Only h2 to h4 carry ids in the rendered page (see MarkdownPage), so
+      // a deeper heading links to the section it sits in rather than to a
+      // fragment that does not exist.
+      anchor = parent;
+    } else {
+      const id = headingId(heading);
+      const seen = used.get(id) ?? 0;
+      used.set(id, seen + 1);
+      // A heading repeated on one page ("Aim" under every block of the
+      // experiments layout, "The targets" under every goal) gets one id per
+      // copy only where the layout numbers them, as ExperimentsPage does.
+      // Elsewhere every copy renders with the same id, the browser finds the
+      // first, and a result for the second would land on the wrong one; so a
+      // later copy links to the section it sits in, which at least opens at
+      // the right place.
+      anchor = !seen
+        ? id
+        : page.layout === "experiments"
+          ? `${id}-${seen + 1}`
+          : parent;
+    }
+    open.push({ level, anchor });
   }
   flush();
 
   return passages;
+}
+
+/** One passage of component-held text, folded for matching. */
+function passage(
+  path: string,
+  page: PageEntry,
+  heading: string,
+  anchor: string,
+  text: string,
+): Passage {
+  return {
+    path,
+    title: page.title,
+    lead: page.lead,
+    heading,
+    anchor,
+    text,
+    foldedTitle: fold(page.title),
+    foldedHeading: fold(heading),
+    foldedText: fold(text),
+  };
 }
 
 /**
@@ -214,19 +313,24 @@ function passagesOf(
  * than a bug. If the consent lands, deleting the `consent` field makes the
  * profile render and become searchable in the same move.
  *
- * Indexed fields are the ones a reader can see on the card: role, place, date,
- * why we chose them, quote, what we learnt, how it changed the project. The question tags are deliberately
- * not indexed. Their titles show only in a tooltip, and a result whose match
+ * Indexed fields are the ones a reader can see in the interview's write-up at
+ * the foot of the page (StakeholderRecord): the names under a group label,
+ * role, place, date, the key points, why we chose them, quote, what we
+ * learnt, how it changed the project. The question tags are deliberately not
+ * indexed. Their titles show only in a tooltip, and a result whose match
  * cannot be found on the page it points at is worse than no result.
  */
 function stakeholderPassages(path: string, page: PageEntry): Passage[] {
   const foldedTitle = fold(page.title);
 
   return STAKEHOLDERS.filter((person) => !person.consent).map((person) => {
+    const heading = titleOf(person);
     const text = [
+      person.label ? person.name : undefined,
       person.role,
       person.place,
       person.date,
+      ...person.points,
       person.why,
       person.quote,
       ...person.learnt,
@@ -241,12 +345,11 @@ function stakeholderPassages(path: string, page: PageEntry): Passage[] {
       path,
       title: page.title,
       lead: page.lead,
-      heading: person.name,
-      // Matches the id StakeholderMap puts on the profile in its roster.
-      anchor: `sm-${person.id}`,
+      heading,
+      anchor: recordAnchor(person.id),
       text,
       foldedTitle,
-      foldedHeading: fold(person.name),
+      foldedHeading: fold(heading),
       foldedText: fold(text),
     };
   });
@@ -331,39 +434,251 @@ function cyclePassages(path: string, page: PageEntry): Passage[] {
   });
 }
 
+/**
+ * The seven HIVE questions, as passages: one for each question's summary and
+ * one for each stage of its write-up.
+ *
+ * They live in src/content/questions/ and reach the page through the
+ * stakeholder map's pane, which shows one question at a time and keeps the
+ * write-up folded under the summary: the most hidden text on the wiki, and
+ * the team's account of what the conversations changed. The anchors are the
+ * ones the map answers to (questionAnchor and stageAnchor, in
+ * src/data/stakeholders.ts): a result opens the question it names, unfolds
+ * the write-up if it names a stage, and scrolls the pane to it.
+ */
+function questionPassages(path: string, page: PageEntry): Passage[] {
+  return QUESTION_IDS.flatMap((q) => {
+    const cycle = QUESTION_CYCLES[q];
+    const name = `${q} ${cycle.title}`;
+    const out: Passage[] = [];
+    if (cycle.summary) {
+      out.push(
+        passage(
+          path,
+          page,
+          name,
+          questionAnchor(q),
+          toPlainText(cycle.summary),
+        ),
+      );
+    }
+    for (const stage of cycle.stages) {
+      if (!stage.body) continue;
+      out.push(
+        passage(
+          path,
+          page,
+          `${name}: ${STAGE_NAMES[stage.stage]}`,
+          stageAnchor(q, stage.stage),
+          toPlainText(stage.body),
+        ),
+      );
+    }
+    return out;
+  });
+}
+
+/**
+ * The hive-corners figure that opens the human practices page: the team's
+ * account of how the work was done, in a component rather than the page's
+ * Markdown (src/data/hiveCorners.ts). It is the top of the page, so the
+ * passage has no heading, and the anchor is the one the timeline already
+ * links to. The HIVE framework in the hive's window is a passage of its
+ * own; landing on its anchor opens the window.
+ */
+function hiveCornersPassages(path: string, page: PageEntry): Passage[] {
+  const plain = (parts: string[]) => parts.join(" ").replace(/\*+/g, "");
+  const { framework } = HIVE_CORNERS;
+  return [
+    passage(
+      path,
+      page,
+      "",
+      HIVE_CORNERS.anchor,
+      plain([
+        ...HIVE_CORNERS.copy,
+        HIVE_CORNERS.onwardLead,
+        ...HIVE_CORNERS.onward.map((link) => link.label),
+      ]),
+    ),
+    passage(
+      path,
+      page,
+      framework.heading,
+      framework.anchor,
+      plain([framework.lead, ...framework.stages.map((stage) => stage.text)]),
+    ),
+  ];
+}
+
+/**
+ * The comb's workstreams (src/content/cycle-families.md), one passage each:
+ * the overarching question on the closed hexagon, and the standfirst under it
+ * once opened. The anchor is the family's id, which the gallery opens.
+ */
+function familyPassages(path: string, page: PageEntry): Passage[] {
+  return FAMILIES.map((family) =>
+    passage(
+      path,
+      page,
+      family.name,
+      family.id,
+      toPlainText([family.question, family.blurb].filter(Boolean).join("\n\n")),
+    ),
+  );
+}
+
+/**
+ * The home deck, read from src/data/homeDeck.ts, which the slides render
+ * from. One passage per claim, and one per piece of evidence a charge opens,
+ * so a result can land on the evidence rather than the claim above it. The
+ * anchors are DECK_ANCHORS: each slide carries its own, and TreatmentsSlide
+ * opens the evidence a fragment names.
+ */
+function deckPassages(path: string, page: PageEntry): Passage[] {
+  const treatments = treatmentsTitle();
+  return [
+    passage(
+      path,
+      page,
+      foodClaim(),
+      DECK_ANCHORS.bees,
+      `${runsText(BEES.food.caption)} ${runsText(BEES.food.ref)}`,
+    ),
+    passage(
+      path,
+      page,
+      harvestClaim(),
+      DECK_ANCHORS.bees,
+      `${BEES.harvest.note} ${runsText(BEES.harvest.ref)}`,
+    ),
+    passage(
+      path,
+      page,
+      miteTitle(),
+      DECK_ANCHORS.mite,
+      [
+        MITE.when,
+        `${MITE.colonies} million colonies`,
+        `$${MITE.dollars.toFixed(1)} billion`,
+        `${MITE.lost.before}${MITE.lost.red}${MITE.lost.after}.`,
+        runsText(MITE.refs),
+        MITE.verdict,
+        runsText(MITE.chart),
+      ].join(" "),
+    ),
+    passage(
+      path,
+      page,
+      treatments,
+      DECK_ANCHORS.treatments,
+      `${TREATMENTS.solution} ${TREATMENTS.answer}`,
+    ),
+    ...TREATMENTS.charges.map((charge) => {
+      const { figure, claim, detail, source } = TREATMENTS.evidence[charge];
+      return passage(
+        path,
+        page,
+        treatments,
+        DECK_ANCHORS.evidence(charge),
+        [figure, claim, detail, runsText(source)].filter(Boolean).join(" "),
+      );
+    }),
+    passage(
+      path,
+      page,
+      CHALLENGES.title,
+      DECK_ANCHORS.challenges,
+      [
+        ...CHALLENGES.barriers,
+        CHALLENGES.requiring,
+        ...CHALLENGES.demands.map(demandText),
+      ].join(" "),
+    ),
+  ];
+}
+
+/**
+ * The colony-loss map on the case studies page (src/data/varroa.ts): the
+ * figure's own words, then one passage per featured country, with what the
+ * caption writes out for it and what the panel adds (its caveats and sources)
+ * when the map opens on it, which it does for these anchors. The table of
+ * every country is data, not prose, and is left out.
+ */
+function colonyLossPassages(path: string, page: PageEntry): Passage[] {
+  const out = [
+    passage(
+      path,
+      page,
+      COLONY_LOSSES.heading,
+      COLONY_LOSSES.anchor,
+      `${COLONY_LOSSES.standfirst} ${COLONY_LOSSES.howto.lead} ${COLONY_LOSSES.howto.text}`,
+    ),
+  ];
+  for (const name of FEATURED) {
+    const context = FEATURED_CONTEXT[name];
+    const sources = (context?.sources ?? []).flatMap(
+      (id) => SOURCES.find((source) => source.id === id)?.ref ?? [],
+    );
+    const text = [
+      ...(NOTES[name] ?? []),
+      provenanceOf(name).text,
+      ...(context?.caveats ?? []),
+      ...sources,
+    ].join(" ");
+    out.push(passage(path, page, name, countryAnchor(name), text));
+  }
+  out.push(
+    passage(
+      path,
+      page,
+      COLONY_LOSSES.limits,
+      COLONY_LOSSES.limitsAnchor,
+      [...CAVEATS, COLONY_LOSSES.drawn].join(" "),
+    ),
+  );
+  return out;
+}
+
 let index: Passage[] | null = null;
+
+/**
+ * The components whose text is indexed, by the slot that places them, and
+ * what reads each. The home deck is keyed on one of its slides, since all of
+ * them sit on the one page.
+ */
+const SLOT_PASSAGES: Record<
+  string,
+  (path: string, page: PageEntry) => Passage[]
+> = {
+  "stakeholder-map": questionPassages,
+  "stakeholder-record": stakeholderPassages,
+  "project-timeline": timelinePassages,
+  "dbtl-cycles": (path, page) => [
+    ...familyPassages(path, page),
+    ...cyclePassages(path, page),
+  ],
+  "hive-corners": hiveCornersPassages,
+  "treatments-slide": deckPassages,
+  "varroa-map": colonyLossPassages,
+};
 
 /** Builds the index on first use, then reuses it for the session. */
 function corpus(): Passage[] {
   if (!index) {
-    const pages = getPathMapping();
-    index = Object.entries(pages).flatMap(([path, page]) =>
-      passagesOf(path, page),
-    );
+    const pages = Object.entries(getPathMapping());
+    index = pages.flatMap(([path, page]) => passagesOf(path, page));
 
-    // The stakeholder profiles are data, not Markdown: they reach the page
-    // through a component slot, so the walk above cannot see a word of them.
-    // The host page is found rather than named, so the search follows if the
-    // component is moved to another page.
-    const host = Object.entries(pages).find(([, page]) =>
-      /```component\s+stakeholder-map\s*```/.test(page.content),
-    );
-    if (host) index.push(...stakeholderPassages(host[0], host[1]));
-
-    // Same again for the timeline, and found the same way.
-    const timelineHost = Object.entries(pages).find(([, page]) =>
-      /```component\s+project-timeline\s*```/.test(page.content),
-    );
-    if (timelineHost) {
-      index.push(...timelinePassages(timelineHost[0], timelineHost[1]));
+    // The text the components hold is data, not the page's Markdown: it
+    // reaches the page through a slot, so the walk above cannot see a word of
+    // it. Each host page is found rather than named, so the search follows
+    // if a component is moved to another page, and a slot on no page indexes
+    // nothing.
+    for (const [slot, read] of Object.entries(SLOT_PASSAGES)) {
+      const pattern = new RegExp("```component\\s+" + slot + "\\s*```");
+      const host = pages.find(([, page]) => pattern.test(page.content));
+      if (host) index.push(...read(host[0], host[1]));
     }
-
-    // And the engineering cycles, which are Markdown but not this page's
-    // Markdown: they are separate files behind the comb.
-    const combHost = Object.entries(pages).find(([, page]) =>
-      /```component\s+dbtl-cycles\s*```/.test(page.content),
-    );
-    if (combHost) index.push(...cyclePassages(combHost[0], combHost[1]));
   }
   return index;
 }

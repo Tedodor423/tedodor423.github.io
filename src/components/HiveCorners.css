@@ -35,9 +35,11 @@
 
 /* ---------- the hive ---------- */
 
-/* No panel behind the hive: it sits straight on the page. */
+/* No panel behind the hive: it sits straight on the page. The whole hive
+ * opens the framework below, so the whole of it points. */
 .hc-frame {
   position: relative;
+  cursor: pointer;
 }
 
 .hc-svg {
@@ -129,6 +131,236 @@
   opacity: 1;
 }
 
+/* ---------- the framework, in a window over the page ---------- */
+
+/* "Click to read more", written on the page like a note scribbled beside
+ * the drawing: heading face, tipped a few degrees, with a hand-drawn violet
+ * arrow that loops once and ends pointing up at the hive. Violet is the
+ * wiki's colour for something that opens (the home deck's charges use it
+ * the same way). Static. Tucked up under the hive's own margin. Pointing
+ * anywhere at the hive turns the note violet too, since the whole hive opens
+ * the same window. */
+.hive-corners .hc-more {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.15rem;
+  margin: -1.75rem auto 0;
+  padding: 0.25rem 0.5rem 0.35rem;
+  border: 0;
+  border-radius: var(--radius);
+  background: none;
+  color: var(--text);
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.2;
+  transform: rotate(-4deg);
+  cursor: pointer;
+}
+
+.hive-corners .hc-frame:hover .hc-more {
+  color: var(--violet);
+}
+
+.hive-corners .hc-more:focus-visible {
+  outline: 3px solid var(--violet);
+  outline-offset: 2px;
+}
+
+.hc-more-arrow {
+  flex: none;
+  width: 6.5rem;
+  height: 5.15rem;
+  overflow: visible;
+}
+
+.hc-more-arrow path {
+  fill: none;
+  stroke: var(--violet);
+  stroke-width: 3.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hc-more-label {
+  padding-bottom: 0.2rem;
+}
+
+/* While the window is open its hive is this one, flown up into it, so the
+ * page's copy is not there to be seen twice. */
+.hive-corners:has(.hc-dialog[open]) .hc-svg {
+  visibility: hidden;
+}
+
+/* The window: most of the screen, its height the text's own up to the
+ * screen's, scrolling inside past that. The wiki's panel, solid surface and
+ * hard ink border, no shadow. */
+.hc-dialog {
+  width: min(72rem, calc(100vw - 2rem));
+  max-width: none;
+  max-height: calc(100dvh - 2rem);
+  padding: 0;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--surface-muted);
+  color: var(--text);
+  overscroll-behavior: contain;
+}
+
+/* It takes focus when it opens (HiveCorners.tsx); its ink border already
+ * marks it, so no ring on top. */
+.hc-dialog:focus {
+  outline: none;
+}
+
+/* While the hive flies in or out (HiveCorners.tsx), it overhangs the
+ * window, so the window stops clipping for those few hundred ms. The words
+ * are faded out then, so nothing else shows past the edge. */
+.hc-dialog[data-flying] {
+  overflow: visible;
+}
+
+/* The page dims behind it, in Oxford navy. A literal colour: older engines
+ * do not pass custom properties down to ::backdrop. No blur. */
+.hc-dialog::backdrop {
+  background: rgb(0 33 71 / 0.6);
+}
+
+/* The page under an open window does not scroll; the gutter stays, so
+ * nothing shifts sideways when the scrollbar goes. */
+html:has(.hc-dialog[open]) {
+  overflow: hidden;
+  scrollbar-gutter: stable;
+}
+
+/* Fills the dialog, so a click on the dialog element itself is a click on
+ * the backdrop (HiveCorners.tsx). */
+.hc-framework {
+  position: relative;
+  padding: 1.5rem 1.75rem 1.75rem;
+  line-height: 1.75;
+}
+
+/* The hive that flew in heads the window, the heading and lead beside it,
+ * clear of the cross. */
+.hc-framework-head {
+  display: grid;
+  grid-template-columns: 13rem minmax(0, 1fr);
+  gap: 0.75rem 2rem;
+  align-items: center;
+  margin: 0 3rem 1.5rem 0;
+}
+
+.hc-mini {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  /* The flight scales it from its top left corner (over() in
+   * HiveCorners.tsx). */
+  transform-origin: 0 0;
+}
+
+/* Decoration here: its cells stay honey and never light. */
+.hc-mini .hc-cell {
+  cursor: default;
+}
+
+/* In the top layer on screen but still inside .markdown-page in the DOM, so
+ * the page's h2 rule reaches it and would push it 2.75rem down from the
+ * window's top edge; its size and honey rule are kept. */
+.hc-dialog .hc-framework-heading {
+  margin-top: 0;
+}
+
+.hc-dialog .hc-framework-lead {
+  max-width: 40rem;
+  margin: 0.75rem 0 0;
+}
+
+/* The four letters two by two, in reading order. Restated at dialog depth
+ * so the page's list rules do not reach them. */
+.hc-dialog .hc-stages {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem 2.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Each paragraph hangs from its letter: the hive's own cell, honey on a
+ * heavy ink stroke with the letter in Cubao, as big as a heading. Static:
+ * they stay honey, pointed at or not. */
+.hc-dialog .hc-stage {
+  display: grid;
+  grid-template-columns: 4.75rem minmax(0, 1fr);
+  gap: 1.1rem;
+  align-items: start;
+  margin: 0;
+}
+
+.hc-dialog .hc-stage > p {
+  margin: 0;
+}
+
+.hc-stage-cell {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.hc-stage-cell polygon {
+  fill: var(--honey);
+  stroke: var(--ink);
+  stroke-width: 4;
+}
+
+.hc-stage-cell text {
+  font-family: var(--font-display);
+  font-size: 52px;
+  fill: var(--ink);
+}
+
+/* The cross, in the top right corner. Ink, the DBTL panel's two strokes;
+ * violet on hover and focus, as every opener on the wiki. */
+.hc-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
+  background: none;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.hc-close:hover,
+.hc-close:focus-visible {
+  color: var(--violet);
+}
+
+.hc-close:focus-visible {
+  outline: 3px solid var(--violet);
+  outline-offset: 0;
+}
+
+.hc-close-cross {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: square;
+}
+
 /* ---------- the onward links ---------- */
 
 /* Three buttons, one per row: honey on an ink rule with an arrow, the
@@ -218,5 +450,46 @@
   .hc-frame {
     max-width: 28rem;
     margin-inline: auto;
+  }
+
+  /* The note stays on one line under a phone-width hive. */
+  .hive-corners .hc-more {
+    margin-top: -1.25rem;
+    font-size: 1.25rem;
+    white-space: nowrap;
+  }
+
+  .hc-more-arrow {
+    width: 5rem;
+    height: 4rem;
+  }
+
+  .hc-framework {
+    padding-inline: 1rem;
+  }
+
+  /* Stacked: the hive centred over the heading, which keeps clear of the
+   * cross by being below it. */
+  .hc-framework-head {
+    grid-template-columns: minmax(0, 1fr);
+    margin-right: 0;
+  }
+
+  .hc-mini {
+    width: min(12rem, 60%);
+    margin-inline: auto;
+  }
+
+  .hc-dialog .hc-framework-heading {
+    font-size: 1.3rem;
+  }
+
+  .hc-dialog .hc-stages {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hc-dialog .hc-stage {
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    gap: 0.85rem;
   }
 }
