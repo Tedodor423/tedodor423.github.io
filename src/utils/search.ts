@@ -33,7 +33,8 @@
  * a component rather than the page's own file, and much of that sits behind a
  * click: the stakeholder interviews and the HIVE questions on the map, the
  * dated timeline, the engineering cycles and their workstreams behind the
- * comb, the home deck's slides, the colony-loss map's caption and panel. Each
+ * comb, the home deck's slides, the colony-loss map's caption and panel, the
+ * team members' cells. Each
  * is read from the same data the component renders (see SLOT_PASSAGES), and
  * each result's anchor is one the component answers to, opening whatever the
  * passage is folded inside. The rule for all of it: nothing is indexed that a
@@ -96,6 +97,7 @@ import {
   countryAnchor,
   provenanceOf,
 } from "../data/varroa";
+import { MEMBERS, labelOf, memberAnchor } from "../data/team";
 
 /** One run of snippet text, either matched or not. */
 export interface Segment {
@@ -501,7 +503,6 @@ function hpIntroPassages(path: string, page: PageEntry): Passage[] {
       HP_INTRO.anchor,
       plain([
         `${HP_INTRO.interviews.value} ${HP_INTRO.interviews.label}`,
-        HP_INTRO.reach,
         `${HP_INTRO.survey.value} ${HP_INTRO.survey.label} ${HP_INTRO.surveyWhere}`,
         HP_INTRO.usesLead,
         ...HP_INTRO.uses.map((use) => use.text),
@@ -646,6 +647,32 @@ function colonyLossPassages(path: string, page: PageEntry): Passage[] {
   return out;
 }
 
+/**
+ * The team gallery (src/data/team.ts), one passage per member: workstreams,
+ * year, course and college (or a PI's name, title and department), and the
+ * post's line of trivia, all written on the member's cell. The trivia shows when the cell opens, and the anchor is
+ * the cell's, which opens it.
+ */
+function memberPassages(path: string, page: PageEntry): Passage[] {
+  return MEMBERS.map((member) =>
+    passage(
+      path,
+      page,
+      member.name,
+      memberAnchor(member.id),
+      [
+        member.roles.join(", "),
+        labelOf(member).join(" · "),
+        ...member.facts.map((fact) =>
+          fact.prompt ? `${fact.prompt}: ${fact.answer}` : fact.answer,
+        ),
+      ]
+        .filter(Boolean)
+        .join(". "),
+    ),
+  );
+}
+
 let index: Passage[] | null = null;
 
 /**
@@ -667,6 +694,7 @@ const SLOT_PASSAGES: Record<
   "hp-intro": hpIntroPassages,
   "treatments-slide": deckPassages,
   "varroa-map": colonyLossPassages,
+  "team-gallery": memberPassages,
 };
 
 /** Builds the index on first use, then reuses it for the session. */

@@ -88,11 +88,6 @@ stands between here and there. See [entrepreneurship](/entrepreneurship).
 What we taught, to whom, and what came back the other way. See
 [public outreach](/education).
 
-## Still missing
-
-- The ordering above, checked against [results](/results).
-- Any measured value for the titre, or an explicit statement that none exists.
-
 ## Where this connects
 
 [Yeast](/wet-lab-experiments#yeast-production) · [Results](/results) ·

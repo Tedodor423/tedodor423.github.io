@@ -37,9 +37,7 @@ treatments-slide
 > with its alpha stacked under the picture, which the page recombines, so it
 > plays transparent in Safari as well (`src/components/AlphaClip.tsx`). Ask
 > iGEM whether it may go through Uploads, and check it on a Mac and an iPhone.
-> The "100%" is from the Lamas et al. 2025 bioRxiv
-> preprint (39 mites, five operations): before the freeze, check whether a
-> peer-reviewed version is out and cite that instead. Owner: wiki.
+> Owner: wiki.
 >
 > **TODO —** Slide four's evidence boxes show a clip and a photo that are not
 > hosted yet, so the published page shows their file names instead. The mites
@@ -108,17 +106,17 @@ against _Varroa_ is anticipated by prior patents, and we say so on
 | Designed candidate RNAs                          | TODO    | [RNA design](/software)       |
 | Built modular dsRNA constructs                   | TODO    | [Parts](/results#parts)               |
 | Measured dsRNA uptake and stability              | TODO    | [Measurement](/measurement)   |
-| Developed NectarDesigner                         | TODO    | [RNA design](/software)       |
+| Developed SEED, our dsRNA design pipeline        | TODO    | [RNA design](/software)       |
 | Engineered and tested the yeast production system| TODO    | [Yeast](/wet-lab-experiments#yeast-production)               |
 | Modelled industrial production and colony impact | TODO    | [Modelling](/model)           |
 | Integrated stakeholder feedback into deployment  | TODO    | [Human practices](/human-practices) |
 
-> **TODO —** Every status above is unset on purpose. [Results](/results) carries
-> no result blocks yet, so no card here may yet be called **Demonstrated**,
-> **Investigated**, **Modelled** or **Proposed**. Fill each status from the
-> matching result block, add the count to "designed candidate RNAs", and delete
-> this note. No card may claim more than [Results](/results) supports.
-> Owner: team lead.
+> **TODO —** Every status above is unset on purpose. Fill each one —
+> **Demonstrated**, **Investigated**, **Modelled** or **Proposed** — from the
+> matching result block on [Results](/results), and add the count to "designed
+> candidate RNAs". No card may claim more than [Results](/results) supports, and
+> the same set of claims has to match the ledger in section 9 of
+> [the project description](/project-description). Owner: team lead.
 
 ## Where to go next
 

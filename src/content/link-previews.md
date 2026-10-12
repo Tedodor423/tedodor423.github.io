@@ -49,7 +49,9 @@ Oxford iGEM 2026.
 
 ## Project Description (/project-description)
 
-The problem, the idea, and what we set out to build.
+Pollinator loss and acaricide resistance, the case for a programmable RNA
+biopesticide, and the six barriers NECTAR's design, production and delivery
+answer. _Varroa_ is the first case study.
 
 ---
 
@@ -71,19 +73,23 @@ What we leave behind for the teams that come after us.
 
 ## Measurement (/measurement)
 
-Quantifying dsRNA in bee material, and the methods we had to build to do it.
+Quantifying dsRNA in bee material: the A260 to duplex correction, a head-to-head
+of four detection chemistries, what haemolymph does to an optical readout, and how
+we deliver a known 1 µg dose to one bee.
 
 ---
 
 ## Designing Our dsRNA Construct (/software)
 
-NectarDesigner: how we choose the sequence that silences the mite.
+SEED, our pipeline for choosing which _Varroa_ sequence to silence, and the frozen
+run over 100 genes.
 
 ---
 
 ## Wet Lab Experiments and Protocols (/wet-lab-experiments)
 
-Protocols in enough detail for another team to repeat them, and why yeast is the chassis.
+Production, cloning and quantification protocols in enough detail for another team
+to repeat them, and why yeast is the chassis.
 
 ---
 
@@ -154,12 +160,6 @@ Which SDGs we affect, including where we affect them negatively.
 ## Team (/team)
 
 The people behind NECTAR.
-
----
-
-## Team Members (/team/members)
-
-Who we are.
 
 ---
 

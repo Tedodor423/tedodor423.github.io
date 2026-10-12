@@ -1,0 +1,388 @@
+/* The brood comb behind a whole page. See CombBackdrop.tsx.
+ *
+ * Everything the page draws for white is restated here for the comb: the
+ * page head, the body copy, links, tables and the experiments menu. What is
+ * paper on the white page stays paper on the comb and keeps its own ink: the
+ * TODO blocks, table heads, citation tags and search marks. A light block on
+ * the comb is the strongest thing on the page, which is what a placeholder
+ * should be. The colours are brand tokens (brand.css, "on the comb
+ * photograph"), with the contrast each was measured at.
+ *
+ * WHY A FIXED LAYER. The comb holds still while the page scrolls over it.
+ * `background-attachment: fixed` would do that, but iOS Safari ignores it and
+ * other browsers repaint the whole page on every scroll. A position: fixed
+ * layer is painted once and moved by the compositor instead, and the
+ * clip-path on the wrapper cuts it to the wrapper's own box, so the comb ends
+ * where the page does and never shows past the footer.
+ */
+
+.comb-backdrop {
+  /* The inks, as roles. These are the shipped treatment, wax type straight
+     on the comb; the type trial below swaps the set.
+       --cb-text     body copy
+       --cb-heading  the title, h3 and below, the experiments menu
+       --cb-section  the section headings (h2)
+       --cb-muted    the lead, the breadcrumbs, the experiments under a block
+       --cb-link     links, and --cb-link-hover under the pointer
+       --cb-rule     table lines and the hairline under the page head
+       --cb-ground   what the type sits on, transparent for the comb itself
+       --cb-on-comb  what still reads on the bare comb when the type sits on
+                     a ground: list bullets, the open/close signs, the rules
+                     between experiments */
+  --cb-text: var(--comb-ink);
+  --cb-heading: var(--comb-ink);
+  --cb-section: var(--honey);
+  --cb-muted: var(--comb-ink-muted);
+  --cb-link: var(--honey);
+  --cb-link-hover: var(--comb-ink);
+  --cb-rule: var(--comb-rule);
+  --cb-ground: transparent;
+  --cb-on-comb: var(--cb-text);
+
+  /* The layer sits at z-index -1: above this box's fallback colour, below
+     everything the page puts on it. */
+  isolation: isolate;
+  clip-path: inset(0);
+  /* Holds the last paragraph's margin inside, so it cannot push a strip of
+     white out between the comb and the footer. The padding is the air the
+     footer's own top margin gives every other page (see below). */
+  display: flow-root;
+  padding-bottom: 4rem;
+  background-color: var(--comb-fallback);
+  color: var(--cb-text);
+}
+
+.comb-backdrop::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: var(--comb-src) center / cover no-repeat;
+}
+
+/* The comb runs on to the footer's honey rule. The footer's top margin would
+   leave a strip of white page between them. */
+main:has(> .comb-backdrop) + .site-footer {
+  margin-top: 0;
+}
+
+/* ---------- the page head ---------- */
+
+.comb-backdrop .page-header,
+.comb-backdrop .section-links {
+  border-bottom-color: var(--cb-rule);
+}
+
+.comb-backdrop .page-header .lead,
+.comb-backdrop .breadcrumbs,
+.comb-backdrop .breadcrumbs a {
+  color: var(--cb-muted);
+}
+
+.comb-backdrop .breadcrumbs a:hover,
+.comb-backdrop .breadcrumbs a:focus-visible,
+.comb-backdrop .section-links a,
+.comb-backdrop .section-links a:hover {
+  color: var(--cb-heading);
+}
+
+.comb-backdrop .section-links a:hover {
+  border-bottom-color: var(--cb-heading);
+}
+
+/* ---------- headings ---------- */
+
+/* Ink is invisible here. Section headings take honey, the colour of the rule
+   they already sit on; the title and every level below a section take wax. */
+.comb-backdrop h2 {
+  color: var(--cb-section);
+}
+
+.comb-backdrop h1,
+.comb-backdrop h3,
+.comb-backdrop h4,
+.comb-backdrop h5,
+.comb-backdrop h6 {
+  color: var(--cb-heading);
+}
+
+/* ---------- the page body ---------- */
+
+/* Violet is the link colour for a white page and is lost on the comb. Links
+   take honey and keep their underline, which is what tells them apart from
+   the section headings. */
+.comb-backdrop .markdown-page a {
+  color: var(--cb-link);
+}
+
+.comb-backdrop .markdown-page a:hover,
+.comb-backdrop .markdown-page a:focus-visible {
+  color: var(--cb-link-hover);
+}
+
+/* Table rules drawn to read on white glare on the photograph. The heads are
+   paper and keep their own ink. */
+.comb-backdrop .markdown-page th,
+.comb-backdrop .markdown-page td {
+  border-color: var(--cb-rule);
+}
+
+.comb-backdrop .markdown-page .table-scroll:focus-visible {
+  outline-color: var(--cb-heading);
+}
+
+/* The TODO blocks stay paper, so their contents go back to the page's own
+   inks. */
+.comb-backdrop .markdown-page blockquote {
+  color: var(--text);
+}
+
+.comb-backdrop .markdown-page blockquote :is(h2, h3, h4, h5, h6) {
+  color: var(--ink);
+}
+
+.comb-backdrop .markdown-page blockquote a {
+  color: var(--link);
+}
+
+.comb-backdrop .markdown-page blockquote a:hover,
+.comb-backdrop .markdown-page blockquote a:focus-visible {
+  color: var(--ink);
+}
+
+/* ---------- the experiments menu ---------- */
+
+/* The blocks in the heading ink, the experiments under them muted, as navy
+   and grey do on white. Hover and focus underline, as they do there. */
+.comb-backdrop .xp-menu-title,
+.comb-backdrop .xp-menu a,
+.comb-backdrop .xp-menu a:hover,
+.comb-backdrop .xp-menu a:focus-visible {
+  color: var(--cb-heading);
+}
+
+.comb-backdrop .xp-menu-list ol a {
+  color: var(--cb-muted);
+}
+
+/* The block being read keeps its honey fill behind the number, so the number
+   on it goes back to ink. */
+.comb-backdrop .xp-menu-block[aria-current] .xp-menu-number {
+  color: var(--ink);
+}
+
+/* ---------- the type trial ---------- */
+
+/* EXPERIMENT. CombBackdrop.tsx sets data-type, data-ground and data-shape
+   from a dev-only switcher; once the team has chosen, fold the chosen inks
+   into .comb-backdrop above and delete this section. */
+
+/* The type. Wax is the default above. */
+.comb-backdrop[data-type="white"] {
+  --cb-text: var(--surface);
+  --cb-heading: var(--surface);
+  --cb-link-hover: var(--surface);
+}
+
+.comb-backdrop[data-type="honey"] {
+  --cb-text: var(--honey);
+  --cb-heading: var(--honey);
+  /* Links in honey type would only differ by their underline. */
+  --cb-link: var(--comb-ink);
+  --cb-link-hover: var(--surface);
+}
+
+/* Black type is the white page's own set, so it only ever sits on a light
+   ground; on the bare comb it is the ground that still reads. */
+.comb-backdrop[data-type="black"] {
+  --cb-text: var(--ink);
+  --cb-heading: var(--ink);
+  --cb-section: var(--ink);
+  --cb-muted: var(--text-muted);
+  --cb-link: var(--link);
+  --cb-link-hover: var(--ink);
+  --cb-rule: var(--rule);
+  --cb-on-comb: var(--cb-ground);
+}
+
+/* The ground. */
+.comb-backdrop[data-ground="black"] {
+  --cb-ground: var(--ink);
+}
+
+.comb-backdrop[data-ground="wax"] {
+  --cb-ground: var(--surface-muted);
+}
+
+.comb-backdrop[data-ground="white"] {
+  --cb-ground: var(--surface);
+}
+
+.comb-backdrop[data-ground="honey"] {
+  --cb-ground: var(--honey);
+}
+
+/* Where the type sits on the ground but the decoration around it sits on the
+   bare comb, the decoration takes the colour that reads there. */
+.comb-backdrop:is([data-shape="line"], [data-shape="block"]) li::marker,
+.comb-backdrop:is([data-shape="line"], [data-shape="block"])
+  .xp-experiment
+  > summary::after {
+  color: var(--cb-on-comb);
+}
+
+.comb-backdrop:is([data-shape="line"], [data-shape="block"]) .xp-experiments {
+  --xp-rule: color-mix(in srgb, var(--cb-on-comb) 30%, transparent);
+  border-color: var(--cb-on-comb);
+}
+
+/* Behind each line: every run of words is an inline box (span.ink, from
+   <Ink>), and the ground breaks with it, one rectangle per line. What has no
+   words of its own to wrap (the breadcrumb trail, the menu, a table) takes
+   the ground as one block. */
+.comb-backdrop[data-shape="line"] .ink {
+  padding: 0.06em 0.3em;
+  background: var(--cb-ground);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* The TODO blocks are paper already, and their lines stay on it. */
+.comb-backdrop[data-shape="line"] blockquote .ink {
+  padding: 0;
+  background: none;
+}
+
+.comb-backdrop[data-shape="line"] .breadcrumbs ol {
+  display: inline-flex;
+  padding: 0.06em 0.3em;
+  background: var(--cb-ground);
+}
+
+.comb-backdrop[data-shape="line"] :is(.xp-menu, .markdown-page td),
+.comb-backdrop[data-shape="line"] .xp-experiment > summary::after {
+  background: var(--cb-ground);
+}
+
+.comb-backdrop[data-shape="line"] .xp-menu {
+  padding: 0.75rem 1rem;
+}
+
+.comb-backdrop[data-shape="line"] .xp-experiment > summary::after {
+  padding: 0.1em 0.3em;
+}
+
+/* Behind each block: every paragraph, heading, list and table on a plate of
+   its own, with the comb showing in the gaps between them. */
+.comb-backdrop[data-shape="block"]
+  :is(
+    .page-header .breadcrumbs,
+    .page-header h1,
+    .page-header .lead,
+    .markdown-page > :is(p, h2, h3, h4, h5, h6, pre, .table-scroll),
+    .markdown-page > div > :is(p, h3, h4, h5, h6, pre, .table-scroll),
+    .xp-experiment-body > :is(p, h5, h6, pre, .table-scroll),
+    .xp-experiment > summary,
+    .xp-menu
+  ) {
+  padding: 0.5rem 0.75rem;
+  background: var(--cb-ground);
+}
+
+/* Lists keep their indent for the bullets, inside the plate. */
+.comb-backdrop[data-shape="block"]
+  :is(.markdown-page, .markdown-page > div, .xp-experiment-body)
+  > :is(ul, ol) {
+  padding: 0.5rem 0.75rem 0.5rem 2.75rem;
+  background: var(--cb-ground);
+}
+
+.comb-backdrop[data-shape="block"] .xp-menu {
+  padding: 0.75rem 1rem;
+}
+
+/* One sheet behind the column: the head and the body on one continuous
+   ground, the width of the reading measure plus its margins, with the comb
+   either side. The experiments page has two columns, so the menu and the
+   write-up each get a sheet. */
+.comb-backdrop[data-shape="sheet"] {
+  --cb-sheet-pad: clamp(1rem, 4vw, 2.5rem);
+}
+
+/* The head's own air moves inside its sheet, so the sheet runs on into the
+   body's without a strip of comb between them. */
+.comb-backdrop[data-shape="sheet"] .page-header {
+  padding: 0;
+  margin-bottom: 0;
+  border-bottom: 0;
+}
+
+.comb-backdrop[data-shape="sheet"] .page-header > .container,
+.comb-backdrop[data-shape="sheet"] .page-band > .container > .markdown-page {
+  /* flow-root keeps each section's margins inside its own sheet, so the
+     sections meet edge to edge with no comb between them. */
+  display: flow-root;
+  padding-inline: var(--cb-sheet-pad);
+  background: var(--cb-ground);
+}
+
+.comb-backdrop[data-shape="sheet"] .page-band > .container > .markdown-page {
+  max-width: calc(var(--measure) + 2 * var(--cb-sheet-pad));
+}
+
+/* The head is a container itself, where the body's sheets sit inside one, so
+   its sheet stops at the container's gutter like theirs do. */
+.comb-backdrop[data-shape="sheet"] .page-header > .container {
+  padding-block: 2.5rem 0.5rem;
+  border-inline: calc(var(--bs-gutter-x) * 0.5) solid transparent;
+  background-clip: padding-box;
+}
+
+/* Over the experiments page's two columns the head's sheet keeps the
+   container's own width, so its edges line up with the menu's on the left
+   and the write-up's on the right. Over one column it is the column's. */
+.comb-backdrop[data-shape="sheet"]:not(:has(.xp)) .page-header > .container {
+  max-width: calc(
+    var(--measure) + 2 * var(--cb-sheet-pad) + var(--bs-gutter-x)
+  );
+}
+
+.comb-backdrop[data-shape="sheet"] .page-band:last-of-type > .container > .markdown-page {
+  padding-bottom: 2rem;
+}
+
+.comb-backdrop[data-shape="sheet"] :is(.xp-main, .xp-menu) {
+  padding: 1.5rem var(--cb-sheet-pad);
+  background: var(--cb-ground);
+}
+
+/* The switcher itself: a plain control on paper, out of the way in the
+   corner, above the bees (z-index 1040 in BeeScene.css). Development builds
+   only. */
+.cb-trial {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 1050;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 1rem;
+  max-width: calc(100vw - 2rem);
+  margin: 0;
+  padding: 0.4rem 0.75rem 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text);
+  background: var(--surface-muted);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+}
+
+.cb-trial legend {
+  float: left;
+  width: auto;
+  margin: 0;
+  font-size: inherit;
+  font-weight: 700;
+}

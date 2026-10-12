@@ -11,8 +11,8 @@ system explored quantitative approaches to dsRNA detection.
    wavelengths, and the first melanisation time-course for bee haemolymph.
 3. A head-to-head **cost and sensitivity comparison of four dsRNA detection
    chemistries**, with a selection decision tree.
-4. A **dosing method that delivers a known mass to an individual bee**, with a
-   24-fold reduction in animal use.
+4. A **dosing method that delivers a known mass to an individual bee**, with an
+   8–20-fold reduction in animal use.
 
 ## Prior art, and why published doses are not reproducible quantities
 
@@ -48,8 +48,8 @@ the opposite error is unbounded by the reader. In a crude T7 reaction most of th
 A260 is unincorporated nucleotides: on the Vazyme TR101 chemistry (0.80 µmol NTP per
 20 µL reaction), a 50 µg yield leaves **87% of A260 as free NTPs and over-reads
 duplex by 7.7×** `[CALC]`. Purification collapses this — a silica spin column removes
->99% of NTPs `[LIT]` — leaving ~1–3% inflation at normal yields, but the reader
-cannot tell which regime a published number sits in.
+>99% of NTPs (Welbourne et al. 2024) `[LIT]` — leaving ~1–3% inflation at normal
+yields, but the reader cannot tell which regime a published number sits in.
 
 **The two errors point in opposite directions.** Free nucleotides inflate; the 40
 factor deflates. A reader cannot sign the error on a published _Varroa_ dose, let
@@ -72,6 +72,80 @@ analogue is a qRT-PCR persistence assay in non-bee insect haemolymph (Garbutt et
 > **TODO —** Figure: "The dose you think you gave." Stacked bar of the A260 budget for a T7
 > IVT: free NTPs, template DNA, ssRNA byproduct and intact duplex, at three yield
 > scenarios (80 / 50 / 20 µg true yield → 2.8× / 4.8× / 12.8× over-read).
+
+## Delivering a known dose
+
+**Status: Demonstrated, as a method.** A dose that is not known cannot be the
+denominator of an uptake measurement. Titre in haemolymph, knockdown and survival
+are each expressed per unit of dsRNA received, so that unit has to be fixed before
+any of them mean anything. We built three delivery routes and only the third returns
+a mass per animal. The assays, with their full tables, are on [the bee lab](/bee-lab)
+and in the bee-lab cycles on [engineering](/engineering).
+
+### B1 — Cage feeding, and why it was abandoned
+
+Fifteen cages of fifteen bees were offered 1 M sucrose with 0, 50, 100 or 150 mM
+NaCl from four 2 mL tubes each, one cage run bee-free as the evaporation control,
+30 June – 3 July. **74% of the mass leaving a feeding tube was evaporation, 90% of it
+on the first day** — the quantity of interest was a tenth of the quantity being
+weighed. Corrected for that, intake was flat across the salt series at
+15.6–16.7 µL/bee/day, which clears the 100–150 mM NaCl that dsRNA stability favours
+as a formulation. What ended the design was dead volume: of 8 mL loaded per cage per
+day a mean of 0.248 mL was drunk, and because tubes were replaced daily **96.9% of
+everything loaded was never drunk** `[CALC]`. At 16.7 µL/bee/day, 1 µg per bee per
+day for fifteen bees over three days needs 60 ng/µL, so **1.44 mg has to be loaded to
+put 45 µg into animals** — a 32:1 waste ratio, about 32 IVT reactions for one cage,
+and 12.9 mg for the smallest design worth running. Synthesis, not bees, becomes the
+binding constraint.
+
+### B2 — Feeder redesign
+
+3D-printed adapters seated a 0.2 mL PCR tube where the 2 mL tube had been, in three
+geometries, each with two needle-bored ports — one at the base and one at the neck,
+the upper one required to break the airlock that otherwise stops flow as the
+reservoir drains. The horizontal geometry discharged at a touch and was dropped
+before quantitative testing. The vertical geometry leaked: leak annotations on nine
+of its cages, and apparent intake ~45% above the tilted arm, which is the leak being
+weighed as consumption — the same failure mode as evaporation in B1 in a different
+disguise. The 15° tilted geometry at 23G was adopted. **Evaporation fell 11-fold, to
+0.077 g/cage/day, and loaded volume fell 20-fold, 0.4 mL against 8 mL, while
+consumption held at 15.7–19.2 µL/bee/day against the 16.7 µL/bee/day benchmark.** The
+redesign was validated by showing it changed nothing biological; had consumption
+fallen, the improvement would have been indistinguishable from bees unable to feed.
+
+### B3 — Harnessed individual feeding
+
+A smaller feeder does not recover the denominator — intake per bee in a cage is still
+a cage mean. Bees were therefore harnessed in a PER-style restraint and fed a measured
+volume by graduated tip, the restraint used purely as a delivery method, with no
+response scoring or olfactory conditioning. Two cohorts were compared on 14–15 July:
+newly emerged bees survived 38/40 overnight and took 5–10 µL, against 22/50 for
+foragers within a working day, about a quarter of whom were lost in the first hour of
+restraint. Newly emerged bees were adopted as standard, fifty of them harnessed in
+roughly two hours. **Delivered dose: 5 µL × 200 ng/µL = 1 µg per bee**, known rather
+than inferred from an average.
+
+### Why individual dosing uses fewer animals
+
+The reason is statistical rather than ethical. For a two-sample comparison at
+α = 0.05 and 80% power, the ratio of animals the cage route needs against the
+individual route is R = (CV_cage / CV_individual)² × DE, where DE = 1 + (m − 1)ρ is
+the design effect from clustering, ρ the fraction of variance belonging to the cage
+rather than the bee, and m the bees sampled per cage per timepoint. R is independent
+of effect size, arm count and timepoint count. Individual dosing carries measurement
+variance only — the 18.5% column-extraction CV with an assumed 30% biological
+response CV gives CV = 0.352 — while cage feeding adds dose variance on top: the
+reported 8.8-fold intra-cage spread
+([Brodschneider 2017](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0174684))
+`[LIT]`, read as a log-normal 95% interval, gives CV_dose = 0.60 and **R from 9.4× at
+ρ = 0.1 to 20.3× at ρ = 0.3** `[CALC]`. Worked
+against our own design, 3 arms × 4 timepoints at a 50% difference, individual dosing
+needs **101 animals and 101 µg** against **765 animals and 73 mg** for the most
+economical cage configuration: **8–20× fewer animals**. The two constraints fight each
+other, because clustering is relieved by spreading bees across more cages while dsRNA
+scales with cages rather than bees, so no cage design is at once powered and
+affordable. Reduction, refinement and replacement are served by the same change that
+makes the measurement valid.
 
 ## What exactly we are measuring
 
@@ -103,9 +177,9 @@ haemolymph sample occupies.
 
 The dependence runs deeper than an edge case. Reverse transcription of a duplex
 requires denaturation, and omitting the 95 °C step costs **125-fold in signal**
-`[LIT]`. A readout whose answer moves that far depending on whether the duplex was
-first forced apart is, by construction, reporting sequence presence rather than
-duplex integrity.
+(Kang 2025) `[LIT]`. A readout whose answer moves that far depending on whether the
+duplex was first forced apart is, by construction, reporting sequence presence rather
+than duplex integrity.
 
 **The unit this work is built on — nanograms of intact duplex — is therefore not a
 quantity RT-qPCR naturally returns.** Three alternative chemistries were evaluated
@@ -136,10 +210,12 @@ between what they count, not between how sensitive they are.
 
 **Status: Investigated.** RNA Mango is a fluorogenic aptamer: a thermostable
 G-quadruplex that binds the fluorophore TO1-Biotin with **Kd 1.1 ± 0.3 nM** and a
-fluorescence turn-on exceeding **1,500-fold** `[LIT]`. Because it is a short
-structured loop, it can _be_ the terminal loop of our loop-ended construct rather
-than sitting next to it — genetically encoded, one copy, at a defined position, at no
-marginal cost. **Mango II was kept** over the brighter Mango III on Prof. Peter
+fluorescence turn-on exceeding **1,500-fold** (Trachman et al. 2018, _Biochemistry_
+57:3544) `[LIT]`. A tag with that affinity would let the construct be told apart from
+host nucleic acid in a crude extract, which no intercalating stain can do. Because it
+is a short structured loop, it can _be_ the terminal loop of our loop-ended construct
+rather than sitting next to it — genetically encoded, one copy, at a defined position,
+at no marginal cost. **Mango II was kept** over the brighter Mango III on Prof. Peter
 Unrau's advice about environmental robustness for eventual _in vivo_ use.
 
 The construct carries the Mango-II insert
@@ -175,6 +251,12 @@ alongside that statement.
 roughly ten times Kd, around 11 nM; non-specific binding to duplex remains linear in
 dye concentration well into the micromolar. Every nanomolar of dye above the
 saturation point therefore buys background and no signal.
+
+> **TODO —** Figure: The two gels this section rests on, neither yet shown — the
+> Mango-tagged and the untagged construct side by side at matched mass, and the
+> commercial ladder stained alone — beside the measured 1.10 fmol in-gel limit
+> plotted against the published 62.5 fmol aptamer limit on a log axis, with the 57×
+> gap annotated. Owner: measurement.
 
 ### In-gel performance
 
@@ -216,6 +298,11 @@ roughly ±70%. These are factor-of-two estimates. Four or more blank lanes on
 subsequent gels would halve that uncertainty at no cost, and is adopted as standing
 practice.
 
+> **TODO —** Figure: The in-gel standard curves, integrated intensity against mass on
+> log–log axes, water and haemolymph series overlaid, the 3.19–51 ng window shaded and
+> the saturating points drawn open to show why they are excluded. The 6.4× difference
+> in slope is the matrix penalty. Owner: measurement.
+
 ### The correction: a signal fifty-seven-fold below its own mechanism
 
 Converting at 381 kDa:
@@ -227,13 +314,10 @@ Converting at 381 kDa:
 | Haemolymph LOD  | 3.13 | 8.22     | 7.6× below                                     |
 
 The published in-gel detection limit for Mango-II on native gels is **62.5 fmol**
-`[LIT]`, equal to **23.8 ng of this construct**. We detected bands at 1.1 fmol.
+(Yaseen, Ang & Unrau 2019, _J Vis Exp_ 148:e59112) `[LIT]`, equal to **23.8 ng of
+this construct**. We detected bands at 1.1 fmol.
 **A signal cannot be seen fifty-seven-fold below the detection limit of the mechanism
 supposedly producing it.** The sensitivity is real; its source is intercalation.
-
-⚠ **This supersedes the ~75 ng/band in-gel figure carried in two of our own project
-documents**, which is 24× higher than the value measured here. That figure is
-retired rather than reconciled.
 
 We initially reported our water-series plate calibration as a successful Mango
 calibration. **On re-analysis it was not measuring the aptamer.** TO1's dissociation
@@ -243,7 +327,7 @@ is rigorously linear in dsRNA mass. **R² = 0.9999 is exactly what a pure-interc
 signal produces, so the quality of the line was evidence against the aptamer working,
 not for it.** A third, independent confirmation: a Mango aptamer base-paired inside a
 duplex does not fluoresce, with base-pairing reported to suppress signal 78–234-fold
-`[LIT]`.
+(Abdolahzadeh, Ang & Unrau 2024, _RNA_ 30:392) `[LIT]`.
 
 ### Plate-reader performance: four runs, all four reported
 
@@ -275,6 +359,10 @@ more dye optimisation.
 
 The **0.8–7.4% CV from the 28 Aug run is our technical-variance yardstick**,
 against which extraction and biological variance are judged.
+
+> **TODO —** Figure: Predicted against observed plate-reader LOD on a log axis, the
+> Kd-derived prediction against all four runs, the two failures marked and the
+> 10–480× gap annotated. Owner: measurement.
 
 ### SYBR Gold
 
@@ -324,6 +412,26 @@ decision gate written down before the data existed. The gel chemistries are reta
 for what they are good for: confirming that material of the right size is present, at
 about £1 and 90 minutes with no reverse-transcription step.
 
+> **TODO —** Figure: Cost against LOD for the four chemistries, log–log, with our
+> operating point marked. Completable once SYBR Gold's dsRNA LOD is measured. Owner:
+> measurement.
+
+### Streptavidin capture
+
+**Status: Proposed.** Every failure above shares a cause: dye in free solution binds
+whatever nucleic acid is present. Immobilising the dye and capturing RNA onto it
+inverts the problem — unbound matrix washes away, and weakly intercalated dye washes
+off with it, so the specific interaction is the only one that survives two washes.
+That is also what the plate-reader diagnosis above points to: an assay limited by
+replicate scatter is better served by removing the matrix than by more dye
+optimisation. Plates are ordered and the design is complete, down to the coat order,
+the competitor tRNA in the binding buffer and the kill criteria, which are written
+down at cycle 4.2. It has not been run.
+
+⚠ **One literature gap gates the whole format** `[FLAG]`: whether Mango folds and
+fluoresces when its dye is immobilised on a surface has not been demonstrated
+anywhere we could find.
+
 ## The matrix: what bee haemolymph does to an optical readout
 
 Every optical readout has to survive being put into bee haemolymph. Two properties
@@ -356,9 +464,10 @@ changed nothing.
 The remaining readings are consistent with that interpretation. All sixteen dilution
 readings fall between 0.006 and 0.055; H1–H5 fall between 0.020 and 0.042. **Every
 value in the dataset lies inside the blank-to-blank reproducibility the instrument
-manufacturer specifies (≤0.04 A at 10 mm equivalent)** `[LIT]`. One pooled replicate
-returns A₅₃₅ (0.045) above A₅₀₇ (0.039), a ratio of 1.15, which no pigment produces
-and which is a straightforward signature of reading noise rather than sample.
+manufacturer specifies (≤0.04 A at 10 mm equivalent, Thermo T042)** `[LIT]`. One
+pooled replicate returns A₅₃₅ (0.045) above A₅₀₇ (0.039), a ratio of 1.15, which no
+pigment produces and which is a straightforward signature of reading noise rather
+than sample.
 
 **Absorbance at 507 nm, 0.0298, is below what this instrument can resolve.** The
 dilution series was run to characterise the matrix and instead characterised the
@@ -460,9 +569,10 @@ optical change on exposure to air rather than melanisation specifically.
 
 **Phenylthiourea at 1 mg/mL in PBS on thawing.** PTU is a competitive phenoloxidase
 inhibitor that chelates the dicopper active site, and has been validated on _Apis_
-`[LIT]`. Prophenoloxidase has been reported to activate spontaneously during
-haemolymph extraction itself `[LIT]`, so inhibition at the point of collection is
-ideal rather than after samples are collected. **This conclusion was drawn after many
+(_J Exp Biol_ 2021 224:jeb232595) `[LIT]`. Prophenoloxidase has been reported to
+activate spontaneously during haemolymph extraction itself (Smilanich 2010,
+_Apidologie_) `[LIT]`, so inhibition at the point of collection is ideal rather than
+after samples are collected. **This conclusion was drawn after many
 haemolymph samples had already been collected.**
 
 **The proteinase K step is an incidental PTU substitute, and it is free.** The
@@ -524,8 +634,8 @@ the raw NanoDrop reading, defines every dose in this project.
 
 > **TODO —** Table: The eight preparations, one row each: date, construct, N₀
 > (NanoDrop pre-digest), N₁ (post-digest), Q₀ and Q₁ (Qubit), N₁/N₀, and the
-> NanoDrop:Qubit ratio. This is the table the 52.1% ± 4.2% is computed from and
-> it belongs on this page in full.
+> NanoDrop:Qubit ratio. This is the table the 52.1% ± 4.2% is computed from.
+> Owner: measurement.
 
 **Do not use the fitted power law.** A fit of `Q₁ = 0.6 × N₀^0.696` across those
 preparations is an instrument artefact, not chemistry: "too high" appears at
@@ -611,9 +721,10 @@ As an intercalation calibration they remain usable.
 The reusable output of this work is **three written procedures**, not a single
 number:
 
-1. **The nuclease-digest quantification protocol** — how to turn an A260 reading
-   into a duplex-specific mass with reagents already in a standard IVT kit, and
-   why RNase T1 rather than RNase A at normal ionic strength.
+1. **[The nuclease-digest quantification protocol](/wet-lab-experiments#nuclease-digest-before-quantification)** —
+   how to turn an A260 reading into a duplex-specific mass with reagents already
+   in a standard IVT kit, and why RNase T1 rather than RNase A at normal ionic
+   strength.
 2. **The NanoDrop/Qubit correction note** — why not to publish a correction
    factor, and what to publish instead.
 3. **The qPCR contamination diagnostic** — the decision tree from cycle 3.3b,
@@ -659,15 +770,15 @@ summaries belong to [Contribution](/contribution).
 | 4   | **RT-qPCR standard curve to MIQE minimums** (efficiency, slope, R², melt, no-RT)                                               | Yes — ~2 days, and mandatory              |
 | 5   | **Mango on both ends + exonuclease + wash**, so only the quadruplex survives and signal-to-background rises                    | Yes — 1–2 gels                            |
 | 6   | **Gel 1 lane masses plus a one-lane registration check** — unblocks the SYBR Gold LOD/LOQ, the ±RNase arm and the comparison table | Yes                                    |
-| 7   | **A photograph of the Mango-against-untagged gel and the ladder gel** — both are cited above and neither is shown              | Required — unshown figures count as unmet |
-| 8   | **6× Mango array** for single-molecule sensitivity                                                                             | At risk — IDT synthesis wall; write up as designed-not-built |
+| 7   | **6× Mango array** for single-molecule sensitivity                                                                             | At risk — IDT synthesis wall; write up as designed-not-built |
 
 ## What this changed in NECTAR
 
 Every µg-per-bee figure in this project is **re-derived from digest-Qubit** rather
-than NanoDrop. Mango was reassigned from quantifier to selector, which freed the
-mass measurement to move to a generic stain and the quantitative numbers to move
-to RT-qPCR. The matrix work turned "crude haemolymph, no purification" from a design
+than NanoDrop, and its denominator is a mass delivered to one animal — 1 µg per bee
+by harnessed feeding — rather than a cage average. Mango was reassigned from
+quantifier to selector, which freed the mass measurement to move to a generic stain
+and the quantitative numbers to move to RT-qPCR. The matrix work turned "crude haemolymph, no purification" from a design
 goal into **a measured 6.4× in-gel penalty** with a named route around it — capture
 and wash rather than a homogeneous read — and it showed that the obvious mitigation,
 dilution, is 233× the wrong side of the point where dilution helps.

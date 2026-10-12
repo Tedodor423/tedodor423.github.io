@@ -1,0 +1,355 @@
+/* The team page, after the team's "Meet the team" posts: honey ground, navy
+ * cells cut to the posts' tall hexagon, the member's cut-out over a halftone
+ * disc, the first name in Basenji. The halftone is the posts' own motif, not
+ * a filler texture; the hexagon is the hive's, and the cells nest into a comb
+ * because that shape tiles that way. */
+
+/* Full bleed: the honey runs the width of the window, past the reading column
+ * the band would otherwise hold it to. 100vw includes the scrollbar, which is
+ * why the band hosting it clips horizontally. */
+.team-gallery {
+  margin-inline: calc(50% - 50vw);
+  padding-block: clamp(2rem, 5vw, 3.5rem) clamp(1.5rem, 3vw, 2.5rem);
+  background: var(--honey);
+  color: var(--oxford-navy);
+}
+
+.page-band:has(> .container > .markdown-page > .team-gallery) {
+  padding-block: 0;
+  overflow-x: clip;
+}
+
+/* The page ends on the comb, so the honey runs on into the footer's own
+ * honey rule instead of stopping short of it on white. */
+main:has(.team-gallery) ~ .site-footer {
+  margin-top: 0;
+}
+
+.tm-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.tm-inner {
+  max-width: 82rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  container-type: inline-size;
+}
+
+.tm-title {
+  margin: 0 0 clamp(1.5rem, 4vw, 2.75rem);
+  color: var(--oxford-navy);
+  font-size: clamp(2.75rem, 9vw, 6rem);
+  line-height: 0.95;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* ---------- the comb ---------- */
+
+/* Columns of tall hexagons, every other one dropped by half a cell, so the
+ * points of one column sit in the notches of the next. That nesting means
+ * neighbouring cells overlap by the depth of the notch (the hexagon's corner
+ * cut), leaving --gap between the slanted edges as between the flat ones.
+ * A grid gap cannot be negative, so each track is one --step wide, narrower
+ * than the cell, and the cell hangs over both sides of its track equally.
+ *
+ * --w is the cell width that makes --cols columns fill the row with that
+ * overlap. It is read here and on the cells, never inside one, so its cqi
+ * resolve against .tm-inner and not against a cell, which is a container of
+ * its own. */
+.tm-comb {
+  --cols: 2;
+  --gap: 0.6rem;
+  --cut: 0.077;
+  --w: calc(
+    (100cqi - (var(--cols) - 1) * var(--gap)) /
+      (var(--cols) - (var(--cols) - 1) * var(--cut))
+  );
+  --step: calc(var(--w) * (1 - var(--cut)) + var(--gap));
+  display: grid;
+  grid-template-columns: repeat(var(--cols), var(--step));
+  row-gap: var(--gap);
+  justify-content: center;
+  margin: 0;
+  padding: 0 0 calc(var(--w) * 0.625 + var(--gap) / 2);
+  list-style: none;
+}
+
+.tm-cell:nth-child(2n) {
+  translate: 0 calc(50% + var(--gap) / 2);
+}
+
+@container (min-width: 44rem) {
+  .tm-comb {
+    --cols: 3;
+    --gap: 0.75rem;
+  }
+
+  .tm-cell:nth-child(2n) {
+    translate: none;
+  }
+
+  .tm-cell:nth-child(3n + 2) {
+    translate: 0 calc(50% + var(--gap) / 2);
+  }
+}
+
+@container (min-width: 68rem) {
+  .tm-comb {
+    --cols: 4;
+  }
+
+  .tm-cell:nth-child(3n + 2) {
+    translate: none;
+  }
+
+  .tm-cell:nth-child(4n + 2),
+  .tm-cell:nth-child(4n) {
+    translate: 0 calc(50% + var(--gap) / 2);
+  }
+}
+
+/* ---------- one cell ---------- */
+
+/* The layers, back to front: halftone, name, echo, photograph, label, the
+ * focus ring, and the button that covers the cell. Sizes inside are in cqi of
+ * the cell, so a cell reads the same at every width it is drawn at. */
+.tm-cell {
+  position: relative;
+  isolation: isolate;
+  container-type: inline-size;
+  width: var(--w);
+  margin-left: calc((var(--step) - var(--w)) / 2);
+  aspect-ratio: 4 / 5;
+  background: var(--oxford-navy);
+  clip-path: polygon(7.7% 0, 92.3% 0, 100% 50%, 92.3% 100%, 7.7% 100%, 0 50%);
+}
+
+.tm-dots {
+  position: absolute;
+  z-index: 0;
+  top: 30%;
+  left: 9%;
+  width: 82%;
+  height: auto;
+  aspect-ratio: 1;
+  fill: var(--honey);
+}
+
+/* Hung from just above the crown of the head, which every cut-out puts at the
+ * same height, so the name sits on the member as in the posts and the roles
+ * stack upwards from it. */
+.tm-head {
+  position: absolute;
+  z-index: 1;
+  inset: auto 11cqi 70%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Prefixed to outrank the page's own h2 rule (size, honey underline, top
+ * margin), which reaches in here because the gallery sits in a Markdown
+ * band. Seven letters (Theodor, Michael) fill the line at 16cqi; a longer
+ * name steps down with its length (--letters, set per cell) so it stays on
+ * one line. */
+.team-gallery .tm-name {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: var(--honey);
+  font-family: var(--font-heading);
+  font-size: min(16cqi, 112cqi / var(--letters, 7));
+  font-weight: 600;
+  line-height: 0.95;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+
+/* Above the name, as the posts set it; after it in the source, so a screen
+ * reader hears who before what. */
+.tm-roles {
+  order: -1;
+  margin: 0 0 2cqi;
+  color: var(--surface);
+  font-family: var(--font-mono);
+  font-size: max(0.68rem, 3.6cqi);
+  line-height: 1.35;
+}
+
+/* The frame runs a tenth below the cell, so neither image shows its cut edge
+ * when it moves. */
+.tm-echo,
+.tm-photo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 720 / 990;
+  pointer-events: none;
+  transition:
+    translate 0.35s ease,
+    opacity 0.25s ease;
+}
+
+.tm-echo {
+  z-index: 2;
+  opacity: 0;
+}
+
+.tm-photo {
+  z-index: 3;
+}
+
+/* ---------- the label ---------- */
+
+/* The cell's own navy, at the foot, tall enough to cover where every cut-out
+ * is cropped, with a honey rule along its top for the member to stand on. In
+ * honey it would vanish into the page and take the hexagon's lower points
+ * with it. Opening the cell raises it over the trivia. */
+/* It hangs 2px past the cell, where the clip cuts it off: the photograph runs
+ * on below the cell too, and at the clip's anti-aliased edge a label ending
+ * flush would let a hairline of it through. */
+.tm-label {
+  position: absolute;
+  z-index: 4;
+  inset: auto 0 -2px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: calc(18% + 2px);
+  padding: 3.5cqi 11cqi calc(5cqi + 2px);
+  border-top: max(2px, 0.9cqi) solid var(--honey);
+  background: var(--oxford-navy);
+  color: var(--surface);
+}
+
+/* A workstream, or a part of the year-course-college line, never breaks
+ * inside itself; lines break between them, after the dot. */
+.tm-part {
+  white-space: nowrap;
+}
+
+/* Honey, as the posts set year, course and college. */
+.tm-study {
+  margin: 0;
+  color: var(--honey);
+  font-family: var(--font-mono);
+  font-size: max(0.66rem, 3.5cqi);
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+/* Folded to nothing until the cell opens; the row animates from 0fr to 1fr,
+ * which is how a height of "auto" is eased. Folded rather than hidden, so a
+ * screen reader reads the trivia whether or not anything is hovered. */
+.tm-more {
+  order: -1;
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease;
+}
+
+.tm-more > div {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.tm-fact {
+  margin: 0 0 3cqi;
+  font-family: var(--font-heading);
+  font-size: max(0.85rem, 4.8cqi);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.tm-prompt {
+  display: block;
+  margin-bottom: 1cqi;
+  color: var(--honey);
+  font-family: var(--font-mono);
+  font-size: max(0.62rem, 3cqi);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ---------- open ---------- */
+
+/* A cell opens under the pointer, and a click adds nothing: a clicked cell
+ * closes as the pointer leaves it. Keyboard focus opens it too, marked by the
+ * ring. Only on a device with nothing that hovers (a phone) does the tap that
+ * focuses a cell open it, until a tap elsewhere. "any-hover", not "hover": a
+ * touch-screen laptop can report its screen as the primary pointer, and its
+ * touchpad still hovers. A link or a search result naming a cell lands on it
+ * open (data-open), until the pointer moves on. */
+.tm-cell[data-open] .tm-echo,
+.tm-cell:focus-visible .tm-echo {
+  opacity: 1;
+  translate: -7% -3.5%;
+}
+
+.tm-cell[data-open] .tm-more,
+.tm-cell:focus-visible .tm-more {
+  grid-template-rows: 1fr;
+}
+
+@media (any-hover: hover) {
+  .tm-cell:hover .tm-echo {
+    opacity: 1;
+    translate: -7% -3.5%;
+  }
+
+  .tm-cell:hover .tm-more {
+    grid-template-rows: 1fr;
+  }
+}
+
+@media (any-hover: none) {
+  .tm-cell:focus .tm-echo {
+    opacity: 1;
+    translate: -7% -3.5%;
+  }
+
+  .tm-cell:focus .tm-more {
+    grid-template-rows: 1fr;
+  }
+}
+
+/* ---------- focus ---------- */
+
+/* An outline would be cut off by the hexagon, so focus draws the hexagon
+ * itself: half the stroke falls outside the clip, leaving 4px inside. */
+.tm-cell:focus-visible {
+  outline: none;
+}
+
+.tm-ring {
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: var(--surface);
+  stroke-width: 8;
+  vector-effect: non-scaling-stroke;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.tm-cell:focus-visible .tm-ring {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tm-echo,
+  .tm-photo,
+  .tm-more {
+    transition: none;
+  }
+}

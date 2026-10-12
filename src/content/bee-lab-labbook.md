@@ -69,8 +69,9 @@ outside the lab and returned to a labelled bucket, not general waste.
 
 Finished the sucrose feeding assay. Practised gut dissection (ileum
 visualisation; gut extracted by pulling the stinger). Extracted haemolymph from
-the feeding-experiment bees by the centrifugal protocol above and stored at
-−80 °C for future spiking experiments.
+the feeding-experiment bees by the centrifugal protocol, written up the same week
+(now on [the protocols page](/bee-lab-experiments)), and stored at −80 °C for
+future spiking experiments.
 
 #### 6 July — Anree, Freddie, Ari, Diogo, Theo
 
@@ -92,7 +93,7 @@ haemolymph protocol for the following Wednesday.
 Collected one frame with enough larvae past the 4th instar, under instruction
 not to disturb capped brood. Tweezers were most efficient for removal, with a
 puncture risk from pointed ones. Established the larval haemolymph method and
-the adult dissection steps recorded in the protocols above.
+the adult dissection steps, both on [the protocols page](/bee-lab-experiments).
 
 #### 10 July — Anree, Theo, Freddie
 
@@ -126,9 +127,11 @@ some bees may have gone unfed overnight. Bees began escaping enclosures during
 setup, flagged as a technique to improve.
 
 Set up a PCR feeding-tube evaporation assay: 6 adapter combinations × 2 repeats
-× 4 tubes, tracked in a shared spreadsheet. The assay write-up gives **five**
-adaptor combinations for the same comparison, at 250 µl of 1 M sucrose in
-deionised water per PCR tube; the two counts need reconciling.
+× 4 tubes, tracked in a shared spreadsheet.
+
+> **TODO —** The assay write-up gives **five** adaptor combinations for this
+> comparison, at 250 µl of 1 M sucrose in deionised water per PCR tube. Reconcile
+> the count with the six recorded here. Owner: bee lab.
 
 #### 15 July
 
@@ -495,13 +498,9 @@ was difficult.
 > [the bee lab](/bee-lab); the per-tube daily masses behind them, and every figure
 > for the vessel comparison, are still only in the team spreadsheet. Owner: bee lab.
 
-## Still missing
-
-- Images uploaded to `static.igem.wiki` — gels, feeder assembly, larval staging,
-  haemolymph extraction.
-- The protocol PDF.
-- The raw count tables above.
-- Adult and larval persistence results.
+> **TODO —** Figure: Photographs from the bench, placed against the entries they
+> belong to: gels, feeder assembly, larval staging and haemolymph extraction.
+> Owner: bee lab.
 
 ## Where this connects
 

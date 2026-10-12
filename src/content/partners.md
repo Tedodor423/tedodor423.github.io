@@ -29,13 +29,7 @@ their time. This page records **who supported the project and how**.
 
 > **TODO —** Write briefly what we did to raise money and what worked.
 
-## Still missing
-
-- Sponsor list, with permission confirmed for each logo.
-- Collaboration outcomes.
-- The fundraising account.
-
 ## Where this connects
 
-[Team](/team) · [Team members](/team/members) ·
-[Attributions](/attributions) · [Entrepreneurship](/entrepreneurship)
+[Team](/team) · [Attributions](/attributions) ·
+[Entrepreneurship](/entrepreneurship)

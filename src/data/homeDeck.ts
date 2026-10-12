@@ -112,7 +112,7 @@ export const MITE = {
     { text: "." },
   ] as Run[],
   verdict:
-    "With unstoppable climate change effects, the problem Will get worse",
+    "With unstoppable climate change effects, the problem will get worse",
 };
 
 export const miteTitle = () =>
@@ -131,7 +131,7 @@ export interface Evidence {
   alt?: string;
 }
 
-const LAMAS_2025 = "https://doi.org/10.1101/2025.05.28.656706";
+const LAMAS_2026 = "https://doi.org/10.1371/journal.ppat.1013939";
 const TANG_2021 = "https://doi.org/10.1038/s41561-021-00712-5";
 
 export const TREATMENTS = {
@@ -148,8 +148,8 @@ export const TREATMENTS = {
       detail:
         "Every mite USDA scientists screened from US commercial operations hit by the 2025 collapses carried the mutation that lets it survive amitraz, a miticide used widely by beekeepers.",
       source: [
-        { text: "Lamas et al., bioRxiv, 2025", href: LAMAS_2025 },
-        { text: ", 39 mites from five operations, preprint; " },
+        { text: "Lamas et al., PLOS Pathogens, 2026", href: LAMAS_2026 },
+        { text: ", 39 mites from five operations; " },
         { text: "USDA ARS, June 2025", href: ARS_2025 },
         { text: " " },
         tag("LIT"),

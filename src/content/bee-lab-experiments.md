@@ -19,8 +19,11 @@ carries its own experimental limitations.**
 
 ### Aim
 
-> **TODO —** Aim, from the team's goal for this block: quantify adult bee feeding
-> behaviour to deliver a known dsRNA dose. Owner: bee lab.
+Find out how long an active dose of dsRNA stays in nurse-bee haemolymph over
+24 h, and whether uptake and persistence depend on the length of the dsRNA. That
+needed three things first: a feeding solution bees will drink, a known dose
+delivered to each bee, and a fast, clean way to extract haemolymph so that every
+timepoint is accurate.
 
 ### Experiments
 
@@ -198,7 +201,7 @@ Two feeding ports per tube, made with sterile hypodermic needles, **one near the
 and one at the neck** — the upper port breaks the airlock that otherwise stops flow
 as the reservoir drains. Port diameter is set by needle gauge; **23G was adopted**,
 and the capacity rule is three tubes per cage at 23G, or sub-24 h replacement. See
-[cycle B2](/engineering#cycle-b2).
+[cycle B1](/engineering#cycle-b1).
 
 **Limitation.** A number of the printed adaptors showed minor print defects. They
 were judged sufficient for testing, but this was noted as a factor that **may have
@@ -226,7 +229,7 @@ dsRNA in sucrose directly to the proboscis to avoid contaminating the body surfa
 - Test solutions in sucrose (e.g. dsRNA, dsGFP control, sucrose-only control),
   labelled
 - Humid chamber: sealed box with a damp towel, kept in the incubator
-- Gloves; −20 °C freezer and biohazard bin for disposal
+- Gloves; −20 °C freezer
 
 **Obtaining newly emerged bees.**
 
@@ -234,8 +237,7 @@ dsRNA in sucrose directly to the proboscis to avoid contaminating the body surfa
    and place it in the incubator brood box.
 2. Incubate overnight at 34 °C so bees emerge from their cells.
 3. The next day, gently brush the newly emerged bees from the frame into a clean
-   bucket or container. **Using bees under 24 h old means all bees are the same age
-   and none have fed in the hive.**
+   bucket or container.
 4. Transfer the bees into glass vials, one or a few bees per vial, and close them.
 
 **Chilling and harnessing.**
@@ -257,14 +259,14 @@ dsRNA in sucrose directly to the proboscis to avoid contaminating the body surfa
 
 **Feeding.** Each bee receives 5 µl of its assigned solution, given in two portions.
 
-1. Dilute the IVT product to 200 ng/µl in 1 M sucrose with the appropriate salt
-   buffers, after reading an aliquot on a Nanodrop. At 5 µl that is a **1 µg dose**.
-2. Draw the solution into the microsyringe and form a 2–3 µl droplet at the tip.
+1. Dilute the IVT product to 200 ng/µl in 1 M sucrose, after reading an aliquot on
+   a Nanodrop. At 5 µl that is a **1 µg dose**.
+2. Draw the solution into the microsyringe and form a 2.5 µl droplet at the tip.
 3. Touch the droplet lightly to the bee's antennae to trigger proboscis extension,
    then present it to the extended proboscis.
 4. If the bee does not respond, gently touch the proboscis or antennae with the tip
    to stimulate extension. Use a blunt tip and light pressure, to avoid injury.
-5. Once the first droplet is fully consumed, offer the remaining 2–3 µl. **Giving all
+5. Once the first droplet is fully consumed, offer the remaining 2.5 µl. **Giving all
    5 µl at once usually makes the droplet spill.**
 6. Record for each bee whether the full 5 µl was consumed, and note any spillage or
    refusal.
@@ -279,11 +281,9 @@ dsRNA in sucrose directly to the proboscis to avoid contaminating the body surfa
 1. Once all bees are fed, place the PER holders in the humid chamber inside the
    incubator at 34 °C, with a warm damp towel at the base of the tubes.
 2. Leave them for the period set by the design (e.g. 3 h, 24 h, 48 h).
-3. For periods over 24 h, give every bee 5 µl of plain sucrose each evening so bees
-   do not starve. Garbian et al. (2012) used this step.
-4. At each time point, record survival: a bee is dead if it shows no leg, antenna or
+3. At each time point, record survival: a bee is dead if it shows no leg, antenna or
    proboscis movement when touched.
-5. At the end of the period, process bees for the planned endpoint — haemolymph or
+4. At the end of the period, process bees for the planned endpoint — haemolymph or
    whole-body sampling — or euthanise at −20 °C and dispose of in a biohazard bin.
 
 **Experimental limitations.**
@@ -424,14 +424,22 @@ adult haemolymph, which the centrifugal method already delivers.
 
 ### Discussion
 
-> **TODO —** Discuss the results, and the next steps. Owner: bee lab.
+NaCl at 50–150 mM in 1 M sucrose did not change how much the bees drank or how many
+died within 24 h, so the salt buffer carried in the dsRNA feeding solution can stay.
+Cage feeding could only ever give an average dose across a whole cage, and the
+haemolymph work needed a known dose per bee, so the PER assay became our feeding
+method. Results and statistics are on [the bee lab](/bee-lab#adult-bee-assays).
+
+> **TODO —** The adult persistence results, what they say about length-dependent
+> uptake, and the next step. Owner: bee lab.
 
 ## Block 2: Working with larvae
 
 ### Aim
 
-> **TODO —** Aim, from the team's goal for this block: a larval feeding experiment
-> to assay dose stability. Owner: bee lab.
+Find out how long a single dose of dsRNA fed to a 5th-instar larva persists in it.
+If the dsRNA is still there 24 h after feeding, a mite infesting that cell is
+exposed to it.
 
 ### Experiments
 
@@ -442,8 +450,18 @@ adult haemolymph, which the centrifugal method already delivers.
 
 ##### Larval feeding: 5 µl dose
 
-> **TODO —** Protocol and results for the 5 µl pilot dose, the first iteration
-> of the larval feeding assay. Owner: bee lab.
+The first iteration, run as three pilots on 22, 28 and 30 July (dated in
+[the lab book](/bee-lab-labbook)). A brood frame was taken from the hive, each
+larva (5th instar; 4th and 5th in the third pilot) was dosed with a 5 µl droplet
+of dsRNA in sucrose, dabbed from a micropipette without the tip touching it, the
+dosed cells were marked with coloured pen lines on the frame, and the frame went
+back into the hive. Haemolymph was extracted the next day.
+
+**Result.** **5 µl was too little.** The droplet fell onto the surface of the
+larva: it neither covered the larva nor could be placed reliably near its mouth.
+Extracting haemolymph with a needle often burst the larva and contaminated the
+sample with gut fluid. We kept the 1 µg dose and diluted it into 20 µl, below. See
+[cycle L1](/engineering#cycle-l1).
 
 ##### Larval feeding: 20 µl dose
 
@@ -503,9 +521,9 @@ throughout the capped period.
 **Experimental limitations.**
 
 - **Larval compromise.** Adding 20 µl of liquid and removing the frame from the hive
-  can drown, chill or stress larvae. **In the main mite assay, over half of fed larvae
-  were compromised in every group.** Always include a sucrose-only control and record
-  larval condition at the end.
+  can drown, chill or stress larvae. **In the main mite assay, half or more of the
+  fed larvae were compromised in every group.** Always include a sucrose-only
+  control and record larval condition at the end.
 - **Nurse bee interference.** Nurse bees may remove fed larvae, or eat or redistribute
   the solution before capping. The true dose each larva receives is therefore unknown.
 - **Staging error.** Instar is judged by eye, so some larvae may be 4th instar or just
@@ -587,7 +605,7 @@ directly.
 ##### Larval haemolymph extraction
 
 Established 8 July 2026. Yield around 10 µl per larva. **Superseded as the primary
-sampling route by whole-larva processing** — see [cycle L2](/engineering#cycle-l2) —
+sampling route by whole-larva processing** — see [cycle L3](/engineering#cycle-l3) —
 but recorded here because it is what a team wanting haemolymph specifically would
 need.
 
@@ -650,15 +668,27 @@ volume and drying with the lid open.
 
 ### Discussion
 
-> **TODO —** Discuss the results, and the next steps. Owner: bee lab.
+A single 1 µg dose of 700 bp dsRNA was recovered intact from 5th-instar larvae 24 h
+after feeding, which spans the window when _Varroa_ enters the cell and begins to
+feed. That made feeding the larva the delivery route for the brood-frame mite death
+assay in Block 3. Whole larvae, frozen in the cell, replaced haemolymph extraction
+as the sampling route, because larvae burst too easily to give clean haemolymph at
+the numbers a timecourse needs. The result is on [the bee lab](/bee-lab#larval-assays)
+and [Results](/results).
+
+> **TODO —** The later timepoints of the timecourse (48 h, 72 h, 96 h and 7 days),
+> what they say about persistence through capping, and the next step. Owner: bee
+> lab.
 
 ## Block 3: Working with mites
 
 ### Aim
 
-> **TODO —** Aim, from the team's goal for this block: develop an experimental
-> setup for a mortality and knockdown screen of NECTAR-designed targets in mites.
-> Owner: bee lab.
+Test an active concentration of SEED-designed targets on live mites, to show both
+that the targets kill mites and that SEED's top-ranked targets kill more than its
+lowest-ranked. First we had to keep mites alive long enough, with background
+mortality low enough, for a death to mean something; that took a series of
+pilots.
 
 ### Experiments
 
@@ -782,8 +812,18 @@ Campbell EM, Budge GE, Bowman AS (2010), _Parasites & Vectors_ 3: 73.
 
 #### Iteration 2: Artificial infestation
 
-> **TODO —** Protocol for soaking mites in dsRNA and inserting them into live
-> larval cells, the method of [cycle V2](/engineering#cycle-v2). Owner: bee lab.
+Mites are soaked for 6 h as in Iteration 1, in 0.9% NaCl carrying a low or a high
+concentration of our 700 bp target dsRNA, or in saline alone as the control. After
+recovery, each surviving mite goes individually into a capped larval cell in a
+brood frame, and is scored alive or dead after 24 h. Group sizes follow soak
+survival, so they are unequal: we used every mite that survived. This is the
+method of [cycle V2](/engineering#cycle-v2).
+
+> **TODO —** The steps still unrecorded: how each cell was opened and resealed,
+> where the frame was held for the 24 h and at what temperature, and the low and
+> high dsRNA concentrations. The 11 September journal entry also records the
+> control soak as plain water, against 0.9% NaCl in the assay write-up. Owner: bee
+> lab.
 
 #### Iteration 3: Feeding larvae a dose, then infesting with mites
 
@@ -868,10 +908,10 @@ relative humidity, in the dark, for the planned assay period. **The main assay u
 
 **Experimental limitations.**
 
-- **Larval compromise.** In the main assay, over half of larvae were compromised in
-  every group, and **96% of mites in compromised larvae died**. Mite death may reflect
-  host failure rather than dsRNA, so always compare against sucrose and dsGFP
-  controls.
+- **Larval compromise.** In the main assay, half or more of the larvae were
+  compromised in every group, and **96% of mites in compromised larvae died**.
+  Mite death may reflect host failure rather than dsRNA, so always compare against
+  sucrose and dsGFP controls.
 - **Missing mites.** 30–50% of cells yielded no mite. Whether these mites died,
   escaped or were removed is unknown, which can bias mortality estimates.
 - **Mite reproduction.** Foundresses can lay eggs, so a cell may hold several mites
@@ -886,7 +926,16 @@ relative humidity, in the dark, for the planned assay period. **The main assay u
 
 ### Discussion
 
-> **TODO —** Discuss the results, and the next steps. Owner: bee lab.
+Soaking gave our first evidence of a dose-response, at 24 h, but the soak is the
+weak step: only about a fifth of mites survive it, and soaked mites reproduced in
+the cell, leaving unexposed offspring beside the treated mother. Feeding the larval
+host removed the soak, but did not show a dsRNA-mediated increase in mite
+mortality: whether the larva was compromised decided whether its mite lived. The
+next iteration has to reduce larval handling and feeding stress and score mite
+mortality only in healthy larvae before target efficacy, or SEED's ranking, can be
+judged. The soak assay is worth repeating in a more favourable mite season (early
+August) with larger, equalised groups and a concentration titre. Results and
+statistics are on [the bee lab](/bee-lab#varroa-work).
 
 ## Protocols still owed
 

@@ -67,7 +67,7 @@
 }
 
 .tl-stage {
-  --tl-gutter: 8.5rem;
+  --tl-gutter: 11rem;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -144,7 +144,7 @@ body:has(.site-nav.is-hidden) .tl-ride.opens-page .tl-stage {
  * of controls leave room for. */
 .tl-title {
   margin: 0;
-  font-size: 2rem;
+  font-size: 2.1rem;
   line-height: 1;
   text-transform: uppercase;
 }
@@ -172,7 +172,7 @@ body:has(.site-nav.is-hidden) .tl-ride.opens-page .tl-stage {
   background: var(--surface);
   color: var(--text);
   font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: 0.8rem;
 }
 
 .tl-filter button:hover,
@@ -192,7 +192,7 @@ body:has(.site-nav.is-hidden) .tl-ride.opens-page .tl-stage {
   gap: 0.4rem;
   margin-left: 0.5rem;
   color: var(--text-muted);
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   white-space: nowrap;
 }
 
@@ -213,12 +213,12 @@ body:has(.site-nav.is-hidden) .tl-ride.opens-page .tl-stage {
 .tl-legend {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.2rem 0.85rem;
+  gap: 0.2rem 0.6rem;
   margin: 0;
   padding: 0;
   list-style: none;
   color: var(--text-muted);
-  font-size: 0.72rem;
+  font-size: 0.74rem;
 }
 
 .tl-legend li {
@@ -236,6 +236,31 @@ body:has(.site-nav.is-hidden) .tl-ride.opens-page .tl-stage {
   overflow: visible;
 }
 
+/* The bar keeps to one row of controls on a 1366px laptop, where a second row
+ * would cost the chart its ride on a short window. Wider screens have the
+ * room for the bar to grow with the chart. */
+@media (min-width: 96rem) {
+  .tl-title {
+    font-size: 2.5rem;
+  }
+
+  .tl-filter button,
+  .tl-follow select,
+  .tl-follow {
+    font-size: 0.88rem;
+  }
+
+  .tl-legend {
+    gap: 0.2rem 0.85rem;
+    font-size: 0.8rem;
+  }
+
+  .tl-legend-mark {
+    width: 26px;
+    height: 14px;
+  }
+}
+
 .tl-legend-turn {
   padding: 0 0.3rem;
   background: var(--honey);
@@ -248,9 +273,9 @@ body:has(.site-nav.is-hidden) .tl-ride.opens-page .tl-stage {
  * two for ever on a window right at the edge. */
 .tl-focus-line {
   min-height: 3.1em;
-  max-width: 64rem;
+  max-width: 72rem;
   margin: 0.35rem 0 0;
-  font-size: 0.78rem;
+  font-size: 0.88rem;
   line-height: 1.55;
 }
 
@@ -303,7 +328,7 @@ body:has(.site-nav.is-hidden) .tl-ride.opens-page .tl-stage {
 .tl-now-month {
   display: block;
   font-family: var(--font-heading);
-  font-size: 0.82rem;
+  font-size: 1.05rem;
   color: var(--ink);
 }
 
@@ -311,7 +336,7 @@ body:has(.site-nav.is-hidden) .tl-ride.opens-page .tl-stage {
   display: block;
   overflow: hidden;
   color: var(--text-muted);
-  font-size: 0.66rem;
+  font-size: 0.82rem;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
@@ -330,7 +355,7 @@ body:has(.site-nav.is-hidden) .tl-ride.opens-page .tl-stage {
   background: none;
   color: var(--ink);
   font-family: var(--font-heading);
-  font-size: 0.8rem;
+  font-size: 1.05rem;
   line-height: 1.2;
   text-align: left;
 }
@@ -379,7 +404,9 @@ body:has(.site-nav.is-hidden) .tl-ride.opens-page .tl-stage {
   pointer-events: none;
 }
 
-/* The head: acts on a honey rule, months under them. */
+/* The head: acts on a honey rule, months under them. The month rules start
+ * under the act names (RULES_TOP in the component), and the whole strip is
+ * HEAD tall. */
 .tl-act-rule {
   stroke: var(--honey);
   stroke-width: 3;
@@ -389,22 +416,23 @@ body:has(.site-nav.is-hidden) .tl-ride.opens-page .tl-stage {
 .tl-month,
 .tl-record-end-label {
   position: absolute;
+  line-height: 1.25;
   white-space: nowrap;
   pointer-events: none;
 }
 
 .tl-act-name {
-  top: 5px;
+  top: 6px;
   font-family: var(--font-heading);
-  font-size: 0.74rem;
+  font-size: 1rem;
   color: var(--ink);
 }
 
 .tl-month,
 .tl-record-end-label {
-  top: 23px;
+  top: 31px;
   color: var(--text-muted);
-  font-size: 0.68rem;
+  font-size: 0.88rem;
 }
 
 .tl-grid {
@@ -567,13 +595,13 @@ body:has(.site-nav.is-hidden) .tl-ride.opens-page .tl-stage {
 .tl-card {
   position: absolute;
   z-index: 5;
-  width: min(24rem, calc(100% - 1rem));
-  padding: 0.7rem 0.9rem 0.75rem;
+  width: min(30rem, calc(100% - 1rem));
+  padding: 0.8rem 1rem 0.85rem;
   border: 1px solid var(--ink);
   border-radius: var(--radius);
   background: var(--surface);
   color: var(--text);
-  font-size: 0.8rem;
+  font-size: 0.98rem;
   line-height: 1.6;
 }
 
@@ -597,12 +625,12 @@ body:has(.site-nav.is-hidden) .tl-ride.opens-page .tl-stage {
   gap: 0 0.4rem;
   margin: 0;
   color: var(--text-muted);
-  font-size: 0.7rem;
+  font-size: 0.86rem;
 }
 
 .tl-card-swatch {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: var(--lane);
 }
@@ -615,8 +643,8 @@ body:has(.site-nav.is-hidden) .tl-ride.opens-page .tl-stage {
   align-self: center;
   display: grid;
   place-items: center;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.8rem;
+  height: 1.8rem;
   margin-left: auto;
   padding: 0;
   border: 1px solid var(--rule);
@@ -625,8 +653,8 @@ body:has(.site-nav.is-hidden) .tl-ride.opens-page .tl-stage {
 }
 
 .tl-close svg {
-  width: 0.6rem;
-  height: 0.6rem;
+  width: 0.7rem;
+  height: 0.7rem;
   fill: none;
   stroke: var(--ink);
   stroke-width: 1.6;
@@ -646,7 +674,7 @@ body:has(.site-nav.is-hidden) .tl-ride.opens-page .tl-stage {
 .tl-card-title {
   margin: 0.45rem 0 0;
   font-family: var(--font-heading);
-  font-size: 0.95rem;
+  font-size: 1.18rem;
   line-height: 1.3;
   color: var(--ink);
 }
@@ -657,7 +685,7 @@ body:has(.site-nav.is-hidden) .tl-ride.opens-page .tl-stage {
 
 .tl-card-foot {
   margin: 0.45rem 0 0;
-  font-size: 0.72rem;
+  font-size: 0.88rem;
 }
 
 /* An entry whose numbers came out of a message rather than a journal. It is
@@ -669,7 +697,7 @@ body:has(.site-nav.is-hidden) .tl-ride.opens-page .tl-stage {
   padding-left: 0.6rem;
   border-left: 2px solid var(--violet);
   color: var(--text-muted);
-  font-size: 0.72rem;
+  font-size: 0.88rem;
   line-height: 1.55;
 }
 
@@ -680,7 +708,7 @@ body:has(.site-nav.is-hidden) .tl-ride.opens-page .tl-stage {
   align-items: baseline;
   gap: 0.2rem 0.5rem;
   margin: 0.45rem 0 0;
-  font-size: 0.74rem;
+  font-size: 0.9rem;
 }
 
 .tl-threads-label,
@@ -694,7 +722,7 @@ body:has(.site-nav.is-hidden) .tl-ride.opens-page .tl-stage {
   background: none;
   color: var(--link);
   font-family: var(--font-mono);
-  font-size: 0.74rem;
+  font-size: 0.9rem;
   text-decoration: underline;
 }
 
@@ -723,7 +751,7 @@ body:has(.site-nav.is-hidden) .tl-ride.opens-page .tl-stage {
   border: 0;
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 0.85rem;
+  font-size: 1.1rem;
   letter-spacing: 0;
 }
 
@@ -731,13 +759,13 @@ body:has(.site-nav.is-hidden) .tl-ride.opens-page .tl-stage {
   max-width: var(--measure);
   margin: 0.5rem 0 0;
   color: var(--text-muted);
-  font-size: 0.76rem;
+  font-size: 0.92rem;
   line-height: 1.6;
 }
 
 .tl-record .tl-record-month h3 {
   margin: 1.25rem 0 0;
-  font-size: 0.95rem;
+  font-size: 1.2rem;
 }
 
 .tl-record-month ul {
@@ -750,7 +778,7 @@ body:has(.site-nav.is-hidden) .tl-ride.opens-page .tl-stage {
   max-width: var(--measure);
   padding: 0.6rem 0;
   border-bottom: 1px solid var(--rule);
-  font-size: 0.8rem;
+  font-size: 0.98rem;
   line-height: 1.6;
 }
 
@@ -761,7 +789,7 @@ body:has(.site-nav.is-hidden) .tl-ride.opens-page .tl-stage {
 .tl-entry-meta {
   margin: 0;
   color: var(--text-muted);
-  font-size: 0.72rem;
+  font-size: 0.86rem;
 }
 
 .tl-entry-title {
@@ -780,7 +808,7 @@ body:has(.site-nav.is-hidden) .tl-ride.opens-page .tl-stage {
  * just wide enough for the row names on two lines. */
 @media (max-width: 47.99rem) {
   .tl-stage {
-    --tl-gutter: 5.75rem;
+    --tl-gutter: 7rem;
   }
 
   .tl-bar {
@@ -796,10 +824,6 @@ body:has(.site-nav.is-hidden) .tl-ride.opens-page .tl-stage {
     row-gap: 0.4rem;
   }
 
-  .tl-title {
-    font-size: 1.8rem;
-  }
-
   .tl-follow {
     margin-left: 0;
   }
@@ -810,7 +834,7 @@ body:has(.site-nav.is-hidden) .tl-ride.opens-page .tl-stage {
 
   .tl-lane {
     left: 0.35rem;
-    font-size: 0.74rem;
+    font-size: 0.9rem;
   }
 
   .tl-now {

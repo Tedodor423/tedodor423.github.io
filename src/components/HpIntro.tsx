@@ -9,7 +9,7 @@ import {
   type CSSProperties,
   type MouseEvent as ReactMouseEvent,
 } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   HEXES,
   HEX_R,
@@ -24,8 +24,10 @@ import { useMedia } from "../utils/useMedia";
 import { STILL, clamp01 } from "../utils/useClock";
 import { DECK_MEDIA, useDeckRests } from "../utils/deck";
 import { glideTo } from "../utils/glide";
+import { PLACED } from "../utils/placed";
 import { MAP_ANCHOR } from "../data/stakeholders";
 import {
+  CASE_STUDIES,
   HP_INTRO,
   SPREAD_YEARS,
   SURVEY_COUNTS,
@@ -63,7 +65,10 @@ import "./HpIntro.css";
  *     surface temperature under it, for the models; the HIVE hive in its
  *     place, which opens the framework's window, for the framework; and the
  *     people we interviewed, a honey cell each, for the engineering.
- *     Pressing a line rides the window to it.
+ *     Pressing a line rides the window to it and puts the line's fragment
+ *     in the address (`#modelling`), so the address is a permalink to it;
+ *     a link with that fragment lands the window on the line (the landing
+ *     markers below).
  *
  * The map scrolls up with the reach, holds at the top beside the slide, and
  * then, on a wide screen, grows into the stakeholder map as that scrolls up
@@ -142,6 +147,23 @@ function lineAt(t: number): number {
 
 /** How far a line the highlight is not on steps back. */
 const DIM = 0.42;
+
+/** Where a line's fragment lands, as a CSS length: the window's top at the
+ * scroll restOf gives for it. On a wide screen from the top of the pin,
+ * where the window's top at the line's place on the ride is that far down
+ * the ride less where the slide holds; on a narrow one from the line's own
+ * top, the window's top being far enough above it for the line to sit just
+ * past the reading line. ScrollToHash puts the marker flush with the
+ * window's top. */
+const landingTop = (i: number, narrow: boolean) =>
+  narrow
+    ? `${-(READ_AT_NARROW - 0.05) * 100}vh`
+    : `calc(${CENTRES[i] * STEP * 100}vh - var(--hpi-top))`;
+
+/** Whether a click is a plain one, which the page answers itself, rather
+ * than one that opens the link elsewhere. */
+const plainClick = (e: ReactMouseEvent) =>
+  e.button === 0 && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey;
 
 /* ---------- the map's data ---------- */
 
@@ -724,22 +746,42 @@ export function HpIntro() {
     };
   }, [narrow]);
 
-  /* The map holds with its middle at the window's middle (HpIntro.css),
-   * which needs its height. */
+  /* The map holds with its middle at the window's middle where the figure
+   * fits that way (HpIntro.css), which needs the map's height and the whole
+   * figure's. */
+  const figure = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
     const el = root.current;
     const box = mapBox.current;
-    if (!el || !box) return;
-    const ro = new ResizeObserver(() =>
-      el.style.setProperty("--hpi-map-h", `${box.offsetHeight}px`),
-    );
+    const fig = figure.current;
+    if (!el || !box || !fig) return;
+    const ro = new ResizeObserver(() => {
+      el.style.setProperty("--hpi-map-h", `${box.offsetHeight}px`);
+      el.style.setProperty("--hpi-fig-h", `${fig.offsetHeight}px`);
+    });
     ro.observe(box);
+    ro.observe(fig);
     return () => ro.disconnect();
   }, []);
 
-  /** Pressing a line rides the window to it. */
-  const pick = (i: number) => glideTo(restOf(i));
-  /* Anywhere on the line is a pointer shortcut to its button, except its
+  /** Pressing a line rides the window to it, and puts its fragment in the
+   * address as a permalink, with PLACED so ScrollToHash leaves the window
+   * to the ride. */
+  const navigate = useNavigate();
+  const { hash } = useLocation();
+  const pick = (i: number) => {
+    glideTo(restOf(i));
+    const { anchor } = USES[i];
+    if (hash !== `#${anchor}`) navigate({ hash: anchor }, { state: PLACED });
+  };
+  /* The line's arrow is a real link to its fragment, so a modified click
+   * opens it as one and it can be copied. */
+  const onArrow = (i: number) => (e: ReactMouseEvent) => {
+    if (!plainClick(e)) return;
+    e.preventDefault();
+    pick(i);
+  };
+  /* Anywhere on the line is a pointer shortcut to its arrow, except its
    * links, which do their own thing. */
   const onLine = (i: number) => (e: ReactMouseEvent) => {
     if ((e.target as Element).closest("a, button")) return;
@@ -869,6 +911,21 @@ export function HpIntro() {
     };
   }, [still]);
 
+  /* "Continue scrolling": a ride down to the stakeholder map filling the
+   * window, the hand-off playing on the way. Still a real link, so a
+   * modified click opens it as one; the address takes the map's fragment,
+   * with PLACED so ScrollToHash leaves the window to the ride. */
+  const toQuestions = (e: ReactMouseEvent) => {
+    if (!plainClick(e)) return;
+    const mapPin = document.querySelector<HTMLElement>(
+      `#${MAP_ANCHOR} .sm-pin`,
+    );
+    if (!mapPin) return;
+    e.preventDefault();
+    glideTo(mapPin.getBoundingClientRect().top + window.scrollY, 900);
+    navigate({ hash: MAP_ANCHOR }, { state: PLACED });
+  };
+
   const on = (s: IntroState) => (state === s ? " is-on" : "");
 
   return (
@@ -897,15 +954,27 @@ export function HpIntro() {
                   </p>
                   <InterviewFaces label={HP_INTRO.facesLabel} />
                 </div>
-                <p className="hpi-lede">
-                  <Copy text={HP_INTRO.reach} />
-                </p>
               </div>
 
               {/* The slide, straight under the reach: pinned while the
                * window rides through its lines (the empty .hpi-ride under it
                * is the length of the ride). */}
               <div className="hpi-pin" ref={pin}>
+                {/* Where a line's fragment lands on a wide screen, each at
+                 * its line's place on the ride (landingTop): the lines are
+                 * pinned, so their own boxes are no place to land. On a
+                 * narrow screen each line carries its own marker. */}
+                {!narrow && (
+                  <div className="hpi-landing" aria-hidden>
+                    {USES.map((use, i) => (
+                      <span
+                        key={use.anchor}
+                        id={use.anchor}
+                        style={{ top: landingTop(i, false) }}
+                      />
+                    ))}
+                  </div>
+                )}
                 <div className="hpi-slide" ref={slide}>
                   <p className="hpi-lede hpi-uses-lead">
                     <Copy text={HP_INTRO.usesLead} />
@@ -924,16 +993,25 @@ export function HpIntro() {
                           ref={(el) => void (lines.current[i] = el)}
                           onClick={onLine(i)}
                         >
+                          {narrow && (
+                            <span
+                              className="hpi-landing"
+                              id={use.anchor}
+                              style={{ top: landingTop(i, true) }}
+                              aria-hidden
+                            />
+                          )}
                           {/* The line's own control, for a keyboard: shows
-                              its picture. The arrow is drawn, the shaft and
-                              head of the wiki's link arrows, so it never
-                              falls back to another face's glyph. */}
-                          <button
-                            type="button"
+                              its picture, and is the line's permalink. The
+                              arrow is drawn, the shaft and head of the
+                              wiki's link arrows, so it never falls back to
+                              another face's glyph. */}
+                          <Link
+                            to={{ hash: use.anchor }}
                             className="hpi-pick"
-                            aria-pressed={active === i}
+                            aria-current={active === i ? "location" : undefined}
                             aria-label={`Show the figure for: ${plain(use.text)}`}
-                            onClick={() => pick(i)}
+                            onClick={onArrow(i)}
                           >
                             <svg
                               className="hpi-arrow"
@@ -942,7 +1020,7 @@ export function HpIntro() {
                             >
                               <path d="M 2 8 H 13 M 8.5 3.5 L 13 8 L 8.5 12.5" />
                             </svg>
-                          </button>
+                          </Link>
                           <span>
                             <Copy text={use.text} />
                           </span>
@@ -965,7 +1043,7 @@ export function HpIntro() {
                 </span>
               </p>
 
-              <div className="hpi-figure">
+              <div className="hpi-figure" ref={figure}>
                 <div className="hpi-mapbox" ref={mapBox}>
                   <div className="hpi-fly" ref={fly}>
                     <IntroMap
@@ -994,6 +1072,27 @@ export function HpIntro() {
                       <Todo text={HP_INTRO.todos.survey} />
                     )}
                   </div>
+                  <div className={`hpi-foot-regions${on("regions")}`}>
+                    <div className="hpi-cases">
+                      {CASE_STUDIES.map((c) => (
+                        <Link key={c.to} to={c.to} className="hpi-case">
+                          <span className="hpi-case-name">
+                            {c.name}
+                            <svg
+                              className="hpi-case-arrow"
+                              viewBox="0 0 16 16"
+                              aria-hidden
+                            >
+                              <path d="M 2 8 H 13 M 8.5 3.5 L 13 8 L 8.5 12.5" />
+                            </svg>
+                          </span>
+                          <span className="hpi-case-text">
+                            <MarkedInline text={c.summary} />
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
                   <div className={`hpi-foot-spread${on("spread")}`}>
                     <p className="hpi-chart-title">
                       <Marked text={HP_INTRO.temperatureTitle} />
@@ -1017,6 +1116,27 @@ export function HpIntro() {
 
                 {/* The framework's line shows the hive in place of the map. */}
                 <div className={`hpi-hive${on("hive")}`}>{hive}</div>
+
+                {/* On to the questions: at the window's bottom right while
+                 * the slide is up, and under the map, larger, once the last
+                 * line is, just before the map grows into the stakeholder
+                 * map. */}
+                <Link
+                  to={{ hash: MAP_ANCHOR }}
+                  className="hpi-continue"
+                  onClick={toQuestions}
+                >
+                  <span className="hpi-continue-label">
+                    <Marked text={HP_INTRO.continueLabel} />
+                  </span>
+                  <svg
+                    className="hpi-continue-arrow"
+                    viewBox="0 0 16 16"
+                    aria-hidden
+                  >
+                    <path d="M 8 2 V 13 M 3.5 8.5 L 8 13 L 12.5 8.5" />
+                  </svg>
+                </Link>
                 {frameworkWindow}
               </div>
             </div>

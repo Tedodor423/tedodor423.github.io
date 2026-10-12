@@ -5,6 +5,7 @@ import { headingId } from "../utils/headingId";
 import { splitAt } from "../utils/markdownSections";
 import { MarksContext } from "../utils/marksContext";
 import { Marked } from "./Marked";
+import { Ink } from "./CombBackdrop";
 import { MarkdownChunk } from "./MarkdownPage";
 
 /* The experiments-and-protocols layout: a menu of every experiment down the
@@ -238,12 +239,16 @@ export function ExperimentsPage({ content, marks }: ExperimentsPageProps) {
                 <h2 id={section.id}>
                   {section.label && (
                     <span className="xp-block-label">
-                      <Marked text={section.label} />
+                      <Ink>
+                        <Marked text={section.label} />
+                      </Ink>
                       {/* Read aloud as "Block 1: ...", as written. */}
                       <span className="visually-hidden">: </span>
                     </span>
                   )}
-                  <Marked text={section.name} />
+                  <Ink>
+                    <Marked text={section.name} />
+                  </Ink>
                 </h2>
 
                 <MarkdownChunk source={section.intro} />
@@ -256,7 +261,9 @@ export function ExperimentsPage({ content, marks }: ExperimentsPageProps) {
                     }
                   >
                     <h3 id={part.id}>
-                      <Marked text={part.title} />
+                      <Ink>
+                        <Marked text={part.title} />
+                      </Ink>
                     </h3>
                     <MarkdownChunk source={part.body} />
 
@@ -269,7 +276,9 @@ export function ExperimentsPage({ content, marks }: ExperimentsPageProps) {
                           >
                             <summary>
                               <h4 id={experiment.id}>
-                                <Marked text={experiment.title} />
+                                <Ink>
+                                  <Marked text={experiment.title} />
+                                </Ink>
                               </h4>
                             </summary>
                             <div className="xp-experiment-body">

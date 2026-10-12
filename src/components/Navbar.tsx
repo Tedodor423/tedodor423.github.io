@@ -14,27 +14,10 @@ import { gliding } from "../utils/glide";
 const COMPACT_MEDIA = "(max-width: 991.98px)";
 
 /**
- * The bar's entries, with consecutive groups that share a `section` gathered
- * under it, so "The project in detail" renders once above its three dropdowns.
- * A `hidden` page is routed but not listed. Pages.ts never changes at runtime,
- * so this is computed once at module load.
+ * The bar's entries. A `hidden` page is routed but not listed. Pages.ts never
+ * changes at runtime, so this is computed once at module load.
  */
-interface Cluster {
-  section?: string;
-  entries: MenuEntry[];
-}
-
-const clusters: Cluster[] = [];
-for (const entry of Pages) {
-  if (!isGroup(entry) && entry.hidden) continue;
-  const section = isGroup(entry) ? entry.section : undefined;
-  const last = clusters[clusters.length - 1];
-  if (last && last.section === section) {
-    last.entries.push(entry);
-  } else {
-    clusters.push({ section, entries: [entry] });
-  }
-}
+const entries = Pages.filter((entry) => isGroup(entry) || !entry.hidden);
 
 /** True if `pathname` is this page or one of its descendants. */
 function containsPath(page: Page, pathname: string): boolean {
@@ -274,24 +257,7 @@ export function Navbar() {
             and the search field sit in the bar as if it were not there. In
             the compact menu it is the panel the Menu button opens. */}
         <div id="site-nav-menu" className="site-nav-menu">
-          <ul className="site-nav-list">
-            {clusters.map((cluster) =>
-              cluster.section ? (
-                // An overarching title with its groups gathered under it. The
-                // title is plain text: it labels the run, it is not a control.
-                <li key={cluster.section} className="site-nav-section">
-                  <span className="site-nav-section-title">
-                    {cluster.section}
-                  </span>
-                  <ul className="site-nav-section-list">
-                    {cluster.entries.map(renderEntry)}
-                  </ul>
-                </li>
-              ) : (
-                cluster.entries.map(renderEntry)
-              ),
-            )}
-          </ul>
+          <ul className="site-nav-list">{entries.map(renderEntry)}</ul>
 
           {/* The wiki's only search field. Typing in it navigates to
               /search, which is why nothing here links there. On a phone,

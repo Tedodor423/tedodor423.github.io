@@ -22,13 +22,8 @@
  */
 
 [data-comb="on"] {
-  /* Type on the comb. Wax rather than white: white on a warm photograph reads
-     as a hole cut in it. */
-  --comb-ink: #fbf7ec;
-
-  /* What a comb band shows if the photograph fails to load. Dark enough that
-     --comb-ink stays readable on it, so a 404 degrades to a plain dark band. */
-  --comb-fallback: #2e1d0c;
+  /* The ink, the fallback and the table rule on the comb are brand tokens
+     (brand.css, "on the comb photograph"), shared with CombBackdrop. */
 
   /* The air a band needs to read as a band. Generous: the point of the run is
      the alternation, and that only registers if each one is a block rather
@@ -111,7 +106,7 @@
 /* Table rules drawn to read on white disappear on the photograph. */
 [data-comb="on"] [data-band="comb"] th,
 [data-comb="on"] [data-band="comb"] td {
-  border-color: #7d6242;
+  border-color: var(--comb-rule);
 }
 
 /* Blockquotes are the TODO / FIGURE / RESULT blocks, and they stay paper: a

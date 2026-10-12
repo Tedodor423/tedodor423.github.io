@@ -1,9 +1,8 @@
-> **TODO —** This page is unwritten. The NECTAR Product Handbook is being drafted
-> by Anna; the team write-up still records no content for it, only her name. Nothing below has been filled in
-> from another source on purpose: usage instructions for a treatment that has
-> not been through a field trial cannot be inferred from the lab work, and
-> inventing them would be the one thing this wiki must not do. Owner: Anna,
-> with human practices.
+> **TODO —** The NECTAR beekeeper's manual is being written by Anna; the team's
+> draft of 12 October holds no text for it yet, and every section below waits on
+> it. Usage instructions have to come from that manual, not from the lab work: the
+> treatment has not been through a field trial. Owner: Anna, with human
+> practices.
 
 ## What NECTAR is
 
@@ -21,7 +20,7 @@
 
 ## How to apply it
 
-> **TODO —** Figure: Photo or drawing sequence of installing the triagonal hive insert
+> **TODO —** Figure: Photo or drawing sequence of installing the triangular hive insert
 > in a hive: where it sits relative to the frames, how it is loaded, how it is
 > removed.
 
@@ -46,7 +45,7 @@ What approval it would still need is on
 
 The **NECTAR Manual for Bee Research** is a separate document: a complete,
 holistic manual for doing research on ingestible honeybee therapeutics. It is
-owned by Roman and is unwritten, but its contents are agreed:
+owned by Roman. Its planned contents:
 
 1. The primary literature on testing novel biopesticide systems on honeybees.
 2. How to approach bee labs and apiarists so that honeybee research can happen at
@@ -60,11 +59,15 @@ owned by Roman and is unwritten, but its contents are agreed:
 6. **Bee husbandry** — extracting frames in and out of hives, and dealing with
    stings and aggressiveness.
 
-The practical bee-handling half of that material already exists as
-[How to work with bees as an iGEM team](/working-with-bees).
+Part of that material already exists. Chapters 2 and 3, and the practical
+bee-handling advice, are in
+[How to work with bees as an iGEM team](/working-with-bees). The uptake,
+stability, gut-dissection and mite-assay protocols are on
+[bee lab experiments and protocols](/bee-lab-experiments).
 
-> **TODO —** The manual itself. Chapters 1–4 and the dissection and mite-assay
-> protocols have no text anywhere yet. Owner: Roman.
+> **TODO —** The manual itself, as one document. Chapters 1 and 4, the fat-body and
+> hypopharyngeal-gland dissections, and the husbandry chapter (frames in and out of
+> hives, stings and aggressiveness) have no text yet. Owner: Roman.
 
 ## Where this connects
 

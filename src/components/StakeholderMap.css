@@ -799,6 +799,16 @@ button.sm-tag:hover {
     scroll-margin-top: 0;
   }
 
+  /* 100vw includes the scrollbar, so the full-bleed map overshoots the
+   * window by half its width on the right, and the page would scroll
+   * sideways by that much. The band hosting it clips the overshoot, as the
+   * timeline's and the home slides' bands do: clip rather than hidden, so
+   * the band does not become a scroll container and the sticky stage keeps
+   * sticking to the window. */
+  .page-band:has(> .container > .markdown-page > .stakeholder-map) {
+    overflow-x: clip;
+  }
+
   /* The pin: the stage is sticky inside a taller wrapper, so the whole map
    * holds while the reader scrolls through it and then releases. The hold
    * is a ride through the questions: everyone at the top, then each

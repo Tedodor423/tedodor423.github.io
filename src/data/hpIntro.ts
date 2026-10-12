@@ -1,3 +1,6 @@
+import california from "../content/case-study-california.md?raw";
+import australia from "../content/case-study-australia.md?raw";
+
 /* The opening of the human practices page (src/components/HpIntro.tsx): the
  * words down the left, and the data the figure beside them draws.
  *
@@ -36,6 +39,9 @@ export interface IntroUse {
   text: string;
   /** What the figure shows while this line is the highlighted one. */
   state: IntroState;
+  /** The line's fragment. Pressing the line puts it in the address, and a
+   * link to it lands the window on the line. Unique on the page. */
+  anchor: string;
 }
 
 export const HP_INTRO = {
@@ -45,8 +51,6 @@ export const HP_INTRO = {
   interviews: { value: "30", label: "in-depth interviews conducted" },
   /** What the changing faces beside the count are, for a screen reader. */
   facesLabel: "Photographs of some of the people we interviewed",
-  reach:
-    "We reached out to hundreds of beekeepers, industry experts, academics and policy specialists.",
   survey: { value: "150+", label: "survey responses collected" },
   surveyWhere: "across 10 countries in 5 continents",
   usesLead:
@@ -55,22 +59,28 @@ export const HP_INTRO = {
     {
       text: "develop [case studies](/case-studies) for the most affected regions: [California](/case-studies/california) and [Australia](/case-studies/australia)",
       state: "regions",
+      anchor: "case-studies",
     },
     {
       text: "computationally model the Varroa mite's effects [within a hive](/ecological-modelling), its spread globally, and its [economic impacts](/economic-modelling)",
       state: "spread",
+      anchor: "modelling",
     },
     {
       text: "develop our HIVE framework",
       state: "hive",
+      anchor: "framework",
     },
     {
       text: "and ultimately inform our [engineering](/engineering), culminating in 3 major pivots of the project",
       state: "people",
+      anchor: "engineering",
     },
   ] satisfies IntroUse[],
   /** The note under the HIVE hive, which opens the framework's window. */
   frameworkButton: "Click to see the explanation",
+  /** The link at the foot of the slide, on to the stakeholder map. */
+  continueLabel: "Scroll down to see our full HP structure",
   /** The two regions the case studies are about, as hexCountries.ts names
    * them, labelled on the map while that line is read. */
   regions: ["California", "Australia"],
@@ -123,3 +133,39 @@ export const VARROA_FIRST_RECORDS: FirstRecord[] = [];
 
 /** The years the spread animation runs over. */
 export const SPREAD_YEARS = { from: 1950, to: 2025 };
+
+/** The first paragraph of a page's "## Summary" section, its hard line
+ * breaks joined, so the words are the page's own and an edit there shows
+ * here too. Empty if the page has no such section. */
+function summaryOf(markdown: string): string {
+  const lines = markdown.split(/\r?\n/);
+  const start = lines.findIndex((line) => /^##\s+Summary\s*$/.test(line));
+  if (start < 0) return "";
+  const paragraph: string[] = [];
+  for (const line of lines.slice(start + 1)) {
+    if (/^#/.test(line)) break;
+    if (!line.trim()) {
+      if (paragraph.length) break;
+      continue;
+    }
+    paragraph.push(line.trim());
+  }
+  return paragraph.join(" ");
+}
+
+/** The two case studies, shown under the map while the case studies' line
+ * is highlighted, in the order they lie on it, west to east. Each summary is
+ * the first paragraph of its page's Summary, references and all: the column
+ * opens that page, where they resolve. */
+export const CASE_STUDIES = [
+  {
+    name: "California",
+    to: "/case-studies/california",
+    summary: summaryOf(california),
+  },
+  {
+    name: "Australia",
+    to: "/case-studies/australia",
+    summary: summaryOf(australia),
+  },
+];

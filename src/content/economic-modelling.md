@@ -1,4 +1,12 @@
-**Status: Modelled.** The chain below runs in one direction.
+The economic cost of _Varroa_ extends far beyond the price of treatment: colony
+losses mean replacement costs, lost honey, reduced pollination capacity and
+additional labour. Following advice from pollination economist Wally Thurman, we
+modelled what NECTAR would change for a beekeeper in the US and in Australia,
+against existing treatments, and then across the honey and pollination markets.
+**Modelled:** a net private benefit of about **US$47.9 per treated colony per year**
+in the US and **A$18.9 per treated hive per year** in Australia `[CALC]`. Set
+against the cost of fermenting the yeast, those figures gave the wet lab its titre
+target.
 
 ## The chain
 
@@ -90,16 +98,20 @@ That makes the following true:
 > **TODO —** Reproduce the £2 per gram calculation with its inputs and its
 > assumed titre stated inline, or withdraw the figure from every page that
 > carries it, including [sustainable development](/sustainability) and
-> [entrepreneurship](/entrepreneurship). An unsupported unit cost is worse than
-> no unit cost. Owner: modelling with entrepreneurship.
+> [entrepreneurship](/entrepreneurship). Give a source for the fermentation price
+> of 2.33 USD (3.35 AUD) per gram of genetically modified yeast used in
+> [cycle M3](/engineering#cycle-m3), and say whether the two are the same figure.
+> An unsupported unit cost is worse than no unit cost. Owner: modelling with
+> entrepreneurship.
 
 ## Sensitivity
 
 Titre is the input that **decides whether the conclusion holds**.
-
-> **TODO —** Run and publish the titre sensitivity sweep, and state explicitly
-> which conclusions fail at the low end. Owner: modelling. Blocked on agreeing
-> the plausible titre range with the wet lab.
+[Cycle M3](/engineering#cycle-m3) prices the winter yeast supply at six titres,
+from 0.0005 to 0.1 mg dsRNA per g yeast, against the benefit below. Below
+0.005 mg/g, the yeast it takes to save a colony costs more than the treatment is
+worth in either country `[CALC]`; the thresholds above that are under
+[what this does to the engineering](#what-this-does-to-the-engineering).
 
 ## The two markets, as they stand
 
@@ -231,7 +243,10 @@ manufacturing cost, yeast titre, dosing frequency and formulation — which is h
 economic loop closes onto [cycle M3](/engineering#cycle-m3), where the modelled
 benefit above is set against a fermentation cost of about **2.33 USD (3.35 AUD) per
 gram** of genetically modified yeast to give the titre the wet lab has to reach:
-**0.005 mg dsRNA per g yeast for US viability, 0.05 mg/g for both markets**.
+**0.005 mg dsRNA per g yeast for US viability, 0.05 mg/g for both markets**
+`[CALC]`. Both thresholds are read from the Australian commercial hive profile,
+priced in each currency; the cost table is on
+[ecological modelling](/ecological-modelling).
 
 ## Manufacturing and scale-up
 
@@ -261,14 +276,6 @@ than a model of its own.
 - Wild pollinators, incidental pollination and non-market beekeeping are outside
   the model by design, following Thurman. That is a scoping choice, not a claim
   that they do not matter.
-
-## Still missing
-
-- The verified numbers with their citation tags, and Goodrich's published source.
-- The titre sensitivity sweep.
-- Chosen elasticities for the market-level layer.
-- The chain figure.
-- A stated position on which conclusions survive if the titre assumption fails.
 
 ## Where this connects
 

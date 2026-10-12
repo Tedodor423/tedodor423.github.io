@@ -95,17 +95,7 @@ each interviewee who can be published.
 > page means a new route in `src/pages.ts` and a matching change to
 > `references/structure_source.md`. Owner: team lead.
 
-## Still missing
-
-- The iGEM template format, checked and applied.
-- Per-person contributions, confirmed by each person.
-- Consent and agreed attributions for the podcast guests and the street-interview
-  participants.
-- The AI disclosure section.
-- Third-party asset licences, collected.
-
 ## Where this connects
 
-[Team](/team) · [Team members](/team/members) ·
-[Fundraising and partners](/partners) ·
+[Team](/team) · [Fundraising and partners](/partners) ·
 [Human practices](/human-practices) · [Contribution](/contribution)

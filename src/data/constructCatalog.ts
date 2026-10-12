@@ -30,7 +30,7 @@ export const CHASSIS_NOTES: Record<DeliveryChassis, string> = {
   "ecoli-ht115":
     "RNase III deficient, so dsRNA survives. The standard laboratory production host, and our comparison.",
   "snodgrassella-alvi":
-    "A bee gut symbiont. The route we started on and abandoned on regulatory advice.",
+    "A bee gut symbiont. The route we started on and abandoned, on regulatory advice and for practical reasons: an engineered symbiont is a GMO, and the strain needs non-standard culture.",
 };
 
 export const CHASSIS_ORDER: DeliveryChassis[] = [

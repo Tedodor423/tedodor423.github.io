@@ -1,4 +1,5 @@
 import { useLayoutEffect, useState } from "react";
+import { COMB_SRC } from "./CombBackdrop";
 import "./CombBands.css";
 
 /* The comb treatment, and the switch that turns it off.
@@ -13,12 +14,10 @@ import "./CombBands.css";
  * TEMPORARY. To drop it: delete this file and CombBands.css, remove the line
  * in App.tsx, and collapse MarkdownPage's sections back into one <Markdown>.
  *
- * The photograph is served from static.igem.wiki, same as BeeScene's artwork.
- * It is the uploads tool's .avif conversion of comb-bg.jpg, a 2000px, 291 KB
- * copy of the 6240px, 12 MB comb.JPG in wiki-assets-source/images_dev/. If it
- * fails to load, the comb bands fall back to their own dark wax colour.
+ * The photograph is the one behind the Bee Lab pages, and its URL lives with
+ * that backdrop in CombBackdrop.tsx. If it fails to load, the comb bands fall
+ * back to their own dark wax colour.
  */
-const COMB_SRC = "https://static.igem.wiki/teams/6391/wiki/assets/comb-bg.avif";
 
 /** Put away: no switch, and the treatment is off for everyone. Set to true to
  *  bring the switch back with each browser's remembered choice. */

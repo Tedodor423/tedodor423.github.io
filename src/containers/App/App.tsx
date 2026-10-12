@@ -18,6 +18,7 @@ import { LinkPreview } from "../../components/LinkPreview";
 import { Footer } from "../../components/Footer";
 import { BeeScene } from "../../components/BeeScene";
 import { CombBands } from "../../components/CombBands";
+import { CombBackdrop } from "../../components/CombBackdrop";
 import { HomeHero } from "../../components/HomeHero";
 
 const App = () => {
@@ -72,13 +73,24 @@ const App = () => {
           {Object.entries(pathMapping).map(
             ([
               path,
-              { title, lead, content, layout, switcher, centredTitle, titleInBody },
+              {
+                title,
+                lead,
+                content,
+                layout,
+                switcher,
+                centredTitle,
+                titleInBody,
+                backdrop,
+              },
             ]) => (
               <Route
                 key={path}
                 path={path}
                 element={
-                  <>
+                  // A page with a backdrop is laid over it whole, title and
+                  // all; without one the wrapper is not rendered at all.
+                  <CombBackdrop on={backdrop === "comb"}>
                     {/* Home opens on the full-screen hero instead of the
                         standard header band; the hero carries the page's
                         <h1>, so heading order stays semantic. A page marked
@@ -117,7 +129,7 @@ ${switcher.shared}`
                         marks={marks}
                       />
                     )}
-                  </>
+                  </CombBackdrop>
                 }
               />
             ),

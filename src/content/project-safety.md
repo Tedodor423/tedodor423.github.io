@@ -17,7 +17,7 @@ than as a separate activity.
 
 Lam's primary concern for our project was off-target effects, and his advice on
 screening against representative species, with the choice of species justified
-rather than default, is built into the design pipeline.
+rather than default, is built into SEED, our dsRNA design pipeline.
 
 ## Risks specific to this system
 
@@ -118,6 +118,9 @@ thought to check is **not a screen against everything**. Sequence databases are
 incomplete for most arthropods, and homology at the sequence level is a proxy for
 silencing, not a measurement of it.
 
+> **TODO —** Write out the screen's scope and limits in full: which species, why
+> those, and the threshold at which a window is rejected.
+
 ## Waste management
 
 Two streams, both currently **Proposed**.
@@ -188,14 +191,6 @@ standards.
   documented.
 - The resistance monitoring programme, designed and costed.
 - A named approving body for any work involving colonies outside the lab.
-
-## Still missing
-
-- The risk assessment documents, uploaded.
-- The off-target screen's scope and limits, written out in full.
-- The waste management protocols, with their guidance cited.
-- The OECD environmental-RNA citation, or the removal of the claim.
-- The welfare approval reference.
 
 ## Where this connects
 

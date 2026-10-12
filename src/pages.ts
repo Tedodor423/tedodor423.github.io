@@ -13,12 +13,12 @@
 // (.claude/hooks/structure-sync.mjs) reminds AI assistants of this on every
 // edit to this file; humans, consider yourselves reminded here.
 //
-// The menu has two visible levels, plus two decorations the structure asks for:
+// The menu has two visible levels:
 //
-//   Section  an overarching non-interactive title ("The project in detail")
-//            shown above a run of consecutive groups that share it
 //   Group    a dropdown label with no page behind it (Project, Team, ...)
 //     Page   the link, optionally with a `subtitle` under it
+//
+// Menu labels are in title case ("Lab Book", "Wet Lab").
 //
 // Home is not in the menu bar. It is marked `hidden` below, so it stays
 // routed and searchable while the bar carries only the groups the agreed
@@ -67,7 +67,6 @@ import entrepreneurship from "./content/entrepreneurship.md?raw";
 import education from "./content/education.md?raw";
 import team from "./content/team.md?raw";
 import partners from "./content/partners.md?raw";
-import members from "./content/members.md?raw";
 import attributions from "./content/attributions.md?raw";
 
 export interface Page {
@@ -115,6 +114,14 @@ export interface Page {
    * links and search results that point at a child still land on it.
    */
   switcher?: boolean;
+  /**
+   * A photograph behind the whole page, title to footer, in place of the
+   * white surface. "comb" is the brood comb (CombBackdrop), and the page's
+   * type inverts on it. The page head, the Markdown and the experiments
+   * layout are restated for it; a component placed in a slot is drawn for
+   * white, so check it on the comb before giving its page a backdrop.
+   */
+  backdrop?: "comb";
 }
 
 /** A top-level menu label that opens a dropdown and has no page of its own. */
@@ -123,11 +130,6 @@ export interface Group {
   children: Page[];
   /** Small, muted line at the top of the dropdown. Optional. */
   subtitle?: string;
-  /**
-   * Overarching header title. Consecutive groups sharing the same `section`
-   * are clustered under one such title in the menu bar. Optional.
-   */
-  section?: string;
 }
 
 export type MenuEntry = Page | Group;
@@ -157,7 +159,7 @@ const Pages: MenuEntry[] = [
         title: "Project Description",
         path: "/project-description", // per structure_source.md — verify against the standard URL list
         content: description,
-        lead: "The problem, the idea, and what we set out to build.",
+        lead: "Why bees, why RNAi, and the six barriers NECTAR was built around.",
       },
       {
         name: "Engineering",
@@ -190,21 +192,20 @@ const Pages: MenuEntry[] = [
     ],
   },
   {
-    name: "Wet lab",
-    section: "The project in detail",
+    name: "Wet Lab",
     children: [
       {
-        name: "RNA design",
+        name: "RNA Design",
         title: "Designing Our dsRNA Construct",
         path: "/software", // iGEM standard URL
         content: software,
-        lead: "NectarDesigner: how we choose the sequence that silences the mite.",
+        lead: "SEED: how we choose the sequence that silences the mite.",
       },
       {
         // Was /experiments, an iGEM standard URL. Re-pathed per
         // structure_source.md; if the 2026 standard list keeps /experiments,
         // this has to move back or gain a redirect.
-        name: "Experiments & protocols",
+        name: "Experiments & Protocols",
         title: "Wet Lab Experiments and Protocols",
         path: "/wet-lab-experiments",
         content: wetLabExperiments,
@@ -212,7 +213,7 @@ const Pages: MenuEntry[] = [
         layout: "experiments",
       },
       {
-        name: "Lab book",
+        name: "Lab Book",
         title: "Wet Lab Lab Book",
         path: "/wet-lab-labbook",
         content: wetLabLabbook,
@@ -221,8 +222,7 @@ const Pages: MenuEntry[] = [
     ],
   },
   {
-    name: "Bee lab",
-    section: "The project in detail",
+    name: "Bee Lab",
     children: [
       {
         name: "Overview",
@@ -230,14 +230,16 @@ const Pages: MenuEntry[] = [
         path: "/bee-lab",
         content: beeLab,
         lead: "Working with live bees: delivery, dosing and the assays we had to invent.",
+        // No backdrop: the overview is getting a treatment of its own.
       },
       {
-        name: "Experiments & protocols",
+        name: "Experiments & Protocols",
         title: "Bee Lab Experiments and Protocols",
         path: "/bee-lab-experiments",
         content: beeLabExperiments,
         lead: "The bee-lab methods, written to be followed.",
         layout: "experiments",
+        backdrop: "comb",
       },
       {
         name: "Safety",
@@ -245,6 +247,7 @@ const Pages: MenuEntry[] = [
         path: "/project-safety", // per structure_source.md — verify against the standard URL list
         content: safety,
         lead: "Risks of our system, and what we did about each of them.",
+        backdrop: "comb",
       },
       {
         name: "Hardware",
@@ -252,36 +255,39 @@ const Pages: MenuEntry[] = [
         path: "/hardware", // iGEM standard URL
         content: hardware,
         lead: "The hive insert and the equipment we built around it.",
+        backdrop: "comb",
       },
       {
-        name: "NECTAR user manual",
+        name: "NECTAR User Manual",
         title: "NECTAR User Manual",
         path: "/user-manual",
         content: userManual,
         lead: "How a beekeeper would actually use this.",
+        backdrop: "comb",
       },
       {
-        name: "Bee research guide (for iGEM teams)",
+        name: "Bee Research Guide (for iGEM Teams)",
         title: "How to Work with Bees as an iGEM Team",
         path: "/working-with-bees",
         content: workingWithBees,
         lead: "What we wish another team had told us before our first hive.",
+        backdrop: "comb",
       },
       {
-        name: "Lab book",
+        name: "Lab Book",
         title: "Bee Lab Lab Book",
         path: "/bee-lab-labbook",
         content: beeLabLabbook,
         lead: "The dated record of the bee lab, 29 June to 25 September 2026.",
+        backdrop: "comb",
       },
     ],
   },
   {
-    name: "Human practices",
-    section: "The project in detail",
+    name: "Human Practices",
     children: [
       {
-        name: "Integrated human practices",
+        name: "Integrated Human Practices",
         title: "NECTAR in the Real World",
         path: "/human-practices", // iGEM standard URL
         content: humanPractices,
@@ -297,7 +303,7 @@ const Pages: MenuEntry[] = [
         lead: "What we taught, to whom, and what we learned back.",
       },
       {
-        name: "Sustainable development",
+        name: "Sustainable Development",
         title: "Sustainable Development",
         path: "/sustainability", // iGEM standard URL
         content: sustainability,
@@ -310,20 +316,13 @@ const Pages: MenuEntry[] = [
     name: "Team",
     children: [
       {
-        name: "Team members",
-        title: "Team",
+        name: "Team Members",
+        title: "Meet the Team",
         path: "/team", // iGEM standard URL
         content: team,
         lead: "The people behind NECTAR.",
-        children: [
-          {
-            name: "Members",
-            title: "Team Members",
-            path: "/team/members",
-            content: members,
-            lead: "Who we are.",
-          },
-        ],
+        // The gallery opens the page and carries the title itself.
+        titleInBody: true,
       },
       {
         name: "Attributions",
@@ -333,7 +332,7 @@ const Pages: MenuEntry[] = [
         lead: "Who did what, and what help we received.",
       },
       {
-        name: "Sponsors and partners",
+        name: "Sponsors and Partners",
         title: "Fundraising and Partners",
         path: "/partners",
         content: partners,

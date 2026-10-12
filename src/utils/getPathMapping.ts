@@ -32,6 +32,7 @@ export interface PageEntry {
   layout?: Page["layout"];
   centredTitle?: boolean;
   titleInBody?: boolean;
+  backdrop?: Page["backdrop"];
   switcher?: SwitchInfo;
 }
 
@@ -54,6 +55,7 @@ export const getPathMapping = (): Record<string, PageEntry> => {
       layout: page.layout,
       centredTitle: page.centredTitle,
       titleInBody: page.titleInBody,
+      backdrop: page.backdrop,
     };
     page.children?.forEach(addPage);
 

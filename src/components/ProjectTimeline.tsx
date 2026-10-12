@@ -56,8 +56,9 @@ import "./ProjectTimeline.css";
  * page's own scrolling carries it left: the track is as much taller than the
  * window as the chart is wider, so one pixel down is one pixel along. Nothing
  * takes over the wheel. A horizontal swipe is passed on as the same scroll,
- * and tabbing to a label moves the page to wherever that label is. On a phone,
- * under reduced motion, or on a screen too short for the chart, it is an
+ * and tabbing to a label moves the page to wherever that label is. A shorter
+ * window gets smaller labels before it gives the ride up. On a phone, under
+ * reduced motion, or on a screen too short for the chart even then, it is an
  * ordinary box that scrolls sideways.
  *
  * READING AN ENTRY. Pointing at a label, or tabbing to it, opens a card with
@@ -111,16 +112,20 @@ const laneStyle = (track: TrackId) =>
 
 /* ---------- sizes ---------- */
 
-/** The label face, in rem. Everything the layout counts is derived from it. */
-const LABEL_REM = 0.72;
+/** The label face, in rem, largest first. Everything the layout counts is
+ *  derived from it. A pinned chart takes the largest that still fits the
+ *  window's height; one that scrolls on its own takes the last. */
+const LABEL_REMS = [1.05, 0.95, 0.85] as const;
 /** The strip above the first row that carries the acts and the months, px. */
-const HEAD = 44;
-/** Pixels per day the pinned chart may use, tightest first. Past 32 the
+const HEAD = 58;
+/** Where the month rules start, under the act names, px. */
+const RULES_TOP = 28;
+/** Pixels per day the pinned chart may use, tightest first. Past 48 the
  *  height stops falling: what is left is runs of events on the same few days,
  *  which no amount of width spreads out. */
-const DAYS = [20, 22, 24, 26, 28, 32] as const;
+const DAYS = [20, 22, 24, 26, 28, 32, 36, 40, 44, 48] as const;
 /** And the one it uses when it scrolls on its own. */
-const LOOSE_DAY = 24;
+const LOOSE_DAY = 32;
 /** The stage's rules, and a little air above and below the chart, px. */
 const STAGE_CHROME = 16;
 
@@ -129,10 +134,10 @@ const STAGE_CHROME = 16;
  * character is measured rather than assumed, because the mono stack resolves
  * to a different face on each system and they differ by a tenth.
  */
-function metricsOf(): Omit<Metrics, "day"> {
+function metricsOf(face: number): Omit<Metrics, "day"> {
   const root = getComputedStyle(document.documentElement);
   const rem = parseFloat(root.fontSize) || 16;
-  const size = LABEL_REM * rem;
+  const size = face * rem;
   let char = size * 0.61;
   const context = document.createElement("canvas").getContext("2d");
   const stack = root.getPropertyValue("--font-mono").trim();
@@ -373,7 +378,7 @@ export function ProjectTimeline() {
    * the menu over its top until the first scroll sends the menu away. Two
    * heights, then: the room while the menu shows, and the room once it has
    * gone. */
-  const [base] = useState(metricsOf);
+  const [bases] = useState(() => LABEL_REMS.map(metricsOf));
   const wide = useMedia(DECK_MEDIA);
   const [room, setRoom] = useState({ arrived: 0, riding: 0, menu: 0 });
   const [viewWidth, setViewWidth] = useState(0);
@@ -404,22 +409,34 @@ export function ProjectTimeline() {
     };
   }, []);
 
-  // Every scale, laid out once: a resize only chooses between them.
-  const plans = useMemo(
-    () => new Map(DAYS.map((day) => [day, layout({ ...base, day })])),
-    [base],
+  // Every face at every scale, laid out once: a resize only chooses between
+  // them.
+  const faces = useMemo(
+    () =>
+      bases.map((base, i) => ({
+        rem: LABEL_REMS[i],
+        scales: DAYS.map((day) => layout({ ...base, day })),
+      })),
+    [bases],
   );
-  // The tightest scale that is whole on arrival; failing that, the tightest
-  // that is whole once the menu has gone.
-  const scales = DAYS.map((day) => plans.get(day)!);
-  const fitted =
-    wide && room.riding > 0
-      ? (scales.find((p) => p.height <= room.arrived) ??
-        scales.find((p) => p.height <= room.riding) ??
-        null)
-      : null;
+  // The largest face that fits: at the tightest scale that is whole on
+  // arrival, failing that the tightest that is whole once the menu has gone.
+  let fitted: { rem: number; plan: Layout } | null = null;
+  if (wide && room.riding > 0) {
+    for (const { rem, scales } of faces) {
+      const plan =
+        scales.find((p) => p.height <= room.arrived) ??
+        scales.find((p) => p.height <= room.riding);
+      if (plan) {
+        fitted = { rem, plan };
+        break;
+      }
+    }
+  }
   const pinned = fitted !== null;
-  const plan: Layout = fitted ?? plans.get(LOOSE_DAY)!;
+  const loose = faces[faces.length - 1];
+  const labelRem = fitted?.rem ?? loose.rem;
+  const plan: Layout = fitted?.plan ?? loose.scales[DAYS.indexOf(LOOSE_DAY)];
   const travel = pinned ? Math.max(0, plan.width - viewWidth) : 0;
   const byId = useMemo(
     () => new Map(plan.items.map((item) => [item.event.id, item])),
@@ -810,7 +827,7 @@ export function ProjectTimeline() {
                     width: plan.width,
                     height: plan.height,
                     "--tl-label-h": `${m.label}px`,
-                    "--tl-label-size": `${LABEL_REM}rem`,
+                    "--tl-label-size": `${labelRem}rem`,
                     "--tl-label-pad": `${m.pad}px`,
                   } as CSSProperties
                 }
@@ -837,7 +854,7 @@ export function ProjectTimeline() {
                       className="tl-grid"
                       x1={month.x}
                       x2={month.x}
-                      y1={20}
+                      y1={RULES_TOP}
                       y2={plan.height}
                     />
                   ))}
@@ -845,7 +862,7 @@ export function ProjectTimeline() {
                     className="tl-record-end"
                     x1={plan.recordEnd}
                     x2={plan.recordEnd}
-                    y1={20}
+                    y1={RULES_TOP}
                     y2={plan.height}
                   />
                   {plan.lanes.map((lane) => (

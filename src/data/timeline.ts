@@ -135,7 +135,7 @@ export const THREADS: Thread[] = [
   {
     id: "mite",
     name: "Getting to the mite",
-    line: "Three redesigns, driven by a mite shortage and by the discovery that a mite alone does not survive.",
+    line: "Four redesigns, driven by a mite shortage and by the discovery that a mite alone does not survive.",
     page: "/engineering#cycle-v1",
   },
   {
@@ -237,7 +237,7 @@ export const EVENTS: TimelineEvent[] = [
     title: "The team forms",
     detail:
       "First meeting in person, about fourteen students. A shared drive, an interests sheet and an ideas board go up the same day.",
-    links: [{ label: "Team members", href: "/team/members" }],
+    links: [{ label: "Team members", href: "/team" }],
   },
   {
     id: "first-meeting",
@@ -409,7 +409,7 @@ export const EVENTS: TimelineEvent[] = [
     links: [
       {
         label: "What shape should the dsRNA be?",
-        href: "/engineering#cycle-1-1",
+        href: "/engineering#cycle-1-2",
       },
     ],
   },
@@ -512,7 +512,7 @@ export const EVENTS: TimelineEvent[] = [
       "Every candidate runs against the honeybee, three bumblebee species and human sequence, and one major off-target match disqualifies it. A check for illegal restriction sites is added the next day.",
     turn: true,
     threads: ["target"],
-    links: [{ label: "NectarDesigner", href: "/software" }],
+    links: [{ label: "SEED", href: "/software" }],
   },
   {
     id: "screen-split",
@@ -718,7 +718,7 @@ export const EVENTS: TimelineEvent[] = [
     setback: true,
     threads: ["dose"],
     links: [
-      { label: "Can we deliver a known dose?", href: "/engineering#cycle-b1" },
+      { label: "Can we deliver a known dose?", href: "/engineering#cycle-b2" },
     ],
   },
   {
@@ -1395,7 +1395,7 @@ export const EVENTS: TimelineEvent[] = [
     links: [
       {
         label: "Validation in matrix",
-        href: "/measurement#what-the-matrix-costs-measured",
+        href: "/measurement#is-the-matrix-actually-a-problem",
       },
     ],
   },
@@ -1451,7 +1451,9 @@ export const EVENTS: TimelineEvent[] = [
     turn: true,
     setback: true,
     threads: ["mite", "dose"],
-    links: [{ label: "Husbandry, cycle V1", href: "/engineering#cycle-v1" }],
+    links: [
+      { label: "The replacement method, cycle V3", href: "/engineering#cycle-v3" },
+    ],
   },
   {
     id: "nanodrop-qubit",

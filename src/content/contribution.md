@@ -22,17 +22,19 @@ We mark each entry **Available** or **Owed**.
 | The standing bench rules for Mango               | Owed      |
 | Commercial fermentation framework                | Owed      |
 | Regulatory and stakeholder framework             | Owed      |
-| HONEY as a reusable human-practices method       | Owed      |
+| HIVE as a reusable human-practices method        | Owed      |
 | The Muita Table S1 erratum                       | Owed      |
 
 ## Methods and workflows
 
 ### The dsRNA design workflow
 
-**What it is.** A two-stage procedure for going from a pest genome to a ranked
-list of dsRNA sequences: select candidate target genes, then score windows inside
-each gene on accessibility, thermodynamic asymmetry and enrichment in the pest's
-own native siRNA population, then screen the survivors for off-target homology.
+**What it is.** SEED (Selective enginEEring of dsRNA), a three-stage pipeline
+for going from a pest genome to a ranked list of dsRNA sequences: select target
+genes by functional connectivity, abundance and published RNAi evidence; score
+regions inside each gene on predicted small-RNA abundance, Dicer processing and
+target accessibility; then screen the best regions for off-target matches in the
+_Apis mellifera_ transcriptome.
 
 **Why another team would want it.** The published _Varroa_ RNAi literature
 demonstrates silencing of individual genes, but offers no standardised framework
@@ -160,7 +162,7 @@ change that makes the measurement interpretable**, and the dsRNA cost falls by t
 orders of magnitude at the same time. Any team feeding anything to insects in cages
 and dividing by the number of animals inherits this problem.
 
-**Where to get it.** [Cycle B3](/engineering#cycle-b3) carries the design effect and
+**Where to get it.** [Cycle B2](/engineering#cycle-b2) carries the design effect and
 the worked comparison; the bench steps are on
 [experiments and protocols](/bee-lab-experiments).
 
@@ -325,6 +327,33 @@ array in a structured RNA context inherits this problem.
 **Where to get it.** [Cycle 5.1](/engineering#cycle-5-1), with the enumeration
 method and the constraint set.
 
+### A linker cannot be chosen once and reused across cargoes
+
+**What it is.** Across 11 passengers and 8 linkers, no linker won everywhere:
+GGGGS4 placed the cargo correctly in 40 of 55 models and EAAAK2 in 38, against 29
+for a direct fusion, but the ranking reorders between passengers. GGGGS1 scored
+4/5 on one passenger and 1/5 on another. **The screening unit is the
+passenger-linker pair, not the linker.**
+
+**Why another team would want it.** Linkers are usually picked once from a table
+and reused, which these results say is unsafe for a fusion that also has to dock
+onto RNA.
+
+**Where to get it.** [Cycle 5.1c](/engineering#cycle-5-1c).
+
+### Structure-prediction confidence does not separate two binding states
+
+**What it is.** Our models settled into two states: one matching the
+experimentally supported MS2 geometry, one about 21 Å away with none of its
+contacts. The predictor's own confidence scores cannot tell them apart, with
+medians of 0.867 and 0.871 and every metric within 0.03.
+
+**Why another team would want it.** A team screening RNA-protein fusions by
+prediction confidence alone would rank a non-binding pose as highly as a binding
+one. **An experimental reference structure is needed to say which state is which.**
+
+**Where to get it.** [Cycle 5.1c](/engineering#cycle-5-1c).
+
 ### The MBP-MCP extinction coefficient
 
 **What it is.** Recomputing ε₂₈₀ from sequence gives 83,310 and MW 56,192.5 for
@@ -375,18 +404,20 @@ constraint on something already built. Ours **changed the project in July**.
 > **TODO —** Publish the framework separately from our conclusions, so a team
 > working on something else can run it. Owner: human practices.
 
-### HONEY as a reusable human-practices method
+### HIVE as a reusable human-practices method
 
-**What it is.** The HONEY loop is a process for turning stakeholder conversations
-into design constraints, not a narrative device applied afterwards. It is usable by
-a team working on something entirely unrelated to bees.
+**What it is.** HIVE (Hear, Investigate, Verdict, Evaluate) is the process we
+used to turn stakeholder conversations and background research into design
+changes, and then to check whether those changes leave the project with a net
+positive effect. It is usable by a team working on something entirely unrelated
+to bees.
 
 **Why another team would want it.** The part of our human-practices work most
 likely to outlive the project is **the method, not the interviews**.
 
-**Where to get it.** [Human practices](/human-practices).
+**Where to get it.** [The HIVE framework](/human-practices#the-hive-framework).
 
-> **TODO —** Write HONEY up as a standalone method, with the template and the
+> **TODO —** Write HIVE up as a standalone method, with the template and the
 > failure cases, not only as the story of our project. Owner: human practices.
 
 ## Standard operating procedures

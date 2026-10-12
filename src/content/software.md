@@ -8,9 +8,12 @@ nectar-pipeline
 genes by RNAi, but there was **no standardised framework** for comparing
 candidate genes, and none for choosing the region within a gene. That leaves the
 two things that most affect whether a construct works, accessibility and
-off-target risk, to precedent and chance. NECTAR is our answer: a reusable method
-for deciding **which sequence to make**. The target changes, the method does not,
-and that is what makes NECTAR a platform rather than a product.
+off-target risk, to precedent and chance. **SEED**, Selective enginEEring of
+dsRNA, is our answer: a reusable method for deciding **which sequence to make**,
+in three stages. Which genes to design against; which region inside a gene; and
+whether that region is safe against the species we are there to protect. The
+target changes, the method does not, and that is what makes SEED a platform
+rather than a product.
 
 On **7 October 2026** we froze a panel of 100 _Varroa destructor_ genes and ran
 the pipeline over all of them. It scored **494,116 candidate guides**, ranked
@@ -83,6 +86,17 @@ transcribed, which is itself a signal of importance.
 | **High transcript abundance** | Most likely to be important to mite survival                          | Likely unimportant, unless very sensitive to partial knockdown |
 | **Low transcript abundance**  | Could be a vulnerability, or could be unimportant; needs further data | Most likely unimportant                                        |
 
+Four kinds of evidence go in. Connectivity and abundance are combined into one
+quantitative ranking; published RNAi evidence and cross-species transferability
+are kept as separate pools, because they are different kinds of claim.
+
+**Published RNAi evidence.** We reviewed **22 primary _Varroa_ RNAi studies** and
+recorded **65 gene × study observations**: **26 direct-positive**, **20
+context-only**, and **19 negative, non-positive or confounded**. The 26
+direct-positive observations are the literature pool. Somebody has already
+silenced those genes and watched what happened, which is why they stay beside the
+computed ranking rather than being folded into it.
+
 **Connectivity.** We uploaded the _Varroa destructor_ proteome to STRING, which
 predicts functional associations between proteins by integrating experimental
 data, curated databases, co-expression, evolutionary relationships and the
@@ -101,9 +115,12 @@ corresponding protein entered the ranking. The two percentiles were summed with
 equal weight, giving a ranked list of targets that are both well connected and
 well expressed.
 
-**Published RNAi evidence** is kept as a separate pool rather than folded into
-that ranking, because it is a different kind of claim: somebody has already
-silenced the gene and watched what happened.
+**Cross-species transferability.** dsRIP ranks genes by how consistently their
+orthologues have produced strong RNAi effects across insect species. The studies
+behind it identified effective RNAi targets in _Tribolium castaneum_, then tested
+whether the corresponding orthologues stayed effective when dsRNA was delivered
+orally in other beetles. We took the number of successful cross-species transfers
+as a measure of how robust a target is likely to be in _Varroa_ as well.
 
 ### How the 100 genes were drawn
 
@@ -115,7 +132,7 @@ evidence:
 | -------------------- | ----- | ------------------------------------------------------------------------------------ |
 | Protein network      | 35    | Entered on STRING functional-association rank                                        |
 | Transcript abundance | 35    | Entered on expression, sampled across abundance strata rather than taken off the top |
-| dsRIP transfer       | 20    | Entered on evidence that the mite's own RNAi machinery handles the transcript        |
+| dsRIP transfer       | 20    | Entered on the number of successful cross-species RNAi transfers recorded in dsRIP    |
 | Published RNAi       | 10    | Entered because a published study already silenced it in _Varroa_                    |
 
 Transcripts in the panel run from **533 to 8,798 nt**. Three genes
@@ -154,6 +171,8 @@ with bcftools, and the alignment was iterated until fewer than 1% or 10 further
 reads were recovered. A final pass of Bowtie1 competitive mapping against the
 concatenated consensus set fixed strand assignment and flagged reads that could
 map to more than one virus. **20 samples and 54 sample-virus units survived.**
+Host filtering was deliberately left out, because sequences this short are shared
+between _Varroa_ and _Apis_ anyway.
 
 **What came out: 23 and 24 nt dominate, and the antisense strand is favoured.**
 
@@ -173,11 +192,17 @@ which makes it a genuinely broad population. **24 nt nearly doubles under
 abundance weighting**, which says its dominance rests on a smaller number of very
 abundant species.
 
+Both lengths sit overwhelmingly on the antisense strand. The sample-balanced
+median antisense fraction is **0.957 for 23 nt and 0.997 for 24 nt** by abundance
+weighting, and 0.877 and 0.978 by unique-sequence weighting, with the 24 nt
+population the more strongly biased of the two. The antisense strand is the one
+that carries target complementarity, so it is the population the rest of the
+analysis is built on.
+
 This is why the pipeline uses **23 and 24 nt windows** as its basic units rather
 than the canonical 21 nt Dicer-2 product. What Dicer cuts and what the mite
 accumulates are different questions, and for choosing a window it is the second
-that matters. For each transcript, **every possible 23 and 24 nt window is
-enumerated** and scored: 494,116 of them across the panel.
+that matters.
 
 ### Two features we tested and dropped
 
@@ -186,65 +211,105 @@ something from it.
 
 **Dicer-2 duplex geometry.** Dicer-2 leaves a characteristic 2 nt 3′ overhang on
 each strand. If our populations carried that signature we could score for it. We
-rebuilt duplexes with stepRNA and looked at the overhang distribution: the
-**(+2, −2) double-overhang pattern was strongly depleted** in every population,
-and 23 and 24 nt carried it at similar levels, so it cannot separate
-Dicer-processed from non-Dicer-processed species either. **Dropped.**
+rebuilt duplexes with stepRNA, pairing each 23 or 24 nt sequence against every
+distinct 15 to 30 nt sequence on the opposite strand of the same unit, and looked
+at the overhang distribution. The **(+2, −2) double-overhang pattern was strongly
+depleted** in every population, at 0.48% to 1.68% pooled; the blunt (0, 0)
+geometry was instead the commonest joint geometry, in 41 of 54 units for the 23 nt
+antisense population. 23 and 24 nt carried the Dicer pattern at similar levels, so
+it cannot separate Dicer-processed from non-Dicer-processed species either.
+**Dropped** — and that is why Layer 2 models a blunt, perfectly paired duplex.
+Sampling and sequencing bias could in principle deplete the pattern on their own,
+which we cannot rule out from this dataset.
 
 **Transitivity.** If 24 nt species were secondary products amplified from 23 nt
 primary events, they should accumulate in a consistent spatial relationship to
-23 nt hotspots. Testing 100, 250 and 500 nt windows either side of hotspots
-across 19 units, we found **no significant change in absolute 24 nt abundance at
-any distance**, and only a small composition shift downstream, reproducible but
-under two percentage points. Real, and far too small to design on. **Dropped.**
+23 nt hotspots. We took the 19 positive-sense-virus units, defined 23 nt hotspots
+two ways — one requiring both strands to be strong, one on total 23 nt signal —
+and looked 100, 250 and 500 nt either side of each. There was **no significant
+change in absolute 24 nt abundance at any distance**, and nothing at all at
+100 nt. What we did find was a composition shift downstream, **+0.2 to +1.6
+percentage points more 24 nt-rich** at 250 and 500 nt, reproducible across all
+four weighting and hotspot combinations. Real, and far too small to design on.
+**Dropped.**
 
-> **TODO —** Table: the overhang distribution by population and the transitivity
-> test by distance, with the parameters of each explained. The working document
-> carries both with a note that the parameters need writing up before
-> publication, which is why only the conclusions are stated above. Owner: dry
-> lab.
+> **TODO —** Table: the overhang distribution by population, and the transitivity
+> test by distance, with the hotspot and window parameters of each stated. Only
+> the conclusions and the headline numbers are published above because the
+> parameters have not been written up. Owner: dry lab.
 
 ## Stage 2: three layers of evidence on every window
 
-Every enumerated window is scored on three layers, and each layer is reported as
-a **percentile within its own transcript**. The layers view of the figure plots
-all three along the transcript, with their combination underneath.
+Every possible 23 and 24 nt window on the sense strand is enumerated by sliding
+one nucleotide at a time: **494,116 of them across the panel**. Each window is a
+candidate guide, and each is scored on three layers. Five raw metrics underlie
+the three, on five different scales, so every one of them is converted to a
+**percentile within its own transcript** before anything is combined. The layers
+view of the figure plots all three along the transcript, with their combination
+underneath.
 
 ### Layer 1, Varroa Accumulation
 
 Does this window look like the small RNAs the mite already makes in quantity? A
-window that does is one its own machinery is equipped to process. The score comes
-from a regression fitted to the viral small RNA population described above,
-which estimates abundance from terminal nucleotide identity and regional base
-composition. The model is frozen and is fitted separately for 23 and 24 nt. Its
-engineered features and their coefficients are held back; see below.
+window that does is one its own machinery is equipped to process. The score is an
+**sRNA accumulation propensity**, from a model fitted to the viral small RNA
+population described above.
+
+The sequence features it uses were found by comparing two populations within the
+same infection: the 23 or 24 nt antisense reads actually recovered, and every
+window of that length the sample's own viral consensus could have produced. The
+ratio of observed to expected is an enrichment, so a nucleotide preference cannot
+simply be the base composition of that virus showing through. The features that
+survived describe terminal nucleotide identity and regional base composition.
+
+The model is a linear fit on those features, with log abundance as the response
+and a per-sample-virus baseline that absorbs differences in sequencing depth while
+the coefficients are fitted and is dropped when a candidate is scored. It is
+fitted separately for 23 and 24 nt, because those are different populations, and
+it is frozen. Its engineered feature set and fitted coefficients are held back;
+see below.
 
 ### Layer 2, Guide Competence
 
 Which strand RISC loads is set by the relative stability of the two duplex ends,
-and that is **a design lever rather than an accident**. Terminal ΔG is computed
-at both the 4 bp and 5 bp ends for guide and passenger, and the difference is the
-asymmetry. Guide self-folding is computed alongside it, because a guide that
-pairs with itself is not available to pair with anything else. Both come from
-ViennaRNA 2.7.2, and the figure prints every stored value for the windows it
-ranks.
+and that is **a design lever rather than an accident**. Each candidate is built
+into a perfectly complementary duplex with **no 3′ overhang imposed**, because our
+own duplex-geometry result gives no Dicer-2 signature to justify one. Terminal ΔG
+is computed over the first **4 base pairs of each 5′ end** with the
+nearest-neighbour parameters of Zuber et al. 2022, and the asymmetry is the guide
+end minus the passenger end: a positive value means the antisense 5′ end is the
+less stable one, which is the strand we want loaded. The 5 bp difference is stored
+alongside it. Guide self-folding is the RNAfold minimum free energy of the guide
+on its own, where a weaker fold is better, because a guide that pairs with itself
+is not available to pair with anything else. Both come from ViennaRNA 2.7.2, and
+the figure prints every stored value for the windows it ranks.
 
 ### Layer 3, Target Accessibility
 
 Which parts of the transcript the silencing machinery can actually reach, rather
 than parts buried in secondary structure. A perfectly complementary window inside
 a stable stem is **not a usable window**. Accessibility is estimated with
-**RNAplfold** as the probability that the site is unpaired, and estimated twice:
-once for the complete target site, once for the **guide seed region g2 to g8**
-within it. This is the same folding setup the construct-architecture work on
-[Engineering](/engineering) uses.
+**RNAplfold** as the probability that the site is unpaired, in local windows of
+150 nt with base pairs spanning at most 100 nt, and estimated twice: once for the
+complete target site, once for the **guide seed region g2 to g8** within it. The
+maximum unpaired interval is 24 nt, which covers the 23 nt population in the same
+pass. These are sense-strand coordinates, because the target mRNA runs in the same
+orientation as the gene's sense strand. This is the same folding setup the
+construct-architecture work on [Engineering](/engineering) uses.
 
 ### Combined Evidence, and why the layers stay apart
 
-The three are combined as a **neutral equal-thirds mean**, with no weighting
-applied. The reason for keeping them separate as long as possible is in the
-stored rank correlations: across the five genes on the figure, at both guide
-lengths, Layer 1 against Layer 2 runs ρ = 0.14 to 0.24, Layer 1 against Layer 3
+Layer 1 is the accumulation percentile directly. Layers 2 and 3 each carry two
+metrics: the two percentiles are averaged so that neither dominates, and the
+average is ranked again across the transcript to give the layer. Combined Evidence
+is then the **equal-thirds mean** of the three layers, with no weighting applied.
+The weights are neutral by choice rather than by fitting: no _Varroa_ RNAi
+efficacy data were available to fit them to, and a coefficient fitted to nothing
+would be worse than an honest third.
+
+The reason for keeping the layers separate as long as possible is in the stored
+rank correlations: across the five genes on the figure, at both guide lengths,
+Layer 1 against Layer 2 runs ρ = 0.14 to 0.24, Layer 1 against Layer 3
 ρ = 0.10 to 0.23, and Layer 2 against Layer 3 ρ = 0.30 to 0.41. **A window that
 looks like a mite small RNA is close to uninformative about whether its target
 site is open.**
@@ -262,10 +327,11 @@ only one of the four with a shape, and the figure plots it.
 ## From windows to regions
 
 A construct carries a region, not a single 23 nt guide, so the pipeline rolls the
-window scores up into **fixed 96 nt regions**: a region's score is the mean of
-the stored score of every guide of that length contained entirely within it. The
-region length is not a free parameter, because the specificity screen is bound
-to it.
+window scores up: a region's score is the mean of the stored score of every guide
+of that length contained entirely within it, with the 23 and 24 nt populations
+kept apart. **Region length is a parameter**, and the off-target screen scales
+with it, so the two are set together. The frozen run ranks **96 nt** regions; the
+multigene constructs use **175 bp** per gene.
 
 Across the panel, the best region of a gene scores between **0.591 and 0.812** on
 Combined Evidence, with a median of 0.701 `[CALC]`. The regions view of the
@@ -289,12 +355,28 @@ question.
 | **Exact match**         | Strict mapping of every exact match of 16 nt or more, with **Bowtie 1.3.1** | Which local stretches of the region could produce off-target small RNAs |
 | **Homology refinement** | Relaxed alignment with **edlib 1.3.9**, seeded by the exact matches         | Broader homology between the whole region and a non-target transcript   |
 
-Matches are reported in three tiers by length, 16 to 20 nt, 21 to 22 nt, and 23
-nt and over, and each event is labelled by **what it hit**: a different _Varroa_
-gene, another transcript of the same gene, the intended transcript itself, or a
-non-target species. Those labels matter. The longest exact match for every one of
-the five featured genes is the **whole transcript**, and in each case it is the
-gene's own other annotated transcript rather than an off-target at all.
+Exact matches are sorted into three tiers by length, and the tier is what decides
+the region's fate: **16 to 20 nt** is caution and is recorded rather than acted
+on, since matches that short are unavoidable against a whole transcriptome; **21
+to 22 nt** and **23 nt and over** are high and very high risk, and our opt-out
+cutoff is set at **21 nt**. Each event is also labelled by **what it hit**: a
+different _Varroa_ gene, another transcript of the same gene, the intended
+transcript itself, or a non-target species. Those labels matter. The longest exact
+match for every one of the five featured genes is the **whole transcript**, and in
+each case it is the gene's own other annotated transcript rather than an
+off-target at all.
+
+> **TODO —** The literature behind the three risk tiers and behind the 21 nt
+> opt-out cutoff is not recorded in our own write-up. Cite it, or state the cutoff
+> as our own judgement. Owner: dry lab.
+
+The homology level asks the other question: whether a region with no alarming
+short match is nonetheless broadly similar to a non-target transcript. edlib is
+run in query-global, subject-local mode with a maximum edit-distance fraction of
+**0.15**, so a region of length N tolerates at most 0.15N mismatches, insertions
+and deletions combined. It reports alignment identity, query coverage,
+whole-region identity, the mismatch, insertion and deletion counts, and the
+longest exact stretch inside the alignment, and those are reviewed by hand.
 
 **The result that matters.** Across all five featured genes, the longest exact
 match to any _Apis mellifera_ transcript is **17 to 20 nt**, which sits in the
@@ -318,40 +400,40 @@ the figure prints it. A species with no reference transcriptome cannot be
 screened at all, and **absence of a hit against a species we could not screen is
 absence of data**, not a clear result.
 
-> **TODO —** The mismatch, insertion and deletion fractions used in the edlib
-> refinement are recorded in the pipeline only as "set fractions" and were not
-> exported with the run. State them as numbers. This also closes the older
-> disagreement in our records about which tool does the homology screen: the run
-> environment records Bowtie 1.3.1 and edlib 1.3.9, so the RNA design outline's
-> mention of BLAST is superseded and should be corrected at source. Owner: dry
-> lab.
-
 ## What comes out
 
 ```component
 nectar-construct
 ```
 
-NECTAR stops at a ranked region. The step after it wraps that region in an
-architecture the wet lab can order and assemble: the loop-ended dumbbell is our
-own, and the two cassette forms are there because a reader comparing them should
-be able to.
+SEED stops at a ranked region. The step after it wraps that region in an
+architecture the wet lab can order and assemble: the loop-ended dumbbell is the
+form we build, and the two cassette forms are there because a reader comparing
+them should be able to.
 
-**Multigene concatenation** is part of the output rather than an abandoned idea.
-The pipeline picks one favourable region per target gene, and several are
-concatenated into a single construct so that one dsRNA molecule silences several
-genes. Which genes, and from which candidate pool, is at
-[cycle 1.1](/engineering#cycle-1-1).
+**Multigene concatenation is part of the output.** Targeting several genes at once
+is how we raise the chance of killing the mite, and single-target resistance is one
+of the bottlenecks SEED was built against, so the pipeline picks one favourable
+region per target gene and several regions are concatenated into one molecule. Two
+four-gene constructs were designed, one from each of two candidate pools, at
+**175 bp per region and 700 bp in total**. The architecture and the bulge geometry
+are at [cycle 1.2](/engineering#cycle-1-2).
 
-> **TODO —** Two of our own records conflict on concatenation, and a third set of
-> numbers has now joined them. An earlier calculation set the strategy aside and
-> it was written up here as tested and rejected; the current wet-lab write-up
-> designs two four-gene concatenated constructs at **175 bp per gene and 700 bp
-> total**; the frozen pipeline run ranks regions at **96 nt**. Resolve which
-> record stands, state one region length, and if concatenation is adopted,
-> publish the calculation that was previously read as a rejection. The mite
-> screen that decides it is already scoped: "see whether a shortened 100 bp
-> fragment is comparable to the 700 bp construct". Owner: dry lab with wet lab.
+The two pools are a comparison: literature-proven targets against targets our own
+analysis chose. The **literature pool** narrowed 65 gene × study observations to
+the 26 direct-positive ones, then to the 6 that resolve confidently to current
+_Varroa_ gene identities, and kept 5 on strength of RNAi evidence and functional
+diversity. The **exploratory pool** narrowed the **5,408 genes** of the combined
+ranking to the **299** in the top 5% of the network percentile, grouped those by
+cellular system — energy metabolism, proteostasis, DNA replication and cell cycle,
+transcription and chromatin, signalling, membrane and ion homeostasis, translation,
+trafficking — to 26 representatives, and reviewed them against the literature to
+reach 5. Four genes from each pool went into a construct; they are not named here,
+for the same reason the single target is not.
+
+Both constructs have been designed and produced. Neither has been screened against
+a single-gene construct, so the gain from concatenating is **Proposed** and not
+demonstrated.
 
 ## Feeding results back in
 
@@ -371,8 +453,8 @@ genes. Which genes, and from which candidate pool, is at
 Metric names, the biology behind each one, the ranking method in Stage 1, the
 small RNA analysis, the screening tools and their versions, and every data
 source are public, and are on this page in full. **The engineered feature set and
-fitted coefficients of the accumulation model, and the training corpus behind it,
-are held back pending the IP position**, as is the target gene name.
+fitted coefficients of the accumulation-propensity model, and the training corpus
+behind it, are held back pending the IP position**, as is the target gene name.
 
 Anything held back is marked as held back on the page where it would otherwise
 appear.
@@ -404,24 +486,14 @@ proteome, a transcript set, an RNA-seq expression table, a GFF annotation, and a
 list of species to screen against. Everything in Stage 1 and in the small RNA
 analysis can be **rebuilt from public data** with the accessions named on this
 page, and the run shown here records its own commit, its panel checksum and its
-tool versions so that it can be repeated rather than taken on trust.
+tool versions so that it can be repeated rather than taken on trust. The analysis
+scripts sit behind an interactive interface, so the three stages run as one
+pipeline from gene selection through region design to the off-target screen.
 
 > **TODO —** Record the public repository link, the commit history dates, the
 > dependency list and a worked example on a non-_Varroa_ target, so the platform
 > claim is demonstrable rather than asserted. The frozen panel and the per-gene
 > outputs are ready to publish alongside it. Owner: dry lab.
-
-## Still missing
-
-- Experimental validation of a sequence the pipeline chose, and with it the
-  feedback loop.
-- The repository link and run instructions.
-- The edlib mismatch and indel fractions, as numbers, and the BLAST mention
-  corrected at source.
-- Whether concatenation is adopted, and at what region length, stated once.
-- The overhang and transitivity tables, with their parameters explained.
-- The disclosure decision, and the IP gate on the target name and on naming
-  Vd-CHIBIN.
 
 ## Where this connects
 

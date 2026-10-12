@@ -2,7 +2,15 @@
 
 ### Aim
 
-To test NECTAR’s RNA design pipeline we needed to use a fast and reliable method for dsRNA production. To do this we used Vazyme’s In vitro transcription kit. For dual promoter dsRNA T7 promoters were added to the sense and antisense strand, and to avoid a non-functional T7 flap two separate PCR reactions were run, providing two separate IVT templates that are annealed after the IVT reaction. For loop-ended dsRNA constructs, we designed parts to include T7, so preparation for IVT required only a colony lysis PCR/PCR of the miniprep product that amplified between the gibson homology arms on the plasmid. To determine the concentration of dsRNA post-annealing we used a qubit assay to measure the concentration of dsRNA after a DNAse I and RNase T1 cleanup.
+To test SEED, our RNA design pipeline, we needed a fast and reliable route to
+dsRNA, so we made it by in vitro transcription with Vazyme's IVT kit. For
+dual-promoter dsRNA, T7 promoters were added to the sense and the antisense
+strand; to avoid a non-functional T7 flap we ran two separate PCRs, which give
+two IVT templates that are annealed after transcription. Loop-ended constructs
+carry T7 in the part itself, so preparing an IVT template needs only a
+colony-lysis PCR, or a PCR off the miniprep product, amplifying between the
+Gibson homology arms on the plasmid. Concentration after annealing is read on
+the Qubit, following a DNase I and RNase T1 cleanup.
 
 ### Experiments
 
@@ -13,7 +21,8 @@ To test NECTAR’s RNA design pipeline we needed to use a fast and reliable meth
 
 ##### Colony lysis and colony PCR
 
-Adapted from a CASPR protocol. General rules: add reagents to a chilled 200 µL
+Adapted from the CASPR Phusion colony-PCR protocol, run with Phanta master mix.
+General rules: add reagents to a chilled 200 µL
 PCR tube, **largest volume first**, so smaller volumes can be pipetted under the
 meniscus; mix by gentle vortexing or pipetting; add the sample last, then tap and
 spin down.
@@ -89,50 +98,205 @@ aptamer has to be denatured before the RNA migrates at true size.
 
 #### Quantifying dsRNA with qubit assay
 
-> **TODO —** Results/qubit assay description, qubit assay results. Owner: wet
-> lab.
+We quantified on the NanoDrop first and found the concentrations it reported
+were often badly inflated, so we moved to the RNA Broad Range assay on the
+Qubit, which reads a fluorescent dye rather than absorbance. A Qubit reading on
+raw product is not duplex-specific either, because unannealed and damaged single
+strands bind the dye too, so a representative volume is cleaned up first and
+only dsRNA is left to measure.
+
+DNase I removes the template, and RNase T1, not RNase A at normal ionic
+strength, removes the single-stranded RNA: in a duplex, steric hindrance blocks
+cleavage of the adjacent bond, so T1 cuts single strands only. The free
+nucleotides it releases do not contaminate a Qubit reading, because they carry
+no secondary structure for the dye to bind — which is precisely where the
+NanoDrop fails. DNA should not interfere with an RNA Broad Range reading, but we
+digest with DNase I as well so that NanoDrop values before and after treatment
+can be compared directly. Both reagents were spare from an old IVT kit, a
+100 U/µL RNase T1 vial and DNase I, and we used that kit's protocol as guidance.
+
+The NanoDrop-to-Qubit correction that came out of this, and what it means for
+every concentration on the project, are on [measurement](/measurement); the
+paired readings are on [results](/results).
 
 ##### Nuclease digest before quantification
 
-The protocol that turns an A260 reading into a duplex-specific mass, and the
-NanoDrop-to-Qubit correction note that goes with it, are described on
-[measurement](/measurement); the short version is DNase I to remove template,
-RNase T1 (not RNase A, at normal ionic strength) to remove single-stranded RNA,
-then re-read on Qubit.
+1. Take a representative sample of the dsRNA product. If single-stranded RNA or
+   DNA carryover matters downstream, treat the whole product instead.
+2. Dilute RNase T1 to 10 U/µL in the dilution buffer supplied with it. Make the
+   aliquot as fresh as possible and keep it no longer than a week.
+3. To a PCR tube, or a larger Eppendorf if treating a whole product, add:
+   - X µL of the dsRNA solution
+   - 0.1X µL RNase T1 at 10 U/µL
+   - 0.05X µL DNase I
+   - RNase-free water to 2X µL
 
-> **TODO —** Write this up as a standalone, downloadable protocol with its
-> spreadsheet. It is the Measurement deliverable and currently exists only as
-> prose. Owner: measurement.
+   For a representative sample, 5 or 10 µL of dsRNA solution works well, because
+   the whole treated mixture then fits on the Qubit.
+4. Incubate at 37 °C for 30 min.
+5. From here follow
+   [Thermo Fisher's Qubit RNA BR protocol](https://documents.thermofisher.com/TFS-Assets/LSG/manuals/Qubit_RNA_BR_Assay_UG.pdf).
+   Make the working solution fresh, diluting Qubit RNA BR reagent 1:200 in Qubit
+   RNA BR buffer.
+6. For each standard, add 10 µL of Standard 1 or Standard 2 to 190 µL working
+   solution in a clear 0.5 mL tube: 200 µL per tube.
+7. For each sample, add 1–20 µL of treated stock to a clear 0.5 mL tube and make
+   it up to 200 µL with working solution.
+8. Vortex each tube 3–5 s, then stand 2–3 min at room temperature.
+9. Read on the Qubit, then work back from the displayed concentration to the
+   concentration of dsRNA in the stock.
 
-> **TODO —** PDF: Full protocol for quantifying dsRNA with the qubit assay, uploaded
-> to `static.igem.wiki` and linked here. Owner: wet lab.
+> **TODO —** PDF: the nuclease-digest-to-Qubit protocol as a standalone download,
+> with the concentration spreadsheet that goes with it. It is the Measurement
+> deliverable and exists only as prose. Owner: measurement.
 
-#### Preparing bee-lab ready doses
+##### Preparing bee-lab-ready doses
 
-> **TODO —** Combine with ‘quantifying dsRNA with qubit assay’ if relevant.
-> Owner: wet lab.
-
-> **TODO —** PDF: Full protocol for preparing bee-lab ready doses, uploaded to
-> `static.igem.wiki` and linked here. Owner: wet lab.
+A pair of 20 µL Vazyme High Yield IVT reactions, one per strand, anneals to a
+duplex stock of roughly 90 µg; the four stocks made on 6 September were 88–93 µg
+each. Stocks are held at −80 °C, and doses are diluted from the Qubit-corrected
+concentration rather than the NanoDrop figure. The doses themselves, and how
+they were fed, are on [bee lab experiments](/bee-lab-experiments).
 
 ### Discussion
 
 > **TODO —** Discuss the results, and the next steps. Owner: wet lab.
 
-## Block 2: Loop ended dsRNA production in yeast/E.coli - Cloning
+## Block 2: Loop-ended dsRNA production in yeast/E. coli — cloning
 
 ### Aim
 
-Establishing a dsRNA expression titre for yeast and e.coli, making a pollen patty and investigating the stability of loop-ended dsRNA required assembly of the loop-ended dsRNA construct and transformation of e.coli and yeast. We used a plasmid that had both yeast (WHAT STRAINS) and e.coli (WHAT STRAINS) compatible origins of replication (WHAT PLASMID).
+Establishing a dsRNA expression titre for yeast and _E. coli_, making a pollen
+patty and testing the stability of loop-ended dsRNA all need the same two steps
+first: assembling the loop-ended construct, and transforming it into _E. coli_
+and yeast. This round also produces the single-promoter dumbbell template used
+for the mite-killing assays and for the microbial titre work. For yeast we took
+forward a medium-copy **pUC57** backbone carrying the loop-ended insert under
+the inducible **GAL10** promoter. For _E. coli_, T7-driven expression in
+**BL21**, with a single-promoter loop-ended insert and a dual-promoter insert
+built to be compatible with the same plasmid, so the two modes of expression can
+be compared.
+
+> **TODO —** Name the _E. coli_ expression plasmid, the _S. cerevisiae_ strain
+> and the cloning strain. None of the three is written down anywhere, and
+> without them this section is not reproducible. Owner: wet lab.
 
 ### Experiments
 
-#### dsRNA expression titre in yeast and e.coli
+#### Cloning the loop-ended construct
+
+A loop-ended insert proved hard to buy as a single synthesised fragment from the
+iGEM synthesis partners, because the inverted repeat defeats synthesis, so the
+construct is assembled by Gibson reaction, transformed into _E. coli_, screened
+by colony PCR and recovered by miniprep. The assembly history, including the
+failed Gibson and cross-over PCR attempts, is at
+[cycle 1.2](/engineering#cycle-1-2).
+
+##### Gibson assembly
+
+For multi-fragment homologous recombination:
+
+1. Use 0.03 pmol of each insert and of the vector. The mass in ng is the
+   fragment's length in bp × 0.02.
+2. Suspend the fragments in Tris buffer, at a concentration that lets you
+   pipette 1–2 µL per fragment.
+3. Prepare the reaction: 10 µL 2× CE mix, X µL inserts plus vector, Milli-Q
+   water to 20 µL.
+4. Mix by pipetting gently up and down — **do not vortex** — and spin briefly.
+5. Incubate at 50 °C for 30 min, then put straight on ice.
+
+For single-fragment recombination with the Vazyme ClonExpress Ultra One Step
+Cloning Kit V3, measure insert and backbone on the NanoDrop and check purity on
+a gel first, with A260/280 around 1.8–2.0. Optimal vector mass in ng is
+0.02 × bp (about 0.03 pmol) and optimal insert mass is 0.04 × bp (about
+0.06 pmol). Set up on ice, including both negative controls and the kit's
+positive control:
+
+| Component            | Recombination | Negative 1 | Negative 2 | Positive |
+| -------------------- | ------------- | ---------- | ---------- | -------- |
+| Vector               | X µL          | X µL       | 0 µL       | 1 µL     |
+| Insert               | Y µL          | 0 µL       | Y µL       | 1 µL     |
+| 2× CE V3 reaction mix | 5 µL         | 0 µL       | 0 µL       | 5 µL     |
+| ddH₂O                | to 10 µL      | to 10 µL   | to 10 µL   | to 10 µL |
+
+Mix by gentle pipetting, spin the contents down, incubate at 50 °C for
+5–15 min, then chill at 4 °C on ice immediately.
+
+##### Making competent cells
+
+1. Collect nine test tubes of the cells to be made competent.
+2. To follow growth, pipette 50 µL LB broth per well into a lidded optical plate
+   and add cells to it.
+3. Incubate in a shaking water bath at 37 °C.
+4. Read OD600 at 1 h, with LB broth alone as the blank.
+5. Read again 45 min later.
+6. Split the culture into 2 × 25 mL conical Falcon tubes.
+7. Stand on ice for 30 min.
+8. Centrifuge 15 min at maximum speed, 4 °C.
+9. Discard the LB supernatant.
+10. Add TSS to 5% of the original volume (2.5 mL) and resuspend the pellet.
+11. Aliquot 50 µL per Eppendorf or PCR tube.
+12. Label and store at −80 °C.
+
+> **TODO —** Three things are missing as recorded: the strain, written down only
+> as "1PIR-TSS"; the OD600 the culture is harvested at; and the culture volume
+> the Falcon tubes are filled from. Owner: wet lab.
+
+##### Transformation
+
+1. Move 4 × 50 µL competent cells from −80 °C onto ice, and keep them on ice
+   wherever possible.
+2. Set a heat block to 42 °C.
+3. Add 5 µL of each Gibson product to a tube of cells.
+4. Stand on ice for 10 min. **Be precise with the timings.**
+5. Heat block for 1 min.
+6. Ice for 3 min.
+7. Add 1 mL SOC medium to each tube.
+8. Shaking incubator at 37 °C for 1 h.
+9. Centrifuge 10 min at 6,800 rpm, 4 °C, warming the plates in the incubator
+   while it spins.
+10. Remove 950 µL of the SOC medium.
+11. Resuspend in what is left, pipette onto glass beads on the plate and shake
+    to spread.
+12. Discard the beads.
+13. Incubate at 37 °C overnight.
+
+##### Miniprep
+
+1. Transfer 1.5 mL of overnight culture to a centrifuge tube.
+2. Centrifuge 1 min at 10,000 rpm. Discard the medium and invert the tube on
+   blotting paper to drain.
+3. Add 250 µL buffer P1, with RNase A already added, and mix thoroughly by
+   pipetting.
+4. Add 250 µL buffer P2 and invert gently 10 times to lyse. **Do not leave it
+   longer than 5 min.**
+5. Add 350 µL buffer P3 and invert 10 times immediately to neutralise P2. A
+   white precipitate forms.
+6. Centrifuge 10 min at 12,000 rpm.
+7. Transfer the supernatant to a FastPure DNA mini column in a 2 mL collection
+   tube, without disturbing the precipitate.
+8. Centrifuge 1 min at 12,000 rpm, discard the filtrate and return the column.
+9. Add 500 µL buffer PW1 and centrifuge 1 min at 12,000 rpm.
+10. Add 600 µL buffer PW2, with absolute ethanol already added, centrifuge 1 min
+    at 12,000 rpm, discard the filtrate and return the column.
+11. Repeat step 10.
+12. Dry-spin the empty column 1 min at 12,000 rpm to clear residual buffer.
+13. Put the column in a fresh sterile 1.5 mL tube and add 50 µL elution buffer
+    to the centre of the membrane.
+14. Stand 2 min at room temperature, then centrifuge 1 min at 12,000 rpm to
+    elute.
+15. Store the DNA at −20 °C.
+
+> **TODO —** PCR verification of the insert is not written down: which primers,
+> the expected product sizes, and the gel call that accepts or rejects a colony.
+> It runs on the [colony PCR](#colony-lysis-and-colony-pcr) above. Owner: wet lab.
+
+#### dsRNA expression titre in yeast and E. coli
 
 > **TODO —** Brief protocol summary for culturing yeast and measuring dsRNA
 > titre, then results. Owner: wet lab.
 
-> **TODO —** PDF: Full protocol for the dsRNA expression titre in yeast and e.coli,
+> **TODO —** PDF: Full protocol for the dsRNA expression titre in yeast and E. coli,
 > uploaded to `static.igem.wiki` and linked here. Owner: wet lab.
 
 #### dsRNA stability in pollen patty vs sucrose solution
@@ -153,9 +317,12 @@ Establishing a dsRNA expression titre for yeast and e.coli, making a pollen patt
 
 ### Discussion
 
-> **TODO —** Wait for results. Owner: wet lab.
+> **TODO —** Write the discussion once the three Block 2 results are in: the
+> expression titre in yeast and _E. coli_, dsRNA stability in a pollen patty
+> against sucrose solution, and the stability of the different loop structures.
+> It has to say which chassis is taken forward and why. Owner: wet lab.
 
-## Block 3: RNA measurements in adult hemolymph with qPCR
+## Block 3: RNA measurements in adult haemolymph with qPCR
 
 ### Aim
 
@@ -165,8 +332,6 @@ Establishing a dsRNA expression titre for yeast and e.coli, making a pollen patt
 ### Experiments
 
 #### One step qPCR
-
-> **TODO —** Standard curve protocol, then results. Owner: Lisa, Michael, Aria.
 
 ##### Reverse transcription
 
@@ -193,9 +358,15 @@ straight onto ice). Skipping this is **the main cause of false negatives** on ds
 4. Cycle: 95 °C for 30 s once; then 40 cycles of 95 °C for 10 s and ~60 °C for
    30 s; then a melt step at the machine's default settings.
 
-**Standard curve for absolute quantification in haemolymph.** Spike haemolymph
-with a known RNA concentration, serially dilute 1:10, reverse-transcribe each
-dilution by the protocol above, and run every point in triplicate.
+**Standard curve for absolute quantification in haemolymph.**
+
+1. Pool untreated haemolymph, to act as the matrix the series is diluted in.
+2. Add PTU to a final concentration of 0.1 mM, to inhibit tyrosinase and stop
+   the haemolymph melanising.
+3. Spike in dsRNA at a known, Qubit-tested concentration, mix thoroughly, and
+   build a 1:10 dilution series in that matrix.
+4. Reverse-transcribe each dilution by the protocol above.
+5. Run every point in triplicate and plot the curve.
 
 **Two constraints specific to dsRNA work.** Primers must sit **outside** the
 dsRNA fragment, because residual input dsRNA carries into the RNA prep and, in a
@@ -295,10 +466,10 @@ A separate five-method comparison on 29 July found **no yield difference** betwe
 any of them, which is a useful null and is written up at cycle 3.1 on
 [Engineering](/engineering).
 
-> **TODO —** "Lisa to writeup." The extraction comparison is owed a full write-up by
-> its author: the Test and Learn beats are marked "Lisa can you fill in" in the
-> write-up, and the reagent list above stops after the chloroform step. Owner: Lisa,
-> wet lab.
+> **TODO —** The Vazyme silica-bead (Vezol) protocol is the method we adopted on
+> reproducibility, and it is the one we have never written out: our own copy of it
+> breaks off after the chloroform step. Write it beside the phenol-chloroform route
+> above. Owner: Lisa, wet lab.
 
 > **TODO —** PDF: Full protocol for the RNA extractions, uploaded to
 > `static.igem.wiki` and linked here. Owner: wet lab.
@@ -363,22 +534,20 @@ Written up so far on
 ## Protocols still owed
 
 > **TODO —** Production and cloning: PCR to add T7 and adaptors, RNA purification,
-> making bee-lab-ready solutions, Gibson assembly, _E. coli_ transformation,
-> miniprep, and the combined IVT + annealing + QC protocol as a single document.
-> Owner: wet lab.
+> the golden-gate route for the dumbbell, and the combined IVT + annealing + QC
+> protocol as a single document. Owner: wet lab.
 
 > **TODO —** Microbial production: yeast transformation and titre approximation,
-> BL21 transformation with rifampicin incubation and dsRNA titre, and the yeast
-> SOP written from scratch. The Renaissance patent compliance note on
-> [yeast](/wet-lab-experiments#yeast-production) goes into the strain documentation at the same time. Owner: wet
-> lab.
+> and BL21 transformation with the designed rifampicin incubation and a dsRNA
+> titre — designed, never run — plus the yeast SOP written from scratch. The
+> Renaissance patent compliance note under [yeast production](#yeast-production)
+> goes into the strain documentation at the same time. Owner: wet lab.
 
-> **TODO —** Measurement: one-step RT-qPCR on raw haemolymph including the
-> dilution series, mite RNA extraction, larval haemolymph extraction, haemolymph
-> matrix characterisation (absorbance spectra and melanisation, which is why we
-> ordered PTU), Mango optimisation (buffer, concentrations, Kd, TO1 and TO3
-> biotin), the two SYBR Gold gel protocols, and the MS2 work once it happens.
-> Owner: measurement.
+> **TODO —** Measurement: one-step RT-qPCR on raw haemolymph, haemolymph matrix
+> characterisation (absorbance spectra and melanisation, which is why we ordered
+> PTU), Mango optimisation (buffer, concentrations, Kd, TO1 and TO3 biotin), the
+> two SYBR Gold gel protocols, and the MS2 work once it happens. Owner:
+> measurement.
 
 > **TODO —** Toehold: no bench protocol is owed, because the approach was modelled
 > and rejected. The modelling method belongs on [dry lab and modelling](/model)
@@ -459,8 +628,10 @@ specification rather than an aspiration.
 [Pol II promoter] -> HH ribozyme -> ledRNA -> HDV ribozyme -> terminator
 ```
 
-with GAL1 inducible and TDH3/TEF1 constitutive variants. The MCP adaptor protein
-is purified separately from _E. coli_ and added _in vitro_, not co-expressed.
+with GAL1 inducible and TDH3/TEF1 constitutive variants designed. The backbone we
+took forward is a medium-copy **pUC57** carrying the loop-ended insert under the
+inducible **GAL10** promoter. The MCP adaptor protein is purified separately from
+_E. coli_ and added _in vitro_, not co-expressed.
 
 **Pol II, not Pol III, and the reason is mechanical.** Pol III would be the
 obvious choice for a short structured non-coding RNA, and it is ruled out by our
@@ -515,9 +686,17 @@ four-route chassis comparison at 2.1.
 
 ### Results
 
-**No yeast has been transformed. No yeast-produced dsRNA exists. No yeast titre
-has been measured.** As of 20 September the yeast plasmid has been linearised and
-DpnI-treated; purification is outstanding. Because no yeast material exists, all
+**No yeast-produced dsRNA exists and no yeast titre has been measured.** As of
+20 September the yeast plasmid had been linearised and DpnI-treated, purification
+outstanding, and that is where our dated record stops. Our 12 October write-up
+states that the insert was then cloned into a pUC57 backbone and used to transform
+_S. cerevisiae_; no journal entry records it, and no strain or final plasmid is
+named.
+
+> **TODO —** Confirm whether the yeast transformation happened, with the date, the
+> strain and the plasmid, or strike the claim. Note also that pUC57 is normally an
+> _E. coli_ cloning backbone and carries no yeast origin of replication, so the
+> vector as described would not replicate in yeast. Owner: wet lab. Because no yeast material exists, all
 dsRNA used for bee-lab validation is IVT-derived, which is what makes the
 quantification work on [measurement](/measurement) **load-bearing for the whole
 project**.
@@ -557,8 +736,8 @@ dsRNA has a very short half-life**. The cycle-by-cycle version is at
 
 > **TODO —** The patty protocol. Prof. Geraldine Wright recommended a formulation,
 > which we adjusted to maximise the dsRNA dose, and **neither the recommended
-> formulation nor our adjustment is written down** — our write-up records the
-> adjustment as "xxxxx". Without it this is not a protocol and the patty cannot be
+> formulation nor our adjustment is written down anywhere**: the composition is
+> still an unfilled placeholder in our own notes. Without it the patty cannot be
 > reproduced. Owner: wet lab.
 
 ### Scale-up

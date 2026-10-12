@@ -1,4 +1,5 @@
 import { Breadcrumbs } from "./Breadcrumbs";
+import { Ink } from "./CombBackdrop";
 
 interface HeaderProps {
   title: string;
@@ -12,8 +13,16 @@ export function Header({ title, lead, centred }: HeaderProps) {
     <header className={`page-header${centred ? " is-centred" : ""}`}>
       <div className="container">
         <Breadcrumbs />
-        <h1>{title}</h1>
-        {lead && <p className="lead">{lead}</p>}
+        {/* <Ink> is the comb backdrop's type trial; it changes nothing
+            unless that trial draws a ground behind every line. */}
+        <h1>
+          <Ink>{title}</Ink>
+        </h1>
+        {lead && (
+          <p className="lead">
+            <Ink>{lead}</Ink>
+          </p>
+        )}
       </div>
     </header>
   );

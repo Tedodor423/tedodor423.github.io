@@ -1,33 +1,47 @@
-[Engineering](/engineering) explains how we made decisions. This page sets out
-what is solid, what is provisional, and what did not work.
+After nuclease digestion, Qubit finds 4–11% of the dsRNA that NanoDrop reports for
+the same preparation, so every dose on this wiki is set by digest-Qubit. Fed to
+larvae in the hive, our dsRNA is still detectable intact 24 h later, but most of a
+1 µg dose is gone by then. Soaking mites in target dsRNA raised mortality with
+dose; delivering it through a fed larval host did not, because larval compromise
+drove mite death in every group. No construct is sequence-verified and no yeast or
+_E. coli_ titre exists yet. The decisions behind each result are on
+[Engineering](/engineering).
+
+Every headline result below, failed ones included, is set out in the same eight
+fields and carries one of four status labels: **Demonstrated**, **Investigated**,
+**Modelled** or **Proposed**. `[LIT]` marks a source we read, `[CALC]` our own
+arithmetic with the assumptions stated, and `[FLAG]` a claim we could not verify,
+never stated as fact.
 
 ```component
 project-outputs
 ```
 
-## How to read a result on this page
-
-Every headline result, including every failed one, uses the same eight fields in
-the same order: **Question · Experiment · Evidence · Controls + n · Result ·
-Interpretation · Limitation · What it changed.**
-
-Each result carries one of the wiki's four status labels — **Demonstrated**,
-**Investigated**, **Modelled**, **Proposed** — and the wiki's citation tags:
-`[LIT]` from a source we read, `[CALC]` our own arithmetic with the assumptions
-stated, `[FLAG]` unverified and never stated as fact.
-
 ## Two caveats that apply to every mass figure below
 
 > **TODO —** Re-quantify all four annealed stocks by digest-Qubit before any
 > µg-per-bee figure is published anywhere on this wiki. Doses on this page are
-> the nominal mass fed; the digest-corrected mass is lower, by roughly the factor
-> in the NanoDrop result below. Owner: wet lab.
+> the nominal mass fed; the digest-Qubit mass is lower, by a factor that varies
+> from one preparation to the next (see the Qubit result below). Owner: wet lab.
 
 > **TODO —** Re-analyse gel SYBE 01 from a 16-bit TIFF. The band intensities
 > currently in hand were read off an 8-bit JPEG, which clips and quantises the
 > exact range a densitometry number comes from. Owner: measurement.
 
 ## Making the molecule
+
+We make dsRNA by _in vitro_ transcription with Vazyme's IVT kit. For
+dual-promoter dsRNA, a T7 promoter is added to each strand in two separate PCRs,
+which avoids a non-functional T7 flap, and the two transcripts are annealed after
+IVT. Loop-ended constructs were designed with T7 built in, so their IVT template
+is a colony-lysis PCR, or a PCR of miniprep product, across the Gibson homology
+arms. The whole pipeline (colony lysis and DNA purification, PCR, purification,
+IVT, RNA extraction, annealing) has been run many times, for 300, 500 and 700 bp
+constructs with and without the Mango loop.
+
+> **TODO —** Figure: agarose gels of annealed dsRNA at 300, 500 and 700 bp, with and
+> without Mango, each band annotated with its expected size. Owner: wet lab (Ariana,
+> Anna).
 
 ### Overnight transcription roughly doubles IVT yield
 
@@ -59,40 +73,101 @@ observation we act on, **not a measured rate**.
 **What it changed.** Overnight became the standard IVT. See
 [cycle 2.1](/engineering#cycle-2-1).
 
-### NanoDrop over-reads dsRNA by about 1.9×
+### After digestion, Qubit finds 4–11% of what NanoDrop reports
 
 **Status: Demonstrated.**
 
-**Question.** NanoDrop and Qubit disagree about our dsRNA concentration. What
-should we report as a dose?
+**Question.** NanoDrop and Qubit disagree about our dsRNA concentration. Which
+should set a dose, and can a NanoDrop reading be converted into one?
 
-**Experiment.** Digest each preparation with DNase I and RNase T1, so that only
-duplex survives, and re-read A260.
+**Experiment.** Each IVT product was read on NanoDrop (RNA-40 setting) and on Qubit
+RNA Broad Range. A representative 5–10 µL was then digested with RNase T1 and
+DNase I and read again on both. RNase T1 cuts single-stranded RNA only, because a
+duplex blocks the cut sterically, and the free nucleotides it leaves give no Qubit
+signal, because the dye needs structure to bind. DNA should not affect the Qubit
+RNA reading; DNase I was added so that NanoDrop before and after could be compared.
+The step-by-step protocol is on [Experiments and protocols](/wet-lab-experiments).
 
 **Evidence.**
 
-> **TODO —** Figure: Post-digest over pre-digest A260 for each of the eight
-> preparations, plotted against pre-digest value, with the 52.1% mean drawn as a
-> line. The point of the figure is the flatness, not the mean.
+| NanoDrop before (ng/µL) | Qubit before (ng/µL) | NanoDrop after digest (ng/µL) | Qubit after digest (ng/µL) | Qubit after / NanoDrop before (%) |
+| ----------------------- | -------------------- | ----------------------------- | -------------------------- | --------------------------------- |
+| 178.3                   | 49.2                 | 92.1                          | 20                         | 11.22                             |
+| 525.2                   | 96                   | 231                           | 40                         | 7.62                              |
+| 530.2                   | 100                  | 283                           | 50.6                       | 9.54                              |
+| 744.1                   | 212                  | 363.8                         | 64.8                       | 8.71                              |
+| 1196.3                  | too high             | 626.4                         | 87.6                       | 7.32                              |
+| 1239.6                  | too high             | 677.9                         | 78.6                       | 6.34                              |
+| 1307.1                  | too high             | 711                           | 93.8                       | 7.18                              |
+| 3323.9                  | too high             | 1922.6                        | 146.6                      | 4.41                              |
+| 2410.6                  | not recorded         | 1193.8                        | 86                         | 3.57                              |
+| 787.3                   | not recorded         | 357                           | 49                         | 6.22                              |
+| 1606.9                  | 110                  | 986.9                         | 67.2                       | 4.18                              |
+| 527.4                   | 57.2                 | 257.6                         | 32.32                      | 6.13                              |
+| 3662.2                  | too high             | not recorded                  | 140                        | 3.82                              |
 
-**Controls + n.** Eight independent preparations, three constructs, five dates.
-Water-plus-nuclease blank, and a DNase + RNase A low-salt arm expected to go to
-near zero.
+> **TODO —** Figure: NanoDrop before digestion (x) against Qubit after digestion (y),
+> both in ng/µL, one point per preparation (n = 13), with the least-squares line
+> y = 0.0322x + 28.9 and R² = 0.862 marked. What it has to show is the spread of
+> Qubit values at a given NanoDrop reading.
 
-**Result.** Digestion removes 48% of the A260 signal every time: N₁/N₀ = 52.1% ±
-4.2% `[CALC]`. An uncorrected NanoDrop reading therefore over-states intact duplex
-by about **1.9×** `[CALC]`.
+> **TODO —** Figure: Qubit reading against fold dilution, 1× to 3.5× in 0.5× steps,
+> for the three digested samples in the dilution series, with the reading expected
+> from dilution alone drawn beside each, so the gap at 3–3.5× is visible.
 
-**Interpretation.** A260 counts leftover NTPs and single-stranded RNA as if they
-were product. The digest, **not a fixed correction factor**, is what transfers: the
-raw NanoDrop-to-Qubit ratio runs from 3.3× to 18.2× across our preparations.
+**Controls + n.** Thirteen IVT preparations. The first eight rows are the original
+cross-check (three constructs, five dates), run with a water-plus-nuclease blank and
+a DNase + RNase A low-salt arm expected to go to near zero.
 
-**Limitation.** RNase T1 leaves mononucleotides that still absorb at 260 nm but
-are invisible to Qubit, so an N₁ read without post-digest cleanup partly counts
-the debris of what was just destroyed.
+**Result.** Qubit after digestion was **3.6–11.2% of the NanoDrop reading before
+it**, falling from about 11% in lower-yield preparations to about 4% in the
+highest, those above 2000 ng/µL by NanoDrop. NanoDrop before predicts Qubit after
+linearly (**R² = 0.862, p = 4.62 × 10⁻⁶, n = 13**), but with a residual standard
+error of 14.80 ng/µL: three preparations at 525–530 ng/µL by NanoDrop held
+32.3–50.6 ng/µL of duplex. In the first eight, digestion removed about half the
+A260 signal (N₁/N₀ = 52.1% ± 4.2% `[CALC]`), and the digested NanoDrop reading
+still sat several-fold above Qubit.
 
-**What it changed.** Every µg-per-bee figure is re-derived from digest-Qubit. See
+**Interpretation.** Reactions that make more nucleic acid make more duplex, but not
+in proportion: very high crude yields did not turn into matching dsRNA. A260 counts
+leftover NTPs and single-stranded RNA as if they were product. The regression is
+good enough to predict a concentration interval and not good enough to set a dose,
+so **every preparation is measured directly by digest-Qubit**.
+
+**Limitation.** Thirteen points, and five Qubit readings before digestion were too
+high to read, so Qubit before and after cannot yet be compared. RNase T1 leaves
+mononucleotides that still absorb at 260 nm, so a NanoDrop reading after digestion
+partly counts the debris of what was just destroyed. Qubit readings also fall less
+than dilution predicts: the sample labelled "700 treated" read 1.68 ng/µL undiluted
+and about 0.77 ng/µL at 3.5×, against about 0.48 expected. That series was made by
+adding working solution to Qubit tubes already prepared, so the free dye and its
+background glow stayed constant while the target signal fell, which most likely
+inflates the readings at high dilution.
+
+**What it changed.** Digest-Qubit sets every dose, and every µg-per-bee figure is
+re-derived from it. Next, the dilution series is to be repeated with the sample
+diluted before the dye goes in, and the stocks that read too high diluted so that
+Qubit before and after digestion can be modelled the same way. See
 [cycle 2.6](/engineering#cycle-2-6).
+
+### dsRNA titre from yeast and _E. coli_
+
+No yeast has been transformed on our written record, so no yeast-produced dsRNA
+and no titre exist yet. As of 20 September the yeast plasmid had been linearised
+and DpnI-treated. Every dose used for bee-lab validation is therefore
+IVT-derived; the detail is on
+[wet lab experiments](/wet-lab-experiments#yeast-production).
+
+> **TODO —** Three results, none yet in: the dsRNA expression titre in yeast and in
+> _E. coli_, as µg intact dsRNA per mg dry cells, with the culture conditions and
+> the quantification method; dsRNA stability in pollen patty against sucrose
+> solution, with how the yeast was cultured and the patty made; and the stability
+> of the different loop structures. Before any of it is written up, name the yeast
+> backbone and strain and the _E. coli_ plasmid and strain, say which chassis
+> produces the loop-ended dsRNA and which is only a cloning host, and resolve
+> whether a transformation happened at all: the 12 October write-up says the
+> insert was cloned into pUC57 and used to transform _S. cerevisiae_, but its own
+> test section is empty and no journal entry records it. Owner: wet lab.
 
 ## Parts
 
@@ -204,14 +279,6 @@ Registry rather than from this wiki still gets the full picture:
 > - Check licensing constraints on upstream sequence sources, including the Mango
 >   aptamer and the MS2 C-variant.
 
-### Still missing
-
-- Registry numbers and the deposit itself.
-- Characterisation data for L0 against L1, on the same gel.
-- Sequence verification.
-- The IP decision that releases the target-bearing construct, or a statement that
-  it stays held.
-
 ## Measuring it in bee material
 
 ### Five extraction methods, no winner
@@ -247,7 +314,7 @@ missing control.
 instead. Published as a null because it saves a future team a week. See
 [cycle 3.1](/engineering#cycle-3-1).
 
-### Silica column beats phenol-chloroform on variance, not on yield
+### Silica column beats phenol-chloroform on variance and purity, not on yield
 
 **Status: Demonstrated.**
 
@@ -260,18 +327,20 @@ ratios by NanoDrop.
 
 **Evidence.**
 
-| Method                | Mean concentration (ng/µL) | SD (ng/µL) | CV (%) |
-| --------------------- | -------------------------- | ---------- | ------ |
-| Phenol-chloroform     | 1255.15                    | 344.04     | 27.41  |
-| Silica beads (column) | 261.33                     | 48.24      | 18.46  |
+| Method                | Mean concentration (ng/µL) | Mean A260/A280 | SD (ng/µL) | Coefficient of variation (%) |
+| --------------------- | -------------------------- | -------------- | ---------- | ---------------------------- |
+| Phenol-chloroform     | 1255.15                    | 1.80           | 344.04     | 27.4                         |
+| Silica beads (column) | 261.33                     | 2.04           | 48.25      | 18.5                         |
 
 **Controls + n.** Aliquots of one pooled homogenate, so biological variation is
 removed and what is left is method variation. Phenol-chloroform n = 8, column
 n = 7.
 
 **Result.** Phenol-chloroform yields **roughly 4.8× more total RNA** and is
-half again as variable. TRIzol A260/230 ran 0.51–0.88, which is guanidine and
-phenol carryover and a qPCR inhibition risk.
+half again as variable: a coefficient of variation of 27.4% against 18.5%. The
+column gives the cleaner RNA, with A260/A280 of 2.04 against 1.80, and TRIzol
+A260/230 ran 0.51–0.88, which is guanidine and phenol carryover and a qPCR
+inhibition risk.
 
 **Interpretation.** For qPCR, **reproducibility is worth more than yield**. The
 TRIzol variance is structural: five operator-dependent steps stack, and the manual
@@ -281,7 +350,34 @@ specifies the aqueous-phase transfer only as "angling the tube at 45°".
 duplex recovery.
 
 **What it changed.** Column extraction became standard for everything feeding
-qPCR. See [cycle 3.1](/engineering#cycle-3-1).
+qPCR, chosen for its lower coefficient of variation and better A260/A280. See
+[cycle 3.1](/engineering#cycle-3-1).
+
+### Measuring dsRNA by RT-qPCR
+
+**Status: Investigated.** The assay and its standard curves are designed; no dsRNA
+concentration in bee material exists yet.
+
+Adults were fed 1 µg of 300, 500 or 700 bp GFP dsRNA, and larvae 1 µg of 700 bp
+GFP dsRNA. The RT-qPCR primers amplify a conserved 100 bp region of the GFP
+sequence, so one assay reads every length. Each matrix gets its own standard
+curve. For adult haemolymph, Qubit-quantified dsRNA is spiked as a 1:10 series
+into pooled untreated haemolymph, with phenylthiourea at 0.1 mM final to inhibit
+tyrosinase and so melanisation, and each point is run in triplicate. Larval
+samples need RNA extraction first, so their curve is a dilution series in water.
+Protocol on [Experiments and protocols](/wet-lab-experiments).
+
+> **TODO —** Figure: the adult standard curve (Cq against log dsRNA spiked into
+> haemolymph, triplicates shown, with efficiency, slope, R² and the no-template
+> control), then dsRNA in adult haemolymph against time after the 1 µg dose, at
+> 1, 3, 6 and 24 h for each of the three lengths, five bees per length per
+> timepoint against three sucrose-fed controls. Owner: wet lab (Lisa, Michael,
+> Ariana).
+
+> **TODO —** Figure: the larval equivalent, the water standard curve and dsRNA per
+> larva after a 1 µg dose of 700 bp GFP dsRNA at 24, 48, 72 and 96 h and 7 days.
+> Nothing on this wiki yet quantifies dsRNA in larval material; the larval result
+> under "Delivering it to bees" is detection only. Owner: wet lab (Lisa, Michael).
 
 ### Mango calibrates in water, and the second run shows how easily it does not
 
@@ -290,8 +386,11 @@ qPCR. See [cycle 3.1](/engineering#cycle-3-1).
 **Question.** Can a Mango-tagged construct report its own concentration on a plate
 reader?
 
-**Experiment.** Dilution series of Mango-tagged dsRNA in water and in spiked adult
-haemolymph, incubated with folding buffer and TO1-biotin, read on a plate reader.
+**Experiment.** Mango-II folds into a K⁺-stabilised G-quadruplex that binds
+TO1-Biotin; the complex is excited around 510 nm and emits at 535 nm. Dilution series
+of Mango-tagged dsRNA in water and in spiked adult haemolymph were incubated with
+the K⁺ folding buffer and TO1-Biotin and read on a plate reader. Method on
+[measurement](/measurement).
 
 **Evidence.**
 
@@ -384,82 +483,65 @@ reading, rather than reading through it. See
 > widely quoted 25 pg figure is dsDNA and is not ours to cite. Owner: wet lab.
 > See [cycle 4.3](/engineering#cycle-4-3).
 
-> **TODO —** Haemolymph matrix characterisation: absorption spectrum across the
-> Mango excitation and emission range, and rate of melanisation with time after
-> extraction. Measured, not yet written up. Owner: measurement.
+### Bee haemolymph barely absorbs at Mango wavelengths
 
-> **TODO —** RNA measurements in larvae, as a number rather than a band. This is
-> now a stated goal of the measurement workstream alongside adult haemolymph, and
-> nothing on this wiki quantifies dsRNA in larval material — the larval result
-> below is detection only. Owner: wet lab with measurement.
+**Status: Investigated.** Neat adult haemolymph absorbs at 507 nm below what a
+NanoDrop can resolve, and diluting it changed nothing, so diluting haemolymph to
+reduce optical interference costs signal and buys nothing. Left open to the air,
+absorbance in two of three samples rose after a lag of 5–10 minutes, but the ratio
+between the two wavelengths points to scatter from coagulation and aggregation,
+and none of the rise can yet be attributed to melanin. Data and working are on
+[measurement](/measurement).
 
 ## Delivering it to bees
 
-### Intact dsRNA recovered from larvae and larval haemolymph 24 h after a 1 µg dose
+### Cage feeding cannot give a known dose per bee
 
-**Status: Demonstrated, qualitatively.**
+**Status: Investigated. A negative that set the dosing method.**
 
-**Question.** After a larva eats our dsRNA, can we get it back intact?
+**Question.** Can caged bees be dosed through a shared feeder, and does the salt our
+dsRNA needs put them off feeding?
 
-**Experiment.** 5th-instar larvae spiked in-frame with 1 µg dsRNA and returned to
-the hive. Whole larvae and larval haemolymph collected at 24 h, column-extracted,
-flash-denatured, reverse-transcribed and amplified with construct-specific primers
-across the 300/500/700 bp series.
-
-**Evidence.**
-
-> **TODO —** Figure: The 4–5 Aug gel, uncropped, with lane labels: dosed larvae, undosed
-> larvae from the same frame, water-plus-primer no-template control, ladder. All
-> three expected band sizes visible in the dosed lanes.
-
-**Controls + n.** Undosed larvae from the same frame and water-plus-primer
-no-template controls, on the same gel. Whole larvae 4 Aug: two samples, both
-positive. Larval haemolymph 5 Aug: controls on the same gel; per-sample n not
-recorded in the journal.
-
-**Result.** Whole larvae gave bands at all three expected sizes, in good quantity,
-**24 h after dosing** (4 Aug). Larval haemolymph gave intact bands at 24 h, with
-undosed and water controls clean on the same gel (5 Aug).
-
-**Interpretation.** Ingested dsRNA crosses the larval gut, reaches the haemolymph,
-and survives at least 24 h at all three lengths. This is the result the whole
-delivery argument rests on.
-
-**Limitation.** An endpoint RT-PCR gel is presence or absence. Band intensity is
-not concentration, and **no length-dependence claim follows from it**.
-
-**What it changed.** Detection worked, so every later measurement cycle is an
-attempt to put a number on it. See [cycle 3.2](/engineering#cycle-3-2).
-
-### A ~700 bp band from adult haemolymph at 3 h
-
-**Status: Investigated. Caveated.**
-
-**Question.** Does the same recovery work in adult bees?
-
-**Experiment.** Adults PER-fed a known dose, haemolymph extracted by the
-centrifugal method at 3 h, RT-PCR and gel.
+**Experiment.** Fourteen cages of fifteen bees, each with four 2 mL feeding tubes of
+1 M sucrose alone or with 50, 100 or 150 mM NaCl, plus one bee-free cage as an
+evaporation control. Tubes were weighed and replaced daily from 30 June to 3 July,
+and dead bees counted at every change. A second round replaced the 2 mL tubes with
+PCR tubes held in 3D-printed inserts ([hardware](/hardware)). The salt-trial data
+are on [the bee lab](/bee-lab).
 
 **Evidence.**
 
-> **TODO —** Figure: The 12 Aug gel, with the contemporaneous water control lane shown
-> rather than omitted, because the caveat below is visible in it.
+> **TODO —** Figure: gross mass lost per cage on each of the three days, split into
+> evaporation (from the bee-free cage) and consumption, with consumption per bee
+> for each NaCl concentration beside it, one point per cage. Owner: bee lab.
 
-**Controls + n.** Water no-template control on the same gel; n not recorded.
+**Controls + n.** One bee-free evaporation cage. 210 bees in 14 cages: five cages at
+0 mM NaCl and three at each other concentration. The cage is the unit of analysis,
+because cage-mates share a feeder.
 
-**Result.** A ~700 bp band was recovered from adult haemolymph at 3 h (12 Aug).
+**Result.** Salt had no detectable effect on consumption (one-way ANOVA,
+F(3,10) = 0.96, p = 0.45) or on 24 h mortality (chi-square = 4.85, p = 0.18,
+approximate because three expected counts fall below 5) `[CALC]`. But evaporation
+made up **74% of the mass lost from the feeders**, 90% on the first day, and only
+**3.1% of the solution loaded** over the three days was drunk `[CALC]`.
 
-**Interpretation.** Consistent with the larval result, and no more than that.
+**Interpretation.** Bees accept the salt that dsRNA stability needs. The feeder is
+the problem: the balance mostly weighs evaporation, almost all the dsRNA loaded is
+wasted, and a cage can only ever give an average dose, never the known dose per bee
+that a haemolymph time course needs.
 
-**Limitation.** This gel predates the contamination fix of 11 Aug only by a day,
-and the reagent-borne template contamination diagnosed in
-[cycle 3.3b](/engineering#cycle-3-3b) had been producing bands in water controls
-through that period. **We do not treat this band as clean evidence** and it is
-reported with the DNA-contamination caveat attached.
+**Limitation.** The evaporation and utilisation figures are means across cages,
+without a spread. The PCR-tube inserts reduce the volume at risk but cannot recover
+a per-bee dose.
 
-**What it changed.** All pre-fix qPCR and RT-PCR data carries the caveat, and the
-adult assay is queued for a repeat. See
-[cycle 3.3b](/engineering#cycle-3-3b).
+**What it changed.** Cage feeding was abandoned for individual dosing by proboscis
+extension, below. See [cycle B1](/engineering#cycle-b1).
+
+> **TODO —** The PCR-tube insert result. One account in our record has the tilted
+> 23-gauge insert cutting evaporation 11-fold with consumption unchanged at
+> 15.7–19.2 µL per bee per day; another has systematic failures in the evaporation
+> controls leaving no reliable comparison. Settle which stands before either is
+> restated. Owner: bee lab.
 
 ### Newly emerged bees take less, but they survive the day
 
@@ -467,29 +549,40 @@ adult assay is queued for a repeat. See
 
 **Question.** Which bees should a proboscis-extension feeding assay use?
 
-**Experiment.** PER feeding of harnessed foragers, then of newly emerged bees,
-scoring uptake volume and survival to the end of the day.
+**Experiment.** Bees strapped into PER harnesses and fed a measured volume of 1 M
+sucrose from a syringe tip: foragers caught at the hive entrance first, then newly
+emerged bees (14–15 Jul), scoring uptake and survival.
 
 **Evidence.**
 
 > **TODO —** Figure: A harnessed bee taking a droplet from the syringe, and the two
 > uptake ranges plotted against survival, so the trade-off is one image.
 
-**Controls + n.** Foragers n = 50. Newly emerged bees: uptake range recorded
-across the pilot sessions; per-session n not separately logged.
+**Controls + n.** Foragers n = 50, scored within the same working day. Newly
+emerged bees n = 40, scored overnight.
 
-**Result.** Foragers took up to ~30 µL but only **22 of 50 survived the day**.
-Newly emerged bees are calm, harness easily and take a controlled 5–10 µL.
+**Result.** Foragers took up to ~30 µL but only **22 of 50 survived the day**, about
+a quarter of them lost within the first hour of restraint. Newly emerged bees are
+calm, harness easily and take a controlled 5–10 µL, and **38 of 40 survived
+overnight**.
 
 **Interpretation.** A larger dose delivered to an animal that dies before the
-timepoint is not a larger dose. Volume was **the wrong thing to maximise**.
+timepoint is not a larger dose. Volume was **the wrong thing to maximise**. Losses
+concentrated in the first hour point to handling and restraint stress rather than
+a slow decline.
 
-**Limitation.** Survival was scored to end of day, not to each timepoint, and the
+**Limitation.** The observation windows are not matched, and the mismatch favours
+the foragers: they were scored over a shorter window and still died more. The
 forager cohort was caught rather than age-matched.
 
 **What it changed.** Newly emerged bees became standard for every dosing
 experiment on this project, and the dose was delivered as 2 × 2.5 µL to hold the
-volume accurate. See [cycle B1](/engineering#cycle-b1).
+volume accurate: 5 µL at 200 ng/µL, 1 µg per bee as set by NanoDrop. See
+[cycle B2](/engineering#cycle-b2).
+
+> **TODO —** Forager uptake: confirm the upper figure (about 30 µL in the cohort
+> record, 20 µL in the cycle text) and the provisional 10 µL lower bound against
+> the bench record. Owner: bee lab.
 
 ### Background mortality over a weekend is low
 
@@ -520,9 +613,121 @@ not a salt-tolerance comparison.
 **What it changed.** Gave the survival assays a baseline to be read against. See
 [cycle B1](/engineering#cycle-b1).
 
+### A ~700 bp band from adult haemolymph at 3 h
+
+**Status: Investigated. Caveated.**
+
+**Question.** Can dsRNA fed to an adult bee be recovered from its haemolymph?
+
+**Experiment.** Adults PER-fed a known dose, haemolymph extracted by the
+centrifugal method at 3 h, RT-PCR and gel.
+
+**Evidence.**
+
+> **TODO —** Figure: The 12 Aug gel, with the contemporaneous water control lane shown
+> rather than omitted, because the caveat below is visible in it.
+
+**Controls + n.** Water no-template control on the same gel; n not recorded.
+
+**Result.** A ~700 bp band was recovered from adult haemolymph at 3 h (12 Aug).
+
+**Interpretation.** Consistent with the larval result below, and no more than that.
+
+**Limitation.** This gel was run on 12 Aug, the day after the reagent-borne
+template contamination diagnosed in [cycle 3.3b](/engineering#cycle-3-3b) was
+isolated, and that contamination had been producing bands in water controls
+through the period. **We do not treat this band as clean evidence** and it is
+reported with the DNA-contamination caveat attached.
+
+**What it changed.** All pre-fix qPCR and RT-PCR data carries the caveat, and the
+adult assay is queued for a repeat. See
+[cycle 3.3b](/engineering#cycle-3-3b).
+
+### A 20 µL dose covers a larva; a 5 µL drop does not
+
+**Status: Demonstrated, as a method decision.**
+
+**Question.** How do we get a whole dose into a 5th-instar larva without taking it
+out of the hive?
+
+**Experiment.** Brood frames lifted from the hive and 5th-instar larvae dosed in
+their cells, first with 5 µL of 200 ng/µL dsRNA (1 µg), then with the same 5 µL
+diluted in 15 µL of 1 M sucrose to 20 µL. Frames went straight back into the hive
+and the larvae were checked 24 h later.
+
+**Evidence.**
+
+> **TODO —** Figure: photographs of a 5th-instar larva in its cell just after a 5 µL
+> drop and just after a 20 µL dose, and the same cells once capped. Owner: bee lab.
+
+**Controls + n.** First pilot: 10 dsRNA-fed and 10 sucrose-fed larvae, located by
+coloured marks on the frame.
+
+**Result.** The 5 µL drop sat on the larva's surface: it neither covered the larva
+nor could be placed reliably near its mouth. The 20 µL dose covered the larva
+completely and visibly disappeared.
+
+**Interpretation.** A dose has to cover the larva, as brood food does. On our bee
+lab mentor's advice, we take a 20 µL dose that disappears as eaten.
+
+**Limitation.** Ingestion is inferred from the solution disappearing, not measured.
+
+**What it changed.** 20 µL became the dose volume for every later larval
+experiment, the mite screen included. See [cycle L1](/engineering#cycle-l1).
+
+### dsRNA is still detectable intact in larvae at 24 h, but most of a 1 µg dose is gone
+
+**Status: Demonstrated, qualitatively, for detection. Investigated for the loss,
+which is not yet a number.**
+
+**Question.** After a larva eats our dsRNA, can we get it back intact, and how much
+of the dose is left?
+
+**Experiment.** 5th-instar larvae fed in-frame with 1 µg of 700 bp GFP dsRNA and
+returned to the hive. GFP has no silencing target in the bee, so the assay isolates
+delivery and persistence from knockdown. Whole larvae and larval haemolymph were
+collected at 24 h, column-extracted, flash-denatured, reverse-transcribed and
+amplified with construct-specific primers.
+
+**Evidence.**
+
+> **TODO —** Figure: The 4–5 Aug gel, uncropped, with lane labels: dosed larvae, undosed
+> larvae from the same frame, water-plus-primer no-template control, ladder. State
+> what was loaded in each lane: the notebook records bands at all three expected
+> sizes (300/500/700 bp) from larvae dosed with the 700 bp construct. Owner: bee lab.
+
+> **TODO —** Table: how much of the 1 µg dose remains at 24 h, with the method and n
+> behind "most of the dose is gone". Owner: bee lab with wet lab.
+
+**Controls + n.** Undosed larvae from the same frame and water-plus-primer
+no-template controls, on the same gel. Whole larvae 4 Aug: two samples, both
+positive. Larval haemolymph 5 Aug: controls on the same gel; per-sample n not
+recorded in the journal.
+
+**Result.** Whole larvae gave bands at the expected sizes, in good quantity, **24 h
+after dosing** (4 Aug). Larval haemolymph gave intact bands at 24 h, with undosed
+and water controls clean on the same gel (5 Aug). **The levels measured were low:
+most of the 1 µg dose had gone within 24 h of feeding.**
+
+**Interpretation.** Ingested dsRNA crosses the larval gut, reaches the haemolymph,
+and some of it survives at least 24 h, which spans the window when _Varroa_ enters
+the cell and begins feeding. Most of it does not survive. We attribute the loss to
+poor dsRNA stability in the feeding medium and in the hive. The mass fed is itself
+uncertain, because Qubit and NanoDrop gave different concentrations when the doses
+were prepared (see the Qubit result above).
+
+**Limitation.** An endpoint RT-PCR gel is presence or absence, and band intensity is
+not concentration. One construct length was fed, so nothing here bears on length.
+
+**What it changed.** Detection worked, so every later measurement cycle is an
+attempt to put a number on it. The loss moved the design to loop-ended dsRNA,
+which has no exposed single-stranded regions for nucleases to attack; whether it
+lasts longer in larvae is untested. See [cycle 3.2](/engineering#cycle-3-2) and
+[cycle L3](/engineering#cycle-l3).
+
 ## Reaching the mite
 
-### Mites do not survive in the lab without a host, and the soak is not what kills them
+### Mites do not survive in the lab without a host
 
 **Status: Investigated. A negative.**
 
@@ -544,13 +749,20 @@ control arms. With a host: in-frame n = 10, white-eyed pupae n = 5, larvae n = 5
 
 **Result.** With a host, 9 of 20 mites survived (45%): 4/10 in-frame, 3/5 on
 white-eyed pupae, 2/5 on larvae. Alone, 0 of 18 survived (0%). Fisher exact test,
-host against no host: **p = 0.0013** `[CALC]`. Comparing the two alone arms
-isolates the soak: soaked 0/9 against unsoaked 0/9, **p = 1.0** `[CALC]` — the
-soak is exonerated. An earlier pilot (3–4 Sep) gave 35.7% survival for soaked
-mites on pupae across 10 replicates, with the no-pupa and unsoaked arms near zero.
+host against no host: **p = 0.0013** `[CALC]`. The two alone arms cannot separate
+the soak from the missing host: soaked 0/9 against unsoaked 0/9, **p = 1.0**
+`[CALC]`, but **both arms died completely**, so the comparison is at the floor and
+carries no power to detect a soak effect. An earlier 24 h pilot (3–4 Sep) pointed the same way without
+proving it: 9 of 14 soaked mites died on white-eyed pupae, against 9 of 10 soaked
+mites in empty capsules and 10 of 10 unsoaked mites in tubes. One-sided Fisher
+tests gave p = 0.17 and p = 0.047 against a Bonferroni-corrected threshold of
+0.025, so neither comparison reached significance `[CALC]`.
 
-**Interpretation.** A host is required; the 6 h soak is **not the cause of death**.
-That matters, because the dosing route we need is a soak.
+**Interpretation.** A host is required. This assay does **not** establish that the
+6 h soak is harmless: with no survivors in either hostless arm it cannot measure
+the soak's contribution, and our later record puts post-soak mortality as high as
+80% in some batches, with only about 20% of mites surviving the soak at all. The
+soak was abandoned for that reason.
 
 **Limitation.** Small n in every arm, mites fell off pupae in the earlier pilot,
 and survival was scored by movement, not by feeding.
@@ -585,24 +797,28 @@ between high and low is consistent with the trend but **not independently confir
 
 **Limitation.** Only about 20% of mites survived the 6 h soak, and soaked mites
 sometimes reproduced in the cell, leaving unexposed offspring scored alongside the
-treated mother. **The dsRNA concentrations are not recorded as numbers anywhere in
-our own record**, so the dose-response cannot yet be reproduced.
+treated mother. With three dose points, the trend test cannot tell a linear
+dose-response from a threshold. **The dsRNA concentrations are not recorded as
+numbers anywhere in our own record**, so the dose-response cannot yet be
+reproduced.
 
 **What it changed.** It justified abandoning the soak and delivering dsRNA through
-the host instead. See [cycle V2](/engineering#cycle-v2).
+the host instead. The next step is a repeat in early August, the more favourable
+part of the mite season, with larger, equalised groups and a series of dsRNA
+concentrations. See [cycle V2](/engineering#cycle-v2).
 
 ### Feeding the larval host did not kill mites, and showed why
 
 **Status: Investigated. A clear negative, with the confound identified.**
 
 **Question.** Does dsRNA delivered through a dosed larva kill the mite that feeds on
-it, and does our pipeline's top-ranked target outperform its lowest-ranked one?
+it, and does SEED's top-ranked target outperform its lowest-ranked one?
 
-**Experiment.** Forty 5th-instar larvae per group, 240 in total, each fed 20 µL.
-Groups: BEST and WORST targets at 50 ng/µL and 5 ng/µL, plus 50 ng/µL dsGFP and 1 M
-sucrose as negative controls. After 24 h, once cells were capped, one mite was
-introduced per cell and left to feed for 96 h, then every cell was uncapped and its
-mites scored.
+**Experiment.** Forty 5th-instar larvae per group, 240 in total, each fed 20 µL:
+1 µg of dsRNA at 50 ng/µL, 100 ng at 5 ng/µL. Groups: BEST and WORST targets at
+50 ng/µL and 5 ng/µL, plus 50 ng/µL dsGFP and 1 M sucrose as negative controls.
+After 24 h, once cells were capped, one mite was introduced per cell and left to
+feed for 96 h, then every cell was uncapped and its mites scored.
 
 **Controls + n.** dsGFP at 50 ng/µL and sucrose-only, 40 larvae each. Only **14–27
 mites were scored per group**.
@@ -615,10 +831,11 @@ direction to our hypothesis `[CALC]`.
 
 **Interpretation.** The dominant predictor of mite death was **larval compromise**:
 in compromised larvae, 45 of 47 recovered mites were dead (96%) regardless of
-treatment, and more than half of all larvae were compromised in every group.
-Restricting to healthy larvae did not change the conclusion. **We do not interpret
-the BEST 50 ng/µL result as evidence that dsRNA protects mites**; it is most likely
-noise.
+treatment, and half or more of the larvae were compromised in every group (50–70%).
+Restricting to healthy larvae did not change the conclusion: BEST 50 ng/µL (0 of
+10 mites dead) still differed from dsGFP (7 of 9 dead, p = 0.0007), and no other
+group differed from the control. **We do not interpret the BEST 50 ng/µL result as
+evidence that dsRNA protects mites**; it is most likely noise.
 
 **Limitation.** Roughly **30–50% of cells contained no recoverable mite**, and we
 cannot tell whether those mites died, escaped or were never present. Some cells held
@@ -626,9 +843,9 @@ two or three mites, so counting per mite treats related individuals as independe
 
 **What it changed.** Future iterations must reduce larval handling and feeding stress
 and score mite mortality only in healthy larvae, before target efficacy or pipeline
-ranking can be meaningfully assessed. **Our computational pipeline's ranking is
-untested by this experiment, not contradicted by it.** See
-[cycle V3](/engineering#cycle-v3).
+ranking can be meaningfully assessed. **SEED's ranking is untested by this
+experiment, not contradicted by it.** See
+[cycle V4](/engineering#cycle-v4).
 
 > **TODO —** Mite knockdown by RT-qPCR, the molecular endpoint the husbandry work
 > redirected us towards. No knockdown number exists. Owner: bee lab.
@@ -674,27 +891,22 @@ Three BEEHAVE cycles have now run, and their headline outputs are:
 
 - **No construct is sequence-verified.** All QC to date is gel band size plus
   spectrophotometry. No sequence-level claim is made anywhere on this wiki.
-- **No yeast has been transformed and no yeast titre exists.** µg intact dsRNA per
-  mg dry yeast is the single measurement the project most needs. The production
-  goal is now written as loop-ended dsRNA in **yeast or _E. coli_**, where it
-  previously named yeast alone, and neither host has a measured titre.
+- **No yeast or _E. coli_ titre exists.** µg intact dsRNA per mg dry cells is the
+  single measurement the project most needs, and neither host has one.
+- **No dsRNA concentration in bee material.** Detection in larvae and adults is by
+  gel, and most of a larval dose is gone within 24 h by an amount we have not yet
+  measured. There is **no MIQE-valid RT-qPCR standard curve** yet, and
+  **spike-recovery has never been run** — the largest remaining hole in the
+  measurement workstream.
 - **No demonstrated mite mortality from our delivery route.** The soak assay gives a
   dose-response without recorded doses; the larval-feeding assay returned a clear
   negative confounded by host condition. **No knockdown figure exists at all.**
-- **No validation of the target-ranking pipeline.** The best-against-worst comparison
-  ran and was uninterpretable, so the pipeline's ranking is untested.
-- **No MIQE-valid RT-qPCR standard curve**, and **spike-recovery has never been
-  run** — the largest remaining hole in the measurement workstream.
+- **No validation of SEED's target ranking.** The best-against-worst comparison ran
+  and was uninterpretable, so the ranking is untested.
 - **No SYBR Gold detection limit of our own**, and no capture-format control for the
   streptavidin assay.
 - **No melanin attribution.** The haemolymph absorbance traces cannot be assigned to
   melanin rather than scatter without a far-red baseline.
-
-> **TODO —** Say which chassis produces the loop-ended dsRNA and which is only a
-> cloning host. The Gibson assembly and colony lysis work runs through *E. coli*;
-> whether *E. coli* is also a production host is a scope question the results
-> outline leaves open, and no titre may be written up under either heading until it
-> is settled. Owner: wet lab.
 
 ## Where this connects
 

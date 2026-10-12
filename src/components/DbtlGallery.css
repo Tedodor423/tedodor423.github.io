@@ -15,8 +15,9 @@
  * degrees.
  *
  * A clip-path cannot take a border, so the rule around each hexagon is two
- * stacked hexagons: the cell is filled with its lab's colour and the face is
- * inset over it. The inset IS the rule's thickness, which is why every state
+ * stacked hexagons: the cell is filled with its lab's colour (on its ::before,
+ * see .dbtl-cell) and the face is inset over it. The inset IS the rule's
+ * thickness, which is why every state
  * change here is an `inset` rather than a `border-width`. It is also why focus is
  * shown by filling the face rather than with an outline: an outline would be
  * clipped away and the hexagon would look unfocusable.
@@ -173,9 +174,14 @@
   min-height: 50vh;
 }
 
+/* The cell's own clip-path is the hover and click target. It paints nothing
+   itself: the lab's colour is on ::before, under a copy of the same clip. While
+   the cell's scale transitions, Chrome on a GPU can drop the clip of the element
+   it is compositing for a frame or more, and with the colour on the cell itself
+   that showed the whole box as a rectangle of the lab's colour round an intact
+   face. A child's clip-path holds through it, as the face's always did. */
 .dbtl-cell {
   position: absolute;
-  background: var(--lab);
   clip-path: polygon(
     var(--slant) 0,
     calc(100% - var(--slant)) 0,
@@ -191,6 +197,14 @@
     height 0.4s cubic-bezier(0.22, 0.61, 0.36, 1),
     transform 0.22s ease,
     opacity 0.2s ease;
+}
+
+.dbtl-cell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--lab);
+  clip-path: inherit;
 }
 
 .dbtl-cell.is-dimmed {

@@ -27,6 +27,18 @@ just uptake**, is what we measured.
 > in a live colony, mite ingestion). The second category is the honest half of
 > the figure.
 
+## Bees, frames and mites
+
+> **TODO —** A short primer, with images, for a reader who has never opened a
+> hive: what honeybees are and their role in the ecosystem; adult, nurse,
+> newly-emerged and larval bees; how nurse bees turn nectar and pollen (bee bread)
+> into the jelly larvae are fed; larval development through the instars to the
+> pupal stages; the _Varroa_ life cycle; hives, frames and the kinds of cell
+> (brood, honey, pollen); beekeeping equipment; and how weather and the season
+> decided when we could work. Most of the text to draw on is in
+> [the bee research guide](/working-with-bees) and
+> [the glossary](/education#a-glossary-of-bee-terms). Owner: bee lab.
+
 ## Adult bee assays
 
 The adult programme asks one question: **how long does an active dose of dsRNA
@@ -66,7 +78,7 @@ per cage, and fifteen nutrition assay boxes split as:
 The no-bees cage is what makes the rest interpretable: it gives the rate of
 evaporation independent of bee feeding.
 
-**Approach.** Tubes filled to the brim, boxes monitored daily, solutions weighed
+**Approach.** Tubes filled, boxes monitored daily, solutions weighed
 and replaced every 24 h with a clear before and after weight at each timepoint.
 Dead bees were noted and removed at every check so that daily sucrose usage could
 be corrected for mortality rather than confounded by it. Full method:
@@ -105,11 +117,14 @@ Three of the four expected cell counts are below 5, the usual
 threshold for the chi-square approximation to be reliable, so **the mortality
 result should be treated as approximate.**
 
-> **TODO —** Figure: The write-up marks an unlabelled image at this point. What it has
-> to show: net sucrose consumption per bee per day for each of the four NaCl
-> concentrations, one point per cage, so that the spread of the 150 mM group the
-> ANOVA reports as non-significant is visible rather than hidden in a mean.
-> Owner: bee lab.
+Box 13, recorded at the bench as having spilled, is included in this analysis and
+carries most of the spread at 150 mM. [Cycle B1](/engineering#cycle-b1) reports
+the treatment means with it excluded.
+
+> **TODO —** Figure: The two-panel salt-assay figure, uploaded: (A) net sucrose
+> consumed per bee per day at 0, 50, 100 and 150 mM NaCl, corrected for
+> evaporation, one point per cage with the group mean and SD and box 13 labelled;
+> (B) bees dead within 24 h per group, 0/75, 2/45, 0/45 and 1/45. Owner: bee lab.
 
 #### Statistical working
 
@@ -162,12 +177,16 @@ intact, tilted and vertical. In that second pilot, **systematic failures in the
 control experiments** meant we could not reliably compare the evaporation
 controls against the tilted and vertical groups at all.
 
-> **TODO —** Per-tube consumption figures for the vessel comparison were recorded
-> separately and are not in the write-up. Three counts also need reconciling: the
-> evaporation-test design lists five tube forms, the feeding pilot reports "four
-> candidate designs" (the four being horizontal, tilted, vertical and the cut-up
-> 2 ml Eppendorf), and the 14 July journal entry records six adapter combinations
-> against the write-up's five. Owner: bee lab.
+> **TODO —** Our record gives two accounts of this comparison. The one here has it
+> abandoned on handling failures and leaking controls;
+> [cycle B1](/engineering#cycle-b1) reports a tilted-against-vertical factorial at
+> 20, 21 and 23 gauge, with the 15°-tilted tube at 23G adopted as the standard
+> feeder. The counts disagree too: five tube forms in the evaporation test, "four
+> candidate designs" (horizontal, tilted, vertical and the cut-up 2 ml Eppendorf)
+> in the feeding pilot, and six adapter combinations in the 14 July journal entry
+> against five here. Settle which runs happened, and make this page, the cycle,
+> [Hardware](/hardware) and [the protocols](/bee-lab-experiments) agree. Owner:
+> bee lab.
 
 **What it changed — we abandoned the assay.** Two iterations of vessel design
 (horizontal, tilted, vertical and the cut-up Eppendorf, narrowed to tilted and
@@ -186,7 +205,7 @@ method.
 
 On the advice of our bee lab PI, Professor Geraldine Wright, we used the
 **proboscis-extension response assay** — well established in the beekeeping
-industry. Live bees are non-harmfully strapped into tubes with head and thorax
+industry. Live bees are gently strapped into tubes with head and thorax
 protruding, fed specific volumes presented on the tip of a 19-gauge syringe, and
 held in position for a set length of time. Its usual purpose is to resolve the
 effect of a fed substance on bee mortality; we used it to guarantee that a
@@ -194,8 +213,7 @@ standardised volume carrying a **known mass of dsRNA** went into each bee.
 
 - **Dose:** an aliquot of the
   [IVT product](/wet-lab-experiments) was read on a Nanodrop, then diluted to
-  200 ng/µl dsGFP in 1 M sucrose with the appropriate salt buffers. 5 µl per bee
-  = **1 µg per bee**.
+  200 ng/µl dsGFP in 1 M sucrose. 5 µl per bee = **1 µg per bee**.
 - **Why that dose.** Garbian et al., 2012 fed a 2.5 µg dose in 5 µl of sucrose
   `[LIT]`. Because of the inefficiencies in our own IVT process we kept their
   volume and **lowered the concentration**, to reach a yield we could reliably
@@ -218,10 +236,10 @@ standardised volume carrying a **known mass of dsRNA** went into each bee.
 
 > **TODO —** Our own write-up gives in-hive conditions two different ways: 32 °C
 > and **80%** humidity, citing Becchimanzi et al., 2024, in the assay method, and
-> roughly 32 °C and **50–60%** humidity in the welfare section below. Both are
-> carried here rather than one being picked. Settle which figure the incubation
-> was actually set to, and give Becchimanzi et al., 2024 and Garbian et al., 2012
-> full resolvable references. Owner: bee lab.
+> roughly 32 °C and **50–60%** humidity in the welfare section below; the
+> [PER protocol](/bee-lab-experiments) sets the incubator to 34 °C. Settle what the
+> incubation was actually set to, and give Becchimanzi et al., 2024 and Garbian et
+> al., 2012 full resolvable references. Owner: bee lab.
 
 > **TODO —** Figure: Two bees strapped into the proboscis-extension feeding assay, with
 > the syringe tip presenting a droplet, so the restraint and the feeding position
@@ -264,15 +282,11 @@ brought back concurrently with the other three.
 
 ### Which bees, and what that cost — **Investigated**
 
-Newly-emerged bees are calm and yield 5–10 µl; foragers yield around 30 µl but
-only 22 of 50 survived the day. **We used newly-emerged bees**, accepting the
-smaller volume, because they are also the nurse-bee stage the delivery pathway
-actually depends on.
-
-> **TODO —** The source note gives "5–10 µl" and "~30 µl" without stating
-> whether these are haemolymph yields or ingested volumes; the notebook's
-> 26–27 August entry supports haemolymph yield. Confirm and state once.
-> Owner: bee lab.
+Newly-emerged bees are calm and drink 5–10 µl; foragers drink up to about 30 µl
+but only 22 of 50 survived the day
+([Results](/results)). **We used newly-emerged bees**, accepting the smaller
+volume, because they are also the nurse-bee stage the delivery pathway actually
+depends on.
 
 Haemolymph yield also varied with how far up the antenna was cut (26–27 August).
 **No firm cause was established**; pooling during calibration was agreed as the way
@@ -284,11 +298,14 @@ Haemolymph was pooled, RNA extracted with Vazyme Vezol under the manufacturer's
 blood protocol, reverse transcribed after a 95 °C denaturation, amplified with
 construct-specific primers and run on a 1.5% agarose gel against a water
 negative and a known-GFP positive. Full steps are in
-[the notebook](/bee-lab-labbook).
+[the protocols](/bee-lab-experiments).
 
-> **TODO —** Adult persistence results (which timepoints carried signal, for
-> which lengths) are not written up. The gel exists in the team's records.
-> Owner: bee lab. Blocked on the figures being uploaded to `static.igem.wiki`.
+> **TODO —** Adult persistence results: which timepoints carried signal, for
+> which lengths. Owner: bee lab.
+
+> **TODO —** Figure: The adult PER-assay gel, uploaded to `static.igem.wiki`, with
+> every lane labelled by fragment length and timepoint and the water negative and
+> GFP positive marked. Owner: bee lab.
 
 ## Larval assays
 
@@ -356,19 +373,18 @@ qualitatively.
 > sizes (300/500/700 bp)" for a larva dosed with the 700 bp fragment. Confirm
 > what was loaded in each lane before this is restated anywhere. Owner: bee lab.
 
-> **TODO —** Results for the full five-timepoint larval timecourse (24, 48, 72,
-> 96 h and 7 days), started 18 August. The write-up carries "details to be
-> inserted here". Owner: bee lab.
+> **TODO —** Results for the 48 h, 72 h, 96 h and 7-day timepoints of the larval
+> timecourse started 18 August. Owner: bee lab.
 
 ### How the larval dose and the frame map were settled
 
-The dosage pilot is now written up as [cycle L1](/engineering#cycle-l1): a 5 µL
+The dosage pilot is written up as [cycle L1](/engineering#cycle-l1): a 5 µL
 droplet was too small, falling onto the surface of the larva rather than covering it
 or reaching the mouth region, and haemolymph extraction by needle burst larvae and
-contaminated the sample with intestinal fluid. [Cycle L2](/engineering#cycle-l2)
-diluted the same 1 µg into **20 µL**, at which the larvae were fully covered and the
-solution visibly disappeared, and replaced pen marks on the frame with **photographs
-and a coloured digital overlay** of individual sampled cones.
+contaminated the sample with intestinal fluid. The same cycle then diluted the same
+1 µg into **20 µL**, at which the larvae were fully covered and the solution visibly
+disappeared, and replaced pen marks on the frame with **photographs and a coloured
+digital overlay** of individual sampled cones.
 
 > **TODO —** The frame-marking comparison is recorded as two options, ruled columns
 > and rows against digital drawing, and the overlay is the one described as adopted.
@@ -400,15 +416,17 @@ We could not **keep mites alive off a host**. Three-day checkpoint, 8 September:
 
 Pooled, that is **9/20 (45%) with a host against 0/18 (0%) without one, Fisher
 p = 0.0013**; and soaked against unsoaked with no host is **0% vs 0%,
-p = 1.0** `[CALC]`. The soak is therefore exonerated as the cause of death at
-this stage; the absence of a host explains it. A baseline of 40% mite survival
-inside cells at 24 h was recorded the same week.
+p = 1.0** `[CALC]`. The absence of a host explains the hostless deaths, but
+because **nothing survived in either hostless arm** that comparison is at the
+floor and cannot show whether the soak itself harms mites. It does not, so our
+later record attributes much of the background mortality to the soak: only about
+20% of mites survived it, reaching 80% losses in some batches. A baseline of 40%
+mite survival inside cells at 24 h was recorded the same week.
 
 > **TODO —** Wilson confidence intervals for these proportions. Owner: bee lab.
 
-An earlier pilot (3–4 September) pointed the same way: soaked mites on pupae
-averaged 35.7% survival across 10 replicates, capsule-without-pupa gave 0/3,
-0/3 and 1/3, and unsoaked mites alone in Eppendorf tubes all died.
+An earlier pilot (3–4 September),
+[Pilot 1 below](/bee-lab#pilot-1-pupal-mite-soaking-test), pointed the same way.
 
 **Soaking is separately lossy.** On 11 September, 140 control mites were soaked
 and 40 were alive afterwards. The standing rule that came out of this is to soak
@@ -419,10 +437,10 @@ impractical.
 ### The mite death assays — **Investigated**
 
 For our main assay we set out to test an active concentration of the targets chosen
-by our computational pipeline on live mites, to prove both that we could kill mites
-with them and that the pipeline produced significantly more lethal targets than
-controls. Before that could run, a series of pilots served as DBTL cycles telling us
-how best to test target solutions on live mites. The route runs through three
+by SEED, our dsRNA design pipeline, on live mites, to prove both that we could kill
+mites with them and that the pipeline produced significantly more lethal targets
+than controls. Before that could run, a series of pilots served as DBTL cycles
+telling us how best to test target solutions on live mites. The route runs through three
 assays, and the third is the one the whole delivery argument was built towards.
 
 #### Pilot 1: pupal mite-soaking test
@@ -455,6 +473,14 @@ guide the next design cycle. The comparison with group 3 is also confounded, bec
 those mites differed in both soaking and container type, so their higher mortality
 cannot be attributed to the absence of a host alone.
 
+> **TODO —** Figure: Pilot 1 mite mortality at 24 h by rearing condition, with the
+> counts and 95% Wilson confidence intervals. Owner: bee lab.
+
+> **TODO —** The 4 September journal entry records this pilot differently: 3 mites
+> per pupa across 10 replicates with 35.7% survival on pupae (which matches 5 of
+> 14), and 0/3, 0/3 and 1/3 surviving in capsules without a host, against the 14,
+> 10 and 10 mites here. Reconcile against the bench sheet. Owner: bee lab.
+
 #### Assay 2: brood-frame mite-soaking rearing test, 24 h
 
 Following the lower mortality seen with soaked mites reared on pupae, we spoke to one
@@ -474,6 +500,9 @@ vdCHIB target, saline with a **high** concentration, and saline alone.
 | Control            | 23    | 17   | 40    | **42.5%** |
 | Low concentration  | 31    | 39   | 70    | **55.7%** |
 | High concentration | 18    | 47   | 65    | **72.3%** |
+
+> **TODO —** Figure: Mite mortality after 24 h for the control, low and high
+> groups, with the counts and 95% Wilson confidence intervals. Owner: bee lab.
 
 **Statistics.** Mortality rose with concentration across the three groups. We used
 the **Cochran–Armitage trend test** as the primary analysis, since the results came
@@ -505,10 +534,10 @@ for controls and doses, with a dsRNA concentration titre to show a linear effect
 #### Assay 3: brood-frame larval-feeding rearing test
 
 For our third and final mite-death assay we constructed **six testing groups**. Since
-part of the assay was to determine whether our computational pipeline increased mite
-lethality, we tested our most optimal chosen target sequence (**BEST**) against our
-least optimal (**WORST**), each at **50 ng/µL and 5 ng/µL**, with two negative
-controls: 50 ng/µL of 700 bp dsGFP, and plain 1 M sucrose.
+part of the assay was to test whether SEED's ranking increases mite lethality, we
+tested its top-ranked target sequence (**BEST**) against its lowest-ranked
+(**WORST**), each at **50 ng/µL and 5 ng/µL**, with two negative controls: 50 ng/µL
+of 700 bp dsGFP, and plain 1 M sucrose.
 
 5th instar larvae were chosen because _Varroa_ preferentially enters the larval cone
 around that time, so any mite mortality difference resolved at this timepoint would
@@ -536,6 +565,15 @@ the solution into the haemolymph. **A single mite was then introduced to each of
 and its mites scored as dead or alive. Cells containing more than one mite, where the
 mite had reproduced, were still counted for dead and live mites present.
 
+| Group | Dead mites | Live mites | Mite mortality | Larvae scored | Compromised larvae |
+| --- | --- | --- | --- | --- | --- |
+| WORST 50 ng/µL | 18 | 4 | 81.8% | 39 | 23 (59.0%) |
+| WORST 5 ng/µL | 19 | 8 | 70.4% | 39 | 23 (59.0%) |
+| BEST 50 ng/µL | 4 | 10 | 28.6% | 32 | 20 (62.5%) |
+| BEST 5 ng/µL | 12 | 5 | 70.6% | 34 | 17 (50.0%) |
+| dsGFP 50 ng/µL | 20 | 2 | 90.9% | 33 | 23 (69.7%) |
+| Sucrose | 15 | 4 | 78.9% | 35 | 19 (54.3%) |
+
 **Result and statistics.** The six groups differed significantly overall
 (chi-square, **p = 0.002**), but the difference was driven almost entirely by the
 **BEST 50 ng/µL group showing _lower_ mortality than the dsGFP control — 29% against
@@ -545,9 +583,9 @@ significant difference (p = 0.03), but in the opposite direction to our hypothes
 
 Splitting by larval condition showed what had happened. **In larvae compromised by
 the end of the assay, 45 of 47 recovered mites were dead (96%), regardless of
-treatment**, and more than half of all larvae were compromised in every group. Mite
-death in this assay therefore largely reflects whether the host larva failed, not
-whether it had been fed dsRNA. Restricting the analysis to healthy larvae did not
+treatment**, and half or more of the larvae were compromised in every group
+(50–70%). Mite death in this assay therefore largely reflects whether the host
+larva failed, not whether it had been fed dsRNA. Restricting the analysis to healthy larvae did not
 change the conclusion: BEST 50 ng/µL (0 of 10 mites dead) still differed from dsGFP
 (7 of 9 dead, p = 0.0007), and no other group differed from the control.
 
@@ -565,17 +603,15 @@ suggests the larval-feeding protocol itself, not target efficacy, drove the outc
 Future iterations should reduce larval handling and feeding stress and score mite
 mortality only in healthy larvae, before target efficacy can be meaningfully
 assessed. The cycles are at [V1](/engineering#cycle-v1),
-[V2](/engineering#cycle-v2) and [V3](/engineering#cycle-v3).
+[V2](/engineering#cycle-v2), [V3](/engineering#cycle-v3) and
+[V4](/engineering#cycle-v4).
 
 > **TODO —** Figure: The digitally-coloured overlay of the frame layout, showing where each
 > dosage group sat. Our write-up marks the place. Owner: bee lab.
 
-> **TODO —** Figure: Mite mortality by group for assay 3, as counts with denominators
-> printed, split by larval condition. The split is the result.
-
-> **TODO —** Only 35 of 40 larval hosts were prepared on 24 September because GFP ran
-> short, leaving 240 larvae ready. State the final per-group denominators. Owner:
-> bee lab.
+> **TODO —** Figure: Mite mortality by group for assay 3, split by larval condition
+> (healthy against compromised), with counts and denominators printed. The split
+> is the result. Owner: bee lab.
 
 > **TODO —** The specific _Varroa_ gene target is withheld pending confirmation
 > of the patent priority filing date against the 21 October freeze. The mite
@@ -647,20 +683,25 @@ on [Model](/model).
 
 ## Protocol library
 
-Protocols are on [the bee lab notebook](/bee-lab-labbook): centrifugal adult
-haemolymph extraction, larval haemolymph extraction, larval RNA extraction and
-the RT-qPCR programme. The handbook written for other teams is
+The methods on this page are written out step by step on
+[bee lab experiments and protocols](/bee-lab-experiments): cage feeding, PER
+feeding, adult and larval haemolymph extraction, larval feeding, larval and pupal
+extraction, the sugar shake, mite soaking and the brood-frame mite death assay,
+with RNA extraction and RT-qPCR. The dated record is
+[the lab book](/bee-lab-labbook). The handbook written for other teams is
 [How to work with bees](/working-with-bees).
 
-> **TODO —** Still owed as written protocols: mite rearing and mite RNA
-> extraction. The PER assay, the adult cage-feeding assay and the cage-feeding
-> adapter pilot are now on
-> [the protocols page](/bee-lab-experiments) from the assay write-ups; they still
+> **TODO —** The protocols were written up from the assay write-ups and still
 > need checking against the bench copies before another team follows them.
+> Owner: bee lab.
+
+> **TODO —** PDF: The beekeeping guide, [How to work with bees](/working-with-bees),
+> as a downloadable PDF, linked here and from [Contribution](/contribution).
 > Owner: bee lab.
 
 ## Where this connects
 
+[Experiments and protocols](/bee-lab-experiments) ·
 [Bee lab notebook](/bee-lab-labbook) · [How to work with bees](/working-with-bees) ·
 [Hardware](/hardware) · [Measurement](/measurement) · [Results](/results) ·
 [Engineering](/engineering) · [Safety and security](/project-safety) ·

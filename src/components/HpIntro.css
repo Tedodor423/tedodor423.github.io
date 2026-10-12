@@ -26,8 +26,20 @@
   margin-inline: calc((100% - min(80rem, calc(100vw - 4rem))) / 2);
   margin-block: 0.5rem 0;
   color: var(--ink);
-  /* Where the slide and the map hold, under the menu. */
+  /* Where the slide holds, under the menu. */
   --hpi-top: 5.5rem;
+  /* Where the figure holds: with the map's middle at the window's middle
+   * where the figure fits that way, with room under it for the link on to
+   * the questions; otherwise as high as needs be for it to fit, but never
+   * under the menu. The map's and the figure's heights are measured by
+   * HpIntro.tsx. */
+  --hpi-fig-top: max(
+    var(--hpi-top),
+    min(
+      50vh - var(--hpi-map-h, 16rem) / 2,
+      100vh - var(--hpi-fig-h, 36rem) - 3.75rem
+    )
+  );
 }
 
 /* Words on the left, the survey's count and the map on the right. The two
@@ -79,7 +91,6 @@
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 1.25rem;
   align-items: start;
-  margin-bottom: 1.75rem;
 }
 
 .hpi-side > .hpi-stat {
@@ -134,7 +145,22 @@
  * the window (--hpi-slide-fs, fitted by HpIntro.tsx); the lead and the
  * lines are set relative to it. */
 .hpi-pin {
+  position: relative;
   margin-top: clamp(3rem, 9vh, 6rem);
+}
+
+/* Where the lines' fragments land (HpIntro.tsx places them): empty
+ * markers, on the pin on a wide screen and on each line on a narrow one. */
+.hpi-landing,
+.hpi-landing > span {
+  position: absolute;
+  left: 0;
+  width: 0;
+  height: 0;
+}
+
+.hpi-pin > .hpi-landing {
+  top: 0;
 }
 
 .hpi-slide {
@@ -155,7 +181,8 @@
 /* Once the stakeholder map has taken over, this section keeps out of its
  * way, the end of it lying under that map (HpIntro.tsx sets data-left). */
 .hp-intro[data-left] .hpi-slide,
-.hp-intro[data-left] .hpi-figure {
+.hp-intro[data-left] .hpi-figure,
+.hp-intro[data-left] .hpi-figure .hpi-continue {
   visibility: hidden;
 }
 
@@ -266,13 +293,12 @@
 /* ---------- the figure ---------- */
 
 /* The map and what goes under it. It scrolls up with the reach, then holds
- * beside the slide with the map's middle at the window's middle (its height
- * is --hpi-map-h, measured by HpIntro.tsx), never under the menu. Above
- * what follows it (the stakeholder map's stage), so the map can fly over
- * that stage at the hand-off. */
+ * beside the slide, the map in the middle of the window where there is
+ * room (--hpi-fig-top). Above what follows it (the stakeholder map's
+ * stage), so the map can fly over that stage at the hand-off. */
 .hpi-figure {
   position: sticky;
-  top: max(var(--hpi-top), calc(50vh - var(--hpi-map-h, 16rem) / 2));
+  top: var(--hpi-fig-top);
   z-index: 5;
 }
 
@@ -328,6 +354,12 @@
 
 .hpi-slot > .is-on {
   opacity: 1;
+}
+
+/* A faded part still lies over the others in the stack (its opacity puts it
+ * in a layer of its own, above them), so it lets the pointer through. */
+.hpi-slot > :not(.is-on) {
+  pointer-events: none;
 }
 
 /* The spread's year, counting, in the empty South Pacific at the map's
@@ -444,8 +476,9 @@
   margin-top: 0.75rem;
 }
 
-/* The chart's part holds a link, so it is out of reach while unseen, once
- * it has faded. */
+/* The parts that hold links are out of reach while unseen, once they have
+ * faded. */
+.hpi-foot-regions,
 .hpi-foot-spread {
   visibility: hidden;
   transition:
@@ -453,9 +486,149 @@
     visibility 0s linear 300ms;
 }
 
+.hpi-foot-regions.is-on,
 .hpi-foot-spread.is-on {
   visibility: visible;
   transition: opacity 300ms linear;
+}
+
+/* The case studies' summaries, while their line is highlighted: California
+ * and Australia side by side, as they lie on the map, each opening its own
+ * page. The name is the link's face, violet and underlined like every link
+ * on the wiki; the summary under it is the body face, in ink. Restated at
+ * .hp-intro depth so the page's link colour does not reach the summary. */
+.hpi-cases {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.hp-intro .hpi-case {
+  display: block;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.hpi-case-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--violet);
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+
+.hp-intro .hpi-case:hover .hpi-case-name {
+  color: var(--oxford-navy);
+}
+
+.hp-intro .hpi-case:focus-visible {
+  outline: 3px solid var(--violet);
+  outline-offset: 3px;
+}
+
+.hpi-case-arrow {
+  width: 0.9em;
+  height: 0.9em;
+}
+
+.hpi-case-arrow path,
+.hpi-continue-arrow path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hpi-case-text {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+/* ---------- on to the questions ---------- */
+
+/* A line of text, underlined, with a plain down arrow: a nudge that the
+ * page goes on, not a button. While the slide is up it sits at the
+ * window's bottom right (the figure holds at a known top, so the window's
+ * bottom is known from it, and the link hangs up from there). With the last
+ * line it moves up under the map and grows, the map's own invitation on to
+ * the stakeholder map it is about to become; it fades with the slide as the
+ * map grows (--hpi-leave). Hidden before the slide, over the reach. */
+.hp-intro .hpi-continue {
+  position: absolute;
+  top: calc(100vh - var(--hpi-fig-top) - 0.75rem);
+  right: 0;
+  display: flex;
+  align-items: flex-end;
+  gap: 0.4rem;
+  max-width: 27rem;
+  padding: 0.2rem 0 0.2rem 0.6rem;
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: right;
+  text-decoration: none;
+  transform: translateY(-100%);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    top 450ms ease,
+    transform 450ms ease,
+    font-size 450ms ease,
+    max-width 450ms ease,
+    opacity 250ms linear,
+    visibility 0s linear 250ms;
+}
+
+.hp-intro:not([data-state="survey"]) .hpi-continue {
+  opacity: calc(1 - var(--hpi-leave, 0));
+  visibility: visible;
+  transition:
+    top 450ms ease,
+    transform 450ms ease,
+    font-size 450ms ease,
+    max-width 450ms ease,
+    opacity 250ms linear;
+}
+
+.hp-intro[data-state="people"] .hpi-continue {
+  top: calc(var(--hpi-map-h, 16rem) + 1.25rem);
+  max-width: 100%;
+  font-size: clamp(1.4rem, 2.3vw, 2rem);
+  transform: none;
+}
+
+.hpi-continue-label {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+
+.hp-intro .hpi-continue:hover {
+  color: var(--violet);
+}
+
+.hp-intro .hpi-continue:focus-visible {
+  outline: 3px solid var(--violet);
+  outline-offset: 2px;
+}
+
+.hpi-continue-arrow {
+  flex: none;
+  width: 1.1em;
+  height: 1.1em;
+  margin-bottom: 0.1em;
 }
 
 /* The page's TODO, smaller, under the figure it is about. */
@@ -546,6 +719,7 @@
   }
 
   .hpi-mark,
+  .hp-intro .hpi-continue,
   .hpi-slot > *,
   .hpi-land > g,
   .hpi-dots,
@@ -635,6 +809,16 @@
 
   .hpi-ride {
     display: none;
+  }
+
+  /* No room at the window's foot under a phone's held map: the link shows
+   * only under the map, with the last line. */
+  .hp-intro:not([data-state="people"]) .hpi-continue {
+    display: none;
+  }
+
+  .hpi-cases {
+    gap: 1rem;
   }
 
   .hp-intro .hpi-uses {

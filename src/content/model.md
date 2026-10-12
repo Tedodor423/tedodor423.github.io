@@ -1,10 +1,15 @@
-Each model has its own question and its own page. This page says how they fit together, and which of
-them is not yet a model at all.
+We built four models and scoped a fifth. The colony model sets the efficacy a
+treatment needs, the delivery layer inside it turns that efficacy into a dsRNA
+titre, and the economic model says which titres a beekeeper can afford. The answer,
+**0.005–0.05 mg dsRNA per g yeast**, is the target the wet lab works to. All of them
+are **Modelled**, and each has its own question and, where it is large enough, its
+own page.
 
 ## Where the parameters come from
 
 No model on this wiki currently uses **a parameter we measured ourselves**. Every
-one is parameterised from the literature or from stakeholder evidence. This
+one is taken from the literature or from stakeholder evidence, or set to a
+provisional value until bench data replace it. This
 names the most valuable thing the next iteration could do: close the loop between
 bench and model.
 
@@ -54,31 +59,38 @@ results.
 
 ### dsRNA dosing and transfer
 
-**Status: Modelled.** Implemented as a layer inside the third BEEHAVE cycle;
-detail on [ecological modelling](/ecological-modelling).
+**Status: Modelled.** Built and run as the delivery layer of BEEHAVE
+[cycle M3](/engineering#cycle-m3); detail on
+[ecological modelling](/ecological-modelling).
 
 - **Question** — between a patty in the hive and a dead mite, where is the dose
-  actually lost?
-- **Inputs** — patty mass fed per bee per day, dsRNA concentration in the patty,
-  and three probabilities: that a bee eats the patty, that it transfers dsRNA to
-  a phoretic mite, and that the mite then dies.
-- **Assumptions** — that the chain is separable into those three steps, and that
-  each can be varied independently.
-- **The model** — each probability is an adjustable parameter rather than one
-  lumped efficacy figure.
-- **Sensitivity and validation** — this is the point of the model: sweeping each
-  link separately says which one moves the outcome.
-- **Prediction** — not yet run.
-- **Decision it informed** — pending. The decision it exists to inform is whether
-  effort belongs on raising dsRNA concentration, which is hard, or on feeding
-  more patty, which is easy.
-- **Limitations** — none of the three probabilities is measured. Every value is a
-  sweep, not an estimate.
+  lost, and what titre does the wet lab have to reach?
+- **Inputs** — three set by the user: dsRNA concentration in the yeast, yeast
+  supplied per day, and the treatment period. Then five steps that reduce the
+  dose (consumption by bees, systemic delivery, degradation, transfer to a
+  feeding phoretic mite, uptake by the mite), a saturating dose-response, the
+  probability of knockdown and the probability that knockdown kills the mite.
+- **Assumptions** — that delivery separates into those steps. The five step values
+  are provisional, within biologically plausible orders of magnitude.
+- **The model** — the probability of mite death follows from the dose supplied,
+  where BEEHAVE's own treatment kills a fixed share of mites whatever the dose.
+- **Sensitivity and validation** — concentration and yeast supply were swept
+  full-factorially, six by five, under three regimens. The five steps were held
+  fixed, so which of them moves the outcome most is still open. Not validated.
+- **Prediction** — above 0.01 mg dsRNA per g yeast, collapse is prevented with a
+  hundred times less yeast than at the lowest concentration; winter treatment
+  matches year-round.
+- **Decision it informed** — whether effort belongs on raising dsRNA
+  concentration, which is hard, or on feeding more, which is easy. Feeding more
+  yeast works, but it raises the price, so the titre decides affordability.
+- **Limitations** — none of the five steps is measured, and no bee-to-mite
+  transfer probability comes from our bench.
 
 > **How did this change NECTAR?**
 >
-> Not yet. It is the one model here built for **a decision that is still open**, and
-> it is marked pending rather than dressed up as a finding.
+> It made the titre, and not the amount of patty fed, the number the wet lab is
+> held to: **0.005–0.05 mg dsRNA per g yeast**, set together with the economic
+> model below.
 
 ### Colony and Varroa dynamics
 
@@ -88,11 +100,12 @@ the transfer chain and the full parameter sweep list.
 
 - **Question** — what efficacy, applied on what schedule, changes a colony's
   trajectory under mite pressure?
-- **Inputs** — BEEHAVE's colony and forage model, hive profiles supplied by Wade
-  Ford's beekeepers, and our own treatment layer.
+- **Inputs** — BEEHAVE's colony and forage model, four hive profiles from our
+  beekeeper interviews, and our own treatment layer.
 - **Assumptions** — BEEHAVE's own, plus a forage landscape left unconstrained in
-  the second cycle.
-- **The model** — BEEHAVE with an added treatment and dsRNA-transfer layer.
+  the second and third cycles.
+- **The model** — BEEHAVE with adult bee deaths from mite feeding added, and a
+  treatment and dsRNA-transfer layer.
 - **Sensitivity and validation** — the parameter sweeps are the sensitivity
   analysis and have been run; the test list is on the owner page. **Validation
   against an independent dataset has not been done**, and we do not claim it.
@@ -127,13 +140,17 @@ the transfer chain and the full parameter sweep list.
   demand of the fermenter?
 - **Inputs** — the cost structure of an average commercial operation, existing
   treatments as the counterfactual, assumed elasticities of supply and demand.
-- **Assumptions** — an assumed dsRNA titre, because the real one is unmeasured.
+- **Assumptions** — an assumed annual NECTAR cost and an assumed cut in colony
+  losses, because the real titre, and so the real cost, is unmeasured.
 - **The model** — operation level first, then a simple partial-equilibrium view
   of the market.
-- **Sensitivity and validation** — titre is the input that breaks it, so the page
-  shows a range rather than a point.
-- **Prediction** — an allowable manufacturing cost, and from it a required mass
-  of intact dsRNA per gram of dry yeast.
+- **Sensitivity and validation** — titre is the input that decides it.
+  [Cycle M3](/engineering#cycle-m3) prices the yeast at six titres against the
+  benefit. Not validated.
+- **Prediction** — a net private benefit of about US$47.9 per treated colony per
+  year in the US and A$18.9 per hive in Australia `[CALC]`; set against the cost
+  of the yeast, a required titre of 0.005 mg dsRNA per g yeast for the US and
+  0.05 mg/g for both.
 - **Decision it informed** — it turned "high expression" into a number for
   [yeast](/wet-lab-experiments#yeast-production).
 - **Limitations** — every downstream figure rests on the assumed titre.
@@ -146,8 +163,8 @@ the transfer chain and the full parameter sweep list.
 
 ### The feeding pathway, and the mite-titre curve
 
-**Status: Proposed.** Nothing here has been built. It is scoped work for the next
-month, to be done **if** we cannot analyse the haemolymph results from the adult
+**Status: Proposed.** Nothing here has been built. It was scoped to characterise
+the feeding pathway **if** we cannot analyse the haemolymph results from the adult
 and larval stability assays, and if those assays do not give the results we want.
 
 - **Question** — what dose of ledRNA actually reaches a mite by way of a bee, and
@@ -177,12 +194,9 @@ and larval stability assays, and if those assays do not give the results we want
   it would rest on nothing. The plan instead, whatever the mite titre results show,
   is a **mite-titre curve**: estimate, across a range of ledRNA doses and our best
   and worst candidate targets, the knockdown of the target gene in mites and the
-  mortality that follows. The mite assays have since run, and the case for the
-  curve is stronger rather than weaker: the brood-frame assay returned a clear
-  negative confounded by host condition
-  ([cycle V3](/engineering#cycle-v3)), so the curve would be the project's
-  quantitative frame around a qualitative and partly uninterpretable result, and it
-  must be labelled as literature-derived throughout.
+  mortality that follows. The brood-frame mite assay has since returned a negative
+  confounded by larval condition ([cycle V4](/engineering#cycle-v4)); the curve
+  does not depend on it, and would be literature-derived throughout.
 - **Limitations** — setting the upstream models aside is what makes the curve
   buildable, and it is also its limitation: the curve would say what happens to a
   mite at a given exposure and **nothing about what exposure our delivery route
@@ -219,7 +233,7 @@ economics are **not**, yet.
 
 ## How the models connect
 
-**The chain is the story**, not the individual models. What a beekeeper can afford
+**The chain is the story.** What a beekeeper can afford
 constrains manufacturing cost, which constrains required titre, which becomes a
 design requirement for [yeast](/wet-lab-experiments#yeast-production). Running the other way, the ecological
 model sets what efficacy has to reach before any of it is worth doing, and the
@@ -229,15 +243,6 @@ transfer model says which lever raises that efficacy most cheaply.
 > cost → required titre, alongside efficacy → colony outcome. Each arrow marked
 > as stakeholder evidence, literature or our own assumption, so a reader can see
 > where the chain is load-bearing and where it is hopeful.
-
-## Still missing
-
-- The first BEEHAVE cycle, brought onto the wiki from the working document.
-- Sensitivity analysis for the RNA design score weights.
-- The model-chain figure.
-- A decision on the fermentation techno-economics.
-- The literature check behind setting the upstream pathway models aside, and the
-  mite-titre curve itself.
 
 ## Where this connects
 

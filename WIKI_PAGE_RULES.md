@@ -62,10 +62,11 @@ Four things follow for how you write:
 - **What the components hold is searched too.** The stakeholder interviews
   (name, role, place, key points, quote, what we learnt), the HIVE questions and
   their write-ups, the timeline, the engineering cycles and the workstreams
-  behind the comb, the home deck's slides and the colony-loss map's caption
-  are all read from the same data the components render, and a result opens
-  what it matched: the question with its write-up unfolded at the stage, the
-  interview in the record at the foot of the page, the hexagon, the evidence under a charge. The rule
+  behind the comb, the home deck's slides, the colony-loss map's caption and
+  the team members' cells are all read from the same data the components
+  render, and a result opens what it matched: the question with its write-up
+  unfolded at the stage, the interview in the record at the foot of the page,
+  the hexagon, the evidence under a charge, the member's cell. The rule
   is that nothing is indexed that a reader cannot then see on the page the
   result points at. Interviews carrying `consent-status` in
   `src/content/stakeholders/` are left out of the index entirely, so they

@@ -67,14 +67,14 @@ start here.
   up, so with a 1 h timepoint each group has to start 20 minutes apart or the
   timepoint is fiction.
 - **Newly-emerged against foragers is a real trade-off.** Newly-emerged bees are
-  calm and give 5–10 µl; foragers give around 30 µl, but only 22 of 50 survived
-  the day. We chose newly-emerged, because they are also the nurse stage the
-  biology depends on.
+  calm and drink 5–10 µl; foragers drink up to about 30 µl, but only 22 of 50
+  survived the day. We chose newly-emerged, because they are also the nurse stage
+  the biology depends on.
 
 ## Adult haemolymph extraction
 
-The method is in [the notebook](/bee-lab-labbook). What **the protocol does not
-tell you**:
+The method is on [the protocols page](/bee-lab-experiments). What **the protocol
+does not tell you**:
 
 - **Chill the cage first.** Slow bees are handled quickly and calmly.
 - **Cut at the petiole**, the joint between the thorax and abdomen. This is also
@@ -108,11 +108,20 @@ tell you**:
   gentle pressure — pinch between two fingers, or press flat on the board with
   bent tweezers. An entomological pin gives the cleanest, least lipid-diluted
   sample. Expect about 10 µl.
-- **Dose without touching the larva.** 5 µl dabbed from a micropipette, tip held
-  clear. If a dose misses the cell, record the re-dose; two of our larvae were
-  double-dosed and it had to be tracked.
-- **Mark the frame so you can find them again.** Coloured lines and position,
-  with a non-volatile marker, photographed before the frame goes back.
+- **Dose 20 µl, not 5 µl, and without touching the larva.** Our first pilots used
+  a 5 µl droplet (July); it sat on the larva's surface instead of covering it.
+  Diluting the same dose into 20 µl covered the larva and the solution visibly
+  disappeared. Pipette it gently onto the top of the larva, tip held clear. If a
+  dose misses the cell, record the re-dose; two of our larvae were double-dosed
+  and it had to be tracked.
+- **Map the frame so you can find them again.** An acetate sheet with its corners
+  marked against the frame, or photographs of the frame with the dosed cells drawn
+  over them in each treatment's colour. Spread the treatments across the frame
+  rather than clustering each in one area.
+- **Freeze a larva in its cell before you lift it.** A small piece of dry ice
+  against the uncapped larva until it is solid; a frozen larva is far less likely
+  to burst. Even so, 30–80% burst depending on who is handling them, so dose more
+  larvae than you need.
 - **Work fast with an open frame.** Nurse bees remove visibly damaged cells and
   pupae if the frame is out too long.
 

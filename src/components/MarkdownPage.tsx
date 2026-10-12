@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { headingId } from "../utils/headingId";
 import { rehypeMark } from "../utils/markTree";
 import { MarksContext } from "../utils/marksContext";
+import { Ink } from "./CombBackdrop";
 import { StakeholderMap } from "./StakeholderMap";
 import { StakeholderRecord } from "./StakeholderRecord";
 import { HoneyLoop } from "./HoneyLoop";
@@ -26,6 +27,7 @@ import { SdgOverview } from "./SdgOverview";
 import { BeehaveEfficiency } from "./BeehaveEfficiency";
 import { BeehaveHeatmaps } from "./BeehaveHeatmaps";
 import { BeehaveCost } from "./BeehaveCost";
+import { TeamGallery } from "./TeamGallery";
 
 /* Components a content file may place in the page.
  *
@@ -62,6 +64,7 @@ const SLOTS: Record<string, () => ReactNode> = {
   "beehave-efficiency": () => <BeehaveEfficiency />,
   "beehave-heatmaps": () => <BeehaveHeatmaps />,
   "beehave-cost": () => <BeehaveCost />,
+  "team-gallery": () => <TeamGallery />,
 };
 
 /** One array, so a page with no marks does not rerender its consumers. */
@@ -137,6 +140,17 @@ function sectionsOf(content: string): string[] {
   return sections;
 }
 
+/**
+ * A component's props minus `node`, the Markdown node react-markdown hands
+ * every component it renders. Spread onto an element as it is, it lands in
+ * the DOM as node="[object Object]".
+ */
+function domProps<T extends { node?: unknown }>(props: T): Omit<T, "node"> {
+  const rest = { ...props };
+  delete rest.node;
+  return rest;
+}
+
 /** Shared by every band, so the map is not rebuilt once per section. */
 const COMPONENTS: Components = {
   // A fenced `component` block is a slot, not source code. Handled on
@@ -162,20 +176,38 @@ const COMPONENTS: Components = {
       <table {...props}>{children}</table>
     </div>
   ),
+  // <Ink> is the comb backdrop's type trial: it puts each run of words in a
+  // box of its own while the trial draws a ground behind every line, and
+  // renders the words untouched otherwise. See CombBackdrop.tsx.
+  p: ({ children, ...props }) => (
+    <p {...domProps(props)}>
+      <Ink>{children}</Ink>
+    </p>
+  ),
+  li: ({ children, ...props }) => (
+    <li {...domProps(props)}>
+      <Ink>{children}</Ink>
+    </li>
+  ),
   h2: ({ children, ...props }) => (
-    <h2 id={idOf(children)} {...props}>
-      {children}
+    <h2 id={idOf(children)} {...domProps(props)}>
+      <Ink>{children}</Ink>
     </h2>
   ),
   h3: ({ children, ...props }) => (
-    <h3 id={idOf(children)} {...props}>
-      {children}
+    <h3 id={idOf(children)} {...domProps(props)}>
+      <Ink>{children}</Ink>
     </h3>
   ),
   h4: ({ children, ...props }) => (
-    <h4 id={idOf(children)} {...props}>
-      {children}
+    <h4 id={idOf(children)} {...domProps(props)}>
+      <Ink>{children}</Ink>
     </h4>
+  ),
+  h5: ({ children, ...props }) => (
+    <h5 {...domProps(props)}>
+      <Ink>{children}</Ink>
+    </h5>
   ),
   a: ({ href, children, ...props }) => {
     if (href?.startsWith("/") && !href.startsWith("//")) {

@@ -45,6 +45,12 @@ vertical and the cut-up 2 ml Eppendorf — and **lost two of them to handling
 failures** before any 24 h reading. The comparison was ultimately abandoned; see
 [the bee lab](/bee-lab) for why.
 
+> **TODO —** [Cycle B1](/engineering#cycle-b1) gives a different account of the
+> same adaptors: a tilted-against-vertical factorial at 20, 21 and 23 gauge, with
+> the 15°-tilted PCR tube at 23G adopted as the standard feeder. Settle which is
+> right, then state here which geometry and gauge the adaptor is printed for.
+> Owner: bee lab.
+
 **Limitation.** A number of the printed adaptors had minor print defects. They
 were usable, but they **may have added variance** between nominally identical tube
 replicates, which matters in an assay whose whole point is measuring small mass
@@ -72,6 +78,11 @@ modified: only three of the four tube holes were factory-drilled, so the fourth
 was taped over. One box was run **without bees** in every session, as the
 evaporation control.
 
+> **TODO —** Our write-up calls these "feeding cages for 30-bee sucrose nutrition
+> experiment", and the cage-feeding protocol fills each cage to 30 bees, but the
+> salt trial's counts (210 bees across 14 cages) give 15 per cage. Confirm the
+> cage capacity and the number actually used. Owner: bee lab.
+
 > **TODO —** Figure: The honeybee cage feeder setup as it ran: a box with its four
 > tubes in place, so the hole spacing and the taped fourth hole are visible.
 
@@ -96,12 +107,13 @@ towel at the base of the tubes, standing in for in-hive temperature and humidity
 
 ## The hive insert — **Investigated**
 
-A **triagonal yeast-feeding insert**, designed by Theo, printed, and used in our
-bee lab hives. It is the delivery end of the platform: the part that would
-present a yeast-produced formulation to a colony rather than to a caged group.
+A **triangular yeast-feeding insert**, designed by Theo, printed, and used in our
+bee lab hives: a perforated triangular plate that sits in the corner of a frame.
+It is the delivery end of the platform: the part that would present a
+yeast-produced formulation to a colony rather than to a caged group.
 
-> **TODO —** Figure: CAD render of the triagonal hive insert, with its dimensions and
-> the frame position it occupies.
+> **TODO —** Figure: 3D render of the triangular hive insert in the corner of a
+> frame, with its dimensions and the frame position it occupies.
 
 > **TODO —** Figure: The printed insert in place in a bee lab hive, photographed so
 > the fit to a standard frame is visible.
@@ -120,14 +132,15 @@ spun, and haemolymph collects in the outer tube.
 
 It works. The centrifugal extraction protocol built on it returns **8–15 µl of
 haemolymph** per adult bee, and every adult sample in the project came through it.
-Full protocol on [the bee lab notebook](/bee-lab-labbook).
+Full protocol on [the protocols page](/bee-lab-experiments).
 
 > **TODO —** Figure: Labelled diagram of the custom centrifuge tube: PCR tube inside
 > Eppendorf, with the bee's orientation and where the haemolymph collects.
 
 ## Where this connects
 
-[Bee lab](/bee-lab) · [Bee lab notebook](/bee-lab-labbook) ·
+[Bee lab](/bee-lab) · [Bee lab protocols](/bee-lab-experiments) ·
+[Bee lab notebook](/bee-lab-labbook) ·
 [How to work with bees](/working-with-bees) ·
 [NECTAR user manual](/user-manual) · [Yeast engineering](/wet-lab-experiments#yeast-production) ·
 [Human practices](/human-practices) · [Entrepreneurship](/entrepreneurship)

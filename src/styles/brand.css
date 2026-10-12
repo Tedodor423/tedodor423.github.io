@@ -285,6 +285,28 @@
   --mite-red: #c1121f;
   --warming: #7a32a6;
 
+  /* ---------- on the comb photograph ---------- */
+
+  /* The brood comb behind the Bee Lab pages (CombBackdrop) and in the comb
+   * bands (CombBands). Not the engineering comb above, which is drawn. The
+   * photograph is left as shot: it is dark almost everywhere, so the page
+   * inverts on it rather than the photograph being dimmed under the page.
+   *
+   * Measured against comb-bg.jpg, as contrast at the photograph's median and
+   * at its brightest 1%: --comb-ink 16.3:1 and 7.5:1, --comb-ink-muted 12.9:1
+   * and 5.9:1, honey 11.5:1 and 5.3:1. All three pass AA as body text even
+   * over the palest cell caps, so honey may be type here, unlike on white.
+   *
+   * Ink is wax rather than white: white on a warm photograph reads as a hole
+   * cut in it. The fallback is what the comb shows if the photograph fails to
+   * load, dark enough that the ink still reads, so a 404 degrades to a plain
+   * dark page. The rule is for table lines and hairlines, which drawn in
+   * --rule would glare on the photograph; this one sits back into it. */
+  --comb-ink: #fbf7ec;
+  --comb-ink-muted: var(--rule);
+  --comb-fallback: #2e1d0c;
+  --comb-rule: #7d6242;
+
   /* One radius, used everywhere something is rounded at all. */
   --radius: 0.2rem;
 }
@@ -362,10 +384,12 @@ body {
 
 /* The same arrow with a thin white keyline, for the navy footer and any other
  * dark surface — a pure black cursor is close to invisible on #002147. */
-/* The comb bands are a dark surface too, while that treatment is switched on.
-   Temporary, with CombBands.css; drop this selector with it. */
+/* The comb is a dark surface too: behind a whole page (CombBackdrop), and in
+   the comb bands while that treatment is switched on. The bands are temporary,
+   with CombBands.css; drop their selector with it. */
 .bg-dark,
 footer,
+.comb-backdrop,
 [data-comb="on"] [data-band="comb"] {
   cursor:
     url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAACHUlEQVR42rXUsUscQRTH8d/M3LoccoQDSWETclbeEQj5C67JNcEyku6KVBZCIFik8fprbNIGtRAsAoKNpdiIhelFF+7kJAbUSoR4tzvfNHuyhRjdbAYeyzTvM/PeztPy8jLAV0k6PDwMjDEqeiUrKysAnyQJKBWa3TnnJcWrq6sAn1MkKAwwxpAio/X1dYCPRSNkkHhra8sDH4pEGCPWWl8qlZLt7W2A90UhZBFjTBIEQbK7u/sbaBbReLJhrUVSUq1W/f7+/k0RCA8gHBwc3ABv/gXhvnDOISmenp7m5OTkJ1BPEVcIkEVmZmaIoug8L8JDYYzxkoa1Wo2zs7MIeJ4i9smAtXZcfyQRBAFhGFKpVHDO0Ww2GQwGPaAKGOCvg+uuadZaee+9JOOcM0mSqNvtqtVq9W5vb4dBEHB9fQ1wKckaY3gMoEyt/ezsLHNzc+MbjObn5wG+hGEooDQ5OZlr2N01st/vnx4fH5+Wy2UvKZ6YmGBvb28AlO9O88jSZFdcq9Xo9/u/gBfAQrvdRlIsKV5cXARo534H9Xqdo6Ojc6CRJnm+s7Nz6ZzzxpjR1NSUj6LoRxAE6nQ69slAr9eLgFdp8jD9dlutFtbakaTh0tISwLtcDw2ojP/rNAzwcmNjYyjJNxoN1tbWABZylyn7aMYnvLi4+La5ucnV1dV34O24wXmSm3v2BngGvNb/Xp1Ox+YZcI+6WRGJ/wC0Labrz5bZQgAAAABJRU5ErkJggg==")
@@ -489,8 +513,10 @@ pre {
   flex: 1;
   justify-content: center;
   /* Wide column gap: there are only five sections, and they read as separate
-   * destinations rather than as a run-on list. */
-  gap: 0.4rem 2.75rem;
+   * destinations rather than as a run-on list. Just above the compact
+   * breakpoint the full gap would push Team onto a second row, so it closes
+   * to 1.75rem there and reaches 2.75rem by about 1070px. */
+  gap: 0.4rem clamp(1.75rem, 25vw - 14rem, 2.75rem);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -598,57 +624,6 @@ pre {
   box-shadow: inset 0 -0.3rem 0 var(--ink);
 }
 
-/* An overarching title spanning a run of groups ("The project in detail").
- * The title is not a control, so it is set apart by size and case only, in
- * ink: the honey bar leaves the muted grey short of contrast. It is taken out
- * of the flow so the run's labels keep the exact vertical line of every other
- * item in the bar, and floats in the headroom the wordmark leaves above them. */
-.site-nav-section {
-  position: relative;
-  display: flex;
-  align-items: stretch;
-}
-
-/* The title must visibly cover the whole run, not hang over its first label:
- * centred, with an ink hairline reaching out to both edges of the cluster.
- * Same line language as the bar's ink bottom rule and the dropdown border.
- * Anchored just above the label row (half a label line, in rem because the
- * title's own type is smaller), wherever the bar's height puts that row. */
-.site-nav-section-title {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: calc(50% + 0.85rem);
-  pointer-events: none;
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  font-size: 0.62em;
-  font-weight: 400;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  color: var(--ink);
-}
-
-.site-nav-section-title::before,
-.site-nav-section-title::after {
-  content: "";
-  flex: 1;
-  border-top: 1px solid var(--ink);
-}
-
-.site-nav-section-list {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
-  /* Tighter than the bar's own 2.75rem gap: these three read as one family,
-   * and the title above is what separates the family from its neighbours. */
-  gap: 0.4rem 1.75rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
 /* The wrapper round the list and the search field. On a wide screen it steps
  * out of the layout entirely, so the two sit in the bar as direct flex items;
  * it only becomes a box of its own as the compact menu's panel. */
@@ -664,8 +639,7 @@ pre {
 
 /* Below 992px the bar cannot hold the wordmark, five labels and the search
  * field on one row: it wrapped to three rows on a phone, a quarter of the
- * screen, with the section title printed over the labels under it. So it
- * folds into the wordmark and a Menu button, and the button opens the same
+ * screen. So it folds into the wordmark and a Menu button, and the button opens the same
  * list as a panel of its own. The breakpoint is Bootstrap's `lg`, and it is
  * written out again as COMPACT_MEDIA in Navbar.tsx: change both. */
 @media (max-width: 991.98px) {
@@ -738,8 +712,7 @@ pre {
     font-size: 1rem;
   }
 
-  .site-nav-list,
-  .site-nav-section-list {
+  .site-nav-list {
     flex-direction: column;
     flex-wrap: nowrap;
     gap: 0;
@@ -749,21 +722,13 @@ pre {
     font-size: 1.2rem;
   }
 
-  .site-nav-section,
   .site-nav-group,
   .site-nav-item {
     display: block;
   }
 
-  /* Back in the flow: a heading over the three groups it spans, with the same
-   * hairlines reaching out to either side as on the wide bar. */
-  .site-nav-section-title {
-    position: static;
-    padding: 0.85rem 0 0.15rem;
-  }
-
   /* Each group is a full-width row. Every row but the first gets an ink
-   * hairline above it, the line language of the section title. */
+   * hairline above it, the line language of the bar's bottom rule. */
   .site-nav-group-label,
   .site-nav-link {
     display: flex;
@@ -773,8 +738,7 @@ pre {
     text-align: left;
   }
 
-  .site-nav-list > li + li > .site-nav-group-label,
-  .site-nav-section-list > li + li > .site-nav-group-label {
+  .site-nav-list > li + li > .site-nav-group-label {
     border-top: 1px solid var(--ink);
   }
 
@@ -983,7 +947,8 @@ pre {
 .varroa-slide[id],
 .treatments-slide[id],
 .ts-fact[id],
-.rc[id] {
+.rc[id],
+.tm-cell[id] {
   scroll-margin-top: 7rem;
 }
 

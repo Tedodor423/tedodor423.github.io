@@ -219,14 +219,6 @@ design method, **not the carrier**: engineered inactivated yeast as an oral dsRN
 vehicle is not novel, and we do not claim it is. See
 [engineering](/engineering).
 
-## Still missing
-
-- Verified numbers with citation tags throughout, starting with the titre.
-- SWOT, business model canvas and a finished risk register.
-- The roadmap figure.
-- The EMA consultation response, filed.
-- Product specification: dose, interval, shelf life.
-
 ## Where this connects
 
 [Economic modelling](/economic-modelling) · [Yeast](/wet-lab-experiments#yeast-production) ·
